@@ -1,2 +1,2 @@
 # Worms
-Trabajo Practico Worms - Taller de Programacion - Curso Veiga
+Trabajo Práctico Worms - Taller de Programación I - Catedra Veiga

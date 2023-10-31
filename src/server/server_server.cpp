@@ -1,10 +1,11 @@
 #include "server_server.h"
+#include "../common/socket.h"
 #include <iostream>
 
 Server::Server(const std::string& servname): servname(servname) {}
 
 void Server::run() {
-	//Socket skt(servname.c_str());
+	Socket accepter_skt(servname.c_str());
 
     //Aceptador accept_thread(skt);
     //accept_thread.start();

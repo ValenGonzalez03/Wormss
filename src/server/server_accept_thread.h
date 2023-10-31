@@ -1,12 +1,12 @@
-#ifndef SERVER_ACEPTADOR_H
-#define SERVER_ACEPTADOR_H
+#ifndef SERVER_ACCEPT_THREAD_H
+#define SERVER_ACCEPT_THREAD_H
 
 #include <list>
-#include "player.h"
+#include "server_player.h"
 #include "../common/socket.h"
 #include "../common/thread.h"
 
-class Aceptador : public Thread {
+class Accept : public Thread {
 	private:
 	Socket skt;
 	std::atomic<bool> is_alive {true};
@@ -26,7 +26,7 @@ class Aceptador : public Thread {
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit Aceptador(Socket& skt);
+	explicit Accept(Socket& skt);
 	
 	/*
 	 * Ejecuta el hilo Aceptador.
@@ -38,8 +38,8 @@ class Aceptador : public Thread {
 	 */
 	void kill();
 
-	Aceptador(const Aceptador&) = delete;
-	Aceptador& operator=(const Aceptador&) = delete;
+	Accept(const Accept&) = delete;
+	Accept& operator=(const Accept&) = delete;
 };
 
 #endif

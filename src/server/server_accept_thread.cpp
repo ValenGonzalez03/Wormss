@@ -1,11 +1,11 @@
-#include "server_aceptador.h"
+#include "server_accept_thread.h"
 
 #include <algorithm>
 #include <utility>
 
-Aceptador::Aceptador(Socket& skt): skt(std::move(skt)) {}
+Accept::Accept(Socket& skt): skt(std::move(skt)) {}
 
-void Aceptador::run() {
+void Accept::run() {
     try {
         while (is_alive) {
             Player* player = new Player(skt.accept());
@@ -24,7 +24,7 @@ void Aceptador::run() {
     }
 }
 
-void Aceptador::reap_dead() {
+void Accept::reap_dead() {
     auto dead = [](Player* player) {
         if (player->is_dead()) {
             player->join();
@@ -38,7 +38,7 @@ void Aceptador::reap_dead() {
 }
 
 
-void Aceptador::kill_all() {
+void Accept::kill_all() {
     for (auto& player: players) {
         player->kill();
         player->join();
@@ -48,7 +48,7 @@ void Aceptador::kill_all() {
 }
 
 
-void Aceptador::kill() {
+void Accept::kill() {
     is_alive = false;
     skt.shutdown(2);
     skt.close();

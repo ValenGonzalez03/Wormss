@@ -3,6 +3,7 @@
 
 #include <list>
 #include "server_player.h"
+#include "server_games_handler.h"
 #include "../common/socket.h"
 #include "../common/thread.h"
 
@@ -11,6 +12,7 @@ class Accept : public Thread {
 	Socket skt;
 	std::atomic<bool> is_alive {true};
 	std::list<Player*> players;
+	GamesHandler games_handler;
 	
 	/*
 	 * Busca todos los players muertos en la lista de players y los joinea.

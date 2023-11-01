@@ -5,11 +5,16 @@
 #include <vector>
 #include <atomic>
 
+#include "client_handler_thread.h"
+#include "player_sender_thread.h"
+
 class Player {
+	private:
 	Socket skt;
-	std::atomic<bool> keep_talking {true};
-	//Sender sender;
-	//Receiver receiver;
+	std::atomic<bool> keep_playing {true};
+	std::atomic<bool> in_game {false};
+	//PlayerSender sender;
+	ClientHandler client_handler;
 	
 		
 	public:
@@ -19,22 +24,22 @@ class Player {
 	explicit Player(Socket peer);
 	
 	/*
-	 * Ejecuta los hilos Sender y Receiver.
+	 * Ejecuta los hilos.
 	 * */
 	void start();
 	
 	/*
-	 * Si siguen vivos, cierra los hilos Sender y Reciever.
+	 * Si siguen vivos, cierra los hilos.
 	 * */
 	void kill();
 	
 	/*
-	 * Joinea los hilos Sender y Receiver.
+	 * Joinea los hilos.
 	 * */
 	void join();
 	
 	/*
-	 * Devuelve true si alguno de sus hilos esta muerto. False en caso contrario.
+	 * Devuelve true si sus hilos estan muertos. False en caso contrario.
 	 * */
 	bool is_dead();
 	

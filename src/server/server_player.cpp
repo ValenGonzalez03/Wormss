@@ -3,34 +3,28 @@
 #include <utility>
 #include <vector>
 
-//#include "player_receiver.h"
-//#include "player_sender.h"
-
 Player::Player(Socket peer):
-        skt(std::move(peer))
-        //sender(skt, keep_talking),
-        //receiver(skt, keep_talking) 
+        skt(std::move(peer)),
+        client_handler(skt, keep_playing, in_game) 
         {}
 
 void Player::start() {
-
-    //sender.start();
-    //receiver.start();
+	client_handler.start();
 }
 
 void Player::kill() {
     if (not is_dead()) {
+		keep_playing = false;
         skt.shutdown(2);
         skt.close();
     }
 }
 
 void Player::join() {
-    //sender.join();
-    //receiver.join();
+	client_handler.join_sender();
+    client_handler.join();
 }
 
 bool Player::is_dead() { 
-	return true;
-	//return (sender.is_dead() || receiver.is_dead()); 
-	}
+	return not keep_playing;
+}

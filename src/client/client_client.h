@@ -1,13 +1,16 @@
 #ifndef CLIENT_CLIENT_H_
 #define CLIENT_CLIENT_H_
 
+#include <SDL2pp/SDL2pp.hh>
+#include <string>
+#include <utility>
+
 #include "../common/protocol.h"
 #include "../common/queue.h"
 #include "../common/socket.h"
 #include "client_receiver_thread.h"
 #include "client_sender_thread.h"
-#include <string>
-#include <utility>
+#include "client_resource_pool.h"
 
 class Client {
 private:
@@ -27,6 +30,8 @@ public:
   void start_threads();
 
   void join_threads();
+
+  int run();
 };
 
 #endif

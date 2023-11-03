@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(Worms LANGUAGES CXX)
+find_package(SDL2pp REQUIRED)
 
 # add compilation flags
 set(CMAKE_CXX_STANDARD 17)
+add_definitions(-DRESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")
+
+include_directories(${SDL2PP_INCLUDE_DIRS})
 
 # Agregar un ejecutable llamado "client" y especificar los archivos fuente
 add_executable(client ./src/client/client_main.cpp
@@ -16,7 +20,8 @@ add_executable(client ./src/client/client_main.cpp
                         ./src/common/protocol.cpp)
 
 
-target_link_libraries(client pthread)
+target_link_libraries(client PUBLIC pthread)
+target_link_libraries(client PUBLIC SDL2pp::SDL2pp)
 
 # define targets
 add_executable(server ./src/server/server_main.cpp

@@ -8,9 +8,11 @@
 #include "../common/protocol.h"
 #include "../common/queue.h"
 #include "../common/socket.h"
+#include "client_position.h"
 #include "client_receiver_thread.h"
-#include "client_sender_thread.h"
 #include "client_resource_pool.h"
+#include "client_sender_thread.h"
+#include "client_worldview.h"
 
 class Client {
 private:

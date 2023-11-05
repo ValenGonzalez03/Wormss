@@ -13,6 +13,7 @@ add_executable(client ./src/client/client_main.cpp
                         ./src/client/client_client.cpp
                         ./src/client/client_receiver_thread.cpp
                         ./src/client/client_sender_thread.cpp
+						./src/client/client_worldview.cpp
                         ./src/common/socket.cpp 
 	                    ./src/common/liberror.cpp 
 	                    ./src/common/resolver.cpp 

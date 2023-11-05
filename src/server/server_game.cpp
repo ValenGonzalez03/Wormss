@@ -14,3 +14,7 @@ void Game::delete_player(const Player* player) {
         }
     }
 }
+
+void Game::push_command(std::vector<char> command) {
+    commands->push(command);
+}

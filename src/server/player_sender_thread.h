@@ -3,20 +3,21 @@
 
 #include "../common/thread.h"
 #include "../common/socket.h"
-//#include "server_protocol.h"
+#include "../common/queue.h"
+#include "server_protocol.h"
 
 class PlayerSender : public Thread {
 	private:
 	Socket& skt;
-	//ServerProtocol protocol;
+	ServerProtocol& protocol;
+	Queue<std::vector<char>>* sender_queue;
 	std::atomic<bool>& keep_playing;
-	//Queue<Message>& sender_queue;
 
 	public:
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit PlayerSender(Socket& skt, 
+	explicit PlayerSender(Socket& skt, ServerProtocol& protocol, Queue<std::vector<char>>* sender_queue, 
 					std::atomic<bool>& keep_playing);
 	
 	/*
@@ -31,4 +32,3 @@ class PlayerSender : public Thread {
 };
 
 #endif
-

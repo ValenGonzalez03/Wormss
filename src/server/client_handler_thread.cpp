@@ -1,16 +1,16 @@
 #include "client_handler_thread.h"
 
-ClientHandler::ClientHandler(Socket& skt, std::atomic<bool>& keep_playing, std::atomic<bool>& in_game):
-        skt(skt), keep_playing(keep_playing), in_game(in_game), sender(skt, keep_playing)  {}
+ClientHandler::ClientHandler(Socket& skt, ServerProtocol& protocol, GamesHandler& games_handler, Game& game, PlayerSender& sender, std::atomic<bool>& keep_playing, std::atomic<bool>& in_game):
+        skt(skt), protocol(protocol), games_handler(games_handler), game(game), keep_playing(keep_playing), in_game(in_game), sender(sender) {}
 
 void ClientHandler::run() {
+	bool was_closed = false;
     try {
-		
         while (keep_playing) {
             //protocol.receive...
             if(not in_game) {		// comunicacion sincronica
-				//protocol.receive
-				//game_handler.join/create
+				std::vector<char> command = protocol.receive_command(was_closed);
+				//games_handler.join/create
 				in_game = true;
 				sender.start();
 			} else {			   // comunicacion asincronica

@@ -4,21 +4,25 @@
 #include "../common/thread.h"
 #include "../common/socket.h"
 #include "player_sender_thread.h"
-//#include "server_protocol.h"
+#include "server_protocol.h"
+#include "server_games_handler.h"
+#include "server_game.h"
 
 class ClientHandler : public Thread {
 	private:
 	Socket& skt;
-	//ServerProtocol protocol;
+	ServerProtocol& protocol;
 	std::atomic<bool>& keep_playing;
 	std::atomic<bool>& in_game;
-	PlayerSender sender;
+	PlayerSender& sender;
+	GamesHandler& games_handler;
+	Game& game;
 	
 	public:
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit ClientHandler(Socket& skt, 
+	explicit ClientHandler(Socket& skt, ServerProtocol& protocol, GamesHandler& games_handler, Game& game, PlayerSender& sender,
 					  std::atomic<bool>& keep_playing, std::atomic<bool>& in_game);
 	
 	/*

@@ -22,5 +22,3 @@ class Server {
 };
 
 #endif
-
-

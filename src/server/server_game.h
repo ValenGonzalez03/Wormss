@@ -15,6 +15,8 @@ private:
     std::mutex m;
     std::list<Player*> players;
     Queue<std::vector<char>>* commands;
+    bool keep_playing = true;
+    double rate = 0.1;
 
 public:
     Game();
@@ -26,6 +28,12 @@ public:
     void push_command(std::vector<char> command);
 
     void handle_command();
+    
+    void run();
+    
+    void update(int& it);
+    
+    void stop();
 };
 
 #endif

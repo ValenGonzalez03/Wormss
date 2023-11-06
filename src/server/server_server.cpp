@@ -1,6 +1,7 @@
 #include "server_server.h"
 #include "../common/socket.h"
 #include <iostream>
+#include "../common/protocol.h"
 
 Server::Server(const std::string& servname): servname(servname) {}
 
@@ -9,8 +10,13 @@ void Server::run() {
 
     //Aceptador accept_thread(skt);
     //accept_thread.start();
+
+    Socket peer(accepter_skt.accept());
+    Protocol prot(std::move(peer));
     
-    while (std::cin.get() != 'q') {}
+    while (std::cin.get() != 'q') {
+        prot.process_command();
+    }
     /*
     accept_thread.kill();
     accept_thread.join();

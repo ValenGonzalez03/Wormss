@@ -30,6 +30,7 @@ add_executable(server ./src/server/server_main.cpp
 		            ./src/common/socket.cpp 
 		            ./src/common/liberror.cpp 
 		            ./src/common/resolver.cpp 
-		            ./src/common/resolvererror.cpp)
+		            ./src/common/resolvererror.cpp
+					./src/common/protocol.cpp)
 		          
 		          

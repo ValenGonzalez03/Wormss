@@ -18,9 +18,8 @@ int main(int argc, char *argv[]) {
     Client client(std::move(skt));
 
     client.start_threads();
-    client.join_threads();
-
     int result = client.run(); // Como manejo los errores? return result?
+    client.join_threads();
 
     return SUCCESS;
 

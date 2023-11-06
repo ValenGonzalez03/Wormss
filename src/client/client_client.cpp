@@ -74,20 +74,30 @@ int Client::run() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) {
+        sender_queue.close();
         return 0;
       } else if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
         case SDLK_ESCAPE:
         case SDLK_q:
+          sender_queue.close();
           return 0;
         case SDLK_RIGHT:
           is_running = true;
+          //StartMoving cmd(0,1);
+          std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(0,1);
+          sender_queue.try_push(cmd);
+          //prot.send_command(cmd);
           break;
         }
       } else if (event.type == SDL_KEYUP) {
         switch (event.key.keysym.sym) {
         case SDLK_RIGHT:
           is_running = false;
+          //StopMoving cmd(0);
+          std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>(0);
+          sender_queue.try_push(cmd);
+          //prot.send_command(cmd);
           break;
         }
       }

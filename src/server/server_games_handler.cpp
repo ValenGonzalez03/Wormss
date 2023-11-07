@@ -14,3 +14,14 @@ void GamesHandler::delete_game(const Game* game) {
         }
     }
 }
+
+Queue<Command*>* GamesHandler::create_game(Queue<GameState*>* sender_queue, int player_id) {
+	Game* game = new Game;
+	add_game(game);
+	return game->add_player(sender_queue);
+}
+/*
+Queue<Command*>* GamesHandler::join_game(Queue<GameState*>* sender_queue, int player_id, int game_id) {
+
+}
+*/

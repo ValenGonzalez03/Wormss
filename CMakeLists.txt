@@ -14,6 +14,11 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/server_player.cpp
 					  ./src/server/player_sender_thread.cpp
 					  ./src/server/client_handler_thread.cpp
+					  ./src/server/worm.cpp
+					  ./src/server/beam.cpp
+					  ./src/server/server_games_handler.cpp
+					  ./src/server/server_game.cpp
+					  ./src/server/commands/command.cpp 
 					  ./src/common/socket.cpp 
 					  ./src/common/liberror.cpp 
 					  ./src/common/resolver.cpp 

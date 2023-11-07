@@ -5,20 +5,23 @@
 
 Game::Game() {}
 
-void Game::add_player(Player* player) {
-    players.push_back(player);
+Queue<Command*>* Game::add_player(Queue<GameState*>* sender_queue) {
+    queues_list.push_back(sender_queue);
+    return commands;
 }
 
-void Game::delete_player(const Player* player) {
+void Game::delete_player() {
+	/*
     for (auto current_player = players.begin();
          current_player != players.end(); current_player++) {
         if (*current_player == player) {
             players.erase(current_player);
         }
     }
+    */
 }
 
-void Game::push_command(std::vector<char> command) {
+void Game::push_command(Command* command) {
     commands->push(command);
 }
 

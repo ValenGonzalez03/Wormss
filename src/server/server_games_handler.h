@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "server_game.h"
+#include "commands/command.h"
 
 class GamesHandler {
 private:
@@ -18,9 +19,9 @@ public:
 
     void delete_game(const Game* game);
 
-    Game* create_game(Player* player);
+    Queue<Command*>* create_game(Queue<GameState*>* sender_queue, int player_id);
 
-    void join_game(Player* player);
+    Queue<Command*>* join_game(Queue<GameState*>* sender_queue, int player_id, int game_id);
 };
 
 #endif

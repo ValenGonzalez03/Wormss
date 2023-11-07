@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "../common/socket.h"
+#include "commands/command.h"
 
 class ServerProtocol {
     Socket& peer;
@@ -13,7 +14,7 @@ class ServerProtocol {
 	 * */
     explicit ServerProtocol(Socket& peer);
 
-    std::vector<char> receive_command(bool& was_closed);
+    std::unique_ptr<Command> receive_command(bool& was_closed);
 
     int send(std::vector<char> command, bool& was_closed);
 };

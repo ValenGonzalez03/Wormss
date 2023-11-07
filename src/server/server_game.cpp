@@ -57,5 +57,3 @@ void Game::update(int& it) {
 void Game::stop() {
 	keep_playing = false;
 }
-
-

@@ -1,4 +1,4 @@
 #include "command.h"
 
-Command::Command() {}
+Command::Command(int id_client) {}
 

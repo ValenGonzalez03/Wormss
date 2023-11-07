@@ -1,0 +1,8 @@
+#ifndef COMMON_PROTOCOL_CODES_H
+#define COMMON_PROTOCOL_CODES_H
+
+#define CREATE_GAME 0x01
+#define JOIN_GAME 0x02
+#define MOVE 0x03
+
+#endif

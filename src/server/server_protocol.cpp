@@ -2,48 +2,29 @@
 
 #include <cstdint>
 
-#include "common_protocol_codes.h"
+#include "../common/protocol_codes.h"
+#include "commands/move.h"
 
 ServerProtocol::ServerProtocol(Socket& peer): peer(peer) {}
 
-std::vector<char> ServerProtocol::receive_command(bool& was_closed) {
+std::unique_ptr<Command> ServerProtocol::receive_command(bool& was_closed) {
     unsigned int sz = 1;
-    std::vector<char> buf(20);
+    std::vector<char> buf(1);
     int s;
-    std::vector<char> command;
 
     s = peer.recvall(buf.data(), sz, &was_closed);
     if (was_closed || s == 0) {
-        return command;
+        //return;
     }
 
-    command.push_back(RESEND_MSG_CODE);
+    char instruction = buf[0];
 
-    sz = 2;
-    s = peer.recvall(buf.data(), sz, &was_closed);
-    if (was_closed || s == 0) {
-        command.clear();
-        return command;
+    if (instruction == MOVE) {
+        int id = 1; //id de prueba
+        return std::make_unique<Move>(id);
     }
 
-    command.push_back(buf[0]);
-    command.push_back(buf[1]);
-
-    uint16_t msg_length = (uint16_t)(buf[0]) | (uint16_t)(buf[1]); // cambiar por ntoh
-
-    buf.resize(msg_length);
-    sz = msg_length;
-
-    s = peer.recvall(buf.data(), sz, &was_closed);
-    if (was_closed || s == 0) {
-        command.clear();
-        return command;
-    }
-
-    for (int i = 0; i < msg_length; i++) {
-        command.push_back(buf[i]);
-    }
-    return command;
+    return;
 }
 
 int ServerProtocol::send(std::vector<char> command, bool& was_closed) {

@@ -15,7 +15,6 @@ class Player {
 	std::atomic<bool> in_game {false};
 	//PlayerSender sender;
 	ClientHandler client_handler;
-	
 		
 	public:
 	/*

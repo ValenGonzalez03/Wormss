@@ -19,7 +19,7 @@ class PlayerSender : public Thread {
 	 * */
 	explicit PlayerSender(Socket& skt, ServerProtocol& protocol, Queue<std::vector<char>>* sender_queue, 
 					std::atomic<bool>& keep_playing);
-	
+
 	/*
 	 * Ejecuta el loop del hilo Sender.
 	 * */

@@ -1,19 +1,5 @@
-#include "box2d/box2d.h"
+#include "game_state.h"
 #include <stdio.h>
 
-GameState::GameState(World world) {}
+GameState::GameState() {}
 
-void step() {
-	world->step(timeStep, velocityIterations, positionIterations);
-}
-
-void update() {}
-
-void update_current_worm() {
-		//current_worm->move...
-}
-	
-void get_state() {}
-
-GameState::~GameState() {
-}

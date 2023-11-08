@@ -3,6 +3,27 @@
 
 #include <list>
 #include <vector>
+#include <cstdint>
+
+#include "socket.h"
+#include "../client/client_position.h"
+
+// Crea un gusano con su posicion actual
+struct Worm {
+private:
+  Position pos;
+
+public:
+  // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
+  Worm() : pos(0, 0) {}
+
+  // Constructor para deserializar GameState
+  explicit Worm(std::vector<char> buf) : pos(0, 0) {
+    this->pos = Position(buf);
+  }
+
+  char *data() { return pos.get_data(); }
+};
 
 // Una estructura del estado del juego. Contiene una lista con todos los gusanos
 // que se encuentran en la partida
@@ -43,18 +64,5 @@ public:
   }
 };
 
-// Crea un gusano con su posicion actual
-struct Worm {
-private:
-  Position pos;
-
-public:
-  // Constructor para deserializar GameState
-  explicit Worm(std::vector<char> buf) : pos(0, 0) {
-    this->pos = Position(buf);
-  }
-
-  char *data() { return pos.get_data(); }
-};
 
 #endif

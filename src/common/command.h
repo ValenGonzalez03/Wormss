@@ -12,11 +12,11 @@ protected:
 public:
     Command(int cod, int clt_id) : code(cod), client_id(clt_id) {}
 
-    // Debe enviar el codigo, el client_id y los datos adicionales
+    // Debe enviar el codigo y los datos adicionales
     // de ser necesario
     virtual void send(Socket &skt, bool* was_closed) = 0;
     
-    // El código y client_id lo recibe el protocolo para decidir
+    // El código lo recibe el protocolo para decidir
     // el comando a crear. Este receive solo recibe los datos
     // adicionales del comando en caso de ser necesario.
     virtual void receive(Socket &skt, bool* was_closed) = 0;

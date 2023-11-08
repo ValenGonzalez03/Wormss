@@ -20,7 +20,7 @@ public:
     int sbeam_width = texture.GetWidth();
     renderer.Copy(texture,
                   SDL2pp::Rect(0, 0, sbeam_width - 10, sbeam_height), // Size
-                  SDL2pp::Rect(position._pos_x, position._pos_y, sbeam_width,
+                  SDL2pp::Rect(position.get_position_x(), position.get_position_y(), sbeam_width,
                                sbeam_height)); // Destination
   }
 };

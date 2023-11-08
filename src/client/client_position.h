@@ -1,6 +1,10 @@
 #ifndef CLIENT_POSITION_H_
 #define CLIENT_POSITION_H_
 
+#include <vector>
+#include <cstdlib>
+#include <cstring>
+
 // Crea una posicion en pixeles para un objeto
 struct Position {
 private:
@@ -33,9 +37,17 @@ public:
     define_data();
   }
 
+  int get_position_x() {
+    return this->_pos_x;
+  }
+
+  int get_position_y() {
+    return this->_pos_y;
+  }
+
   char *get_data() { return this->data; }
 
-  ~Position() { free(data); }
+  //~Position() { free(data); }
 };
 
 #endif

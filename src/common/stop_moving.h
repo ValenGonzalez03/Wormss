@@ -12,7 +12,7 @@ namespace CODE_PLAYER_COMM {
 class StopMoving : public Command {
 public:
     // Constructor from client side
-    StopMoving(int clt_id) : Command(CODE_PLAYER_COMM::STOP_MOVING, clt_id) {}
+    StopMoving() : Command(CODE_PLAYER_COMM::STOP_MOVING,0) {}
 
     // Constructor from server side for code consistency but doesn't do anything
     // different from the other
@@ -22,7 +22,6 @@ public:
 
     void send(Socket &skt, bool* was_closed) override {
         skt.sendall(&code, sizeof(code), was_closed);
-        skt.sendall(&client_id, sizeof(client_id), was_closed);
     }
 
     void receive(Socket &skt, bool* was_closed) override {}

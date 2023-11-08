@@ -25,7 +25,7 @@ int Client::run() {
 
   // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
   Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                1280, 720, SDL_WINDOW_RESIZABLE);
+                480, 360, SDL_WINDOW_RESIZABLE);
 
   // Create accelerated video renderer with default driver
   Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -58,6 +58,7 @@ int Client::run() {
   float position = 0.0;    // player position
 
   unsigned int prev_ticks = SDL_GetTicks();
+
   // Main loop
   while (1) {
     // Timing: calculate difference between this and previous frame
@@ -69,37 +70,38 @@ int Client::run() {
     // Event processing:
     // - If window is closed, or Q or Escape buttons are pressed,
     //   quit the application
-    // - If Right key is pressed, character would run
-    // - If Right key is released, character would stop
+    // - If Right/Left key is pressed, character would run
+    // - If Right/Left key is released, character would stop
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
+      if (event.type == SDL_QUIT) { // Cierra el juego
         sender_queue.close();
         return 0;
-      } else if (event.type == SDL_KEYDOWN) {
+
+      } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
         switch (event.key.keysym.sym) {
-        case SDLK_ESCAPE:
-        case SDLK_q:
-          sender_queue.close();
-          return 0;
-        case SDLK_RIGHT:
-          is_running = true;
-          //StartMoving cmd(0,1);
-          std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(0,1);
-          sender_queue.try_push(cmd);
-          //prot.send_command(cmd);
-          break;
-        }
-      } else if (event.type == SDL_KEYUP) {
+          case SDLK_ESCAPE:
+          case SDLK_q:
+            sender_queue.close();
+            return 0;
+          case SDLK_RIGHT:
+            if (! is_running)
+              handle_start_moving(RIGHT, is_running);
+            break;
+          case SDLK_LEFT:
+            if (! is_running)
+              handle_start_moving(LEFT, is_running);
+            break;
+          }
+
+      } else if (event.type == SDL_KEYUP) { // Suelta una tecla
         switch (event.key.keysym.sym) {
-        case SDLK_RIGHT:
-          is_running = false;
-          //StopMoving cmd(0);
-          std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>(0);
-          sender_queue.try_push(cmd);
-          //prot.send_command(cmd);
-          break;
-        }
+          case SDLK_RIGHT:
+          case SDLK_LEFT:
+            if (is_running)
+              handle_stop_moving(is_running);
+            break;
+          }
       }
     }
 
@@ -152,6 +154,18 @@ int Client::run() {
 
   // Here all resources are automatically released and libraries deinitialized
   return 0;
+}
+
+void Client::handle_start_moving(int direction, bool &is_running) {
+  std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(direction);
+  sender_queue.try_push(cmd);
+  is_running = true;
+}
+
+void Client::handle_stop_moving(bool &is_running) {
+  std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>();
+  sender_queue.try_push(cmd);
+  is_running = false;
 }
 
 // ------------------------------------------------------------------------

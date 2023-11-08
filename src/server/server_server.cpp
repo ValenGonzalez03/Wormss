@@ -13,10 +13,13 @@ void Server::run() {
 
     Socket peer(accepter_skt.accept());
     Protocol prot(std::move(peer));
-    
-    while (std::cin.get() != 'q') {
-        prot.process_command();
+
+    while (true) {
+        std::unique_ptr<Command> cmd = prot.process_command();
+        cmd->run();
     }
+    
+    while (std::cin.get() != 'q') {}
     /*
     accept_thread.kill();
     accept_thread.join();

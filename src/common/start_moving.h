@@ -15,7 +15,7 @@ private:
 
 public:
     // Constructor from client side with direction passed by parameter
-    StartMoving(int clt_id, int dir) : Command(CODE_PLAYER_COMM::START_MOVING, clt_id), direction(dir) {}
+    StartMoving(int dir) : Command(CODE_PLAYER_COMM::START_MOVING, 0), direction(dir) {}
 
     // Constructor from server side with direction received by socket
     StartMoving(int clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::START_MOVING, clt_id) {
@@ -24,7 +24,6 @@ public:
 
     void send(Socket &skt, bool* was_closed) override {
         skt.sendall(&code, sizeof(code), was_closed);
-        skt.sendall(&client_id, sizeof(client_id), was_closed);
         skt.sendall(&direction, sizeof(direction), was_closed);
     }
 

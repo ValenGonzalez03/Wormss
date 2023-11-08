@@ -14,6 +14,9 @@
 #include "client_sender_thread.h"
 #include "client_worldview.h"
 
+#define LEFT 0
+#define RIGHT 1
+
 class Client {
 private:
   Protocol prot;
@@ -25,6 +28,7 @@ private:
   // tenerla Client.
   ClientReceiverThread receiver;
   ClientSenderThread sender;
+  std::map<int, std::function<void()>> controls;
 
 public:
   explicit Client(Socket &&skt);
@@ -34,6 +38,10 @@ public:
   void join_threads();
 
   int run();
+
+  void handle_start_moving(int direction, bool &is_running);
+
+  void handle_stop_moving(bool &is_running);
 };
 
 #endif

@@ -3,7 +3,7 @@
 #include "math.h"
 #include <unistd.h>
 
-Game::Game() {}
+Game::Game(int& game_id): game_id(game_id) {}
 
 Queue<Command*>* Game::add_player(Queue<GameState*>* sender_queue) {
     queues_list.push_back(sender_queue);
@@ -56,4 +56,8 @@ void Game::update(int& it) {
 
 void Game::stop() {
 	keep_playing = false;
+}
+
+bool Game::compare_id(const int& another_game_id) {
+	return (game_id == another_game_id);
 }

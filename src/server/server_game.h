@@ -16,11 +16,12 @@ private:
     std::mutex m;
     std::list<Queue<GameState*>*> queues_list;
     Queue<Command*>* commands;
+    int game_id;
     bool keep_playing = true;
     double rate = 0.1;
 
 public:
-    Game();
+    Game(int& game_id);
 
     Queue<Command*>* add_player(Queue<GameState*>* sender_queue);
 
@@ -35,6 +36,8 @@ public:
     void update(int& it);
     
     void stop();
+    
+    bool compare_id(const int& another_game_id);
 };
 
 #endif

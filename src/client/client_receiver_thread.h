@@ -11,14 +11,15 @@
 class ClientReceiverThread : public Thread {
 private:
   Protocol &prot;
-  Queue<Message> &receiver_queue;
+  Queue<GameState> &receiver_queue;
 
   // Elimino posibilidad de copias y operador =
   ClientReceiverThread(const ClientReceiverThread &) = delete;
   ClientReceiverThread &operator=(const ClientReceiverThread &) = delete;
 
 public:
-  explicit ClientReceiverThread(Protocol &protocol, Queue<Message> &recv_queue);
+  explicit ClientReceiverThread(Protocol &protocol,
+                                Queue<GameState> &recv_queue);
 
   virtual void run() override;
 };

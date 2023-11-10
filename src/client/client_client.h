@@ -20,7 +20,7 @@
 class Client {
 private:
   Protocol prot;
-  Queue<Message> receiver_queue;
+  Queue<GameState> receiver_queue;
   Queue<std::shared_ptr<Command>> sender_queue;
   // Hice que la clase Client tenga las queues porque el cliente tambien va a
   // hacer pops y pushs para mandarselas al game loop. Al sender y al receiver

@@ -22,8 +22,8 @@ private:
 
   void add_texture(const std::string &texture_name,
                    const std::string &image_path) {
-    // Aca estoy trabajando con la version no wrappeada de SDL2, pero
-    // sinceramente no Pude encontrar otra forma de hacerlo.
+    // Aca estoy trabajando con la version no wrappeada de SDL2, porque
+    // sinceramente no pude encontrar otra forma de hacerlo.
     SDL2pp::Surface surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
     Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
 

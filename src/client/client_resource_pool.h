@@ -20,12 +20,20 @@ private:
   SDL2pp::Renderer &renderer;
   std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
 
-  void add_texture(std::string texture_name, std::string image_path) {
-    textures[texture_name] = std::make_shared<SDL2pp::Texture>(
-        renderer,
-        SDL2pp::Surface(RESOURCES_PATH + image_path).SetColorKey(true, 0));
-  }
+  void add_texture(const std::string &texture_name,
+                   const std::string &image_path) {
+    // Aca estoy trabajando con la version no wrappeada de SDL2, pero
+    // sinceramente no Pude encontrar otra forma de hacerlo.
+    SDL2pp::Surface surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
+    Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
 
+    textures[texture_name] = std::make_shared<SDL2pp::Texture>(
+        renderer, surface.SetColorKey(
+                      true, color_key)); // Esta color_key es especifica para
+                                         // los fondos de los gusanos.
+    // Para imagenes con otros fondos no haria efecto, por lo que si hay
+    // distintas habria que poner ifs.
+  }
   SDL2pp::Texture *get_texture(const std::string &texture_name) {
     try {
       return textures.at(texture_name).get();

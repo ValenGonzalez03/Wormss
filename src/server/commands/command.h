@@ -13,7 +13,7 @@ class Command {
 	 * */
     explicit Command(int player_id);
 
-    virtual void handle_command(GamesHandler& games_handler, Queue<GameState*>* sender_queue) = 0;
+    virtual Queue<Command*>* handle_command(GamesHandler& games_handler, Queue<GameState*>* sender_queue) = 0;
 
     virtual void handle_command(Game& game) = 0;
 };

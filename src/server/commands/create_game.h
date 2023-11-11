@@ -14,8 +14,8 @@ class CreateGame : public Command {
 	 * */
     explicit CreateGame(int player_id);
 
-    void handle_command(GamesHandler& games_handler, Queue<GameState*>* sender_queue) override {
-        games_handler.create_game(sender_queue, player_id);
+    Queue<Command*>* handle_command(GamesHandler& games_handler, Queue<GameState*>* sender_queue) override {
+        return games_handler.create_game(sender_queue, player_id);
     };
 };
 

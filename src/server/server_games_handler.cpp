@@ -8,7 +8,6 @@ void GamesHandler::add_game(Game* game) {
 
 void GamesHandler::delete_game(const int& game_id) {
 	std::lock_guard<std::mutex> lck(m);
-    
     for (auto current_game: games) {
         if (current_game->compare_id(game_id)) {
 			current_game->stop();
@@ -25,14 +24,14 @@ Queue<Command*>* GamesHandler::create_game(Queue<GameState*>* sender_queue, cons
 	games_counter++;
 	add_game(game);
 	game->start();
-	return game->add_player(sender_queue);
+	return game->add_player(sender_queue, player_id);
 }
 
 Queue<Command*>* GamesHandler::join_game(Queue<GameState*>* sender_queue, const int& player_id, const int& game_id) {
 	std::lock_guard<std::mutex> lck(m);
 	for (auto& current_game: games) {
         if (current_game->compare_id(game_id)) {
-			return current_game->add_player(sender_queue);
+			return current_game->add_player(sender_queue, player_id);
 		}
     }
     return nullptr;

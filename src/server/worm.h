@@ -25,6 +25,9 @@ class Worm {
 	void move_right();
 	
 	b2Vec2 get_position();
+	
+	Worm(const Worm&) = delete;
+	Worm& operator=(const Worm&) = delete;
 };
 
 #endif

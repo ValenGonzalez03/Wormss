@@ -8,20 +8,14 @@ Game::Game(int& game_id): game_id(game_id), commands(100) {
 	}
 
 Queue<Command*>* Game::add_player(Queue<GameState*>* sender_queue, const int& player_id) {
-    queues_list.push_back(sender_queue);
+    queues_sender[player_id] = sender_queue;
     game_manager.add_player(player_id);
     return &commands;
 }
 
-void Game::delete_player() {
-	/*
-    for (auto current_player = players.begin();
-         current_player != players.end(); current_player++) {
-        if (*current_player == player) {
-            players.erase(current_player);
-        }
-    }
-    */
+void Game::delete_player(const int& player_id) {
+	queues_sender.erase(player_id);
+	game_manager.delete_player(player_id);
 }
 
 void Game::push_command(Command* command) {
@@ -74,7 +68,7 @@ bool Game::compare_id(const int& another_game_id) {
 
 void Game::push_game_state(GameState* game_state) {	//hacer monitor luego
 	std::lock_guard<std::mutex> lck(m);
-	for (auto& current_queue: queues_list) {
-        current_queue->push(game_state);
+	for (auto& current_queue: queues_sender) {
+        current_queue.second->push(game_state);
 	}
 }

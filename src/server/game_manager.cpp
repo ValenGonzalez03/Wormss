@@ -22,7 +22,7 @@ void GameManager::add_player(const int& player_id) {
 
 void GameManager::delete_player(const int& player_id) {
 	current_players--;
-	//players.push_back(player_id);
+	players.remove(player_id);
 }
 
 void GameManager::step() {

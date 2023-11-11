@@ -3,6 +3,7 @@
 
 #include <list>
 #include <mutex>
+#include <map>
 
 #include "game_state.h"
 #include "game_manager.h"
@@ -16,7 +17,7 @@
 class Game : public Thread {
 private:
     std::mutex m;
-    std::list<Queue<GameState*>*> queues_list;
+    std::map<int,Queue<GameState*>*> queues_sender;
     Queue<Command*> commands;
     int game_id;
     bool keep_playing = true;
@@ -28,7 +29,7 @@ public:
 
     Queue<Command*>* add_player(Queue<GameState*>* sender_queue, const int& player_id);
 
-    void delete_player();
+    void delete_player(const int& player_id);
 
     void push_command(Command* command);
 

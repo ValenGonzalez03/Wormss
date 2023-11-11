@@ -17,5 +17,4 @@ void ClientReceiverThread::run() {
       std::cout << "Socket cerrado" << std::endl;
     }
   }
-  std::cout << "Receiver Thread not implemented yet" << std::endl;
 }

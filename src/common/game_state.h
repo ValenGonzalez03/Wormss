@@ -1,12 +1,12 @@
 #ifndef GAME_STATE_H_
 #define GAME_STATE_H_
 
+#include <cstdint>
 #include <list>
 #include <vector>
-#include <cstdint>
 
-#include "socket.h"
 #include "../client/client_position.h"
+#include "socket.h"
 
 // Crea un gusano con su posicion actual
 struct Worm {
@@ -14,15 +14,18 @@ private:
   Position pos;
 
 public:
-  // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   Worm() : pos(0, 0) {}
+  // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
+  explicit Worm(Position pos) : pos(pos) {}
 
   // Constructor para deserializar GameState
-  explicit Worm(std::vector<char> buf) : pos(0, 0) {
+  explicit Worm(const std::vector<char> &buf) : pos(0, 0) {
     this->pos = Position(buf);
   }
 
-  char *data() { return pos.get_data(); }
+  int16_t get_pos_x() { return pos.get_position_x(); }
+
+  int16_t get_pos_y() { return pos.get_position_y(); }
 };
 
 // Una estructura del estado del juego. Contiene una lista con todos los gusanos
@@ -32,6 +35,8 @@ private:
   std::list<Worm> worms_list;
 
 public:
+  explicit GameState(const std::list<Worm> &list) : worms_list(list) {}
+
   // Constructor que funciona como una deserializacion, recibe la tira de bytes
   // y devuelve un game state
   GameState(Socket &skt, bool *was_closed, std::vector<char> buf)
@@ -51,18 +56,21 @@ public:
 
   void serialize(Socket &skt, bool *was_closed) {
     uint8_t worms_amount = worms_list.size();
-    std::vector<char> buf(worms_amount * sizeof(Worm) + 1);
+    std::vector<char> buf((worms_amount * 2 * sizeof(int16_t)) + 1);
     memcpy(buf.data(), &worms_amount, sizeof(worms_amount));
 
     int i = 0;
     for (std::list<Worm>::iterator it = worms_list.begin();
          it != worms_list.end(); ++it) {
-      memcpy(&buf[i * sizeof(Worm) + 1], it->data(), sizeof(Worm));
+      auto pos_x = it->get_pos_x();
+      auto pos_y = it->get_pos_y();
+      memcpy(&buf[(i * 2 * sizeof(int16_t)) + 1], &pos_x, sizeof(int16_t));
+      memcpy(&buf[((i * 2 * sizeof(int16_t)) + 2) + 1], &pos_y,
+             sizeof(int16_t));
       i++;
     }
     skt.sendall(buf.data(), buf.size(), was_closed);
   }
 };
-
 
 #endif

@@ -19,7 +19,7 @@ void Server::run() {
     std::unique_ptr<Command> cmd = prot.process_command();
     cmd->run();
 
-    std::list list({Worm(Position(1, 3)), Worm(Position(2, 5))});
+    std::list<Worm> list({Worm(Position(1, 3)), Worm(Position(2, 5))});
     GameState game_state(list);
     prot.send_game_state(game_state);
   }

@@ -3,9 +3,12 @@
 #include <utility>
 #include <vector>
 
-Player::Player(Socket peer):
+Player::Player(Socket peer, GamesHandler& games_handler, Queue<GameState*>* sender_queue):
         skt(std::move(peer)),
-        client_handler(skt, keep_playing, in_game) 
+        games_handler(games_handler),
+        protocol(skt),
+        sender(skt, protocol, sender_queue, keep_playing),
+        client_handler(skt, protocol, games_handler, sender, sender_queue, keep_playing, in_game)
         {}
 
 void Player::start() {

@@ -16,7 +16,7 @@ class ServerProtocol {
 
     std::unique_ptr<Command> receive_command(bool& was_closed);
 
-    int send(std::vector<char> command, bool& was_closed);
+    int send(GameState* game_state, bool& was_closed);
 };
 
 #endif

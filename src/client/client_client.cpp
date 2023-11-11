@@ -83,6 +83,7 @@ int Client::run() {
           case SDLK_ESCAPE:
           case SDLK_q:
             sender_queue.close();
+            receiver_queue.close();
             return 0;
           case SDLK_RIGHT:
             if (! is_running)

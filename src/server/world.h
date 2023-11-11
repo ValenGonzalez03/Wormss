@@ -27,6 +27,9 @@ class World {
 	void delete_beams();
 	
 	~World();
+	
+	World(const World&) = delete;
+	World& operator=(const World&) = delete;
 };
 
 #endif

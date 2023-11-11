@@ -39,5 +39,13 @@ void World::delete_beams() {
 
 World::~World()
 {
+	for (auto& current_worm: worms) {
+        delete current_worm;
+    }
+    
+    for (auto& current_beam: beams) {
+        delete current_beam;
+    }
+    
 	delete world;
 }

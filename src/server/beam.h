@@ -18,7 +18,9 @@ class Beam {
 
 	public:
 	explicit Beam(b2World* world, float pos_x, float pos_y);
-
+	
+	Beam(const Beam&) = delete;
+	Beam& operator=(const Beam&) = delete;
 };
 
 #endif

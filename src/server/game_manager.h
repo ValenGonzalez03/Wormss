@@ -6,13 +6,16 @@
 #include "world.h"
 #include "worm.h"
 #include "beam.h"
+#include "game_state.h"
 
 class GameManager {
 	private:
-	World* world;
-	int players = 0;
-	//current_player_id
-	//current_worm_id
+	World world;
+	int current_players = 0;
+	int current_player_id;
+	int current_worm_id;
+	std::list<int> players;
+	Worm* worm;
 	
 	float timeStep = 1.0f / 60.0f;
 	int32 velocityIterations = 6;
@@ -21,13 +24,27 @@ class GameManager {
 	public:
 	explicit GameManager();
 	
+	void initialize_game();
+	
+	void add_player(const int& player_id);
+	
+	void delete_player(const int& player_id);
+	
 	void step();
 	
 	void update();
 	
-	void get_state();
+	void move(const int& player_id, const int& direction);
 	
-	 ~GameManager();
+	GameState get_state();
+	
+	// SOLO DE PRUEBA
+	b2Vec2 get_worm_position();
+	
+	~GameManager();
+	
+	GameManager(const GameManager&) = delete;
+	GameManager& operator=(const GameManager&) = delete; 
 };
 
 #endif

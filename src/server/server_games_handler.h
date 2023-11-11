@@ -4,7 +4,6 @@
 #include <list>
 #include <mutex>
 
-#include <map>
 #include "server_game.h"
 #include "commands/command.h"
 
@@ -12,7 +11,6 @@ class GamesHandler {
 private:
     std::mutex m;
     std::list<Game*> games;
-    std::map<int, Game*> games2;
     int games_counter = 0;
 
 public:
@@ -29,6 +27,9 @@ public:
     bool game_exist(int game_id);
     
     ~GamesHandler();
+    
+    GamesHandler(const GamesHandler&) = delete;
+	GamesHandler& operator=(const GamesHandler&) = delete; 
 };
 
 #endif

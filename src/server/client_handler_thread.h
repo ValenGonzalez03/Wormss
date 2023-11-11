@@ -17,7 +17,6 @@ class ClientHandler : public Thread {
 	Queue<GameState*>* sender_queue;
 	std::atomic<bool>& keep_playing;
 	std::atomic<bool>& in_game;
-	Game& game;
 	
 	public:
 	/*

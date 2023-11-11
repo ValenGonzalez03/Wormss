@@ -2,7 +2,6 @@
 #define CREATE_GAME_H
 
 #include "command.h"
-#include "../server_games_handler.h"
 #include "../../common/protocol_codes.h"
 
 class CreateGame : public Command {
@@ -13,10 +12,11 @@ class CreateGame : public Command {
 	 * Constructor de la clase.
 	 * */
     explicit CreateGame(int player_id);
-
+	/*
     void handle_command(GamesHandler& games_handler, Queue<GameState*>* sender_queue) override {
         games_handler.create_game(sender_queue, player_id);
     };
+    */
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "../common/socket.h"
 #include "../common/queue.h"
 #include "server_protocol.h"
+#include "game_state.h"
 
 class PlayerSender : public Thread {
 	private:

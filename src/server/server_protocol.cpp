@@ -6,7 +6,8 @@
 #include "commands/move.h"
 
 ServerProtocol::ServerProtocol(Socket& peer): peer(peer) {}
-
+// VER ESTO
+/*
 std::unique_ptr<Command> ServerProtocol::receive_command(bool& was_closed) {
     unsigned int sz = 1;
     std::vector<char> buf(1);
@@ -24,9 +25,9 @@ std::unique_ptr<Command> ServerProtocol::receive_command(bool& was_closed) {
         return std::make_unique<Move>(id);
     }
 
-    return;
+    return nullptr;
 }
-
+*/
 int ServerProtocol::send(GameState* game_state, bool& was_closed) {
     std::vector<char> command;
     int s = peer.sendall(command.data(), command.size(), &was_closed);

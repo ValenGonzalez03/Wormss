@@ -2,7 +2,7 @@
 #define MOVE_H
 
 #include "command.h"
-#include "../server_game.h"
+#include "../game_manager.h"
 #include "../../common/protocol_codes.h"
 
 class Move : public Command {
@@ -14,8 +14,8 @@ class Move : public Command {
 	 * */
     explicit Move(int player_id);
 
-    void handle_command(Game& game) override {
-        //game.move(id_client);
+    void handle_command(GameManager& game_manager) override {
+        game_manager.move(player_id, 0);
     };
 };
 

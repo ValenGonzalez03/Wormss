@@ -4,6 +4,8 @@
 #include <vector>
 #include "../common/socket.h"
 #include "commands/command.h"
+#include "game_state.h"
+#include <memory>
 
 class ServerProtocol {
     Socket& peer;
@@ -14,7 +16,7 @@ class ServerProtocol {
 	 * */
     explicit ServerProtocol(Socket& peer);
 
-    std::unique_ptr<Command> receive_command(bool& was_closed);
+    //std::unique_ptr<Command> receive_command(bool& was_closed);   VER ESTO
 
     int send(GameState* game_state, bool& was_closed);
 };

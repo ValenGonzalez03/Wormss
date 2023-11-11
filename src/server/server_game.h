@@ -7,12 +7,13 @@
 
 #include "game_state.h"
 #include "game_manager.h"
-#include "commands/command.h"
 #include "../common/thread.h"
 #include "../common/queue.h"
 
 #define MAX_PLAYERS 10
 #define MS_PER_UPDATE 10
+
+class Command;
 
 class Game : public Thread {
 private:

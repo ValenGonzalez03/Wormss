@@ -5,7 +5,8 @@
 #include <mutex>
 
 #include "server_game.h"
-#include "commands/command.h"
+
+class Command;
 
 class GamesHandler {
 private:

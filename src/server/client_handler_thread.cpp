@@ -9,8 +9,8 @@ void ClientHandler::run() {
         while (keep_playing) {
             //protocol.receive...
             if(not in_game) {		// comunicacion sincronica
-				std::unique_ptr<Command> command = protocol.receive_command(was_closed);
-				Queue<Command*>* game_commands_queue = command->handle_command(games_handler, sender_queue);
+				//std::unique_ptr<Command> command = protocol.receive_command(was_closed);
+				//Queue<Command*>* game_commands_queue = command->handle_command(games_handler, sender_queue);
 				in_game = true;
 				sender.start();
 			} else {			   // comunicacion asincronica

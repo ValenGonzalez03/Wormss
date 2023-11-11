@@ -3,6 +3,7 @@
 
 #include "../common/thread.h"
 #include "../common/socket.h"
+#include "commands/command.h"
 #include "player_sender_thread.h"
 #include "server_protocol.h"
 #include "server_games_handler.h"
@@ -17,7 +18,6 @@ class ClientHandler : public Thread {
 	Queue<GameState*>* sender_queue;
 	std::atomic<bool>& keep_playing;
 	std::atomic<bool>& in_game;
-	Game& game;
 	
 	public:
 	/*

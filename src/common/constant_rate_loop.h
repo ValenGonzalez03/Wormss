@@ -5,30 +5,27 @@
 #include <cmath>
 #include <thread>
 
-typedef std::chrono::duration<std::chrono::milliseconds> dur_ms;
-typedef std::chrono::time_point<std::chrono::steady_clock,
-                                std::chrono::milliseconds>
-    time_p_ms;
-typedef std::chrono::milliseconds ms;
-typedef std::chrono::duration<float> dur_f;
+using namespace std::chrono;
+
+typedef duration<float, duration<float>> dur_ms;
+typedef time_point<steady_clock, milliseconds> time_p_ms;
+typedef duration<float> dur_f;
 
 class ConstantRateLoop {
 public:
-  void loop(dur_ms rate) {
+  void loop(milliseconds rate) {
 
-    auto t1 =
-        std::chrono::time_point_cast<ms>(std::chrono::steady_clock::now());
+    auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     int it_frames = 0;
     while (true) {
-      func_to_excecute();
+      func_to_execute();
 
-      auto t2 =
-          std::chrono::time_point_cast<ms>(std::chrono::steady_clock::now());
+      auto t2 = time_point_cast<milliseconds>(steady_clock::now());
 
-      dur_ms time_func(t2 - t1);
-      auto rest = rate.count().count() - time_func.count().count();
+      auto time_func = (t2 - t1);
+      auto rest = rate.count() - time_func.count();
 
-      drop_and_rest(rest, rate.count().count(), &t1, &it_frames);
+      drop_and_rest(rest, rate.count(), &t1, &it_frames);
     }
   }
 
@@ -38,13 +35,13 @@ public:
       rest = rate - static_cast<int>(behind) % static_cast<int>(rate);
 
       auto lost = behind + rest;
-      auto lost_ms = std::chrono::duration_cast<ms>(dur_f(lost));
+      auto lost_ms = duration_cast<milliseconds>(dur_f(lost));
 
       *t1 += lost_ms;
       it += static_cast<int>(floor(lost / rate));
     }
-    auto sleep_ms = std::chrono::duration_cast<ms>(dur_f(rest));
-    auto rate_ms = std::chrono::duration_cast<ms>(dur_f(rate));
+    auto sleep_ms = duration_cast<milliseconds>(dur_f(rest));
+    auto rate_ms = duration_cast<milliseconds>(dur_f(rate));
 
     std::this_thread::sleep_for(sleep_ms);
 
@@ -52,7 +49,7 @@ public:
     *it += 1;
   }
 
-  virtual void func_to_excecute() = 0;
+  virtual void func_to_execute() = 0;
 };
 
 #endif

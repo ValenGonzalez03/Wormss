@@ -4,16 +4,12 @@
 #include <algorithm>
 #include <utility>
 
-#define QUEUE_MAX_SIZE 20
-
 Accept::Accept(Socket& skt): skt(std::move(skt)) {}
 
 void Accept::run() {
     try {
         while (is_alive) {
-            // A CHECKEAR PORQUE PUEDE SER QUE LA QUEUE TENGA EL ESTADO DEL JUEGO EN VEZ DE COMANDOS
-            Queue<GameState*>* sender_queue = new Queue<GameState*>(QUEUE_MAX_SIZE);
-            Player* player = new Player(skt.accept(), games_handler, sender_queue);
+            Player* player = new Player(skt.accept(), games_handler);
             player->start();
 
             reap_dead();

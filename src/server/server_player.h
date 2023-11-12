@@ -13,6 +13,7 @@
 class Player {
 	private:
 	Socket skt;
+	Queue<GameState*> sender_queue;
 	GamesHandler& games_handler;
 	std::atomic<bool> keep_playing {true};
 	std::atomic<bool> in_game {false};
@@ -24,7 +25,7 @@ class Player {
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit Player(Socket peer, GamesHandler& games_handler, Queue<GameState*>* sender_queue);
+	explicit Player(Socket peer, GamesHandler& games_handler);
 	
 	/*
 	 * Ejecuta los hilos.

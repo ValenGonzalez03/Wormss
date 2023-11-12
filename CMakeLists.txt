@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(Worms LANGUAGES CXX)
+find_package(box2d REQUIRED)
 find_package(SDL2pp REQUIRED)
 
 # add compilation flags
@@ -25,12 +26,23 @@ target_link_libraries(client PUBLIC pthread)
 target_link_libraries(client PUBLIC SDL2pp::SDL2pp)
 
 # define targets
-add_executable(server ./src/server/server_main.cpp
-                    ./src/server/server_server.cpp
-		            ./src/common/socket.cpp 
-		            ./src/common/liberror.cpp 
-		            ./src/common/resolver.cpp 
-		            ./src/common/resolvererror.cpp
-					./src/common/protocol.cpp)
-		          
-		          
+add_executable(server ./src/server/server_main.cpp 
+					  ./src/server/server_server.cpp 
+					  ./src/server/server_accept_thread.cpp
+					  ./src/server/server_player.cpp
+					  ./src/server/player_sender_thread.cpp
+					  ./src/server/client_handler_thread.cpp
+					  ./src/server/server_games_handler.cpp
+					  ./src/server/server_game.cpp
+					  ./src/server/game_manager.cpp
+					  ./src/server/server_protocol.cpp
+					  ./src/server/commands/command.cpp 
+					  ./src/server/world.cpp
+					  ./src/server/worm.cpp
+					  ./src/server/beam.cpp
+					  ./src/common/socket.cpp 
+					  ./src/common/liberror.cpp 
+					  ./src/common/resolver.cpp 
+					  ./src/common/resolvererror.cpp)
+
+target_link_libraries (server PUBLIC box2d)

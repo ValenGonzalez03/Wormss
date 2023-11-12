@@ -1,12 +1,30 @@
 #include "server_server.h"
+#include "server_accept_thread.h"
 #include <iostream>
+#include "../common/socket.h"
+
+/*		PARA LA PRUEBA
 #include <list>
 #include "../common/protocol.h"
 #include "../common/game_state.h"
+*/
 
 Server::Server(const std::string &servname) : servname(servname) {}
 
 void Server::run() {
+	Socket skt(servname.c_str());
+
+    Accept accept_thread(skt);
+    accept_thread.start();
+    
+    while (std::cin.get() != 'q') {}
+    
+    accept_thread.kill();
+    accept_thread.join();
+	
+    return;
+
+/*		PRUEBA DE ENVIO DE GAME STATE
   Socket accepter_skt(servname.c_str());
 
   // Aceptador accept_thread(skt);
@@ -26,9 +44,10 @@ void Server::run() {
 
   while (std::cin.get() != 'q') {
   }
-  /*
-  accept_thread.kill();
-  accept_thread.join();
-      */
+
+  //accept_thread.kill();
+  //accept_thread.join();
+   
   return;
+*/
 }

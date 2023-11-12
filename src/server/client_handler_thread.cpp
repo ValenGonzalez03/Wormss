@@ -25,7 +25,9 @@ void ClientHandler::run() {
 }
 
 void ClientHandler::join_sender() {
-	sender.join();
+	if (in_game) {
+		sender.join();
+	}
 }
 
 ClientHandler::~ClientHandler() {

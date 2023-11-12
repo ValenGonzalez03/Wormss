@@ -42,6 +42,8 @@ public:
   void handle_start_moving(int direction, bool &is_running);
 
   void handle_stop_moving(bool &is_running);
+
+  void handle_finish_game();
 };
 
 #endif

@@ -75,15 +75,14 @@ int Client::run() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) { // Cierra el juego
-        sender_queue.close();
+        handle_finish_game();
         return 0;
 
       } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
         switch (event.key.keysym.sym) {
           case SDLK_ESCAPE:
           case SDLK_q:
-            sender_queue.close();
-            receiver_queue.close();
+            handle_finish_game();
             return 0;
           case SDLK_RIGHT:
             if (! is_running)
@@ -167,6 +166,12 @@ void Client::handle_stop_moving(bool &is_running) {
   std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>();
   sender_queue.try_push(cmd);
   is_running = false;
+}
+
+void Client::handle_finish_game() {
+  prot.close_socket();
+  sender_queue.close();
+  //receiver_queue.close();
 }
 
 // ------------------------------------------------------------------------

@@ -35,6 +35,8 @@ public:
   void send_game_state(GameState game_state);
 
   GameState process_game_state();
+
+  void close_socket();
 };
 
 #endif

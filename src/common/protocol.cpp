@@ -52,3 +52,8 @@ GameState Protocol::process_game_state() {
 
   return GameState(skt, &was_closed, buf);
 }
+
+void Protocol::close_socket() {
+  skt.shutdown(2);
+  skt.close();
+}

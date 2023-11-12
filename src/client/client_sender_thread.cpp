@@ -6,19 +6,15 @@ ClientSenderThread::ClientSenderThread(Protocol &protocol,
 
 void ClientSenderThread::run() {
   // Blocking pop
-    bool was_closed = false;
-    while (!was_closed && _keep_running) {
+    while (_keep_running) {
         try {
             // Obtengo el mensaje de la cola
             std::shared_ptr<Command> cmd = sender_queue.pop();
             // Envio el msj al server
             prot.send_command(*cmd);
-            if (was_closed) {
-                std::cout << "Socket cerrado" << std::endl;
-                break;
-            }
         } catch (const std::exception& err) {
-            // Si la cola está cerrada termino
+            //sender_queue.close();
+            // Si la cola está cerrada o el socket está cerrado termino
             break;
         }
     }

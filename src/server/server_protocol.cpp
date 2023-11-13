@@ -28,7 +28,7 @@ std::unique_ptr<Command> ServerProtocol::receive_command(bool& was_closed) {
     return nullptr;
 }
 */
-int ServerProtocol::send(GameState* game_state, bool& was_closed) {
+int ServerProtocol::send(GameState& game_state, bool& was_closed) {
     std::vector<char> command;
     int s = peer.sendall(command.data(), command.size(), &was_closed);
     if (was_closed || s == 0) {

@@ -13,6 +13,7 @@ void Accept::run() {
             player->start();
 
             reap_dead();
+            games_handler.reap_dead();
             players.push_back(player);
         }
 

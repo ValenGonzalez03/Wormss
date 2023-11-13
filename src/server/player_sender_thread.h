@@ -11,14 +11,14 @@ class PlayerSender : public Thread {
 	private:
 	Socket& skt;
 	ServerProtocol& protocol;
-	Queue<GameState*>* sender_queue;
+	Queue<GameState>* sender_queue;
 	std::atomic<bool>& keep_playing;
 
 	public:
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit PlayerSender(Socket& skt, ServerProtocol& protocol, Queue<GameState*>* sender_queue, 
+	explicit PlayerSender(Socket& skt, ServerProtocol& protocol, Queue<GameState>* sender_queue, 
 					std::atomic<bool>& keep_playing);
 
 	/*

@@ -15,7 +15,8 @@ class ClientHandler : public Thread {
 	ServerProtocol& protocol;
 	GamesHandler& games_handler;
 	PlayerSender& sender;
-	Queue<GameState*>* sender_queue;
+	Queue<GameState>* sender_queue;
+	Queue<Command*>* receiver_queue;
 	std::atomic<bool>& keep_playing;
 	std::atomic<bool>& in_game;
 	
@@ -23,7 +24,7 @@ class ClientHandler : public Thread {
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit ClientHandler(Socket& skt, ServerProtocol& protocol, GamesHandler& games_handler, PlayerSender& sender, Queue<GameState*>* sender_queue,
+	explicit ClientHandler(Socket& skt, ServerProtocol& protocol, GamesHandler& games_handler, PlayerSender& sender, Queue<GameState>* sender_queue,
 					  std::atomic<bool>& keep_playing, std::atomic<bool>& in_game);
 	
 	/*

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(Worms LANGUAGES CXX)
 find_package(box2d REQUIRED)
 find_package(SDL2pp REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 # add compilation flags
 set(CMAKE_CXX_STANDARD 17)
@@ -47,3 +48,4 @@ add_executable(server ./src/server/server_main.cpp
 
 target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)
+target_link_libraries(server PUBLIC yaml-cpp)

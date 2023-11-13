@@ -1,5 +1,6 @@
 #include <iostream>
 #include "server_server.h"
+#include "game_config.h"
 
 #define SUCCESS 0
 #define ERROR 1
@@ -10,6 +11,11 @@ int main(int argc, char* argv[]) { try {
 		return ERROR;
 	}
 	const std::string& servname = argv[1];
+
+	// std::string config_path = "/game_config.yml";
+	// GameConfig game_config(RESOURCES_PATH + config_path);
+	// std::cout << "worm speed: " << game_config.get_worm_speed() << std::endl;
+	// std::cout << "worm life: " << game_config.get_worm_life() << std::endl;
 
 	Server server(servname);
 	server.run();

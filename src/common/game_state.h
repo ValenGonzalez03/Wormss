@@ -14,8 +14,9 @@ private:
   Position pos;
 
 public:
-  Worm() : pos(0, 0) {}
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
+  Worm() : pos(0, 0) {}
+  
   explicit Worm(Position pos) : pos(pos) {}
 
   // Constructor para deserializar GameState

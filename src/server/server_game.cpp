@@ -3,7 +3,9 @@
 #include "math.h"
 #include <unistd.h>
 
-Game::Game(int& game_id): game_id(game_id), commands(100) {
+#define QUEUE_MAX_SIZE 20
+
+Game::Game(int& game_id): game_id(game_id), commands(QUEUE_MAX_SIZE) {
 	game_manager.initialize_game();
 	}
 
@@ -69,7 +71,7 @@ bool Game::compare_id(const int& another_game_id) {
 	return (game_id == another_game_id);
 }
 
-void Game::push_game_state(GameState game_state) {	
+void Game::push_game_state(GameState game_state) {	// hacer monitor, posible RC
 	for (auto& current_queue: queues_sender) {
         current_queue.second->try_push(game_state);
 	}

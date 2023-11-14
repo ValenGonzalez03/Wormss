@@ -1,7 +1,6 @@
 #include "box2d/box2d.h"
 #include <stdio.h>
 #include "game_manager.h"
-#include "game_state.h"
 
 // cambiar despues
 #define LEFT 0
@@ -12,7 +11,8 @@ GameManager::GameManager() {}
 void GameManager::initialize_game() {
 	world.create_beam(0, 0);
 	worm = world.create_worm(0, 4);
-	world.create_worm(1, 4);
+	worms_list.push_back(worm);
+	//worms_list.push_back(world.create_worm(1, 4));
 }
 
 void GameManager::add_player(const int& player_id) {
@@ -41,7 +41,8 @@ void GameManager::move(const int& player_id, const int& direction) {
 }
 	
 GameState GameManager::get_state() {
-	GameState game_state(0, 0);
+	GameState game_state;
+	game_state.add_worm(worm->get_position().x, worm->get_position().y);
 	return game_state;
 }
 

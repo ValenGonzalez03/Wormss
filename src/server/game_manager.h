@@ -15,7 +15,12 @@ class GameManager {
 	int current_player_id;
 	int current_worm_id;
 	std::list<int> players;
+	std::list<Worm*> worms_list;
+	
+	//PARA PRUEBAS
 	Worm* worm;
+	
+	//GameState game_state;
 	
 	float timeStep = 1.0f / 60.0f;
 	int32 velocityIterations = 6;

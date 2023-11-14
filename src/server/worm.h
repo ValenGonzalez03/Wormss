@@ -26,6 +26,10 @@ class Worm {
 	
 	b2Vec2 get_position();
 	
+	float get_pos_x();
+	
+	float get_pos_y();
+	
 	Worm(const Worm&) = delete;
 	Worm& operator=(const Worm&) = delete;
 };

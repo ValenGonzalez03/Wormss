@@ -22,6 +22,8 @@ public:
     virtual void receive(Socket &skt, bool* was_closed) = 0;
 
     virtual void run() = 0;
+
+    virtual Queue<std::unique_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue) = 0;
 };
 
 #endif

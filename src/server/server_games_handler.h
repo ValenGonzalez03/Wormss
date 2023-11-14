@@ -21,9 +21,9 @@ public:
 
     void delete_game(const int& game_id);
 
-    Queue<Command*>* create_game(Queue<GameState*>* sender_queue, const int&  player_id);
+    Queue<std::unique_ptr<Command>>* create_game(std::shared_ptr<Queue<GameState*>> sender_queue, const int&  player_id);
 
-    Queue<Command*>* join_game(Queue<GameState*>* sender_queue, const int&  player_id, const int&  game_id);
+    Queue<std::unique_ptr<Command>>* join_game(std::shared_ptr<Queue<GameState*>> sender_queue, const int&  player_id, const int&  game_id);
     
     bool game_exist(int game_id);
     

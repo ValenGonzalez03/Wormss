@@ -4,21 +4,20 @@
 #include "../common/thread.h"
 #include "../common/socket.h"
 #include "../common/queue.h"
-#include "server_protocol.h"
+#include "../common/protocol.h"
 #include "game_state.h"
 
 class PlayerSender : public Thread {
 	private:
-	Socket& skt;
-	ServerProtocol& protocol;
-	Queue<GameState*>* sender_queue;
+	Protocol& protocol;
+	std::shared_ptr<Queue<GameState*>> sender_queue;
 	std::atomic<bool>& keep_playing;
 
 	public:
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit PlayerSender(Socket& skt, ServerProtocol& protocol, Queue<GameState*>* sender_queue, 
+	explicit PlayerSender(Protocol& protocol, std::shared_ptr<Queue<GameState*>> sender_queue, 
 					std::atomic<bool>& keep_playing);
 
 	/*

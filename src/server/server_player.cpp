@@ -3,15 +3,13 @@
 #include <utility>
 #include <vector>
 
-#define QUEUE_MAX_SIZE 20
-
-Player::Player(Socket peer, GamesHandler& games_handler):
+Player::Player(Socket&& peer, GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue):
         skt(std::move(peer)),
-        sender_queue(QUEUE_MAX_SIZE),
+        sender_queue(sender_queue),
         games_handler(games_handler),
-        protocol(skt),
-        sender(skt, protocol, &sender_queue, keep_playing),
-        client_handler(skt, protocol, games_handler, sender, &sender_queue, keep_playing, in_game)
+        protocol(std::move(skt)),
+        sender(protocol, sender_queue, keep_playing),
+        client_handler(skt, protocol, games_handler, sender, sender_queue, keep_playing, in_game)
         {}
 
 void Player::start() {

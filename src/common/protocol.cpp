@@ -3,6 +3,8 @@
 // Algunos posibles codigos de acciones que puede realizar el cliente para que
 // se envien por el protocolo
 namespace CODE_PLAYER_COMM {
+uint8_t CREATE_GAME = 0x03;
+uint8_t JOIN_GAME = 0x04;
 uint8_t START_MOVING = 0x05;
 uint8_t STOP_MOVING = 0x06;
 uint8_t JUMP = 0x07;
@@ -26,7 +28,11 @@ std::unique_ptr<Command> Protocol::process_command() {
   uint8_t code;
   uint8_t client_id = 0;
   skt.recvall(&code, sizeof(code), &was_closed);
-  if (code == CODE_PLAYER_COMM::START_MOVING) {
+  if (code == CODE_PLAYER_COMM::CREATE_GAME) {
+    return std::make_unique<CreateGame>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
+    return std::make_unique<JoinGame>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::START_MOVING) {
     return std::make_unique<StartMoving>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_MOVING) {
     return std::make_unique<StopMoving>(client_id, skt, &was_closed);

@@ -18,8 +18,8 @@ class Command;
 class Game : public Thread {
 private:
     std::mutex m;
-    std::map<int,Queue<GameState*>*> queues_sender;
-    Queue<Command*> commands;
+    std::map<int,std::shared_ptr<Queue<GameState*>>> queues_sender;
+    Queue<std::unique_ptr<Command>> commands;
     int game_id;
     bool keep_playing = true;
     GameManager game_manager;
@@ -28,11 +28,11 @@ private:
 public:
     Game(int& game_id);
 
-    Queue<Command*>* add_player(Queue<GameState*>* sender_queue, const int& player_id);
+    Queue<std::unique_ptr<Command>>* add_player(std::shared_ptr<Queue<GameState*>> sender_queue, const int& player_id);
 
     void delete_player(const int& player_id);
 
-    void push_command(Command* command);
+    void push_command(std::unique_ptr<Command> command);
 
     void handle_command();
     

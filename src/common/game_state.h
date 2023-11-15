@@ -5,7 +5,7 @@
 #include <list>
 #include <vector>
 
-#include "../client/client_position.h"
+#include "position.h"
 #include "socket.h"
 
 // Crea un gusano con su posicion actual
@@ -16,7 +16,7 @@ private:
 public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   Worm() : pos(0, 0) {}
-  
+
   explicit Worm(Position pos) : pos(pos) {}
 
   // Constructor para deserializar GameState
@@ -24,9 +24,9 @@ public:
     this->pos = Position(buf);
   }
 
-  int16_t get_pos_x() { return pos.get_position_x(); }
+  float get_pos_x() { return pos.get_position_x(); }
 
-  int16_t get_pos_y() { return pos.get_position_y(); }
+  float get_pos_y() { return pos.get_position_y(); }
 };
 
 // Una estructura del estado del juego. Contiene una lista con todos los gusanos
@@ -57,7 +57,7 @@ public:
 
   void serialize(Socket &skt, bool *was_closed) {
     uint8_t worms_amount = worms_list.size();
-    std::vector<char> buf((worms_amount * 2 * sizeof(int16_t)) + 1);
+    std::vector<char> buf((worms_amount * 2 * sizeof(float)) + 1);
     memcpy(buf.data(), &worms_amount, sizeof(worms_amount));
 
     int i = 0;
@@ -65,9 +65,8 @@ public:
          it != worms_list.end(); ++it) {
       auto pos_x = it->get_pos_x();
       auto pos_y = it->get_pos_y();
-      memcpy(&buf[(i * 2 * sizeof(int16_t)) + 1], &pos_x, sizeof(int16_t));
-      memcpy(&buf[((i * 2 * sizeof(int16_t)) + 2) + 1], &pos_y,
-             sizeof(int16_t));
+      memcpy(&buf[(i * 2 * sizeof(float)) + 1], &pos_x, sizeof(float));
+      memcpy(&buf[((i * 2 * sizeof(float)) + 2) + 1], &pos_y, sizeof(float));
       i++;
     }
     skt.sendall(buf.data(), buf.size(), was_closed);

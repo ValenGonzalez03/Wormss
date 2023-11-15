@@ -5,11 +5,11 @@
 #include <string>
 #include <utility>
 
+#include "../common/constant_rate_loop.h"
+#include "../common/position.h"
 #include "../common/protocol.h"
 #include "../common/queue.h"
 #include "../common/socket.h"
-#include "../common/constant_rate_loop.h"
-#include "client_position.h"
 #include "client_receiver_thread.h"
 #include "client_resource_pool.h"
 #include "client_sender_thread.h"
@@ -22,13 +22,19 @@ struct worm_state {
   bool is_running = false; // whether the character is currently running
   int run_phase = -1;      // run animation phase
   float position = 0.0;    // player position
+  // cppcheck-suppress unusedStructMember
   unsigned int prev_ticks;
 };
 
 struct client_SDL {
-  SDL2pp::Window window = SDL2pp::Window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                480, 360, SDL_WINDOW_RESIZABLE);
-  SDL2pp::Renderer renderer = SDL2pp::Renderer(window, -1, SDL_RENDERER_ACCELERATED);
+  // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
+  SDL2pp::Window window =
+      SDL2pp::Window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED,
+                     SDL_WINDOWPOS_UNDEFINED, 480, 360, SDL_WINDOW_RESIZABLE);
+  // Create accelerated video renderer with default driver
+  SDL2pp::Renderer renderer =
+      SDL2pp::Renderer(window, -1, SDL_RENDERER_ACCELERATED);
+  // Create resource pool
   ResourcePool resource_pool = ResourcePool(renderer);
   WorldView world_view = WorldView(resource_pool, renderer);
   SDL2pp::Texture *worm_walking = resource_pool.get_worm_walking();
@@ -58,6 +64,8 @@ public:
 
   int run();
 
+  // Devuelve false si el cliente no cerro el programa, devuelve true en caso
+  // contrario.
   bool func_to_execute() override;
 
   void handle_start_moving(int direction, bool &is_running);

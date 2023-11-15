@@ -9,26 +9,26 @@
 // Crea una posicion en pixeles para un objeto
 struct Position {
 private:
-  int16_t _pos_x;
-  int16_t _pos_y;
+  float _pos_x;
+  float _pos_y;
 
 public:
-  explicit Position(int16_t position_x, int16_t position_y)
+  explicit Position(float position_x, float position_y)
       : _pos_x(position_x), _pos_y(position_y) {}
 
   // Constructor para deserializar GameState
   explicit Position(const std::vector<char> &buf) : _pos_x(0), _pos_y(0) {
-    int16_t pos_x = 0;
-    int16_t pos_y = 0;
-    memcpy(&pos_x, buf.data(), sizeof(int16_t));
-    memcpy(&pos_y, &buf[sizeof(int16_t)], sizeof(int16_t));
+    float pos_x = 0;
+    float pos_y = 0;
+    memcpy(&pos_x, buf.data(), sizeof(float));
+    memcpy(&pos_y, &buf[sizeof(float)], sizeof(float));
     this->_pos_x = pos_x;
     this->_pos_y = pos_y;
   }
 
-  int get_position_x() { return this->_pos_x; }
+  float get_position_x() { return this->_pos_x; }
 
-  int get_position_y() { return this->_pos_y; }
+  float get_position_y() { return this->_pos_y; }
 
   //~Position() { free(data); }
 };

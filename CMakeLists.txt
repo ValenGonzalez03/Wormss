@@ -39,7 +39,7 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/server_protocol.cpp
 					  ./src/server/commands/command.cpp 
 					  ./src/server/world.cpp
-					  ./src/server/worm.cpp
+					  ./src/server/worm_game.cpp
 					  ./src/server/beam.cpp
 					  ./src/common/socket.cpp 
 					  ./src/common/liberror.cpp 

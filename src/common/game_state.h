@@ -12,6 +12,9 @@
 struct Worm {
 private:
   Position pos;
+  // uint16_t id;
+  // uint16_t player_id;
+  // uint8_t direction;
 
 public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
@@ -34,8 +37,11 @@ public:
 struct GameState {
 private:
   std::list<Worm> worms_list;
+  // uint16_t players_amount;
 
 public:
+  GameState() : worms_list(std::list<Worm>(0)) {}
+
   explicit GameState(const std::list<Worm> &list) : worms_list(list) {}
 
   // Constructor que funciona como una deserializacion, recibe la tira de bytes
@@ -70,6 +76,11 @@ public:
       i++;
     }
     skt.sendall(buf.data(), buf.size(), was_closed);
+  }
+
+  void add_worm(const float &pos_x, const float &pos_y) {
+    Worm worm(Position(pos_x, pos_y));
+    worms_list.push_back(worm);
   }
 };
 

@@ -1,8 +1,8 @@
 #include "box2d/box2d.h"
-#include "worm.h"
+#include "worm_body.h"
 #include <stdio.h>
 
-Worm::Worm(b2World* world, float pos_x, float pos_y): world(world), pos_x(pos_x), pos_y(pos_y) {
+WormBody::WormBody(b2World* world, float pos_x, float pos_y): world(world), pos_x(pos_x), pos_y(pos_y) {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(pos_x, pos_y);
@@ -21,7 +21,7 @@ Worm::Worm(b2World* world, float pos_x, float pos_y): world(world), pos_x(pos_x)
 
 }
 
-void Worm::move_left() {
+void WormBody::move_left() {
 	b2Vec2 body_vel = body->GetLinearVelocity();
 	float desired_vel = -vel;
 	
@@ -32,7 +32,7 @@ void Worm::move_left() {
 	body->ApplyLinearImpulse(b2Vec2(impulse,0), body->GetWorldCenter(), true);
 }
 	
-void Worm::move_right() {
+void WormBody::move_right() {
 	b2Vec2 body_vel = body->GetLinearVelocity();
 	float desired_vel = vel;
 	
@@ -43,6 +43,6 @@ void Worm::move_right() {
 	body->ApplyLinearImpulse(b2Vec2(impulse,0), body->GetWorldCenter(), true);
 }
 
-b2Vec2 Worm::get_position() {
+b2Vec2 WormBody::get_position() {
 	return body->GetPosition();
 }

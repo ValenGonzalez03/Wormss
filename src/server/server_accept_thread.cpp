@@ -29,7 +29,7 @@ void Accept::run() {
 }
 
 void Accept::reap_dead() {
-    auto dead = [](Player* player) {
+    auto dead = [](std::shared_ptr<Player> player) {
         if (player->is_dead()) {
             player->join();
             return true;

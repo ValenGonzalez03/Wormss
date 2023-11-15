@@ -4,9 +4,7 @@
 #include "box2d/box2d.h"
 #include <stdio.h>
 #include "world.h"
-#include "worm.h"
-#include "beam.h"
-#include "game_state.h"
+#include "../common/game_state.h"
 
 class GameManager {
 	private:
@@ -15,7 +13,7 @@ class GameManager {
 	int current_player_id;
 	int current_worm_id;
 	std::list<int> players;
-	Worm* worm;
+	WormBody* worm;
 	
 	float timeStep = 1.0f / 60.0f;
 	int32 velocityIterations = 6;

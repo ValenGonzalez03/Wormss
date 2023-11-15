@@ -1,7 +1,6 @@
 #include "box2d/box2d.h"
 #include <stdio.h>
 #include "game_manager.h"
-#include "game_state.h"
 
 // cambiar despues
 #define LEFT 0

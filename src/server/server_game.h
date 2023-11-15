@@ -5,7 +5,7 @@
 #include <mutex>
 #include <map>
 
-#include "game_state.h"
+#include "../common/game_state.h"
 #include "game_manager.h"
 #include "../common/thread.h"
 #include "../common/queue.h"

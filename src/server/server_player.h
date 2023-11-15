@@ -9,7 +9,7 @@
 #include "player_sender_thread.h"
 #include "../common/protocol.h"
 #include "server_games_handler.h"
-#include "game_state.h"
+#include "../common/game_state.h"
 
 class Player {
 	private:

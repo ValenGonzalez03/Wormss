@@ -3,10 +3,12 @@
 
 #include <cstdint>
 #include "socket.h"
+#include "queue.h"
+#include "../server/server_games_handler.h"
 
 class Command {
 protected:
-    uint8_t code;
+    uint8_t code ;
     uint8_t client_id;
 
 public:
@@ -21,9 +23,9 @@ public:
     // adicionales del comando en caso de ser necesario.
     virtual void receive(Socket &skt, bool* was_closed) = 0;
 
-    virtual void run() = 0;
+    //virtual void run() = 0;
 
-    virtual Queue<std::unique_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue) = 0;
+    //virtual Queue<std::unique_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue) = 0;
 };
 
 #endif

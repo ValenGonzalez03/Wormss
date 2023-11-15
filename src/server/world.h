@@ -4,21 +4,21 @@
 #include "box2d/box2d.h"
 #include <stdio.h>
 #include <list>
-#include "worm.h"
-#include "beam.h"
+#include "worm_body.h"
+#include "beam_body.h"
 
 class World {
 	private:
 	b2World* world;
-	std::list<Worm*> worms;
-	std::list<Beam*> beams;
+	std::list<WormBody*> worms;
+	std::list<BeamBody*> beams;
 
 	public:
 	explicit World();
 	
-	Beam* create_beam(float pos_x, float pos_y);
+	BeamBody* create_beam(float pos_x, float pos_y);
 	
-	Worm* create_worm(float pos_x, float pos_y);
+	WormBody* create_worm(float pos_x, float pos_y);
 	
 	void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 	

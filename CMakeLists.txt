@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(Worms LANGUAGES CXX)
 find_package(box2d REQUIRED)
 find_package(SDL2pp REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 # add compilation flags
 set(CMAKE_CXX_STANDARD 17)
@@ -36,10 +37,9 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/server_game.cpp
 					  ./src/server/game_manager.cpp
 					  ./src/server/server_protocol.cpp
-					  ./src/server/commands/command.cpp 
 					  ./src/server/world.cpp
-					  ./src/server/worm.cpp
-					  ./src/server/beam.cpp
+					  ./src/server/worm_body.cpp
+					  ./src/server/beam_body.cpp
 					  ./src/common/socket.cpp 
 					  ./src/common/liberror.cpp 
 					  ./src/common/resolver.cpp 

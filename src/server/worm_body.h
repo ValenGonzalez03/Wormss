@@ -1,10 +1,10 @@
-#ifndef WORM_H
-#define WORM_H
+#ifndef WORM_BODY_H
+#define WORM_BODY_H
 
 #include "box2d/box2d.h"
 #include <stdio.h>
 
-class Worm {
+class WormBody {
 	private:
 	b2World* world;
 	b2Body* body;
@@ -18,7 +18,7 @@ class Worm {
 	const float friction = 1;
 
 	public:
-	explicit Worm(b2World* world, float pos_x, float pos_y);
+	explicit WormBody(b2World* world, float pos_x, float pos_y);
 	
 	void move_left();
 	
@@ -26,8 +26,8 @@ class Worm {
 	
 	b2Vec2 get_position();
 	
-	Worm(const Worm&) = delete;
-	Worm& operator=(const Worm&) = delete;
+	WormBody(const WormBody&) = delete;
+	WormBody& operator=(const WormBody&) = delete;
 };
 
 #endif

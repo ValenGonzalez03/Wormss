@@ -6,7 +6,7 @@
 #include <utility>
 
 #include "../common/constant_rate_loop.h"
-#include "../common/position.h"
+#include "../common/game_state.h"
 #include "../common/protocol.h"
 #include "../common/queue.h"
 #include "../common/socket.h"
@@ -18,12 +18,13 @@
 #define LEFT 0
 #define RIGHT 1
 
-struct worm_state {
+struct client_state {
   bool is_running = false; // whether the character is currently running
   int run_phase = -1;      // run animation phase
   float position = 0.0;    // player position
   // cppcheck-suppress unusedStructMember
   unsigned int prev_ticks;
+  GameState last_game_state = GameState();
 };
 
 struct client_SDL {
@@ -51,7 +52,7 @@ private:
 
   std::map<int, std::function<void()>> controls;
 
-  worm_state state;
+  client_state state;
 
   client_SDL client_sdl;
 

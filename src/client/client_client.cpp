@@ -92,11 +92,21 @@ bool Client::func_to_execute() {
     }
   }
 
+  GameState game_state = GameState();
+  bool was_received = receiver_queue.try_pop(game_state);
+
+  if (!was_received) {
+    game_state = state.last_game_state;
+  }
+  state.last_game_state = game_state;
+
   // Update game state for this frame:
   // if character is runnung, move it to the right
   if (state.is_running) {
     state.position += frame_delta * 0.2;
-    state.run_phase = (frame_ticks / 100) % 8;
+    state.run_phase =
+        (frame_ticks / 50) % 15; // Algunos retoques en run_phase para que se
+                                 // vea mas fluido y con todos los frames
   } else {
     state.run_phase = 0;
   }
@@ -116,7 +126,7 @@ bool Client::func_to_execute() {
   // player is running and run animation phase
   int src_x = 10, src_y = 10; // by default, standing sprite
   if (state.is_running) {
-    // one of 8 run animation sprites
+    // one of 15 run animation sprites
     src_x = 10;
     src_y = 10 + 60 * state.run_phase;
   }

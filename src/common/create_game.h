@@ -26,7 +26,7 @@ public:
 
     void receive(Socket &skt, bool* was_closed) override {}
 
-    Queue<std::unique_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue) {
+    Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue) {
         return games_handler.create_game(sender_queue, client_id);
     }
 };

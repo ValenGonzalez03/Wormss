@@ -39,9 +39,9 @@ void GameManager::move(const int& player_id, const int& direction) {
 	}
 }
 	
-GameState GameManager::get_state() {
-	GameState game_state(0, 0);
-	return game_state;
+void GameManager::get_state() {
+	//GameState game_state(0, 0);
+	//return game_state;
 }
 
 // SOLO DE PRUEBA

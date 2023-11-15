@@ -8,13 +8,13 @@ World::World() {
 }
 
 BeamBody* World::create_beam(float pos_x, float pos_y) {
-	Beam* beam = new Beam(world, pos_x, pos_y);
+	BeamBody* beam = new BeamBody(world, pos_x, pos_y);
 	beams.push_back(beam);
 	return beam;
 }
 
 WormBody* World::create_worm(float pos_x, float pos_y) {
-	Worm* worm = new Worm(world, pos_x, pos_y);
+	WormBody* worm = new WormBody(world, pos_x, pos_y);
 	worms.push_back(worm);
 	return worm;
 }

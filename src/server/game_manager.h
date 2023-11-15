@@ -34,7 +34,7 @@ class GameManager {
 	
 	void move(const int& player_id, const int& direction);
 	
-	GameState get_state();
+	void get_state();
 	
 	// SOLO DE PRUEBA
 	b2Vec2 get_worm_position();

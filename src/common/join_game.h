@@ -32,7 +32,7 @@ public:
         skt.recvall(&game_id, sizeof(game_id), was_closed);
     }
 
-    Queue<std::unique_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue) {
+    Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue) {
         return games_handler.join_game(sender_queue, client_id, game_id);
     }
 };

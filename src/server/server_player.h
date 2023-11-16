@@ -14,7 +14,7 @@
 class Player {
 	private:
 	Socket skt;
-	std::shared_ptr<Queue<GameState*>> sender_queue;
+	std::shared_ptr<Queue<GameState>> sender_queue;
 	GamesHandler& games_handler;
 	std::atomic<bool> keep_playing {true};
 	std::atomic<bool> in_game {false};
@@ -26,7 +26,7 @@ class Player {
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit Player(Socket&& peer, GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue);
+	explicit Player(Socket&& peer, GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue);
 	
 	/*
 	 * Ejecuta los hilos.

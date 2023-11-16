@@ -15,15 +15,16 @@ class ClientHandler : public Thread {
 	Protocol& protocol;
 	GamesHandler& games_handler;
 	PlayerSender& sender;
-	std::shared_ptr<Queue<GameState*>> sender_queue;
+	std::shared_ptr<Queue<GameState>> sender_queue;
 	std::atomic<bool>& keep_playing;
 	std::atomic<bool>& in_game;
+	Queue<std::shared_ptr<Command>>* receiver_queue;
 	
 	public:
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit ClientHandler(Socket& skt, Protocol& protocol, GamesHandler& games_handler, PlayerSender& sender, std::shared_ptr<Queue<GameState*>> sender_queue,
+	explicit ClientHandler(Socket& skt, Protocol& protocol, GamesHandler& games_handler, PlayerSender& sender, std::shared_ptr<Queue<GameState>> sender_queue,
 					  std::atomic<bool>& keep_playing, std::atomic<bool>& in_game);
 	
 	/*

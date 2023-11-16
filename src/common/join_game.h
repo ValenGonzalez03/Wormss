@@ -3,7 +3,7 @@
 
 #include "command.h"
 #include "protocol.h"
-#include "../server/server_games_handler.h"
+//#include "../server/server_games_handler.h"
 
 // Forward declaration de CODE_PLAYER_COMM
 namespace CODE_PLAYER_COMM {
@@ -31,10 +31,33 @@ public:
     void receive(Socket &skt, bool* was_closed) override {
         skt.recvall(&game_id, sizeof(game_id), was_closed);
     }
-
-    Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue) {
+    
+    void run() override {}
+	/*
+    Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) {
         return games_handler.join_game(sender_queue, client_id, game_id);
-    }
+    }*/
+    
+    bool is_connect_type() override {
+		return true;
+	}
+	
+	bool is_create_command() override {
+		return false;
+	}
+	
+	bool is_join_command() override {
+		return true;
+	}
+	
+	// PROVISORIAS
+	uint8_t get_client_id() override {
+		return client_id;
+	}
+	
+    uint8_t get_game_id() override {
+		return game_id;
+	}
 };
 
 #endif

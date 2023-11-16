@@ -10,14 +10,14 @@
 class PlayerSender : public Thread {
 	private:
 	Protocol& protocol;
-	std::shared_ptr<Queue<GameState*>> sender_queue;
+	std::shared_ptr<Queue<GameState>> sender_queue;
 	std::atomic<bool>& keep_playing;
 
 	public:
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit PlayerSender(Protocol& protocol, std::shared_ptr<Queue<GameState*>> sender_queue, 
+	explicit PlayerSender(Protocol& protocol, std::shared_ptr<Queue<GameState>> sender_queue, 
 					std::atomic<bool>& keep_playing);
 
 	/*

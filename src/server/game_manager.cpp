@@ -11,7 +11,8 @@ GameManager::GameManager() {}
 void GameManager::initialize_game() {
 	world.create_beam(0, 0);
 	worm = world.create_worm(0, 4);
-	world.create_worm(1, 4);
+	worms_list.push_back(worm);
+	//worms_list.push_back(world.create_worm(1, 4));
 }
 
 void GameManager::add_player(const int& player_id) {
@@ -39,9 +40,11 @@ void GameManager::move(const int& player_id, const int& direction) {
 	}
 }
 	
-void GameManager::get_state() {
+GameState GameManager::get_state() {
+	std::list<Worm> list({Worm(Position(1, 3)), Worm(Position(2, 5))});
+    GameState game_state(list);
 	//GameState game_state(0, 0);
-	//return game_state;
+	return game_state;
 }
 
 // SOLO DE PRUEBA

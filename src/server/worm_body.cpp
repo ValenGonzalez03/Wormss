@@ -46,3 +46,11 @@ void WormBody::move_right() {
 b2Vec2 WormBody::get_position() {
 	return body->GetPosition();
 }
+
+float WormBody::get_pos_x() {
+	return body->GetPosition().x;
+}
+	
+float WormBody::get_pos_y() {
+	return body->GetPosition().y;
+}

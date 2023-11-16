@@ -23,19 +23,19 @@ void Protocol::send_command(Command &cmd) {
   cmd.send(skt, &was_closed);
 }
 
-std::unique_ptr<Command> Protocol::process_command() {
+std::shared_ptr<Command> Protocol::process_command() {
   bool was_closed = false;
   uint8_t code;
   uint8_t client_id = 0;
   skt.recvall(&code, sizeof(code), &was_closed);
   if (code == CODE_PLAYER_COMM::CREATE_GAME) {
-    return std::make_unique<CreateGame>(client_id, skt, &was_closed);
+    return std::make_shared<CreateGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
-    return std::make_unique<JoinGame>(client_id, skt, &was_closed);
+    return std::make_shared<JoinGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::START_MOVING) {
-    return std::make_unique<StartMoving>(client_id, skt, &was_closed);
+    return std::make_shared<StartMoving>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_MOVING) {
-    return std::make_unique<StopMoving>(client_id, skt, &was_closed);
+    return std::make_shared<StopMoving>(client_id, skt, &was_closed);
   } else {
     std::cout << "Error de comando" << std::endl;
     throw(-1);
@@ -43,6 +43,7 @@ std::unique_ptr<Command> Protocol::process_command() {
 }
 
 void Protocol::send_game_state(GameState game_state) {
+	std::cout << "ESTADO RECIBIDO\n";
   bool was_closed = false;
   game_state.serialize(skt, &was_closed);
 }
@@ -57,4 +58,9 @@ GameState Protocol::process_game_state() {
   skt.recvall(&buf[1], worms_amount * sizeof(Worm), &was_closed);
 
   return GameState(skt, &was_closed, buf);
+}
+
+void Protocol::close_socket() {
+  skt.shutdown(2);
+  skt.close();
 }

@@ -3,7 +3,7 @@
 #include <utility>
 #include <vector>
 
-Player::Player(Socket&& peer, GamesHandler& games_handler, std::shared_ptr<Queue<GameState*>> sender_queue):
+Player::Player(Socket&& peer, GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue):
         skt(std::move(peer)),
         sender_queue(sender_queue),
         games_handler(games_handler),

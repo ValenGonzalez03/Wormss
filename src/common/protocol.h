@@ -32,11 +32,13 @@ public:
 
   void send_command(Command &cmd);
 
-  std::unique_ptr<Command> process_command();
+  std::shared_ptr<Command> process_command();
 
   void send_game_state(GameState game_state);
 
   GameState process_game_state();
+  
+  void close_socket();
 };
 
 #endif

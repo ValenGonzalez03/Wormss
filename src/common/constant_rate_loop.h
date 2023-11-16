@@ -13,16 +13,17 @@ typedef duration<float> dur_f;
 
 class ConstantRateLoop {
 public:
-  void loop(milliseconds rate) {
+  void loop(dur_f rate) {
 
     auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     int it_frames = 0;
-    while (true) {
-      func_to_execute();
+    bool was_closed = false;
+    while (!was_closed) {
+      was_closed = func_to_execute();
 
       auto t2 = time_point_cast<milliseconds>(steady_clock::now());
 
-      auto time_func = (t2 - t1);
+      auto time_func = duration_cast<duration<float>>(t2 - t1);
       auto rest = rate.count() - time_func.count();
 
       drop_and_rest(rest, rate.count(), &t1, &it_frames);
@@ -32,16 +33,17 @@ public:
   void drop_and_rest(float rest, float rate, time_p_ms *t1, int *it) {
     if (rest < 0) {
       auto behind = -rest;
-      rest = rate - static_cast<int>(behind) % static_cast<int>(rate);
+      rest = rate - fmod(behind, rate);
 
       auto lost = behind + rest;
       auto lost_ms = duration_cast<milliseconds>(dur_f(lost));
 
       *t1 += lost_ms;
-      it += static_cast<int>(floor(lost / rate));
+      *it += floor(lost / rate);
     }
-    auto sleep_ms = duration_cast<milliseconds>(dur_f(rest));
+
     auto rate_ms = duration_cast<milliseconds>(dur_f(rate));
+    auto sleep_ms = duration_cast<milliseconds>(dur_f(rest));
 
     std::this_thread::sleep_for(sleep_ms);
 
@@ -49,7 +51,7 @@ public:
     *it += 1;
   }
 
-  virtual void func_to_execute() = 0;
+  virtual bool func_to_execute() = 0;
 };
 
 #endif

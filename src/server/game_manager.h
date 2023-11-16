@@ -13,6 +13,9 @@ class GameManager {
 	int current_player_id;
 	int current_worm_id;
 	std::list<int> players;
+	std::list<WormBody*> worms_list;
+	
+	//PARA PRUEBAS
 	WormBody* worm;
 	
 	float timeStep = 1.0f / 60.0f;
@@ -34,7 +37,7 @@ class GameManager {
 	
 	void move(const int& player_id, const int& direction);
 	
-	void get_state();
+	GameState get_state();
 	
 	// SOLO DE PRUEBA
 	b2Vec2 get_worm_position();

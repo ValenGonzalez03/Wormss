@@ -8,17 +8,20 @@ void GamesHandler::add_game(Game* game) {
 
 void GamesHandler::delete_game(const int& game_id) {
 	std::lock_guard<std::mutex> lck(m);
-    for (auto current_game: games) {
-        if (current_game->compare_id(game_id)) {
-			current_game->stop();
-			current_game->join();
-			delete current_game;
-		}
-    }
-    games.clear();
+	auto dead = [game_id](Game* game) {
+        if (game->compare_id(game_id)) {
+			game->stop();
+            game->join();
+            delete game;
+            return true;
+        }
+        return false;
+    };
+    
+    games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Queue<std::shared_ptr<Command>>* GamesHandler::create_game(std::shared_ptr<Queue<GameState*>> sender_queue, const int& player_id) {
+Queue<std::shared_ptr<Command>>* GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& player_id) {
 	std::lock_guard<std::mutex> lck(m);
 	Game* game = new Game(games_counter);
 	games_counter++;
@@ -27,7 +30,7 @@ Queue<std::shared_ptr<Command>>* GamesHandler::create_game(std::shared_ptr<Queue
 	return game->add_player(sender_queue, player_id);
 }
 
-Queue<std::shared_ptr<Command>>* GamesHandler::join_game(std::shared_ptr<Queue<GameState*>> sender_queue, const int& player_id, const int& game_id) {
+Queue<std::shared_ptr<Command>>* GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& player_id, const int& game_id) {
 	std::lock_guard<std::mutex> lck(m);
 	for (auto& current_game: games) {
         if (current_game->compare_id(game_id)) {
@@ -45,6 +48,19 @@ bool GamesHandler::game_exist(int game_id) {
 		}
     }
     return false;
+}
+
+void GamesHandler::reap_dead() {
+	auto dead = [](Game* game) {
+        if (game->is_dead()) {
+            game->join();
+            delete game;
+            return true;
+        }
+        return false;
+    };
+    
+    games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
 GamesHandler::~GamesHandler() {

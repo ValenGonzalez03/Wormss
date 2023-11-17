@@ -10,6 +10,7 @@
 #include "command.h"
 #include "game_state.h"
 #include "socket.h"
+#include "liberror.h"
 #include "create_game.h"
 #include "join_game.h"
 #include "start_moving.h"

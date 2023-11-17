@@ -31,7 +31,7 @@ std::shared_ptr<Command> Protocol::process_command() {
   
   if (was_closed) {
         throw LibError(errno, "Socket is closed.");
-    }
+  }
 
   
   if (code == CODE_PLAYER_COMM::CREATE_GAME) {

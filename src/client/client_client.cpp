@@ -4,7 +4,8 @@ using namespace SDL2pp;
 
 Client::Client(Socket &&skt)
     : prot(std::move(skt)), receiver_queue(), sender_queue(),
-      receiver(prot, receiver_queue), sender(prot, sender_queue) {}
+      receiver(prot, receiver_queue), sender(prot, sender_queue), state(),
+      client_sdl() {}
 
 void Client::start_threads() {
   sender.start();
@@ -23,17 +24,6 @@ int Client::run() {
   // Initialize SDL_ttf library
   SDLTTF ttf;
 
-  // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-  // Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-  //               480, 360, SDL_WINDOW_RESIZABLE);
-
-  // Create accelerated video renderer with default driver
-  // Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-  // Create resource pool
-  // ResourcePool resource_pool(renderer);
-
-  // WorldView world_view(resource_pool, renderer);
   client_sdl.world_view.add_short_beam(100, 100);
   client_sdl.world_view.add_short_beam(200, 200);
   client_sdl.world_view.add_short_beam(250, 20);
@@ -47,115 +37,119 @@ int Client::run() {
   // Texture sprites(renderer, Surface(RESOURCES_PATH + image_path)
   //			.SetColorKey(true, 200));
 
-  // Texture *worm_walking = resource_pool.get_worm_walking();
-
   // Enable alpha blending for the sprites
   client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
 
-  // Game state
-  // bool is_running = false; // whether the character is currently running
-  // int run_phase = -1;      // run animation phase
-  // float position = 0.0;    // player position
-
   state.prev_ticks = SDL_GetTicks();
 
-  loop(std::chrono::duration<float>(1/60));
- 
+  loop(std::chrono::duration<float>((float)1 / 60));
+
   return 0;
 }
 
 bool Client::func_to_execute() {
-   // Timing: calculate difference between this and previous frame
-    // in milliseconds
-    unsigned int frame_ticks = SDL_GetTicks();
-    unsigned int frame_delta = frame_ticks - state.prev_ticks;
-    state.prev_ticks = frame_ticks;
+  // Timing: calculate difference between this and previous frame
+  // in milliseconds
+  unsigned int frame_ticks = SDL_GetTicks();
+  unsigned int frame_delta = frame_ticks - state.prev_ticks;
+  state.prev_ticks = frame_ticks;
 
-    // Event processing:
-    // - If window is closed, or Q or Escape buttons are pressed,
-    //   quit the application
-    // - If Right/Left key is pressed, character would run
-    // - If Right/Left key is released, character would stop
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) { // Cierra el juego
+  // Event processing:
+  // - If window is closed, or Q or Escape buttons are pressed,
+  //   quit the application
+  // - If Right/Left key is pressed, character would run
+  // - If Right/Left key is released, character would stop
+  SDL_Event event;
+  while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_QUIT) { // Cierra el juego
+      handle_finish_game();
+      return true;
+
+    } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
+      switch (event.key.keysym.sym) {
+      case SDLK_ESCAPE:
+      case SDLK_q:
         handle_finish_game();
         return true;
+      case SDLK_RIGHT:
+        if (!state.is_running)
+          handle_start_moving(RIGHT, state.is_running);
+        break;
+      case SDLK_LEFT:
+        if (!state.is_running)
+          handle_start_moving(LEFT, state.is_running);
+        break;
+      }
 
-      } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
-        switch (event.key.keysym.sym) {
-          case SDLK_ESCAPE:
-          case SDLK_q:
-            handle_finish_game();
-            return true;
-          case SDLK_RIGHT:
-            if (! state.is_running)
-              handle_start_moving(RIGHT, state.is_running);
-            break;
-          case SDLK_LEFT:
-            if (! state.is_running)
-              handle_start_moving(LEFT, state.is_running);
-            break;
-          }
-
-      } else if (event.type == SDL_KEYUP) { // Suelta una tecla
-        switch (event.key.keysym.sym) {
-          case SDLK_RIGHT:
-          case SDLK_LEFT:
-            if (state.is_running)
-              handle_stop_moving(state.is_running);
-            break;
-          }
+    } else if (event.type == SDL_KEYUP) { // Suelta una tecla
+      switch (event.key.keysym.sym) {
+      case SDLK_RIGHT:
+      case SDLK_LEFT:
+        if (state.is_running)
+          handle_stop_moving(state.is_running);
+        break;
       }
     }
+  }
 
-    // Update game state for this frame:
-    // if character is runnung, move it to the right
-    if (state.is_running) {
-      state.position += frame_delta * 0.2;
-      state.run_phase = (frame_ticks / 100) % 8;
-    } else {
-      state.run_phase = 0;
-    }
+  GameState game_state = GameState();
+  bool was_received = receiver_queue.try_pop(game_state);
 
-    // If player passes past the right side of the window, wrap him
-    // to the left side
-    if (state.position > client_sdl.renderer.GetOutputWidth())
-      state.position = -50;
+  if (!was_received) {
+    game_state = state.last_game_state;
+  }
+  state.last_game_state = game_state;
 
-    int vcenter =
-        client_sdl.renderer.GetOutputHeight() / 2; // Y coordinate of window center
+  // Update game state for this frame:
+  // if character is runnung, move it to the right
+  if (state.is_running) {
+    state.position += frame_delta * 0.2;
+    state.run_phase =
+        (frame_ticks / 50) % 15; // Algunos retoques en run_phase para que se
+                                 // vea mas fluido y con todos los frames
+  } else {
+    state.run_phase = 0;
+  }
 
-    // Clear screen
-    client_sdl.renderer.Clear();
+  // If player passes past the right side of the window, wrap him
+  // to the left side
+  if (state.position > client_sdl.renderer.GetOutputWidth())
+    state.position = -50;
 
-    // Pick sprite from sprite atlas based on whether
-    // player is running and run animation phase
-    int src_x = 10, src_y = 10; // by default, standing sprite
-    if (state.is_running) {
-      // one of 8 run animation sprites
-      src_x = 10;
-      src_y = 10 + 60 * state.run_phase;
-    }
+  int vcenter = client_sdl.renderer.GetOutputHeight() /
+                2; // Y coordinate of window center
 
-    client_sdl.world_view.render(1);
+  // Clear screen
+  client_sdl.renderer.Clear();
 
-    // Draw player sprite
-    client_sdl.worm_walking->SetAlphaMod(255); // sprite is fully opaque
-    client_sdl.renderer.Copy(*client_sdl.worm_walking, Rect(src_x, src_y, 40, 40), // Size
-                  Rect((int)state.position, vcenter - 40, 40, 40), // Destination
-                  0.0,                                       // don't rotate
-                  NullOpt,            // rotation center - not needed
-                  SDL_FLIP_HORIZONTAL // vertical flip
-    );
+  // Pick sprite from sprite atlas based on whether
+  // player is running and run animation phase
+  int src_x = 10, src_y = 10; // by default, standing sprite
+  if (state.is_running) {
+    // one of 15 run animation sprites
+    src_x = 10;
+    src_y = 10 + 60 * state.run_phase;
+  }
 
-    // Show rendered frame
-    client_sdl.renderer.Present();
+  client_sdl.world_view.render(1);
 
-    // Frame limiter: sleep for a little bit to not eat 100% of CPU
-    SDL_Delay(1);
+  // Draw player sprite
+  client_sdl.worm_walking->SetAlphaMod(255); // sprite is fully opaque
+  client_sdl.renderer.Copy(
+      *client_sdl.worm_walking, Rect(src_x, src_y, 40, 40), // Size
+      Rect((int)state.position, vcenter - 40, 40, 40),      // Destination
+      0.0,                                                  // don't rotate
+      NullOpt,            // rotation center - not needed
+      SDL_FLIP_HORIZONTAL // vertical flip
+  );
 
-    return false;
+  // Show rendered frame
+  client_sdl.renderer.Present();
+
+  // Frame limiter: sleep for a little bit to not eat 100% of CPU
+  SDL_Delay(1);
+
+  return false;
 }
 
 void Client::handle_start_moving(int direction, bool &is_running) {
@@ -173,7 +167,7 @@ void Client::handle_stop_moving(bool &is_running) {
 void Client::handle_finish_game() {
   prot.close_socket();
   sender_queue.close();
-  //receiver_queue.close();
+  // receiver_queue.close();
 }
 
 // ------------------------------------------------------------------------

@@ -28,7 +28,7 @@ void ClientHandler::run() {
 				in_game = true;
 				*/
 			} else {			   // comunicacion asincronica
-				std::shared_ptr<Command> command = protocol.process_command();
+				//std::shared_ptr<Command> command = protocol.process_command();
 				receiver_queue->push(command);
 			}
         }

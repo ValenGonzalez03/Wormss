@@ -1,9 +1,11 @@
 #ifndef SERVER_SERVER_H
 #define SERVER_SERVER_H
 
+/*
 #include "../common/game_state.h"
 #include "../common/protocol.h"
 #include "../common/socket.h"
+*/
 #include <string>
 
 class Server {

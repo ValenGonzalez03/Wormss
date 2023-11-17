@@ -46,3 +46,5 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/common/protocol.cpp)
 
 target_link_libraries (server PUBLIC box2d)
+target_link_libraries(server PUBLIC pthread)
+target_link_libraries(server PUBLIC yaml-cpp)

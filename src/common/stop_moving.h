@@ -7,25 +7,26 @@
 
 // Forward declaration de CODE_PLAYER_COMM
 namespace CODE_PLAYER_COMM {
-    extern uint8_t STOP_MOVING;
+	extern uint8_t STOP_MOVING;
 }
 
 class StopMoving : public Command {
 public:
-    // Constructor from client side
-    StopMoving() : Command(CODE_PLAYER_COMM::STOP_MOVING,0) {}
+  // Constructor from client side
+  explicit StopMoving() : Command(CODE_PLAYER_COMM::STOP_MOVING, 0) {}
 
-    // Constructor from server side for code consistency but doesn't do anything
-    // different from the other
-    StopMoving(int clt_id, Socket &skt, bool* was_closed) : Command(CODE_PLAYER_COMM::STOP_MOVING, clt_id) {
-        receive(skt, was_closed);
-    }
+  // Constructor from server side for code consistency but doesn't do anything
+  // different from the other
+  StopMoving(int clt_id, Socket &skt, bool *was_closed)
+      : Command(CODE_PLAYER_COMM::STOP_MOVING, clt_id) {
+     receive(skt, was_closed);
+  }
 
-    void send(Socket &skt, bool* was_closed) override {
-        skt.sendall(&code, sizeof(code), was_closed);
-    }
+  void send(Socket &skt, bool *was_closed) override {
+    skt.sendall(&code, sizeof(code), was_closed);
+  }
 
-    void receive(Socket &skt, bool* was_closed) override {}
+  void receive(Socket &skt, bool *was_closed) override {}
 
     void run() override {
         std::cout << "Stop Moving" << std::endl;

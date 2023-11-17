@@ -24,7 +24,7 @@ private:
 
 public:
   explicit GameManager();
-	
+
   void initialize_game();
 
   void add_player(const int &player_id);

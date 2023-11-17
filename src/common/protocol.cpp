@@ -42,8 +42,7 @@ std::shared_ptr<Command> Protocol::process_command() {
   }
 }
 
-void Protocol::send_game_state(GameState game_state) {
-	std::cout << "ESTADO RECIBIDO\n";
+void Protocol::send_game_state(GameState& game_state) {
   bool was_closed = false;
   game_state.serialize(skt, &was_closed);
 }

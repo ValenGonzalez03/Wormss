@@ -22,11 +22,14 @@ void ClientHandler::run() {
 					in_game = true;
 					sender.start();
 				}
-				//receiver_queue = games_handler.create_game(sender_queue, command->get_client_id());
-				//sender.start();
-				//in_game = true;
-
+				
+				/*
+				receiver_queue = games_handler.create_game(sender_queue, 0);
+				sender.start();
+				in_game = true;
+				*/
 			} else {			   // comunicacion asincronica
+				//std::shared_ptr<Command> command = protocol.process_command();
 				receiver_queue->push(command);
 
 			}

@@ -19,8 +19,7 @@ void Player::start() {
 void Player::kill() {
     if (not is_dead()) {
 		keep_playing = false;
-        skt.shutdown(2);
-        skt.close();
+        protocol.close_socket();
     }
 }
 

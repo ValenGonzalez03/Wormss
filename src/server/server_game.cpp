@@ -14,9 +14,7 @@ Queue<std::shared_ptr<Command>> *Game::add_player(std::shared_ptr<Queue<GameStat
   queues_sender[player_id] = sender_queue;
   game_manager.add_player(player_id);
 
-  //GameState game_state = game_manager.get_state();
   push_game_state();
-  //sender_queue->try_push();
   return &commands;
 }
 
@@ -78,8 +76,8 @@ bool Game::compare_id(const int &another_game_id) {
 
 void Game::push_game_state() {	// hacer monitor, posible RC
   //std::lock_guard<std::mutex> lck(m);
+  GameState game_state = game_manager.get_state();
   for (auto& current_queue: queues_sender) {
-	  GameState game_state = game_manager.get_state();
 	  current_queue.second->try_push(game_state);
   }
 }

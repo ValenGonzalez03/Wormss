@@ -18,4 +18,17 @@ void WorldView::render(int frame) {
   for (auto &beam : beams) {
     beam.render(frame);
   }
+  //render_text("Position: " + std::to_string((int)state.position)
+  //      + ", running: " + (state.is_running ? "true" : "false")
+  //      + ", direction: " + std::to_string(int(state.direction)), "Vera", 0, 0);
 }
+
+/*
+void WorldView::render_text(const std::string text, const std::string font_name, int pos_x, int pos_y) {
+  SDL2pp::Texture text_sprite(renderer, (*resource_pool.get_font(font_name)).RenderText_Blended(text,
+  SDL_Color{255, 255, 255, 255}));
+
+  renderer.Copy(text_sprite, SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y,
+  text_sprite.GetWidth(), text_sprite.GetHeight()));
+}
+*/

@@ -103,18 +103,27 @@ bool Client::func_to_execute() {
   // Update game state for this frame:
   // if character is runnung, move it to the right
   if (state.is_running) {
+    if (state.direction == RIGHT) {
     state.position += frame_delta * 0.2;
     state.run_phase =
         (frame_ticks / 50) % 15; // Algunos retoques en run_phase para que se
                                  // vea mas fluido y con todos los frames
+    }
+    else if (state.direction == LEFT) {
+      state.position += frame_delta * 0.2 * -1;
+      state.run_phase =
+        (frame_ticks / 50) % 15;
+    }
   } else {
     state.run_phase = 0;
   }
 
   // If player passes past the right side of the window, wrap him
   // to the left side
-  if (state.position > client_sdl.renderer.GetOutputWidth())
-    state.position = -50;
+  if (state.position > client_sdl.renderer.GetOutputWidth() -30)
+    state.position = client_sdl.renderer.GetOutputWidth() -30;
+  else if (state.position < 0 )
+    state.position = 0;
 
   int vcenter = client_sdl.renderer.GetOutputHeight() /
                 2; // Y coordinate of window center
@@ -122,14 +131,28 @@ bool Client::func_to_execute() {
   // Clear screen
   client_sdl.renderer.Clear();
 
+
+  SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL; // Sin volteo por defecto
+
   // Pick sprite from sprite atlas based on whether
   // player is running and run animation phase
   int src_x = 10, src_y = 10; // by default, standing sprite
+  if (state.is_running) {
+      // Voltear horizontalmente solo si te estás moviendo a la izquierda
+      if (state.direction == LEFT) {
+          flip = SDL_FLIP_NONE;
+      }
+      src_x = 10;
+      src_y = 10 + 60 * state.run_phase;
+}
+
+/*
   if (state.is_running) {
     // one of 15 run animation sprites
     src_x = 10;
     src_y = 10 + 60 * state.run_phase;
   }
+*/
 
   client_sdl.world_view.render(1);
 
@@ -140,8 +163,26 @@ bool Client::func_to_execute() {
       Rect((int)state.position, vcenter - 40, 40, 40),      // Destination
       0.0,                                                  // don't rotate
       NullOpt,            // rotation center - not needed
-      SDL_FLIP_HORIZONTAL // vertical flip
+      flip // horizontal flip
   );
+
+  //client_sdl.resource_pool.add_font("Vera20", "/Vera.ttf", 20);
+  //client_sdl.resource_pool.add_font("Vera12", "/Vera.ttf", 12);
+  //std::shared_ptr<Font> vera20_font_ptr = client_sdl.resource_pool.get_font("Vera20");
+  //std::shared_ptr<Font> vera12_font_ptr = client_sdl.resource_pool.get_font("Vera12");
+
+  std::string text = "Position: " + std::to_string((int)state.position)
+        + ", running: " + (state.is_running ? "true" : "false")
+        + ", direction: " + std::to_string(int(state.direction));
+  
+  Font font(RESOURCES_PATH "/Vera.ttf", 12);
+  
+  Texture text_sprite(client_sdl.renderer, (font).RenderText_Blended(text,
+   SDL_Color{255, 255, 255, 255}));
+
+   client_sdl.renderer.Copy(text_sprite, NullOpt, Rect(0, 0,
+   text_sprite.GetWidth(), text_sprite.GetHeight()));
+  
 
   // Show rendered frame
   client_sdl.renderer.Present();
@@ -156,6 +197,7 @@ void Client::handle_start_moving(int direction, bool &is_running) {
   std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(direction);
   sender_queue.try_push(cmd);
   is_running = true;
+  state.direction = direction;
 }
 
 void Client::handle_stop_moving(bool &is_running) {

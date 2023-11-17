@@ -19,6 +19,7 @@ class ResourcePool {
 private:
   SDL2pp::Renderer &renderer;
   std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
+  std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
 
   void add_texture(const std::string &texture_name,
                    const std::string &image_path) {
@@ -53,6 +54,8 @@ public:
     add_short_beam();
     add_long_beam();
     add_worm_walking();
+    //add_font("Vera20", "/Vera.ttf", 20);
+    //add_font("Vera12", "/Vera.ttf", 12);
   }
 
   SDL2pp::Texture *get_short_beam_texture() { return get_texture(SHORT_BEAM); }
@@ -60,6 +63,22 @@ public:
   SDL2pp::Texture *get_long_beam_texture() { return get_texture(LONG_BEAM); }
 
   SDL2pp::Texture *get_worm_walking() { return get_texture(WORM_WALKING); }
+
+  // Ver inicialización (no usar)
+  void add_font(const std::string font_name, const std::string font_path, int font_size) {
+    SDL2pp::Font font(RESOURCES_PATH + font_path, font_size);
+    this->fonts[font_name] = std::make_shared<SDL2pp::Font>(std::move(font));
+	}
+
+  // Ver inicialización (no usar)
+  std::shared_ptr<SDL2pp::Font> get_font(const std::string &font_name) {
+    auto it = this->fonts.find(font_name);
+    if (it == this->fonts.end()) {
+        throw std::runtime_error("Font not found: " + font_name);
+    }
+    return it->second;
+  }
+
 };
 
 #endif

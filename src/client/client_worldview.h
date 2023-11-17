@@ -22,6 +22,8 @@ public:
   // void update(GameState &game_state);
 
   void render(int frame);
+
+  //void render_text(const std::string text, std::string font_name, int pos_x, int pos_y);
 };
 
 #endif

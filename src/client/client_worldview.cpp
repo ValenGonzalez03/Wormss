@@ -14,10 +14,16 @@ void WorldView::add_long_beam(int pos_x, int pos_y) {
   beams.push_back(beam);
 }
 
-void WorldView::render(int frame) {
+void WorldView::render(int frame) { //Gamestate game_state
+  //Renderizar fondo
   for (auto &beam : beams) {
     beam.render(frame);
   }
+  //for (auto &worm : game_state.get_worm_list() {
+  //  worm.render(frame);
+  //}
+  //Renderizar balas/cohetes
+
   //render_text("Position: " + std::to_string((int)state.position)
   //      + ", running: " + (state.is_running ? "true" : "false")
   //      + ", direction: " + std::to_string(int(state.direction)), "Vera", 0, 0);

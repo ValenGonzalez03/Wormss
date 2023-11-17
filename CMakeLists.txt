@@ -37,7 +37,7 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/server_game.cpp
 					  ./src/server/game_manager.cpp
 					  ./src/server/server_protocol.cpp
-					  ./src/server/commands/command.cpp 
+					  #./src/server/commands/command.cpp 
 					  ./src/server/world.cpp
 					  ./src/server/worm_game.cpp
 					  ./src/server/beam.cpp
@@ -49,3 +49,23 @@ add_executable(server ./src/server/server_main.cpp
 target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)
 target_link_libraries(server PUBLIC yaml-cpp)
+
+# Agregar el ejecutable de pruebas y especificar los archivos fuente
+add_executable(tests ./tests/protocol_tests.cpp
+					./src/common/socket.cpp 
+					./src/common/liberror.cpp 
+					./src/common/resolver.cpp 
+					./src/common/resolvererror.cpp
+					./src/common/protocol.cpp)
+
+# Enlazar con Catch2
+#find_package(Catch2 REQUIRED)
+#target_link_libraries(tests PRIVATE Catch2::Catch2 Catch2::Catch2WithMain)
+
+
+############################################
+#find_package(Catch2 CONFIG REQUIRED)
+#include(CTest)
+#include(Catch)
+#catch_discover_tests(tests)
+###########################################

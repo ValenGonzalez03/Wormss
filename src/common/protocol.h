@@ -10,6 +10,9 @@
 #include "command.h"
 #include "game_state.h"
 #include "socket.h"
+#include "liberror.h"
+#include "create_game.h"
+#include "join_game.h"
 #include "start_moving.h"
 #include "stop_moving.h"
 
@@ -30,9 +33,9 @@ public:
 
   void send_command(Command &cmd);
 
-  std::unique_ptr<Command> process_command();
+  std::shared_ptr<Command> process_command();
 
-  void send_game_state(GameState game_state);
+  void send_game_state(GameState& game_state);
 
   GameState process_game_state();
 

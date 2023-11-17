@@ -36,15 +36,14 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/server_games_handler.cpp
 					  ./src/server/server_game.cpp
 					  ./src/server/game_manager.cpp
-					  ./src/server/server_protocol.cpp
-					  #./src/server/commands/command.cpp 
 					  ./src/server/world.cpp
-					  ./src/server/worm_game.cpp
-					  ./src/server/beam.cpp
+					  ./src/server/worm_body.cpp
+					  ./src/server/beam_body.cpp
 					  ./src/common/socket.cpp 
 					  ./src/common/liberror.cpp 
 					  ./src/common/resolver.cpp 
-					  ./src/common/resolvererror.cpp)
+					  ./src/common/resolvererror.cpp
+					  ./src/common/protocol.cpp)
 
 target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)

@@ -1,10 +1,10 @@
-#ifndef BEAM_H
-#define BEAM_H
+#ifndef BEAM_BODY_H
+#define BEAM_BODY_H
 
 #include "box2d/box2d.h"
 #include <stdio.h>
 
-class Beam {
+class BeamBody {
 	private:
 	b2World* world;
 	b2Body* body;
@@ -17,10 +17,10 @@ class Beam {
 	float friction = 0;
 
 	public:
-	explicit Beam(b2World* world, float pos_x, float pos_y);
+	explicit BeamBody(b2World* world, float pos_x, float pos_y);
 	
-	Beam(const Beam&) = delete;
-	Beam& operator=(const Beam&) = delete;
+	BeamBody(const BeamBody&) = delete;
+	BeamBody& operator=(const BeamBody&) = delete;
 };
 
 #endif

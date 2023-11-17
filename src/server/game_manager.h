@@ -2,10 +2,8 @@
 #define GAME_MANAGER_H
 
 #include "../common/game_state.h"
-#include "beam.h"
 #include "box2d/box2d.h"
 #include "world.h"
-#include "worm_game.h"
 #include <stdio.h>
 
 class GameManager {
@@ -15,13 +13,11 @@ private:
   int current_player_id;
   int current_worm_id;
   std::list<int> players;
-  std::list<WormGame *> worms_list;
-
+  std::list<WormBody*> worms_list;
+	
   // PARA PRUEBAS
-  WormGame *worm;
-
-  // GameState game_state;
-
+  WormBody *worm;
+	
   float timeStep = 1.0f / 60.0f;
   int32 velocityIterations = 6;
   int32 positionIterations = 2;

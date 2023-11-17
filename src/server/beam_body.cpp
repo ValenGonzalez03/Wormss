@@ -1,8 +1,8 @@
 #include "box2d/box2d.h"
-#include "beam.h"
+#include "beam_body.h"
 #include <stdio.h>
 
-Beam::Beam(b2World* world, const float pos_x, const float pos_y): world(world), pos_x(pos_x), pos_y(pos_y) {
+BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y): world(world), pos_x(pos_x), pos_y(pos_y) {
 	b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
     bodyDef.position.Set(0, 0);

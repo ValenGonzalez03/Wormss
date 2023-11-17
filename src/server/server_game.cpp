@@ -9,13 +9,12 @@ Game::Game(int &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
   game_manager.initialize_game();
 }
 
-Queue<Command *> *Game::add_player(Queue<GameState> *sender_queue,
+Queue<std::shared_ptr<Command>> *Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
                                    const int &player_id) {
   queues_sender[player_id] = sender_queue;
   game_manager.add_player(player_id);
 
-  GameState game_state = game_manager.get_state();
-  sender_queue->try_push(game_state);
+  push_game_state();
   return &commands;
 }
 
@@ -33,7 +32,7 @@ void Game::run() {
       update(it);
       game_manager.step();
 
-      push_game_state(game_manager.get_state());
+      push_game_state();
 
       auto time_end = std::chrono::high_resolution_clock::now();
       std::chrono::duration<double> duration = time_end - time_start;
@@ -54,29 +53,32 @@ void Game::run() {
           std::chrono::high_resolution_clock::duration>(
           std::chrono::duration<double>(rate));
       it += 1;
+
     }
   } catch (const std::exception &err) {
   }
 }
 
-void Game::update(int &it) {
-  Command *command;
+void Game::update(int& it) {
+  std::shared_ptr<Command> command;
   while (commands.try_pop(command)) {
-    // command.handle_command(game_manager);
-    // delete command;
-    it--;
+	  commands.try_pop(command);
+	  command->run();
+	  it--;
   }
 }
 
-void Game::stop_game() { keep_playing = false; }
+void Game::stop() { keep_playing = false; }
 
 bool Game::compare_id(const int &another_game_id) {
   return (game_id == another_game_id);
 }
 
-void Game::push_game_state(GameState game_state) { // hacer monitor, posible RC
-  for (auto &current_queue : queues_sender) {
-    current_queue.second->try_push(game_state);
+void Game::push_game_state() {	// hacer monitor, posible RC
+  //std::lock_guard<std::mutex> lck(m);
+  GameState game_state = game_manager.get_state();
+  for (auto& current_queue: queues_sender) {
+	  current_queue.second->try_push(game_state);
   }
 }
 

@@ -7,17 +7,18 @@
 
 #include "client_handler_thread.h"
 #include "player_sender_thread.h"
-#include "server_protocol.h"
+#include "../common/protocol.h"
 #include "server_games_handler.h"
+#include "../common/game_state.h"
 
 class Player {
 	private:
 	Socket skt;
-	Queue<GameState> sender_queue;
+	std::shared_ptr<Queue<GameState>> sender_queue;
 	GamesHandler& games_handler;
 	std::atomic<bool> keep_playing {true};
 	std::atomic<bool> in_game {false};
-	ServerProtocol protocol;
+	Protocol protocol;
 	PlayerSender sender;
 	ClientHandler client_handler;
 		
@@ -25,7 +26,7 @@ class Player {
 	/*
 	 * Constructor de la clase.
 	 * */
-	explicit Player(Socket peer, GamesHandler& games_handler);
+	explicit Player(Socket&& peer, GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue);
 	
 	/*
 	 * Ejecuta los hilos.

@@ -7,26 +7,26 @@ World::World() {
   world = new b2World(gravity);
 }
 
-Beam *World::create_beam(float pos_x, float pos_y) {
-  Beam *beam = new Beam(world, pos_x, pos_y);
+BeamBody* World::create_beam(float pos_x, float pos_y) {
+  BeamBody* beam = new BeamBody(world, pos_x, pos_y);
   beams.push_back(beam);
   return beam;
 }
 
-WormGame *World::create_worm(float pos_x, float pos_y) {
-  WormGame *worm = new WormGame(world, pos_x, pos_y);
+WormBody* World::create_worm(float pos_x, float pos_y) {
+  WormBody* worm = new WormBody(world, pos_x, pos_y);
   worms.push_back(worm);
   return worm;
 }
 
-void World::step(float timeStep, int32 velocityIterations,
-                 int32 positionIterations) {
+void World::step(float timeStep, int32 velocityIterations, 
+				 int32 positionIterations) {
   world->Step(timeStep, velocityIterations, positionIterations);
 }
 
 void World::delete_worms() {
   for (auto &worm : worms) {
-    delete worm;
+	delete worm;
   }
   worms.clear();
 }
@@ -49,3 +49,4 @@ World::~World() {
 
   delete world;
 }
+

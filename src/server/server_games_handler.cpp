@@ -21,7 +21,7 @@ void GamesHandler::delete_game(const int& game_id) {
     games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Queue<Command*>* GamesHandler::create_game(Queue<GameState>* sender_queue, const int& player_id) {
+Queue<std::shared_ptr<Command>>* GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& player_id) {
 	std::lock_guard<std::mutex> lck(m);
 	Game* game = new Game(games_counter);
 	games_counter++;
@@ -30,7 +30,7 @@ Queue<Command*>* GamesHandler::create_game(Queue<GameState>* sender_queue, const
 	return game->add_player(sender_queue, player_id);
 }
 
-Queue<Command*>* GamesHandler::join_game(Queue<GameState>* sender_queue, const int& player_id, const int& game_id) {
+Queue<std::shared_ptr<Command>>* GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& player_id, const int& game_id) {
 	std::lock_guard<std::mutex> lck(m);
 	for (auto& current_game: games) {
         if (current_game->compare_id(game_id)) {

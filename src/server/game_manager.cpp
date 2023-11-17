@@ -41,8 +41,8 @@ void GameManager::move(const int& player_id, const int& direction) {
 }
 	
 GameState GameManager::get_state() {
-	GameState game_state;
-	game_state.add_worm(worm->get_position().x, worm->get_position().y);
+	std::list<Worm> list({Worm(Position(1, 3)), Worm(Position(2, 5))});
+    GameState game_state(list);
 	return game_state;
 }
 

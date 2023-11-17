@@ -4,12 +4,15 @@
 #include <algorithm>
 #include <utility>
 
+#define QUEUE_MAX_SIZE 20
+
 Accept::Accept(Socket& skt): skt(std::move(skt)) {}
 
 void Accept::run() {
     try {
         while (is_alive) {
-            Player* player = new Player(skt.accept(), games_handler);
+            std::shared_ptr<Queue<GameState>> sender_queue = std::make_shared<Queue<GameState>>(10);
+            std::shared_ptr<Player> player = std::make_shared<Player>(std::move(skt.accept()), games_handler, sender_queue);
             player->start();
 
             reap_dead();
@@ -27,10 +30,9 @@ void Accept::run() {
 }
 
 void Accept::reap_dead() {
-    auto dead = [](Player* player) {
+    auto dead = [](std::shared_ptr<Player> player) {
         if (player->is_dead()) {
             player->join();
-            delete player;
             return true;
         }
         return false;
@@ -44,7 +46,6 @@ void Accept::kill_all() {
     for (auto& player: players) {
         player->kill();
         player->join();
-        delete player;
     }
     players.clear();
 }

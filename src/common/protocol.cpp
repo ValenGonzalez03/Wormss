@@ -3,6 +3,8 @@
 // Algunos posibles codigos de acciones que puede realizar el cliente para que
 // se envien por el protocolo
 namespace CODE_PLAYER_COMM {
+uint8_t CREATE_GAME = 0x03;
+uint8_t JOIN_GAME = 0x04;
 uint8_t START_MOVING = 0x05;
 uint8_t STOP_MOVING = 0x06;
 uint8_t JUMP = 0x07;
@@ -21,22 +23,32 @@ void Protocol::send_command(Command &cmd) {
   cmd.send(skt, &was_closed);
 }
 
-std::unique_ptr<Command> Protocol::process_command() {
+std::shared_ptr<Command> Protocol::process_command() {
   bool was_closed = false;
   uint8_t code;
   uint8_t client_id = 0;
   skt.recvall(&code, sizeof(code), &was_closed);
-  if (code == CODE_PLAYER_COMM::START_MOVING) {
-    return std::make_unique<StartMoving>(client_id, skt, &was_closed);
+  
+  if (was_closed) {
+        throw LibError(errno, "Socket is closed.");
+  }
+
+  
+  if (code == CODE_PLAYER_COMM::CREATE_GAME) {
+    return std::make_shared<CreateGame>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
+    return std::make_shared<JoinGame>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::START_MOVING) {
+    return std::make_shared<StartMoving>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_MOVING) {
-    return std::make_unique<StopMoving>(client_id, skt, &was_closed);
+    return std::make_shared<StopMoving>(client_id, skt, &was_closed);
   } else {
     std::cout << "Error de comando" << std::endl;
     throw(-1);
   }
 }
 
-void Protocol::send_game_state(GameState game_state) {
+void Protocol::send_game_state(GameState& game_state) {
   bool was_closed = false;
   game_state.serialize(skt, &was_closed);
 }

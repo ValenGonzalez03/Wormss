@@ -11,7 +11,7 @@ class Accept : public Thread {
 	private:
 	Socket skt;
 	std::atomic<bool> is_alive {true};
-	std::list<Player*> players;
+	std::list<std::shared_ptr<Player>> players;
 	GamesHandler games_handler;
 	
 	/*

@@ -25,6 +25,9 @@ void Game::delete_player(const int &player_id) {
 
 void Game::run() {
   try {
+	
+	//while(queues_sender.size() != MAX_PLAYERS) {}  
+	  
     auto time_start = std::chrono::high_resolution_clock::now();
     int it = 0;
 
@@ -62,7 +65,6 @@ void Game::run() {
 void Game::update(int& it) {
   std::shared_ptr<Command> command;
   while (commands.try_pop(command)) {
-	  commands.try_pop(command);
 	  command->run();
 	  it--;
   }
@@ -83,3 +85,7 @@ void Game::push_game_state() {	// hacer monitor, posible RC
 }
 
 bool Game::is_dead() { return not keep_playing; }
+
+int Game::get_game_id() {
+	return game_id;
+}

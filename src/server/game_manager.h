@@ -13,6 +13,7 @@ private:
   int current_player_id;
   int current_worm_id;
   std::list<int> players;
+  //std::map <int, WormBody>
   std::list<WormBody*> worms_list;
 	
   // PARA PRUEBAS

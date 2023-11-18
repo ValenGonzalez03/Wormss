@@ -22,6 +22,7 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y)
 }
 
 void WormBody::move_left() {
+  direction = LEFT;
   b2Vec2 body_vel = body->GetLinearVelocity();
   float desired_vel = -vel;
   
@@ -33,6 +34,7 @@ void WormBody::move_left() {
 }
 	
 void WormBody::move_right() {
+  direction = RIGHT;
   b2Vec2 body_vel = body->GetLinearVelocity();
   float desired_vel = vel;
   
@@ -48,3 +50,5 @@ b2Vec2 WormBody::get_position() { return body->GetPosition(); }
 float WormBody::get_pos_x() { return body->GetPosition().x; }
 	
 float WormBody::get_pos_y() { return body->GetPosition().y; }
+
+uint8_t WormBody::get_direction() {return direction;}

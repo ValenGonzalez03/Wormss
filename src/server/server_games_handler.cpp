@@ -63,8 +63,16 @@ void GamesHandler::reap_dead() {
     games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
+std::list<int>* GamesHandler::obtain_all_games_id() {
+	std::list<int>* games_id;
+	for (auto& current_game: games) {
+		games_id->push_back(current_game->get_game_id());
+    }
+    return games_id;
+}
+
 GamesHandler::~GamesHandler() {
-	 for (auto& current_game: games) {
+	for (auto& current_game: games) {
 		current_game->stop();
 		current_game->join();
         delete current_game;

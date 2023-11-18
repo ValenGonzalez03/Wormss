@@ -12,7 +12,7 @@
 #include "../common/queue.h"
 #include "game_manager.h"
 
-#define MAX_PLAYERS 10
+#define MAX_PLAYERS 2
 #define MS_PER_UPDATE 10
 
 //class Command;
@@ -48,6 +48,8 @@ public:
   void push_game_state();
 
   bool is_dead();
+  
+  int get_game_id();	//Provisional
 
   Game(const Game &) = delete;
   Game &operator=(const Game &) = delete;

@@ -1,6 +1,11 @@
 #include "client_client.h"
 
+#include <list>
+
 using namespace SDL2pp;
+
+const float RATE = 1 / 60;
+const float RATIO_MTS_PX = 210.0 / 9.0; // 23,3 periodico
 
 Client::Client(Socket &&skt)
     : prot(std::move(skt)), receiver_queue(), sender_queue(),
@@ -42,7 +47,9 @@ int Client::run() {
 
   state.prev_ticks = SDL_GetTicks();
 
-  loop(std::chrono::duration<float>((float)1 / 60));
+  // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
+  // cuantos frames se renderizan en un segundo
+  loop(std::chrono::duration<float>((float)RATE));
 
   return 0;
 }
@@ -54,11 +61,8 @@ bool Client::func_to_execute() {
   unsigned int frame_delta = frame_ticks - state.prev_ticks;
   state.prev_ticks = frame_ticks;
 
-  // Event processing:
-  // - If window is closed, or Q or Escape buttons are pressed,
-  //   quit the application
-  // - If Right/Left key is pressed, character would run
-  // - If Right/Left key is released, character would stop
+  // EVENT LOOP
+  // ---------------------------------------------------------------------------
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) { // Cierra el juego
@@ -91,46 +95,68 @@ bool Client::func_to_execute() {
       }
     }
   }
+  // ---------------------------------------------------------------------------
 
+  // TRY-POP DE LA RECEIVER QUEUE
+  // ---------------------------------------------------------------------------
   GameState game_state = GameState();
-  bool was_received = receiver_queue.try_pop(game_state);
+
+  bool was_received = receiver_queue.pop_last_one(game_state);
 
   if (!was_received) {
     game_state = state.last_game_state;
+  } else {
+    state.last_game_state = game_state;
   }
-  state.last_game_state = game_state;
 
-  // Update game state for this frame:
-  // if character is runnung, move it to the right
+  // ---------------------------------------------------------------------------
+
+  // TODO ESTO DEBE GENERALIZARSE PARA TODOS LOS GUSANOS
+  // ---------------------------------------------------------------------------
+  std::list<Worm> list = game_state.get_worms();
+  // Por ahora asumo que hay un solo gusano
+  Worm worm = list.front();
+
+  Position pos_mts = Position(worm.get_pos_x(), 0);
+  Position pos_px = convert_to_pixels(pos_mts);
+
+  // Nueva coordenada X del gusano
+  state.position_x = pos_px.get_position_x();
+  // Coordenada Y del centro de la pantalla
+  int vcenter = client_sdl.renderer.GetOutputHeight() / 2;
   if (state.is_running) {
-    if (state.direction == RIGHT) {
-    state.position += frame_delta * 0.2;
-    state.run_phase =
-        (frame_ticks / 50) % 15; // Algunos retoques en run_phase para que se
-                                 // vea mas fluido y con todos los frames
-    }
-    else if (state.direction == LEFT) {
-      state.position += frame_delta * 0.2 * -1;
-      state.run_phase =
-        (frame_ticks / 50) % 15;
-    }
+    state.run_phase = (frame_ticks / 50) % 15;
   } else {
     state.run_phase = 0;
   }
 
+  // // Update game state for this frame:
+  // // if character is runnung, move it to the right
+  // if (state.is_running) {
+  //   if (state.direction == RIGHT) {
+  //   state.position_x += frame_delta * 0.2;
+  //   state.run_phase =
+  //       (frame_ticks / 50) % 15; // Algunos retoques en run_phase para que se
+  //                                // vea mas fluido y con todos los frames
+  //   }
+  //   else if (state.direction == LEFT) {
+  //     state.position_x += frame_delta * 0.2 * -1;
+  //     state.run_phase =
+  //       (frame_ticks / 50) % 15;
+  //   }
+  // } else {
+  //   state.run_phase = 0;
+  // }
+
   // If player passes past the right side of the window, wrap him
   // to the left side
-  if (state.position > client_sdl.renderer.GetOutputWidth() -30)
-    state.position = client_sdl.renderer.GetOutputWidth() -30;
-  else if (state.position < 0 )
-    state.position = 0;
-
-  int vcenter = client_sdl.renderer.GetOutputHeight() /
-                2; // Y coordinate of window center
+  if (state.position_x > client_sdl.renderer.GetOutputWidth() - 30)
+    state.position_x = client_sdl.renderer.GetOutputWidth() - 30;
+  else if (state.position_x < 0)
+    state.position_x = 0;
 
   // Clear screen
   client_sdl.renderer.Clear();
-
 
   SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL; // Sin volteo por defecto
 
@@ -138,51 +164,59 @@ bool Client::func_to_execute() {
   // player is running and run animation phase
   int src_x = 10, src_y = 10; // by default, standing sprite
   if (state.is_running) {
-      // Voltear horizontalmente solo si te estás moviendo a la izquierda
-      if (state.direction == LEFT) {
-          flip = SDL_FLIP_NONE;
-      }
-      src_x = 10;
-      src_y = 10 + 60 * state.run_phase;
-}
-
-/*
-  if (state.is_running) {
-    // one of 15 run animation sprites
+    // Voltear horizontalmente solo si te estás moviendo a la izquierda
+    if (worm.get_direction() == LEFT) {
+      flip = SDL_FLIP_NONE;
+    }
     src_x = 10;
     src_y = 10 + 60 * state.run_phase;
   }
-*/
 
+  // ---------------------------------------------------------------------------
+
+  /*
+    if (state.is_running) {
+      // one of 15 run animation sprites
+      src_x = 10;
+      src_y = 10 + 60 * state.run_phase;
+    }
+  */
+
+  // RENDER DE TEXTURAS
+  // ---------------------------------------------------------------------------
   client_sdl.world_view.render(1);
 
   // Draw player sprite
   client_sdl.worm_walking->SetAlphaMod(255); // sprite is fully opaque
   client_sdl.renderer.Copy(
       *client_sdl.worm_walking, Rect(src_x, src_y, 40, 40), // Size
-      Rect((int)state.position, vcenter - 40, 40, 40),      // Destination
+      Rect((int)state.position_x, vcenter - 40, 40, 40),    // Destination
       0.0,                                                  // don't rotate
-      NullOpt,            // rotation center - not needed
-      flip // horizontal flip
+      NullOpt, // rotation center - not needed
+      flip     // horizontal flip
   );
 
-  //client_sdl.resource_pool.add_font("Vera20", "/Vera.ttf", 20);
-  //client_sdl.resource_pool.add_font("Vera12", "/Vera.ttf", 12);
-  //std::shared_ptr<Font> vera20_font_ptr = client_sdl.resource_pool.get_font("Vera20");
-  //std::shared_ptr<Font> vera12_font_ptr = client_sdl.resource_pool.get_font("Vera12");
+  // client_sdl.resource_pool.add_font("Vera20", "/Vera.ttf", 20);
+  // client_sdl.resource_pool.add_font("Vera12", "/Vera.ttf", 12);
+  // std::shared_ptr<Font> vera20_font_ptr =
+  // client_sdl.resource_pool.get_font("Vera20"); std::shared_ptr<Font>
+  // vera12_font_ptr = client_sdl.resource_pool.get_font("Vera12");
 
-  std::string text = "Position: " + std::to_string((int)state.position)
-        + ", running: " + (state.is_running ? "true" : "false")
-        + ", direction: " + std::to_string(int(state.direction));
-  
+  std::string text = "Position: " + std::to_string((int)state.position_x) +
+                     ", running: " + (state.is_running ? "true" : "false") +
+                     ", direction: " + std::to_string(int(state.direction));
+
   Font font(RESOURCES_PATH "/Vera.ttf", 12);
-  
-  Texture text_sprite(client_sdl.renderer, (font).RenderText_Blended(text,
-   SDL_Color{255, 255, 255, 255}));
 
-   client_sdl.renderer.Copy(text_sprite, NullOpt, Rect(0, 0,
-   text_sprite.GetWidth(), text_sprite.GetHeight()));
-  
+  Texture text_sprite(
+      client_sdl.renderer,
+      (font).RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+
+  client_sdl.renderer.Copy(
+      text_sprite, NullOpt,
+      Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
+
+  // ---------------------------------------------------------------------------
 
   // Show rendered frame
   client_sdl.renderer.Present();
@@ -191,6 +225,12 @@ bool Client::func_to_execute() {
   SDL_Delay(1);
 
   return false;
+}
+
+Position Client::convert_to_pixels(Position &pos_m) {
+  float pos_x_px = pos_m.get_position_x() * RATIO_MTS_PX;
+  float pos_y_px = pos_m.get_position_y() * RATIO_MTS_PX;
+  return Position(pos_x_px, pos_y_px);
 }
 
 void Client::handle_start_moving(int direction, bool &is_running) {

@@ -8,28 +8,36 @@
 #include "position.h"
 #include "socket.h"
 
+#define LEFT 0
+#define RIGHT 1
+
 // Crea un gusano con su posicion actual
 struct Worm {
 private:
   Position pos;
+  uint8_t direction;
   // uint16_t id;
   // uint16_t player_id;
-  // uint8_t direction;
 
 public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
-  Worm() : pos(0, 0) {}
+  Worm() : pos(0, 0), direction(RIGHT) {}
 
-  explicit Worm(Position pos) : pos(pos) {}
+  explicit Worm(Position pos, u_int8_t dir) : pos(pos), direction(dir) {}
 
   // Constructor para deserializar GameState
-  explicit Worm(const std::vector<char> &buf) : pos(0, 0) {
+  explicit Worm(const std::vector<char> &buf) : pos(0, 0), direction(RIGHT) {
     this->pos = Position(buf);
+    uint8_t dir;
+    memcpy(&dir, &buf[2 * sizeof(float)], sizeof(uint8_t));
+    this->direction = dir;
   }
 
   float get_pos_x() { return pos.get_position_x(); }
 
   float get_pos_y() { return pos.get_position_y(); }
+
+  uint8_t get_direction() { return direction; }
 };
 
 // Una estructura del estado del juego. Contiene una lista con todos los gusanos
@@ -53,8 +61,8 @@ public:
 
     std::list<Worm> list(0);
     for (int i = 0; i < worms_amount; i++) {
-      std::vector<char> buf_worm(sizeof(Worm));
-      memcpy(buf_worm.data(), &buf[i * sizeof(Worm) + 1], sizeof(Worm));
+      std::vector<char> buf_worm((2 * sizeof(float)) + 1);
+      memcpy(buf_worm.data(), &buf[i * sizeof(buf_worm) + 1], sizeof(buf_worm));
       Worm worm(buf_worm);
       list.push_back(worm);
     }
@@ -63,23 +71,29 @@ public:
 
   void serialize(Socket &skt, bool *was_closed) {
     uint8_t worms_amount = worms_list.size();
-    std::vector<char> buf((worms_amount * 2 * sizeof(float)) + 1);
+    std::vector<char> buf(1 + (worms_amount * (2 * sizeof(float) + 1)));
     memcpy(buf.data(), &worms_amount, sizeof(worms_amount));
 
     int i = 0;
     for (std::list<Worm>::iterator it = worms_list.begin();
          it != worms_list.end(); ++it) {
+      // esto habria que hacerlo de otra manera para comprimirlo, sino va a
+      // quedar gigante.
       auto pos_x = it->get_pos_x();
       auto pos_y = it->get_pos_y();
+      auto dir = it->get_direction();
       memcpy(&buf[(i * 2 * sizeof(float)) + 1], &pos_x, sizeof(float));
       memcpy(&buf[((i * 2 * sizeof(float)) + 2) + 1], &pos_y, sizeof(float));
+      memcpy(&buf[((i * 2 * sizeof(float)) + 4) + 1], &dir, sizeof(uint8_t));
       i++;
     }
     skt.sendall(buf.data(), buf.size(), was_closed);
   }
 
-  void add_worm(const float &pos_x, const float &pos_y) {
-    Worm worm(Position(pos_x, pos_y));
+  std::list<Worm> get_worms() { return worms_list; }
+
+  void add_worm(const float &pos_x, const float &pos_y, uint8_t dir) {
+    Worm worm(Position(pos_x, pos_y), dir);
     worms_list.push_back(worm);
   }
 };

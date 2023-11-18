@@ -10,10 +10,11 @@ Game::Game(int &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
 }
 
 Queue<std::shared_ptr<Command>> *Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
-                                   const int &player_id) {
+                                   int &player_id) {
+  player_id = last_player_id_added + 1;
   queues_sender[player_id] = sender_queue;
   game_manager.add_player(player_id);
-
+  last_player_id_added = player_id;
   push_game_state();
   return &commands;
 }
@@ -27,7 +28,7 @@ void Game::run() {
   try {
     auto time_start = std::chrono::high_resolution_clock::now();
     int it = 0;
-
+	started = true;
     while (keep_playing) {
       update(it);
       game_manager.step();
@@ -81,5 +82,7 @@ void Game::push_game_state() {	// hacer monitor, posible RC
 	  current_queue.second->try_push(game_state);
   }
 }
+
+bool Game::is_started() { return started; }
 
 bool Game::is_dead() { return not keep_playing; }

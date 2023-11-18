@@ -10,17 +10,16 @@ void ClientHandler::run() {
         while (keep_playing) {
             std::shared_ptr<Command> command = protocol.process_command();
             
-            if(not in_game) {		// comunicacion sincronica	
-							
+            if(not in_game) {		// comunicacion sincronica
+				int player_id;
 				if(command->is_create_command()) {
-					receiver_queue = games_handler.create_game(sender_queue, command->get_client_id());
-					in_game = true;
-					sender.start();
+					receiver_queue = games_handler.create_game(sender_queue, player_id);
 				} else if(command->is_join_command()) {
-					receiver_queue = games_handler.join_game(sender_queue, command->get_client_id(), command->get_game_id());
-					in_game = true;
-					sender.start();
+					receiver_queue = games_handler.join_game(sender_queue, player_id, command->get_game_id());
 				}
+				in_game = true;
+				sender.send_player_id(player_id);
+				sender.start();
 				
 				/*
 				receiver_queue = games_handler.create_game(sender_queue, 0);

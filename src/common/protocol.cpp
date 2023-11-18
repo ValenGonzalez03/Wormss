@@ -25,15 +25,15 @@ void Protocol::send_command(Command &cmd) {
 
 std::shared_ptr<Command> Protocol::process_command() {
   bool was_closed = false;
+  uint8_t client_id;
   uint8_t code;
-  uint8_t client_id = 0;
+  skt.recvall(&client_id, sizeof(client_id), &was_closed);
   skt.recvall(&code, sizeof(code), &was_closed);
   
   if (was_closed) {
         throw LibError(errno, "Socket is closed.");
   }
 
-  
   if (code == CODE_PLAYER_COMM::CREATE_GAME) {
     return std::make_shared<CreateGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
@@ -51,6 +51,11 @@ std::shared_ptr<Command> Protocol::process_command() {
 void Protocol::send_game_state(GameState& game_state) {
   bool was_closed = false;
   game_state.serialize(skt, &was_closed);
+}
+
+void Protocol::send_player_id(const int player_id) {
+  bool was_closed = false;
+  skt.sendall(&player_id, sizeof(player_id), &was_closed);
 }
 
 GameState Protocol::process_game_state() {

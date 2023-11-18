@@ -21,6 +21,8 @@ public:
                         std::shared_ptr<Queue<GameState>> sender_queue,
                         std::atomic<bool>& keep_playing);
 
+  void send_player_id(const int player_id);
+
   /*
    * Ejecuta el loop del hilo Sender.
    * */

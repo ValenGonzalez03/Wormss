@@ -23,7 +23,9 @@ private:
   std::map<int,std::shared_ptr<Queue<GameState>>> queues_sender;
   Queue<std::shared_ptr<Command>> commands;
   int game_id;
+  int last_player_id_added = 0;
   bool keep_playing = true;
+  bool started = false;
   GameManager game_manager;
   double rate = 0.1;
 
@@ -31,7 +33,7 @@ public:
   explicit Game(int &game_id);
 
   Queue<std::shared_ptr<Command>>* add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
-											  const int& player_id);
+											  int& player_id);
 
   void delete_player(const int &player_id);
 
@@ -46,6 +48,8 @@ public:
   bool compare_id(const int &another_game_id);
 
   void push_game_state();
+
+  bool is_started();
 
   bool is_dead();
 

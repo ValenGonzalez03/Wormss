@@ -5,7 +5,7 @@
 using namespace SDL2pp;
 
 const float RATE = 1 / 60;
-const float RATIO_MTS_PX = 210.0 / 9.0; // 23,3 periodico
+//const float RATIO_MTS_PX = 210.0 / 9.0; // 23,3 periodico
 
 Client::Client(Socket &&skt)
     : prot(std::move(skt)), receiver_queue(), sender_queue(),
@@ -109,6 +109,13 @@ bool Client::func_to_execute() {
     state.last_game_state = game_state;
   }
 
+  //PRUEBA RENDERIZADO MULTIPLES WORMS
+  state.last_game_state.add_worm(1, 1, 1);
+  state.last_game_state.add_worm(5,5,0);
+  client_sdl.world_view.update(state.last_game_state);
+  client_sdl.renderer.Clear();
+  client_sdl.world_view.render(1);
+  
   // ---------------------------------------------------------------------------
 
   // TODO ESTO DEBE GENERALIZARSE PARA TODOS LOS GUSANOS
@@ -118,10 +125,10 @@ bool Client::func_to_execute() {
   Worm worm = list.front();
 
   Position pos_mts = Position(worm.get_pos_x(), 0);
-  Position pos_px = convert_to_pixels(pos_mts);
+  //Position pos_px = convert_to_pixels(pos_mts);
 
   // Nueva coordenada X del gusano
-  state.position_x = pos_px.get_position_x();
+  //state.position_x = pos_px.get_position_x();
   // Coordenada Y del centro de la pantalla
   int vcenter = client_sdl.renderer.GetOutputHeight() / 2;
   if (state.is_running) {
@@ -171,7 +178,7 @@ bool Client::func_to_execute() {
     src_x = 10;
     src_y = 10 + 60 * state.run_phase;
   }
-
+  
   // ---------------------------------------------------------------------------
 
   /*
@@ -184,6 +191,7 @@ bool Client::func_to_execute() {
 
   // RENDER DE TEXTURAS
   // ---------------------------------------------------------------------------
+  
   client_sdl.world_view.render(1);
 
   // Draw player sprite
@@ -195,6 +203,7 @@ bool Client::func_to_execute() {
       NullOpt, // rotation center - not needed
       flip     // horizontal flip
   );
+  
 
   // client_sdl.resource_pool.add_font("Vera20", "/Vera.ttf", 20);
   // client_sdl.resource_pool.add_font("Vera12", "/Vera.ttf", 12);
@@ -225,12 +234,6 @@ bool Client::func_to_execute() {
   SDL_Delay(1);
 
   return false;
-}
-
-Position Client::convert_to_pixels(Position &pos_m) {
-  float pos_x_px = pos_m.get_position_x() * RATIO_MTS_PX;
-  float pos_y_px = pos_m.get_position_y() * RATIO_MTS_PX;
-  return Position(pos_x_px, pos_y_px);
 }
 
 void Client::handle_start_moving(int direction, bool &is_running) {

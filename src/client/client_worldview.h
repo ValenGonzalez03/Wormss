@@ -2,7 +2,9 @@
 #define CLIENT_WORLDVIEW_H_
 
 #include "client_beam.h"
+#include "client_worm_view.h"
 #include "client_resource_pool.h"
+#include "../common/game_state.h"
 #include <vector>
 
 class WorldView {
@@ -10,6 +12,7 @@ private:
   ResourcePool &resource_pool;
   SDL2pp::Renderer &renderer;
   std::vector<Beam> beams;
+  std::list<Worm> worms;
 
 public:
   WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
@@ -19,7 +22,7 @@ public:
 
   void add_long_beam(int pos_x, int pos_y);
 
-  // void update(GameState &game_state);
+  void update(GameState &game_state);
 
   void render(int frame);
 

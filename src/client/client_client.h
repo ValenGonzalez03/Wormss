@@ -68,7 +68,7 @@ public:
   bool func_to_execute() override;
 
   // Convierte una posicion en metros a una posicion en pixeles.
-  Position convert_to_pixels(Position &pos);
+  //Position convert_to_pixels(Position &pos);
 
   void handle_start_moving(int direction, bool &is_running);
 

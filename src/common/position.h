@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-// Crea una posicion en pixeles para un objeto
+// Crea una posicion en metros para un objeto
 struct Position {
 private:
   float _pos_x;
@@ -26,9 +26,16 @@ public:
     this->_pos_y = pos_y;
   }
 
+  // Devuelve la pos_x en metros
   float get_position_x() { return this->_pos_x; }
 
+  // Devuelve la pos_y en metros
   float get_position_y() { return this->_pos_y; }
+
+  // Convierte la pos de m a px y la devuelve 
+  //int get_position_x_in_px() {}
+
+  //int get_position_y_in_px() {}
 
   //~Position() { free(data); }
 };

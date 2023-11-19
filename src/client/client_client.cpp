@@ -126,14 +126,15 @@ bool Client::func_to_execute() {
   std::list<Worm> list = game_state.get_worms();
   // Por ahora asumo que hay un solo gusano
   Worm worm = list.front();
-
-  Position pos_mts = Position(worm.get_pos_x(), 0);
-  //Position pos_px = convert_to_pixels(pos_mts);
+  
+  PositionConverter converter = PositionConverter();
+  int vcenter = client_sdl.renderer.GetOutputHeight() / 2;
+  float pos_x_px = converter.convert_from_m_to_px(worm.get_pos_x());
+  float pos_y_px = 0;
 
   // Nueva coordenada X del gusano
   //state.position_x = pos_px.get_position_x();
   // Coordenada Y del centro de la pantalla
-  int vcenter = client_sdl.renderer.GetOutputHeight() / 2;
   if (state.is_running) {
     state.run_phase = (frame_ticks / 50) % 15;
   } else {
@@ -160,10 +161,10 @@ bool Client::func_to_execute() {
 
   // If player passes past the right side of the window, wrap him
   // to the left side
-  if (state.position_x > client_sdl.renderer.GetOutputWidth() - 30)
-    state.position_x = client_sdl.renderer.GetOutputWidth() - 30;
-  else if (state.position_x < 0)
-    state.position_x = 0;
+  if (pos_x_px > client_sdl.renderer.GetOutputWidth() - 30)
+    pos_x_px = client_sdl.renderer.GetOutputWidth() - 30;
+  else if (pos_x_px < 0)
+    pos_x_px = 0;
 
   // Clear screen
   client_sdl.renderer.Clear();
@@ -201,7 +202,7 @@ bool Client::func_to_execute() {
   client_sdl.worm_walking->SetAlphaMod(255); // sprite is fully opaque
   client_sdl.renderer.Copy(
       *client_sdl.worm_walking, Rect(src_x, src_y, 40, 40), // Size
-      Rect((int)state.position_x, vcenter - 40, 40, 40),    // Destination
+      Rect((int)pos_x_px, vcenter - 40, 40, 40),    // Destination
       0.0,                                                  // don't rotate
       NullOpt, // rotation center - not needed
       flip     // horizontal flip
@@ -214,7 +215,7 @@ bool Client::func_to_execute() {
   // client_sdl.resource_pool.get_font("Vera20"); std::shared_ptr<Font>
   // vera12_font_ptr = client_sdl.resource_pool.get_font("Vera12");
 
-  std::string text = "Position: " + std::to_string((int)state.position_x) +
+  std::string text = "Position: " + std::to_string((int)pos_x_px) +
                      ", running: " + (state.is_running ? "true" : "false") +
                      ", direction: " + std::to_string(int(state.direction));
 

@@ -65,7 +65,7 @@ void Game::run() {
 void Game::update(int& it) {
   std::shared_ptr<Command> command;
   while (commands.try_pop(command)) {
-	  command->run();
+	  command->run(game_manager);
 	  it--;
   }
 }

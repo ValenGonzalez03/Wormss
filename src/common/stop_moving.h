@@ -28,9 +28,9 @@ public:
 
   void receive(Socket &skt, bool *was_closed) override {}
 
-    void run() override {
-        std::cout << "Stop Moving" << std::endl;
-    }
+  void run() override {
+      std::cout << "Stop Moving" << std::endl;
+  }
     /*
     Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) override {
         return nullptr;

@@ -34,9 +34,10 @@ public:
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
 
-    void run() override {
-        std::cout << "Start moving" << std::endl;
-    }
+  void run() override {
+      std::cout << "Start moving" << std::endl;
+      //game_manager.move(client_id, direction);
+  }
     /*
     Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) override {
         return nullptr;

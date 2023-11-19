@@ -4,7 +4,6 @@
 #include <cstdint>
 #include "socket.h"
 #include "queue.h"
-//#include "../server/server_games_handler.h"
 
 class Command {
 protected:

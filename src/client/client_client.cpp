@@ -67,37 +67,9 @@ bool Client::func_to_execute() {
   // EVENT LOOP
   // ---------------------------------------------------------------------------
   SDL_Event event;
-  while (SDL_PollEvent(&event)) {
-    if (event.type == SDL_QUIT) { // Cierra el juego
-      handle_finish_game();
-      return true;
 
-    } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
-      switch (event.key.keysym.sym) {
-      case SDLK_ESCAPE:
-      case SDLK_q:
-        handle_finish_game();
-        return true;
-      case SDLK_RIGHT:
-        if (!state.is_running)
-          handle_start_moving(RIGHT, state.is_running);
-        break;
-      case SDLK_LEFT:
-        if (!state.is_running)
-          handle_start_moving(LEFT, state.is_running);
-        break;
-      }
-
-    } else if (event.type == SDL_KEYUP) { // Suelta una tecla
-      switch (event.key.keysym.sym) {
-      case SDLK_RIGHT:
-      case SDLK_LEFT:
-        if (state.is_running)
-          handle_stop_moving(state.is_running);
-        break;
-      }
-    }
-  }
+  if (execute_event(event)) // Si execute_event devuelve true, se
+    return true;            // quiere cerrar el juego
   // ---------------------------------------------------------------------------
 
   // TRY-POP DE LA RECEIVER QUEUE
@@ -256,6 +228,41 @@ void Client::handle_finish_game() {
   prot.close_socket();
   sender_queue.close();
   // receiver_queue.close();
+}
+
+bool Client::execute_event(SDL_Event &event) {
+  while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_QUIT) { // Cierra el juego
+      handle_finish_game();
+      return true;
+
+    } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
+      switch (event.key.keysym.sym) {
+      case SDLK_ESCAPE:
+      case SDLK_q:
+        handle_finish_game();
+        return true;
+      case SDLK_RIGHT:
+        if (!state.is_running)
+          handle_start_moving(RIGHT, state.is_running);
+        break;
+      case SDLK_LEFT:
+        if (!state.is_running)
+          handle_start_moving(LEFT, state.is_running);
+        break;
+      }
+
+    } else if (event.type == SDL_KEYUP) { // Suelta una tecla
+      switch (event.key.keysym.sym) {
+      case SDLK_RIGHT:
+      case SDLK_LEFT:
+        if (state.is_running)
+          handle_stop_moving(state.is_running);
+        break;
+      }
+    }
+  }
+  return false;
 }
 
 // ------------------------------------------------------------------------

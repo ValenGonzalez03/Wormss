@@ -54,6 +54,16 @@ private:
 
   client_SDL client_sdl;
 
+  void handle_start_moving(int direction, bool &is_running);
+
+  void handle_stop_moving(bool &is_running);
+
+  void handle_finish_game();
+
+  // Ejecuta un evento y devuelve true si se quiere cerrar el juego
+  // o false en caso contrario
+  bool execute_event(SDL_Event &event);
+  
 public:
   explicit Client(Socket &&skt);
 
@@ -70,11 +80,6 @@ public:
   // Convierte una posicion en metros a una posicion en pixeles.
   //Position convert_to_pixels(Position &pos);
 
-  void handle_start_moving(int direction, bool &is_running);
-
-  void handle_stop_moving(bool &is_running);
-
-  void handle_finish_game();
 };
 
 #endif

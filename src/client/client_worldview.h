@@ -5,6 +5,7 @@
 #include "client_worm_view.h"
 #include "client_resource_pool.h"
 #include "../common/game_state.h"
+#include "client_state.h"
 #include <vector>
 
 class WorldView {
@@ -24,7 +25,7 @@ public:
 
   void update(GameState &game_state);
 
-  void render(int frame);
+  void render(int frame, client_state &worm_state);
 
   //void render_text(const std::string text, std::string font_name, int pos_x, int pos_y);
 };

@@ -14,14 +14,14 @@ void WorldView::add_long_beam(int pos_x, int pos_y) {
   beams.push_back(beam);
 }
 
-void WorldView::render(int frame) { //Gamestate game_state
+void WorldView::render(int frame, client_state &worm_state) { //Gamestate game_state
   //Renderizar fondo
+    WormView worm_view(renderer, *resource_pool.get_worm_walking()); // Ver de hacer una sola instancia
   for (auto &beam : beams) {
     beam.render(frame);
   }
   for (auto &worm : worms) {
-    WormView worm_view(renderer, *resource_pool.get_worm_walking()); // Ver de hacer una sola instancia
-    worm_view.render(frame, worm);
+    worm_view.render(frame, worm, worm_state);
   }
   //Renderizar balas/cohetes
 

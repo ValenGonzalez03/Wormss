@@ -34,14 +34,6 @@ int Client::run() {
   client_sdl.world_view.add_short_beam(250, 20);
   client_sdl.world_view.add_long_beam(600, 500);
 
-  // Load sprites image as a new texture; since there's no alpha channel
-  // but we need transparency, use helper surface for which set color key
-  // to color index 0 -> black background on image will be transparent on our
-  // texture
-  // std::string image_path = "/Images/Worms/wwalk.png";
-  // Texture sprites(renderer, Surface(RESOURCES_PATH + image_path)
-  //			.SetColorKey(true, 200));
-
   // Enable alpha blending for the sprites
   client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
 
@@ -83,26 +75,19 @@ bool Client::func_to_execute() {
   } else {
     state.last_game_state = game_state;
   }
-
-  //PRUEBA RENDERIZADO MULTIPLES WORMS
-  //state.last_game_state.add_worm(1, 1, 1);
-  //state.last_game_state.add_worm(5,5,0);
-  client_sdl.world_view.update(state.last_game_state);
-  client_sdl.renderer.Clear();
-  client_sdl.world_view.render(1);
   
   // ---------------------------------------------------------------------------
 
   // TODO ESTO DEBE GENERALIZARSE PARA TODOS LOS GUSANOS
   // ---------------------------------------------------------------------------
-  std::list<Worm> list = game_state.get_worms();
+  //std::list<Worm> list = game_state.get_worms();
   // Por ahora asumo que hay un solo gusano
-  Worm worm = list.front();
+  //Worm worm = list.front();
   
-  PositionConverter converter = PositionConverter();
-  int vcenter = client_sdl.renderer.GetOutputHeight() / 2;
-  float pos_x_px = converter.convert_from_m_to_px(worm.get_pos_x());
-  float pos_y_px = 0;
+  //PositionConverter converter = PositionConverter();
+  //int vcenter = client_sdl.renderer.GetOutputHeight() / 2;
+  //float pos_x_px = converter.convert_from_m_to_px(worm.get_pos_x());
+  //float pos_y_px = 0;
 
   // Nueva coordenada X del gusano
   //state.position_x = pos_px.get_position_x();
@@ -112,6 +97,13 @@ bool Client::func_to_execute() {
   } else {
     state.run_phase = 0;
   }
+
+  //PRUEBA RENDERIZADO MULTIPLES WORMS
+  state.last_game_state.add_worm(1, 1, 1);
+  state.last_game_state.add_worm(5,5,0);
+  client_sdl.world_view.update(state.last_game_state);
+  client_sdl.renderer.Clear();
+  client_sdl.world_view.render(1, state);
 
   // // Update game state for this frame:
   // // if character is runnung, move it to the right
@@ -133,27 +125,27 @@ bool Client::func_to_execute() {
 
   // If player passes past the right side of the window, wrap him
   // to the left side
-  if (pos_x_px > client_sdl.renderer.GetOutputWidth() - 30)
-    pos_x_px = client_sdl.renderer.GetOutputWidth() - 30;
-  else if (pos_x_px < 0)
-    pos_x_px = 0;
+  //if (pos_x_px > client_sdl.renderer.GetOutputWidth() - 30)
+  //  pos_x_px = client_sdl.renderer.GetOutputWidth() - 30;
+  //else if (pos_x_px < 0)
+  //  pos_x_px = 0;
 
   // Clear screen
-  client_sdl.renderer.Clear();
+  //client_sdl.renderer.Clear();
 
-  SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL; // Sin volteo por defecto
+  //SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL; // Sin volteo por defecto
 
   // Pick sprite from sprite atlas based on whether
   // player is running and run animation phase
-  int src_x = 10, src_y = 10; // by default, standing sprite
-  if (state.is_running) {
+  //int src_x = 10, src_y = 10; // by default, standing sprite
+  //if (state.is_running) {
     // Voltear horizontalmente solo si te estás moviendo a la izquierda
-    if (worm.get_direction() == LEFT) {
-      flip = SDL_FLIP_NONE;
-    }
-    src_x = 10;
-    src_y = 10 + 60 * state.run_phase;
-  }
+  //  if (worm.get_direction() == LEFT) {
+  //    flip = SDL_FLIP_NONE;
+  //  }
+  //  src_x = 10;
+  //  src_y = 10 + 60 * state.run_phase;
+  //}
   
   // ---------------------------------------------------------------------------
 
@@ -168,17 +160,17 @@ bool Client::func_to_execute() {
   // RENDER DE TEXTURAS
   // ---------------------------------------------------------------------------
   
-  client_sdl.world_view.render(1);
+  //client_sdl.world_view.render(1, state);
 
   // Draw player sprite
-  client_sdl.worm_walking->SetAlphaMod(255); // sprite is fully opaque
-  client_sdl.renderer.Copy(
-      *client_sdl.worm_walking, Rect(src_x, src_y, 40, 40), // Size
-      Rect((int)pos_x_px, vcenter - 40, 40, 40),    // Destination
-      0.0,                                                  // don't rotate
-      NullOpt, // rotation center - not needed
-      flip     // horizontal flip
-  );
+  //client_sdl.worm_walking->SetAlphaMod(255); // sprite is fully opaque
+  //client_sdl.renderer.Copy(
+  //    *client_sdl.worm_walking, Rect(src_x, src_y, 40, 40), // Size
+  //    Rect((int)pos_x_px, vcenter - 40, 40, 40),    // Destination
+  //    0.0,                                                  // don't rotate
+  //    NullOpt, // rotation center - not needed
+  //    flip     // horizontal flip
+  //);
   
 
   // client_sdl.resource_pool.add_font("Vera20", "/Vera.ttf", 20);
@@ -187,7 +179,7 @@ bool Client::func_to_execute() {
   // client_sdl.resource_pool.get_font("Vera20"); std::shared_ptr<Font>
   // vera12_font_ptr = client_sdl.resource_pool.get_font("Vera12");
 
-  std::string text = "Position: " + std::to_string((int)pos_x_px) +
+  std::string text = "Position: " + std::to_string((int)10) +
                      ", running: " + (state.is_running ? "true" : "false") +
                      ", direction: " + std::to_string(int(state.direction));
 

@@ -13,31 +13,8 @@
 #include "client_receiver_thread.h"
 #include "client_resource_pool.h"
 #include "client_sender_thread.h"
-#include "client_worldview.h"
-
-struct client_state {
-  bool is_running = false; // whether the character is currently running
-  int run_phase = -1;      // run animation phase
-  float position_x = 0.0;  // player position
-  int direction = 0;
-  // cppcheck-suppress unusedStructMember
-  unsigned int prev_ticks;
-  GameState last_game_state = GameState();
-};
-
-struct client_SDL {
-  // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-  SDL2pp::Window window =
-      SDL2pp::Window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED,
-                     SDL_WINDOWPOS_UNDEFINED, 480, 360, SDL_WINDOW_RESIZABLE);
-  // Create accelerated video renderer with default driver
-  SDL2pp::Renderer renderer =
-      SDL2pp::Renderer(window, -1, SDL_RENDERER_ACCELERATED);
-  // Create resource pool
-  ResourcePool resource_pool = ResourcePool(renderer);
-  WorldView world_view = WorldView(resource_pool, renderer);
-  SDL2pp::Texture *worm_walking = resource_pool.get_worm_walking();
-};
+#include "client_state.h"
+#include "client_SDL.h"
 
 class Client : public ConstantRateLoop {
 private:
@@ -63,7 +40,7 @@ private:
   // Ejecuta un evento y devuelve true si se quiere cerrar el juego
   // o false en caso contrario
   bool execute_event(SDL_Event &event);
-  
+
 public:
   explicit Client(Socket &&skt);
 

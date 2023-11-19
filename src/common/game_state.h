@@ -16,6 +16,7 @@ struct Worm {
 private:
   Position pos;
   uint8_t direction;
+  // uint8_t state; // Si está corriendo, disparando, saltando, etc
   // uint16_t id;
   // uint16_t player_id;
 
@@ -99,3 +100,67 @@ public:
 };
 
 #endif
+
+/*
+struct Worm {
+private:
+  Position pos;
+  uint8_t direction;
+  uint8_t state; // Si está corriendo, disparando, saltando, etc
+  // uint16_t id;
+  // uint16_t player_id;
+
+public:
+  // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
+  Worm() : pos(0, 0), direction(RIGHT), state(0) {}
+
+  explicit Worm(Position pos, u_int8_t dir, uint8_t st) : pos(pos), direction(dir), state(st) {}
+
+  Worm(Socket &skt) : pos(0,0) {
+    bool was_closed = false;
+    deserialize(skt, &was_closed);
+  }
+
+  void deserialize(Socket &skt, bool* was_closed) {
+    //recibe la pos, la direccion, el state y devuelve un worm
+    float pos_x;
+    float pos_y;
+    //recvall() y guardo en las pos_x y pos_y
+    Position position(pos_x, pos_y);
+    this->pos = position;
+    skt.recvall(&(this->direction), sizeof(this->direction), was_closed);
+    skt.recvall(&(this->state), sizeof(this->state), was_closed);
+  }
+
+  void serialize(Socket &skt, bool* was_closed) {
+    //Hago send de la position
+    skt.sendall(&(this->direction), sizeof(this->direction), was_closed);
+    skt.sendall(&(this->state), sizeof(this->state), was_closed);
+  }
+};
+
+
+struct GameState {
+private:
+  std::list<Worm> worms_list;
+  // uint16_t players_amount;
+
+public:
+  GameState() : worms_list(std::list<Worm>(0)) {}
+
+  explicit GameState(const std::list<Worm> &list) : worms_list(list) {}
+
+  // Constructor que funciona como una deserializacion, recibe la tira de bytes
+  // y devuelve un game state
+  GameState(Socket &skt, bool *was_closed, std::vector<char> buf)
+      : worms_list(0) {
+    uint8_t worms_amount = 0;
+    skt.recvall(&worms_amount, sizeof(worms_amount), was_closed);
+    for (int i=0; i<worms_amount; i++) {
+      Worm worm(skt);
+      worms_list.push_back(worm);
+    }
+  }
+
+};
+*/

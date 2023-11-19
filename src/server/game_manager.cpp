@@ -31,7 +31,7 @@ void GameManager::step() {
 
 void GameManager::update() {}
 
-void GameManager::move(const int &player_id, const int &direction) {
+void GameManager::move(const uint8_t &player_id, const uint8_t &direction) {
   // obtain worm
   if (direction == LEFT) {
     worm->move_left();

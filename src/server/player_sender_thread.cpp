@@ -9,7 +9,6 @@ void PlayerSender::run() {
         while (keep_playing) {
 			GameState game_state = sender_queue->pop();
 			protocol.send_game_state(game_state);
-            
         }
     } catch (const std::exception& err) {
 	}

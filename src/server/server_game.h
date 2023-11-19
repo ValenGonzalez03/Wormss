@@ -11,6 +11,7 @@
 #include "../common/thread.h"
 #include "../common/queue.h"
 #include "game_manager.h"
+#include "broadcaster.h"
 
 #define MAX_PLAYERS 2
 #define MS_PER_UPDATE 10
@@ -21,6 +22,7 @@ class Game : public Thread {
 private:
   std::mutex m;
   std::map<int,std::shared_ptr<Queue<GameState>>> queues_sender;
+  Broadcaster broadcaster;
   Queue<std::shared_ptr<Command>> commands;
   int game_id;
   bool keep_playing = true;

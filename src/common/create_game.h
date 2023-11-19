@@ -17,16 +17,17 @@ public:
 
     // Constructor from server side
     CreateGame(int clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::CREATE_GAME, clt_id) {
-        receive(skt, was_closed);
+        //receive(skt, was_closed);
     }
 
     void send(Socket &skt, bool* was_closed) override {
         skt.sendall(&code, sizeof(code), was_closed);
     }
 
+    #ifdef SERVER_BUILD
     void receive(Socket &skt, bool* was_closed) override {}
     
-    void run() override {}
+    void run(GameManager &game_manager) override {}
     
 	/*
     Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) override {
@@ -53,6 +54,7 @@ public:
     uint8_t get_game_id() override {
 		return -1;
 	}
+    #endif
 };
 
 #endif

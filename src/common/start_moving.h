@@ -30,19 +30,21 @@ public:
     skt.sendall(&direction, sizeof(direction), was_closed);
   }
 
+  #ifdef SERVER_BUILD
   void receive(Socket &skt, bool *was_closed) override {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
 
-    void run() override {
-        std::cout << "Start moving" << std::endl;
-    }
-    /*
-    Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) override {
-        return nullptr;
-    }*/
+  void run(GameManager &game_manager) override {
+    game_manager.move(client_id, direction);
+  }
+  
+  /*
+  Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) override {
+      return nullptr;
+  }*/
     
-    bool is_connect_type() override {
+  bool is_connect_type() override {
 		return false;
 	}
 	
@@ -59,9 +61,10 @@ public:
 		return -1;
 	}
 	
-    uint8_t get_game_id() override {
+  uint8_t get_game_id() override {
 		return -1;
 	}
+  #endif
 };
 
 #endif

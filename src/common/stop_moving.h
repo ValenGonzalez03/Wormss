@@ -19,24 +19,25 @@ public:
   // different from the other
   StopMoving(int clt_id, Socket &skt, bool *was_closed)
       : Command(CODE_PLAYER_COMM::STOP_MOVING, clt_id) {
-     receive(skt, was_closed);
+     //receive(skt, was_closed);
   }
 
   void send(Socket &skt, bool *was_closed) override {
     skt.sendall(&code, sizeof(code), was_closed);
   }
 
+  #ifdef SERVER_BUILD
   void receive(Socket &skt, bool *was_closed) override {}
 
-    void run() override {
+  void run(GameManager &game_manager) override {
         std::cout << "Stop Moving" << std::endl;
-    }
+  }
     /*
     Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) override {
         return nullptr;
     }*/
     
-    bool is_connect_type() override {
+  bool is_connect_type() override {
 		return false;
 	}
 	
@@ -53,9 +54,10 @@ public:
 		return -1;
 	}
 	
-    uint8_t get_game_id() override {
+  uint8_t get_game_id() override {
 		return -1;
 	}
+  #endif
 };
 
 #endif

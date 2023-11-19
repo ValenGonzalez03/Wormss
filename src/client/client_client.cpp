@@ -46,6 +46,9 @@ int Client::run() {
   client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
 
   state.prev_ticks = SDL_GetTicks();
+  CreateGame new_game;
+
+  prot.send_command(new_game);
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
@@ -110,8 +113,8 @@ bool Client::func_to_execute() {
   }
 
   //PRUEBA RENDERIZADO MULTIPLES WORMS
-  state.last_game_state.add_worm(1, 1, 1);
-  state.last_game_state.add_worm(5,5,0);
+  //state.last_game_state.add_worm(1, 1, 1);
+  //state.last_game_state.add_worm(5,5,0);
   client_sdl.world_view.update(state.last_game_state);
   client_sdl.renderer.Clear();
   client_sdl.world_view.render(1);

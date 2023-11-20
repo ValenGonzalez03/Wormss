@@ -99,8 +99,8 @@ bool Client::func_to_execute() {
   //}
 
   //PRUEBA RENDERIZADO MULTIPLES WORMS
-  state.last_game_state.add_worm(1.3, 1.5, 1, 0);
-  state.last_game_state.add_worm(5.2, 5.8, 0, 0);
+  //state.last_game_state.add_worm(1.3, 1.5, 1, 0);
+  //state.last_game_state.add_worm(5.2, 5.8, 0, 0);
   client_sdl.world_view.update(state.last_game_state);
 
   std::list<Worm> worms = state.last_game_state.get_worms();

@@ -128,8 +128,10 @@ public:
     uint16_t pos_y;
     skt.recvall(&pos_x, sizeof(pos_x), was_closed);
     skt.recvall(&pos_y, sizeof(pos_y), was_closed);
-    float final_pos_x = ntohs(pos_x) / 100;
-    float final_pos_y = ntohs(pos_y) / 100;
+    float final_pos_x = ntohs(pos_x) / 100.0;
+    float final_pos_y = ntohs(pos_y) / 100.0;
+    std::cout << "final_pos_x: " << final_pos_x << std::endl;
+    std::cout << "final_pos_y: " << final_pos_y << std::endl;
     Position position(final_pos_x, final_pos_y);
     this->pos = position;
     skt.recvall(&(this->direction), sizeof(this->direction), was_closed);
@@ -174,7 +176,7 @@ public:
 
   // Constructor que funciona como una deserializacion, recibe la tira de bytes
   // y devuelve un game state
-  GameState(Socket &skt, bool *was_closed, std::vector<char> buf)
+  GameState(Socket &skt, bool *was_closed)
       : worms_list(0) {
     uint8_t worms_amount = 0;
     skt.recvall(&worms_amount, sizeof(worms_amount), was_closed);

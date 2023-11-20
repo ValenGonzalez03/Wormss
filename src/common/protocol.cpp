@@ -52,7 +52,7 @@ void Protocol::send_game_state(GameState& game_state) {
   bool was_closed = false;
   game_state.serialize(skt, &was_closed);
 }
-
+/*
 GameState Protocol::process_game_state() {
   bool was_closed = false;
   uint8_t worms_amount = 0;
@@ -63,6 +63,12 @@ GameState Protocol::process_game_state() {
   skt.recvall(&buf[1], worms_amount * sizeof(Worm), &was_closed);
 
   return GameState(skt, &was_closed, buf);
+}
+*/
+
+GameState Protocol::process_game_state() {
+  bool was_closed = false;
+  return GameState(skt, &was_closed);
 }
 
 void Protocol::close_socket() {

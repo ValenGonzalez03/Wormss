@@ -27,7 +27,7 @@ private:
   int game_id;
   bool keep_playing = true;
   GameManager game_manager;
-  double rate = 0.1;
+  double rate = 0.01;
 
 public:
   explicit Game(int &game_id);

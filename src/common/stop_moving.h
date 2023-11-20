@@ -31,6 +31,7 @@ public:
 
   void run(GameManager &game_manager) override {
         std::cout << "Stop Moving" << std::endl;
+        game_manager.stop_moving();
   }
     /*
     Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) override {

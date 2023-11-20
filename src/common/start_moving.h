@@ -36,6 +36,7 @@ public:
   }
 
   void run(GameManager &game_manager) override {
+	  std::cout << "Start Moving" << std::endl;
     game_manager.move(client_id, direction);
   }
   

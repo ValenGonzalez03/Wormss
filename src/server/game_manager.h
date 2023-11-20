@@ -37,6 +37,8 @@ public:
   void update();
 
   void move(const uint8_t &player_id, const uint8_t &direction);
+  
+  void stop_moving();
 
   GameState get_state();
 

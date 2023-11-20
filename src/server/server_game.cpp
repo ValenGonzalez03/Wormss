@@ -33,6 +33,7 @@ void Game::run() {
 
     while (keep_playing) {
       update(it);
+      game_manager.update();
       game_manager.step();
 
       push_game_state();
@@ -48,14 +49,14 @@ void Game::run() {
         time_start += std::chrono::duration_cast<
             std::chrono::high_resolution_clock::duration>(
             std::chrono::duration<double>(lost));
-        it += int(lost / rate);
+        //it += int(lost / rate);
       } else {
         sleep(rest);
       }
       time_start += std::chrono::duration_cast<
           std::chrono::high_resolution_clock::duration>(
           std::chrono::duration<double>(rate));
-      it += 1;
+      //it += 1;
 
     }
   } catch (const std::exception &err) {
@@ -66,7 +67,7 @@ void Game::update(int& it) {
   std::shared_ptr<Command> command;
   while (commands.try_pop(command)) {
 	  command->run(game_manager);
-	  it--;
+	  //it--;
   }
 }
 

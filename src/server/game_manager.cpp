@@ -43,7 +43,7 @@ void GameManager::move(const uint8_t &player_id, const uint8_t &direction) {
 GameState GameManager::get_state() {
   GameState game_state;
   for (auto &current_worm: worms_list) {
-	  game_state.add_worm(current_worm->get_pos_x(), current_worm->get_pos_y(), current_worm->get_direction());
+	  game_state.add_worm(current_worm->get_pos_x(), current_worm->get_pos_y(), current_worm->get_direction(), 0); //CAMBIAR LUEGO
   }
     
   return game_state;

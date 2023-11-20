@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <list>
 #include <vector>
+#include <arpa/inet.h>
 
 #include "position.h"
 #include "socket.h"
@@ -11,6 +12,7 @@
 #define LEFT 0
 #define RIGHT 1
 
+/*
 // Crea un gusano con su posicion actual
 struct Worm {
 private:
@@ -98,10 +100,9 @@ public:
     worms_list.push_back(worm);
   }
 };
+*/
 
-#endif
 
-/*
 struct Worm {
 private:
   Position pos;
@@ -121,23 +122,44 @@ public:
     deserialize(skt, &was_closed);
   }
 
+  //recibe la pos, la direccion, el state, etc del gusano
   void deserialize(Socket &skt, bool* was_closed) {
-    //recibe la pos, la direccion, el state y devuelve un worm
-    float pos_x;
-    float pos_y;
-    //recvall() y guardo en las pos_x y pos_y
-    Position position(pos_x, pos_y);
+    uint16_t pos_x;
+    uint16_t pos_y;
+    skt.recvall(&pos_x, sizeof(pos_x), was_closed);
+    skt.recvall(&pos_y, sizeof(pos_y), was_closed);
+    float final_pos_x = ntohs(pos_x) / 100;
+    float final_pos_y = ntohs(pos_y) / 100;
+    Position position(final_pos_x, final_pos_y);
     this->pos = position;
     skt.recvall(&(this->direction), sizeof(this->direction), was_closed);
     skt.recvall(&(this->state), sizeof(this->state), was_closed);
   }
 
+  // Envia los datos del gusano
   void serialize(Socket &skt, bool* was_closed) {
     //Hago send de la position
+    uint16_t pos_x = uint(pos.get_position_x() * 100);
+    uint16_t pos_y = uint(pos.get_position_y() * 100);
+    uint16_t pos_x_be = htons(pos_x);
+    uint16_t pos_y_be = htons(pos_y);
+    skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
+    skt.sendall(&pos_y_be, sizeof(pos_y_be), was_closed);
+    //Hago send de la direccion
     skt.sendall(&(this->direction), sizeof(this->direction), was_closed);
+    //Hago send del estado
     skt.sendall(&(this->state), sizeof(this->state), was_closed);
   }
+
+  float get_pos_x() { return pos.get_position_x(); }
+
+  float get_pos_y() { return pos.get_position_y(); }
+
+  unsigned int get_direction() { return direction; }
+
+  unsigned int get_state() {return state; }
 };
+
 
 
 struct GameState {
@@ -162,5 +184,20 @@ public:
     }
   }
 
+  void serialize(Socket &skt, bool* was_closed) {
+    uint8_t worms_amount = worms_list.size();
+    skt.sendall(&worms_amount, sizeof(worms_amount), was_closed);
+    for (auto &worm : worms_list){
+      worm.serialize(skt, was_closed);
+    }
+  }
+
+  std::list<Worm> get_worms() { return worms_list; }
+
+  void add_worm(const float &pos_x, const float &pos_y, uint8_t dir, uint8_t state) {
+    Worm worm(Position(pos_x, pos_y), dir, state);
+    worms_list.push_back(worm);
+  }
 };
-*/
+
+#endif

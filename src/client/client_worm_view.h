@@ -18,9 +18,9 @@ public:
 
   void render(int frame, Worm &worm, client_state &worm_state);
 
-  void render_worm_idle(int pos_x, int pos_y, Worm &worm, client_state &worm_state);
+  void render_worm_idle(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state);
 
-  void render_worm_running(int pos_x, int pos_y, Worm &worm, client_state &worm_state);
+  void render_worm_running(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state);
 
 };
 

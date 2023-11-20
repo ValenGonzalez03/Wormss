@@ -92,18 +92,30 @@ bool Client::func_to_execute() {
   // Nueva coordenada X del gusano
   //state.position_x = pos_px.get_position_x();
   // Coordenada Y del centro de la pantalla
-  if (state.is_running) {
-    state.run_phase = (frame_ticks / 50) % 15;
-  } else {
-    state.run_phase = 0;
-  }
+  //if (state.is_running) {
+  //  state.run_phase = (frame_ticks / 50) % 15;
+  //} else {
+  //  state.run_phase = 0;
+  //}
 
   //PRUEBA RENDERIZADO MULTIPLES WORMS
-  state.last_game_state.add_worm(1, 1, 1);
-  state.last_game_state.add_worm(5,5,0);
+  state.last_game_state.add_worm(1.3, 1.5, 1, 0);
+  state.last_game_state.add_worm(5.2, 5.8, 0, 0);
   client_sdl.world_view.update(state.last_game_state);
+
+  std::list<Worm> worms = state.last_game_state.get_worms();
+  int worm_n = 0;
+  for (auto &worm : worms) {
+    worm_n++;
+    std::cout << "worm_n: " << worm_n << std::endl;
+    std::cout << "posx: " << worm.get_pos_x() << std::endl;
+    std::cout << "posy: " << worm.get_pos_y() << std::endl;
+    std::cout << "dir: " << worm.get_direction() << std::endl;
+    std::cout << "state: " << worm.get_state() << std::endl;
+  }
+
   client_sdl.renderer.Clear();
-  client_sdl.world_view.render(1, state);
+  client_sdl.world_view.render(frame_ticks, state);
 
   // // Update game state for this frame:
   // // if character is runnung, move it to the right
@@ -204,6 +216,8 @@ bool Client::func_to_execute() {
   return false;
 }
 
+
+
 void Client::handle_start_moving(int direction, bool &is_running) {
   std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(direction);
   sender_queue.try_push(cmd);
@@ -211,17 +225,20 @@ void Client::handle_start_moving(int direction, bool &is_running) {
   state.direction = direction;
 }
 
+
 void Client::handle_stop_moving(bool &is_running) {
   std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>();
   sender_queue.try_push(cmd);
   is_running = false;
 }
 
+
 void Client::handle_finish_game() {
   prot.close_socket();
   sender_queue.close();
   // receiver_queue.close();
 }
+
 
 bool Client::execute_event(SDL_Event &event) {
   while (SDL_PollEvent(&event)) {

@@ -4,13 +4,14 @@ void WormView::render(int frame, Worm &worm, client_state &worm_state) {
   PositionConverter converter;
   int pos_x = converter.convert_from_m_to_px(worm.get_pos_x());
   int pos_y = converter.convert_from_m_to_px(worm.get_pos_y());
-  if (worm_state.is_running)
-      render_worm_running(pos_x, pos_y, worm, worm_state);
-  else
-      render_worm_idle(pos_x, pos_y, worm, worm_state);
+  if (worm_state.is_running) // worm.get_state() == 1
+      render_worm_running(frame, pos_x, pos_y, worm, worm_state);
+  else // worm.get_state() == idle == 0
+      render_worm_idle(frame, pos_x, pos_y, worm, worm_state);
 }
 
-void WormView::render_worm_idle(int pos_x, int pos_y, Worm &worm, client_state &worm_state) {
+void WormView::render_worm_idle(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state) {
+  worm_state.run_phase = 0;
   walking_texture.SetAlphaMod(255);
   renderer.Copy(
     walking_texture, 
@@ -22,19 +23,19 @@ void WormView::render_worm_idle(int pos_x, int pos_y, Worm &worm, client_state &
 );
 }
 
-void WormView::render_worm_running(int pos_x, int pos_y, Worm &worm, client_state &worm_state) {
+void WormView::render_worm_running(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state) {
   SDL_RendererFlip flip = SDL_FLIP_NONE; // Sin volteo por defecto
-
+  worm_state.run_phase = (frame / 50) % 15;
   int src_x = 10, src_y = 10; // by default, standing sprite
   // Voltear horizontalmente solo si te estás moviendo a la izquierda
-  if (worm_state.direction == LEFT) {
+  if (worm.get_direction() == LEFT) { //worm.get_direction() == LEFT
       //flip = SDL_FLIP_NONE;
   }
-  else if (worm_state.direction == RIGHT) {
+  else if (worm.get_direction() == RIGHT) { //worm.get_direction() == RIGHT
     flip = SDL_FLIP_HORIZONTAL;
   }
   src_x = 10;
-  src_y = 10 + 60 * worm_state.run_phase;
+  src_y = 10 + 60 * worm_state.run_phase; //Corregir?
 
   walking_texture.SetAlphaMod(255); // sprite is fully opaque
   renderer.Copy(

@@ -2,10 +2,11 @@
 
 void WormView::render(int frame, Worm &worm, client_state &worm_state) {
   PositionConverter converter;
-  int pos_x = converter.convert_from_m_to_px(worm.get_pos_x());
-  int pos_y = converter.convert_from_m_to_px(worm.get_pos_y());
-  std::cout << "Posx en m: " << worm.get_pos_x() << std::endl;
-  std::cout << "Posy en m: " << worm.get_pos_y() << std::endl;
+  Position pos_in_px = converter.convert_position_to_px(worm.get_position());
+  int pos_x = pos_in_px.get_position_x();
+  int pos_y = pos_in_px.get_position_y();
+  std::cout << "Posx en m: " << worm.get_position().get_position_x() << std::endl;
+  std::cout << "Posy en m: " << worm.get_position().get_position_y() << std::endl;
   std::cout << "Posx en px: " << pos_x << std::endl;
   std::cout << "Posy en px: " << pos_y << std::endl;
   if (worm_state.is_running) // worm.get_state() == 1

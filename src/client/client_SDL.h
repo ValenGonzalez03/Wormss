@@ -3,6 +3,8 @@
 
 #include "client_worldview.h"
 
+// Contiene los datos del cliente SDL, como la window, el renderer
+// la resource pool, el world_view, etc
 struct client_SDL {
   // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
   SDL2pp::Window window =

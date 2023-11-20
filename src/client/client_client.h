@@ -31,10 +31,16 @@ private:
 
   client_SDL client_sdl;
 
+  // Maneja el evento de comenzar a moverse al apretar
+  // alguna tecla de movimiento
   void handle_start_moving(int direction, bool &is_running);
 
+  // Maneja el evento de dejar de moverse al soltar la tecla
+  // de movimiento
   void handle_stop_moving(bool &is_running);
 
+  // Maneja el cierre del juego cuando se aprieta la 'q' o
+  // la x para cerrar
   void handle_finish_game();
 
   // Ejecuta un evento y devuelve true si se quiere cerrar el juego

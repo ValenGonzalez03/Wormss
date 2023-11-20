@@ -29,10 +29,12 @@ int Client::run() {
   // Initialize SDL_ttf library
   SDLTTF ttf;
 
-  client_sdl.world_view.add_short_beam(100, 100);
-  client_sdl.world_view.add_short_beam(200, 200);
-  client_sdl.world_view.add_short_beam(250, 20);
-  client_sdl.world_view.add_long_beam(600, 500);
+  //client_sdl.world_view.add_short_beam(100, 100);
+  //client_sdl.world_view.add_short_beam(200, 200);
+  //client_sdl.world_view.add_short_beam(250, 20);
+  client_sdl.world_view.add_long_beam(0, 1);
+  //client_sdl.world_view.add_long_beam(2, 2);
+  //client_sdl.world_view.add_long_beam(3, 3);
 
   // Enable alpha blending for the sprites
   client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);

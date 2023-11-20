@@ -13,13 +13,18 @@ private:
   SDL2pp::Texture &walking_texture;
   //SDL2pp::Texture &shooting_texture;
 public:
+  // Crea un WormView con un renderer y las texturas correspondientes
   WormView(SDL2pp::Renderer &rend, SDL2pp::Texture &walking) :
   renderer(rend), walking_texture(walking) {}
 
+  // Renderiza el worm pasado por parámetro según el estado del
+  // mismo
   void render(int frame, Worm &worm, client_state &worm_state);
 
+  // Renderiza el worm cuando este se encuentra en estado "idle"
   void render_worm_idle(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state);
 
+  // Renderiza el worm cuando este se encuentra en estado "running"
   void render_worm_running(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state);
 
 };

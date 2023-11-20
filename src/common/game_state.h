@@ -122,7 +122,7 @@ public:
     deserialize(skt, &was_closed);
   }
 
-  //recibe la pos, la direccion, el state, etc del gusano
+  // Recibe la pos, la direccion, el state, etc del gusano
   void deserialize(Socket &skt, bool* was_closed) {
     uint16_t pos_x;
     uint16_t pos_y;
@@ -160,6 +160,9 @@ public:
   unsigned int get_direction() { return direction; }
 
   unsigned int get_state() {return state; }
+
+  // Devuelve la pos del gusano. Uso const para evitar que sea modificada
+  Position get_position() const {return pos; }
 };
 
 

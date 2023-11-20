@@ -15,13 +15,11 @@
 #include "client_sender_thread.h"
 #include "client_worldview.h"
 
-#define LEFT 0
-#define RIGHT 1
-
 struct client_state {
   bool is_running = false; // whether the character is currently running
   int run_phase = -1;      // run animation phase
-  float position = 0.0;    // player position
+  float position_x = 0.0;  // player position
+  int direction = 0;
   // cppcheck-suppress unusedStructMember
   unsigned int prev_ticks;
   GameState last_game_state = GameState();
@@ -68,6 +66,9 @@ public:
   // Devuelve false si el cliente no cerro el programa, devuelve true en caso
   // contrario.
   bool func_to_execute() override;
+
+  // Convierte una posicion en metros a una posicion en pixeles.
+  //Position convert_to_pixels(Position &pos);
 
   void handle_start_moving(int direction, bool &is_running);
 

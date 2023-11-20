@@ -5,17 +5,22 @@ ClientHandler::ClientHandler(Socket& skt, Protocol& protocol, GamesHandler& game
 
 void ClientHandler::run() {
 	bool was_closed = false;
+	//int player_id = 0;
 	//std::shared_ptr<Command> command = std::make_shared<StartMoving>(0); SOLO PARA PRUEBAS
     try {
-        while (keep_playing) {
-            std::shared_ptr<Command> command = protocol.process_command();
-            
-            if(not in_game) {		// comunicacion sincronica
+        while (keep_playing) {            
+            if(not in_game) {		// comunicacion sincronica	
+				//std::list<int>* games_id = games_handler.obtain_all_games_id();
+				//protocol.send_games_id();
 				int player_id;
+				std::shared_ptr<Command> command = protocol.process_command();
+								
 				if(command->is_create_command()) {
 					receiver_queue = games_handler.create_game(sender_queue, player_id);
 				} else if(command->is_join_command()) {
 					receiver_queue = games_handler.join_game(sender_queue, player_id, command->get_game_id());
+				} else {
+					continue;
 				}
 				in_game = true;
 				sender.send_player_id(player_id);
@@ -27,7 +32,7 @@ void ClientHandler::run() {
 				in_game = true;
 				*/
 			} else {			   // comunicacion asincronica
-				//std::shared_ptr<Command> command = protocol.process_command();
+				std::shared_ptr<Command> command = protocol.process_command();
 				receiver_queue->push(command);
 			}
         }

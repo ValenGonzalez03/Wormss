@@ -14,8 +14,33 @@ void WorldView::add_long_beam(int pos_x, int pos_y) {
   beams.push_back(beam);
 }
 
-void WorldView::render(int frame) {
+void WorldView::render(int frame) { //Gamestate game_state
+  //Renderizar fondo
   for (auto &beam : beams) {
     beam.render(frame);
   }
+  for (auto &worm : worms) {
+    WormView worm_view(renderer, *resource_pool.get_worm_walking()); // Ver de hacer una sola instancia
+    worm_view.render(frame, worm);
+  }
+  //Renderizar balas/cohetes
+
+  //render_text("Position: " + std::to_string((int)state.position)
+  //      + ", running: " + (state.is_running ? "true" : "false")
+  //      + ", direction: " + std::to_string(int(state.direction)), "Vera", 0, 0);
 }
+
+void WorldView::update(GameState &game_state) {
+  this->worms = game_state.get_worms();
+}
+
+
+/*
+void WorldView::render_text(const std::string text, const std::string font_name, int pos_x, int pos_y) {
+  SDL2pp::Texture text_sprite(renderer, (*resource_pool.get_font(font_name)).RenderText_Blended(text,
+  SDL_Color{255, 255, 255, 255}));
+
+  renderer.Copy(text_sprite, SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y,
+  text_sprite.GetWidth(), text_sprite.GetHeight()));
+}
+*/

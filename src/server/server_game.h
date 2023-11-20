@@ -11,8 +11,9 @@
 #include "../common/thread.h"
 #include "../common/queue.h"
 #include "game_manager.h"
+#include "broadcaster.h"
 
-#define MAX_PLAYERS 10
+#define MAX_PLAYERS 2
 #define MS_PER_UPDATE 10
 
 //class Command;
@@ -21,6 +22,7 @@ class Game : public Thread {
 private:
   std::mutex m;
   std::map<int,std::shared_ptr<Queue<GameState>>> queues_sender;
+  Broadcaster broadcaster;
   Queue<std::shared_ptr<Command>> commands;
   int game_id;
   int last_player_id_added = 0;
@@ -48,10 +50,12 @@ public:
   bool compare_id(const int &another_game_id);
 
   void push_game_state();
-
+  
   bool is_started();
 
   bool is_dead();
+  
+  int get_game_id();	//Provisional
 
   Game(const Game &) = delete;
   Game &operator=(const Game &) = delete;

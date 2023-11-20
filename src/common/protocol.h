@@ -36,7 +36,7 @@ public:
   std::shared_ptr<Command> process_command();
 
   void send_game_state(GameState& game_state);
-
+  
   void send_player_id(const int player_id);
 
   GameState process_game_state();

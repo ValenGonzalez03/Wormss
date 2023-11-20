@@ -20,7 +20,7 @@ public:
 
     // Constructor from server side
     JoinGame(int clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::JOIN_GAME, clt_id) {
-        receive(skt, was_closed);
+        //receive(skt, was_closed);
     }
 
     void send(Socket &skt, bool* was_closed) override {
@@ -28,11 +28,12 @@ public:
         skt.sendall(&game_id, sizeof(game_id), was_closed);
     }
 
+    #ifdef SERVER_BUILD
     void receive(Socket &skt, bool* was_closed) override {
         skt.recvall(&game_id, sizeof(game_id), was_closed);
     }
     
-    void run() override {}
+    void run(GameManager &game_manager) override {}
 	/*
     Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) {
         return games_handler.join_game(sender_queue, client_id, game_id);
@@ -58,6 +59,7 @@ public:
     uint8_t get_game_id() override {
 		return game_id;
 	}
+    #endif
 };
 
 #endif

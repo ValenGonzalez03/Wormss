@@ -12,7 +12,7 @@ class Command;
 class GamesHandler {
 private:
     std::mutex m;
-    std::list<Game*> games;
+    std::list<Game*> games;		//cambiar por map
     int games_counter = 0;
 
 public:
@@ -29,6 +29,8 @@ public:
     bool game_exist(int game_id);
     
     void reap_dead();
+    
+    std::list<int>* obtain_all_games_id();
     
     ~GamesHandler();
     

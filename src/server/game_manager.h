@@ -13,6 +13,7 @@ private:
   int current_player_id;
   int current_worm_id;
   std::list<int> players;
+  //std::map <int, WormBody>
   std::list<WormBody*> worms_list;
 	
   // PARA PRUEBAS
@@ -35,7 +36,7 @@ public:
 
   void update();
 
-  void move(const int &player_id, const int &direction);
+  void move(const uint8_t &player_id, const uint8_t &direction);
 
   GameState get_state();
 

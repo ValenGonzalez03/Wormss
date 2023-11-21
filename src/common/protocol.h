@@ -37,7 +37,7 @@ public:
 
   void send_game_state(GameState& game_state);
   
-  void send_player_id(const int player_id);
+  void send_id(const int id);
 
   GameState process_game_state();
 

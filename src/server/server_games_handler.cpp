@@ -21,12 +21,13 @@ void GamesHandler::delete_game(const int& game_id) {
     games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Queue<std::shared_ptr<Command>>* GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, int& player_id) {
+Queue<std::shared_ptr<Command>>* GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, int& game_id, int& player_id) {
 	std::lock_guard<std::mutex> lck(m);
 	Game* game = new Game(games_counter);
+    game_id = games_counter;
 	games_counter++;
 	add_game(game);
-	game->start();
+	//game->start();
 	return game->add_player(sender_queue, player_id);
 }
 

@@ -54,9 +54,9 @@ void Protocol::send_game_state(GameState& game_state) {
   game_state.serialize(skt, &was_closed);
 }
 
-void Protocol::send_player_id(const int player_id) {
+void Protocol::send_id(const int id) {
   bool was_closed = false;
-  skt.sendall(&player_id, sizeof(player_id), &was_closed);
+  skt.sendall(&id, sizeof(id), &was_closed);
 }
 
 GameState Protocol::process_game_state() {

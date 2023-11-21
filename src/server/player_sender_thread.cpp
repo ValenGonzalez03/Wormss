@@ -14,8 +14,8 @@ void PlayerSender::run() {
 	}
 }
 
-void PlayerSender::send_player_id(const int player_id) {
-    protocol.send_player_id(player_id);
+void PlayerSender::send_id(const int id) {
+    protocol.send_id(id);
 }
 
 PlayerSender::~PlayerSender() {

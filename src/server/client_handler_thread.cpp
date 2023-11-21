@@ -12,18 +12,20 @@ void ClientHandler::run() {
             if(not in_game) {		// comunicacion sincronica	
 				//std::list<int>* games_id = games_handler.obtain_all_games_id();
 				//protocol.send_games_id();
+				int game_id;
 				int player_id;
 				std::shared_ptr<Command> command = protocol.process_command();
-								
+				
 				if(command->is_create_command()) {
-					receiver_queue = games_handler.create_game(sender_queue, player_id);
+					receiver_queue = games_handler.create_game(sender_queue, game_id, player_id);
+					sender.send_id(game_id);
 				} else if(command->is_join_command()) {
 					receiver_queue = games_handler.join_game(sender_queue, player_id, command->get_game_id());
 				} else {
 					continue;
 				}
 				in_game = true;
-				sender.send_player_id(player_id);
+				sender.send_id(player_id);
 				sender.start();
 				
 				/*

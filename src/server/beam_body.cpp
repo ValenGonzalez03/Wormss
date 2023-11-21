@@ -5,11 +5,30 @@
 BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y): world(world), pos_x(pos_x), pos_y(pos_y) {
 	b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
-    bodyDef.position.Set(0, 0);
+    bodyDef.position.Set(pos_x, pos_y);
     body = world->CreateBody(&bodyDef);
     
     b2PolygonShape polygonShape;
-    polygonShape.SetAsBox(width, height, b2Vec2(0, 0), angle);
+    float angleInRadians = static_cast<float>(angle) * b2_pi / 180.0f;
+    polygonShape.SetAsBox(width, height, b2Vec2(0, 0), angleInRadians);
+  
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &polygonShape;
+    fixtureDef.density = density;
+    fixtureDef.friction = friction;
+    
+    body->CreateFixture(&fixtureDef);
+}
+
+BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y, int angle): world(world), pos_x(pos_x), pos_y(pos_y), angle(angle) {
+	b2BodyDef bodyDef;
+    bodyDef.type = b2_staticBody;
+    bodyDef.position.Set(pos_x, pos_y);
+    body = world->CreateBody(&bodyDef);
+    
+    b2PolygonShape polygonShape;
+    float angleInRadians = static_cast<float>(angle) * b2_pi / 180.0f;
+    polygonShape.SetAsBox(width, height, b2Vec2(0, 0), angleInRadians);
   
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &polygonShape;

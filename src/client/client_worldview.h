@@ -24,11 +24,11 @@ public:
 
   // Convierte la posicion pasada por parámetro de m a px, 
   // crea la short_beam y la agrega al WorldView
-  void add_short_beam(int pos_x, int pos_y);
+  void add_short_beam(int pos_x, int pos_y, int angle);
 
   // Convierte la posicion pasada por parámetro de m a px, 
   // crea la long_beam y la agrega al WorldView
-  void add_long_beam(int pos_x, int pos_y);
+  void add_long_beam(int pos_x, int pos_y, int angle);
 
   // Recibe el estado de juego y actualiza la world_view
   // con los nuevos datos

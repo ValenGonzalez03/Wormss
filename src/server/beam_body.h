@@ -10,7 +10,7 @@ class BeamBody {
 	b2Body* body;
 	const float pos_x; 
 	const float pos_y;
-	float angle = 0;
+	int angle = 0;
 	const float width = 6;
 	const float height = 0.8;
 	float density = 1;
@@ -21,6 +21,8 @@ class BeamBody {
 	
 	BeamBody(const BeamBody&) = delete;
 	BeamBody& operator=(const BeamBody&) = delete;
+
+	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle);
 };
 
 #endif

@@ -3,6 +3,7 @@
 // Algunos posibles codigos de acciones que puede realizar el cliente para que
 // se envien por el protocolo
 namespace CODE_PLAYER_COMM {
+uint8_t START_GAME = 0x02;
 uint8_t CREATE_GAME = 0x03;
 uint8_t JOIN_GAME = 0x04;
 uint8_t START_MOVING = 0x05;
@@ -30,18 +31,35 @@ std::shared_ptr<Command> Protocol::process_command() {
   skt.recvall(&code, sizeof(code), &was_closed);
   
   if (was_closed) {
-        throw LibError(errno, "Socket is closed.");
+    throw LibError(errno, "Socket is closed.");
   }
 
+  if (code == CODE_PLAYER_COMM::START_MOVING) {
+    return std::make_shared<StartMoving>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::STOP_MOVING) {
+    return std::make_shared<StopMoving>(client_id, skt, &was_closed);
+  } else {
+    std::cout << "Error de comando" << std::endl;
+    throw(-1);
+  }
+}
+
+std::shared_ptr<Command> Protocol::process_command_lobby() {
+  bool was_closed = false;
+  uint8_t code;
+  uint8_t client_id = 0;
+  skt.recvall(&code, sizeof(code), &was_closed);
   
+  if (was_closed) {
+    throw LibError(errno, "Socket is closed.");
+  }
+
   if (code == CODE_PLAYER_COMM::CREATE_GAME) {
     return std::make_shared<CreateGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
     return std::make_shared<JoinGame>(client_id, skt, &was_closed);
-  } else if (code == CODE_PLAYER_COMM::START_MOVING) {
-    return std::make_shared<StartMoving>(client_id, skt, &was_closed);
-  } else if (code == CODE_PLAYER_COMM::STOP_MOVING) {
-    return std::make_shared<StopMoving>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::START_GAME) {
+    return std::make_shared<StartGame>(client_id, skt, &was_closed);
   } else {
     std::cout << "Error de comando" << std::endl;
     throw(-1);
@@ -52,7 +70,7 @@ void Protocol::send_game_state(GameState& game_state) {
   bool was_closed = false;
   game_state.serialize(skt, &was_closed);
 }
-
+/*
 GameState Protocol::process_game_state() {
   bool was_closed = false;
   uint8_t worms_amount = 0;
@@ -63,6 +81,12 @@ GameState Protocol::process_game_state() {
   skt.recvall(&buf[1], worms_amount * sizeof(Worm), &was_closed);
 
   return GameState(skt, &was_closed, buf);
+}
+*/
+
+GameState Protocol::process_game_state() {
+  bool was_closed = false;
+  return GameState(skt, &was_closed);
 }
 
 void Protocol::close_socket() {

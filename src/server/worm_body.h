@@ -7,6 +7,9 @@
 #define LEFT 0
 #define RIGHT 1
 
+#define STOPPED 0
+#define MOVING 1
+
 class WormBody {
 private:
   b2World* world;
@@ -15,11 +18,14 @@ private:
   float pos_y;
   uint8_t direction = RIGHT;
   float angle = 0;
-  float vel = 0.2;
+  float vel = 0.5;
   const float width = 1;
   const float height = 1;
   const float density = 1;
-  const float friction = 1;
+  const float friction = 0.9;
+  
+  bool is_moving = false;
+  uint8_t state = STOPPED;
 
 public:
   explicit WormBody(b2World* world, float pos_x, float pos_y);
@@ -28,6 +34,10 @@ public:
   
   void move_right();
   
+  void start_moving(const uint8_t &dir);
+  
+  void stop_moving(); 
+  
   b2Vec2 get_position();
   
   float get_pos_x();
@@ -35,6 +45,10 @@ public:
   float get_pos_y();
   
   uint8_t get_direction();
+  
+  uint8_t get_state();
+  
+  void update();
   
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;

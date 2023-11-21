@@ -11,9 +11,11 @@ private:
   SDL2pp::Renderer &renderer;
 
 public:
+  // Crea una Beam en la posicion en px pasada por parámetro
   Beam(Position &pos, SDL2pp::Texture &beam_texture, SDL2pp::Renderer &rend)
       : position(pos), texture(beam_texture), renderer(rend) {}
 
+  // Renderiza la Beam en su posición
   void render(int frame) {
     texture.SetAlphaMod(255);
     int sbeam_height = texture.GetHeight();

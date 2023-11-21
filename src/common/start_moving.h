@@ -2,7 +2,7 @@
 #define START_MOVING_H_
 
 #include "command.h"
-#include "protocol.h"
+//#include "protocol.h"
 //#include "../server/server_games_handler.h"
 
 // Forward declaration de CODE_PLAYER_COMM
@@ -30,31 +30,10 @@ public:
     skt.sendall(&direction, sizeof(direction), was_closed);
   }
 
-  #ifdef SERVER_BUILD
+
   void receive(Socket &skt, bool *was_closed) override {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
-
-  void run(GameManager &game_manager) override {
-    game_manager.move(client_id, direction);
-  }
-  
-  /*
-  Queue<std::shared_ptr<Command>>* run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue) override {
-      return nullptr;
-  }*/
-    
-  bool is_connect_type() override {
-		return false;
-	}
-	
-	bool is_create_command() override {
-		return false;
-	}
-	
-	bool is_join_command() override {
-		return false;
-	}
 	
 	// PROVISORIAS
 	uint8_t get_client_id() override {
@@ -64,7 +43,11 @@ public:
   uint8_t get_game_id() override {
 		return -1;
 	}
-  #endif
+
+  uint8_t get_direction() {
+    return direction;
+  }
+
 };
 
 #endif

@@ -35,6 +35,9 @@ private:
     // Para imagenes con otros fondos no haria efecto, por lo que si hay
     // distintas habria que poner ifs.
   }
+
+  // Devuelve la textura guardada en el map de texturas
+  // relacionada con el texture_name
   SDL2pp::Texture *get_texture(const std::string &texture_name) {
     try {
       return textures.at(texture_name).get();
@@ -43,13 +46,18 @@ private:
     }
   }
 
+  // Agrega la textura de short_beam al map de texturas
   void add_short_beam() { add_texture(SHORT_BEAM, SHORT_BEAM_PATH); }
 
+  // Agrega la textura de long_beam al map de texturas
   void add_long_beam() { add_texture(LONG_BEAM, LONG_BEAM_PATH); }
 
+  // Agrega la textura del gusano caminando al map de texturas
   void add_worm_walking() { add_texture(WORM_WALKING, WORM_WALKING_PATH); }
 
 public:
+
+  // Crea la Resource pool y le carga las texturas
   explicit ResourcePool(SDL2pp::Renderer &rend) : renderer(rend) {
     add_short_beam();
     add_long_beam();
@@ -58,20 +66,23 @@ public:
     // add_font("Vera12", "/Vera.ttf", 12);
   }
 
+  // Devuelve un ptr a la textura del short_beam
   SDL2pp::Texture *get_short_beam_texture() { return get_texture(SHORT_BEAM); }
 
+  // Devuelve un ptr a la textura del long_beam
   SDL2pp::Texture *get_long_beam_texture() { return get_texture(LONG_BEAM); }
 
+  // Devuelve un ptr a la textura del worm caminando
   SDL2pp::Texture *get_worm_walking() { return get_texture(WORM_WALKING); }
 
-  // Ver inicialización (no usar)
+  // Ver inicialización (NO USAR)
   void add_font(const std::string &font_name, const std::string &font_path,
                 int font_size) {
     SDL2pp::Font font(RESOURCES_PATH + font_path, font_size);
     this->fonts[font_name] = std::make_shared<SDL2pp::Font>(std::move(font));
   }
 
-  // Ver inicialización (no usar)
+  // Ver inicialización (NO USAR)
   std::shared_ptr<SDL2pp::Font> get_font(const std::string &font_name) {
     auto it = this->fonts.find(font_name);
     if (it == this->fonts.end()) {

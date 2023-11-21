@@ -6,15 +6,25 @@
 #include <map>
 #include <mutex>
 
+#include <chrono>
+#include <cmath>
+
 #include "../common/game_state.h"
 #include "../common/command.h"
 #include "../common/thread.h"
 #include "../common/queue.h"
+#include "../common/constant_rate_loop.h"
+#include "command_runnable_game.h"
 #include "game_manager.h"
 #include "broadcaster.h"
 
 #define MAX_PLAYERS 2
 #define MS_PER_UPDATE 10
+#define RATE 0.01
+
+typedef duration<float, duration<float>> dur_ms;
+typedef time_point<steady_clock, milliseconds> time_p_ms;
+typedef duration<float> dur_f;
 
 //class Command;
 
@@ -23,19 +33,21 @@ private:
   std::mutex m;
   std::map<int,std::shared_ptr<Queue<GameState>>> queues_sender;
   Broadcaster broadcaster;
-  Queue<std::shared_ptr<Command>> commands;
+  Queue<std::shared_ptr<RunnableCommandGame>> commands;
   int game_id;
   int last_player_id_added = 0;
   bool keep_playing = true;
   bool started = false;
   GameManager game_manager;
-  double rate = 0.1;
+  std::chrono::duration<float> rate = std::chrono::duration<float>((float)RATE);
+  
+  
 
 public:
   explicit Game(int &game_id);
 
-  Queue<std::shared_ptr<Command>>* add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
-											  int& player_id);
+  Queue<std::shared_ptr<RunnableCommandGame>>* add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
+											  const int& player_id);
 
   void delete_player(const int &player_id);
 

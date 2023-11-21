@@ -7,7 +7,7 @@
 
 #include "client_handler_thread.h"
 #include "player_sender_thread.h"
-#include "../common/protocol.h"
+//#include "../common/protocol.h"
 #include "server_games_handler.h"
 #include "../common/game_state.h"
 
@@ -18,7 +18,7 @@ class Player {
 	GamesHandler& games_handler;
 	std::atomic<bool> keep_playing {true};
 	std::atomic<bool> in_game {false};
-	Protocol protocol;
+	ServerProtocol protocol;
 	PlayerSender sender;
 	ClientHandler client_handler;
 		

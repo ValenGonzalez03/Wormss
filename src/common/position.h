@@ -16,6 +16,7 @@ public:
   explicit Position(float position_x, float position_y)
       : _pos_x(position_x), _pos_y(position_y) {}
 
+/*
   // Constructor para deserializar GameState
   explicit Position(const std::vector<char> &buf) : _pos_x(0), _pos_y(0) {
     float pos_x = 0;
@@ -25,6 +26,7 @@ public:
     this->_pos_x = pos_x;
     this->_pos_y = pos_y;
   }
+*/
 
   // Devuelve la pos_x en metros
   float get_position_x() { return this->_pos_x; }

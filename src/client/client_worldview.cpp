@@ -1,27 +1,31 @@
 #include "client_worldview.h"
 
 void WorldView::add_short_beam(int pos_x, int pos_y) {
-  Position beam_pos(pos_x, pos_y);
+  PositionConverter converter;
+  Position pos_in_m(pos_x, pos_y);
+  Position beam_pos = converter.convert_position_to_px(pos_in_m);
   SDL2pp::Texture &beam_texture = *resource_pool.get_short_beam_texture();
   Beam beam(beam_pos, beam_texture, renderer);
   beams.push_back(beam);
 }
 
 void WorldView::add_long_beam(int pos_x, int pos_y) {
-  Position beam_pos(pos_x, pos_y);
+  PositionConverter converter;
+  Position pos_in_m(pos_x, pos_y);
+  Position beam_pos = converter.convert_position_to_px(pos_in_m);
   SDL2pp::Texture &beam_texture = *resource_pool.get_long_beam_texture();
   Beam beam(beam_pos, beam_texture, renderer);
   beams.push_back(beam);
 }
 
-void WorldView::render(int frame) { //Gamestate game_state
+void WorldView::render(int frame, client_state &worm_state) { //Gamestate game_state
   //Renderizar fondo
+    WormView worm_view(renderer, *resource_pool.get_worm_walking()); // Ver de hacer una sola instancia
   for (auto &beam : beams) {
     beam.render(frame);
   }
   for (auto &worm : worms) {
-    WormView worm_view(renderer, *resource_pool.get_worm_walking()); // Ver de hacer una sola instancia
-    worm_view.render(frame, worm);
+    worm_view.render(frame, worm, worm_state);
   }
   //Renderizar balas/cohetes
 

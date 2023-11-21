@@ -11,7 +11,7 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y)
   body = world->CreateBody(&bodyDef);
   
   b2PolygonShape polygonShape;
-  polygonShape.SetAsBox(width / 2, height / 2);
+  polygonShape.SetAsBox(width , height);
   
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &polygonShape;
@@ -23,6 +23,7 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y)
 
 void WormBody::move_left() {
   direction = LEFT;
+  is_moving = true;
   b2Vec2 body_vel = body->GetLinearVelocity();
   float desired_vel = -vel;
   
@@ -35,6 +36,7 @@ void WormBody::move_left() {
 	
 void WormBody::move_right() {
   direction = RIGHT;
+  is_moving = true;
   b2Vec2 body_vel = body->GetLinearVelocity();
   float desired_vel = vel;
   
@@ -45,10 +47,39 @@ void WormBody::move_right() {
   body->ApplyLinearImpulse(b2Vec2(impulse, 0), body->GetWorldCenter(), true);
 }
 
+
+void WormBody::start_moving(const uint8_t &dir) { 
+	state = WORM_STATES::MOVING;
+	if (dir == LEFT) {
+		is_moving = true;
+		direction = LEFT; 
+	} else if (dir == RIGHT) {
+		is_moving = true;
+		direction = RIGHT;
+	}
+}
+
+void WormBody::stop_moving() { 
+	is_moving = false;	// probablemente no sea necesario con el state
+	state = WORM_STATES::STOPPED;
+}
+
 b2Vec2 WormBody::get_position() { return body->GetPosition(); }
 
 float WormBody::get_pos_x() { return body->GetPosition().x; }
 	
 float WormBody::get_pos_y() { return body->GetPosition().y; }
 
-uint8_t WormBody::get_direction() {return direction;}
+uint8_t WormBody::get_direction() { return direction; }
+
+uint8_t WormBody::get_state() { return state; }
+
+void WormBody::update() {
+	if (is_moving) {
+		if (direction == LEFT) {
+			move_left();
+		} else {
+			move_right();
+		}
+	}
+}

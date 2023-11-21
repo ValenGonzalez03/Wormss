@@ -4,13 +4,13 @@
 #include <string>
 
 #include "../common/message.h"
-#include "../common/protocol.h"
+#include "client_protocol.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 
 class ClientSenderThread : public Thread {
 private:
-  Protocol &prot;
+  ClientProtocol &prot;
   Queue<std::shared_ptr<Command>> &sender_queue;
 
   // Elimino posibilidad de copias y operador =
@@ -19,7 +19,7 @@ private:
 
 public:
   explicit ClientSenderThread(
-      Protocol &protocol,
+      ClientProtocol &protocol,
       Queue<std::shared_ptr<Command>> &send_queue); //, Queue<Message>& queue);
 
   virtual void run() override;

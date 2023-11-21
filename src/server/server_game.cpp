@@ -9,9 +9,8 @@ Game::Game(int &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
   game_manager.initialize_game();
 }
 
-Queue<std::shared_ptr<Command>> *Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
-                                   int &player_id) {
-  player_id = last_player_id_added + 1;
+Queue<std::shared_ptr<RunnableCommandGame>> *Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
+                                   const int &player_id) {
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
   last_player_id_added = player_id;
@@ -26,48 +25,49 @@ void Game::delete_player(const int &player_id) {
 
 void Game::run() {
   try {
-	
-	//while(queues_sender.size() != MAX_PLAYERS) {}  
-	  
-    auto time_start = std::chrono::high_resolution_clock::now();
+	auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     int it = 0;
-	started = true;
+    bool was_closed = false;
     while (keep_playing) {
       update(it);
+      game_manager.update();
       game_manager.step();
 
       push_game_state();
 
-      auto time_end = std::chrono::high_resolution_clock::now();
-      std::chrono::duration<double> duration = time_end - time_start;
-      double elapsed = duration.count();
-      auto rest = rate - elapsed;
+      auto t2 = time_point_cast<milliseconds>(steady_clock::now());
+
+      auto time_func = duration_cast<duration<float>>(t2 - t1);
+      auto rest = rate.count() - time_func.count();
 
       if (rest < 0) {
-        double behind = -rest;
-        double lost = behind - fmod(behind, rate);
-        time_start += std::chrono::duration_cast<
-            std::chrono::high_resolution_clock::duration>(
-            std::chrono::duration<double>(lost));
-        it += int(lost / rate);
-      } else {
-        sleep(rest);
-      }
-      time_start += std::chrono::duration_cast<
-          std::chrono::high_resolution_clock::duration>(
-          std::chrono::duration<double>(rate));
-      it += 1;
+        auto behind = -rest;
+        rest = rate.count() - fmod(behind, rate.count());
 
+        auto lost = behind + rest;
+        auto lost_ms = duration_cast<milliseconds>(dur_f(lost));
+
+        t1 += lost_ms;
+        it += floor(lost / rate.count());
+      }
+
+      auto rate_ms = duration_cast<milliseconds>(dur_f(rate));
+      auto sleep_ms = duration_cast<milliseconds>(dur_f(rest));
+
+      std::this_thread::sleep_for(sleep_ms);
+
+      t1 += rate_ms;
+      it += 1;
     }
   } catch (const std::exception &err) {
   }
 }
 
 void Game::update(int& it) {
-  std::shared_ptr<Command> command;
-  while (commands.try_pop(command)) {
-	  command->run(game_manager);
-	  it--;
+  std::shared_ptr<RunnableCommandGame> runnable_command;
+  while (commands.try_pop(runnable_command)) {
+	  runnable_command->run(game_manager);
+	  //it--;
   }
 }
 
@@ -86,4 +86,6 @@ bool Game::is_started() { return started; }
 
 bool Game::is_dead() { return not keep_playing; }
 
-int Game::get_game_id() { return game_id; }
+int Game::get_game_id() {
+	return game_id;
+}

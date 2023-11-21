@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "server_game.h"
+#include "command_runnable_game.h"
 
 class Command;
 
@@ -22,9 +23,9 @@ public:
 
     void delete_game(const int& game_id);
 
-    Queue<std::shared_ptr<Command>>* create_game(std::shared_ptr<Queue<GameState>> sender_queue, int& game_id, int&  player_id);
+    Queue<std::shared_ptr<RunnableCommandGame>>* create_game(std::shared_ptr<Queue<GameState>> sender_queue, int& game_id, int& player_id);
 
-    Queue<std::shared_ptr<Command>>* join_game(std::shared_ptr<Queue<GameState>> sender_queue, int&  player_id, const int&  game_id);
+    Queue<std::shared_ptr<RunnableCommandGame>>* join_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& game_id, int& player_id);
     
     bool game_exist(int game_id);
     

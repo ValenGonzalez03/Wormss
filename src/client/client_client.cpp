@@ -38,8 +38,8 @@ int Client::run() {
   //client_sdl.world_view.add_short_beam(100, 100);
   //client_sdl.world_view.add_short_beam(200, 200);
   //client_sdl.world_view.add_short_beam(250, 20);
-  client_sdl.world_view.add_long_beam(0, 1);
-  //client_sdl.world_view.add_long_beam(2, 2);
+  client_sdl.world_view.add_long_beam(0, 1, 0);
+  client_sdl.world_view.add_long_beam(6, 1, 30);
   //client_sdl.world_view.add_long_beam(3, 3);
 
   // Enable alpha blending for the sprites
@@ -212,7 +212,7 @@ bool Client::func_to_execute() {
   // client_sdl.resource_pool.get_font("Vera20"); std::shared_ptr<Font>
   // vera12_font_ptr = client_sdl.resource_pool.get_font("Vera12");
 
-  std::string text = "Position: " + std::to_string((int)10) +
+  std::string text = "Position: " + std::to_string(game_state.get_worms().front().get_pos_x()) +
                      ", running: " + (state.is_running ? "true" : "false") +
                      ", direction: " + std::to_string(int(state.direction));
 

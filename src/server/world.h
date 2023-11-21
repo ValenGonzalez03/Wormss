@@ -17,7 +17,9 @@ public:
   explicit World();
 	
   BeamBody *create_beam(float pos_x, float pos_y);
-	
+
+	BeamBody *create_beam(float pos_x, float pos_y, int angle);
+
   WormBody *create_worm(float pos_x, float pos_y);
 	
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);

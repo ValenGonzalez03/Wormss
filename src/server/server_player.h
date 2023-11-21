@@ -7,7 +7,7 @@
 
 #include "client_handler_thread.h"
 #include "player_sender_thread.h"
-#include "../common/protocol.h"
+//#include "../common/protocol.h"
 #include "server_games_handler.h"
 #include "../common/game_state.h"
 

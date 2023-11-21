@@ -2,7 +2,7 @@
 #define RUNNABLE_COMMAND_H_
 
 #include "../common/command.h"
-#include "../common/protocol.h"
+//#include "../common/protocol.h"
 
 class RunnableCommand {
 

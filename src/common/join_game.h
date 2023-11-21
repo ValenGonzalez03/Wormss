@@ -2,7 +2,7 @@
 #define JOIN_GAME_H_
 
 #include "command.h"
-#include "protocol.h"
+//#include "protocol.h"
 //#include "../server/server_games_handler.h"
 
 // Forward declaration de CODE_PLAYER_COMM

@@ -23,15 +23,20 @@ void ClientHandler::run() {
 				sender.start();
 				in_game = true;
 				*/
+				
 			} else {			   // comunicacion asincronica
 				std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command();
 				receiver_queue->push(runnable_command);
 			}
         }
 
-    } catch (const std::exception& err) {
+    } catch (const LibError& libError) { // Si se cierra el skt
 		keep_playing = false;
-    }
+		//std::cerr << "LibError: " << libError.what() << std::endl;
+    } catch (const std::runtime_error& runtimeError) { // Si se procesa mal un cmd
+		keep_playing = false;
+		std::cerr << "RuntimeError: " << runtimeError.what() << std::endl;
+	}
 }
 
 void ClientHandler::create_game(Command *command) {

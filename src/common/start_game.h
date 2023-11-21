@@ -2,7 +2,7 @@
 #define START_GAME_H_
 
 #include "command.h"
-#include "protocol.h"
+//#include "protocol.h"
 
 namespace CODE_PLAYER_COMM {
 extern uint8_t START_GAME;

@@ -25,8 +25,8 @@ std::shared_ptr<RunnableCommandGame> ServerProtocol::process_command() {
   } else if (code == CODE_PLAYER_COMM::STOP_MOVING) {
     return std::make_shared<RunnableStopMoving>(client_id, skt, &was_closed);
   } else {
-    std::cout << "Error de comando" << std::endl;
-    throw(-1);
+    throw std::runtime_error("Error de comando");
+
   }
 }
 
@@ -47,8 +47,7 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
   } else if (code == CODE_PLAYER_COMM::START_GAME) {
     return std::make_shared<RunnableStartGame>(client_id, skt, &was_closed);
   } else {
-    std::cout << "Error de comando" << std::endl;
-    throw(-1);
+    throw std::runtime_error("Error de comando");
   }
 }
 

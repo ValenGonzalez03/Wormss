@@ -18,7 +18,7 @@ class Player {
 	GamesHandler& games_handler;
 	std::atomic<bool> keep_playing {true};
 	std::atomic<bool> in_game {false};
-	Protocol protocol;
+	ServerProtocol protocol;
 	PlayerSender sender;
 	ClientHandler client_handler;
 		

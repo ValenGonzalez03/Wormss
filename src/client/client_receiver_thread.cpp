@@ -1,6 +1,6 @@
 #include "client_receiver_thread.h"
 
-ClientReceiverThread::ClientReceiverThread(Protocol &protocol,
+ClientReceiverThread::ClientReceiverThread(ClientProtocol &protocol,
                                            Queue<GameState> &recv_queue)
     : prot(protocol), receiver_queue(recv_queue) {}
 

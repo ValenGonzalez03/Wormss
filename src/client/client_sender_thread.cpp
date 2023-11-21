@@ -1,6 +1,6 @@
 #include "client_sender_thread.h"
 
-ClientSenderThread::ClientSenderThread(Protocol &protocol,
+ClientSenderThread::ClientSenderThread(ClientProtocol &protocol,
                                        Queue<std::shared_ptr<Command>> &send_queue)
     : prot(protocol), sender_queue(send_queue) {}
 

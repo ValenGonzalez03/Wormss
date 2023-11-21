@@ -14,6 +14,7 @@
 #include "../common/thread.h"
 #include "../common/queue.h"
 #include "../common/constant_rate_loop.h"
+#include "command_runnable_game.h"
 #include "game_manager.h"
 #include "broadcaster.h"
 
@@ -32,7 +33,7 @@ private:
   std::mutex m;
   std::map<int,std::shared_ptr<Queue<GameState>>> queues_sender;
   Broadcaster broadcaster;
-  Queue<std::shared_ptr<Command>> commands;
+  Queue<std::shared_ptr<RunnableCommandGame>> commands;
   int game_id;
   bool keep_playing = true;
   GameManager game_manager;
@@ -43,7 +44,7 @@ private:
 public:
   explicit Game(int &game_id);
 
-  Queue<std::shared_ptr<Command>>* add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
+  Queue<std::shared_ptr<RunnableCommandGame>>* add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
 											  const int& player_id);
 
   void delete_player(const int &player_id);

@@ -9,7 +9,7 @@ Game::Game(int &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
   game_manager.initialize_game();
 }
 
-Queue<std::shared_ptr<Command>> *Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
+Queue<std::shared_ptr<RunnableCommandGame>> *Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
                                    const int &player_id) {
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
@@ -64,9 +64,9 @@ void Game::run() {
 }
 
 void Game::update(int& it) {
-  std::shared_ptr<Command> command;
-  while (commands.try_pop(command)) {
-	  command->run(game_manager);
+  std::shared_ptr<RunnableCommandGame> runnable_command;
+  while (commands.try_pop(runnable_command)) {
+	  runnable_command->run(game_manager);
 	  //it--;
   }
 }

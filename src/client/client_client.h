@@ -5,11 +5,11 @@
 #include <string>
 #include <utility>
 
+#include "../common/command.h"
 #include "../common/constant_rate_loop.h"
 #include "../common/game_state.h"
-#include "../common/protocol.h"
 #include "../common/queue.h"
-#include "../common/socket.h"
+#include "client_protocol.h"
 #include "client_receiver_thread.h"
 #include "client_resource_pool.h"
 #include "client_sender_thread.h"
@@ -18,7 +18,7 @@
 
 class Client : public ConstantRateLoop {
 private:
-  Protocol prot;
+  ClientProtocol prot;
 
   Queue<GameState> receiver_queue;
   Queue<std::shared_ptr<Command>> sender_queue;

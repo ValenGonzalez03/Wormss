@@ -2,6 +2,12 @@
 
 #include <list>
 
+#include "../common/create_game.h"
+#include "../common/join_game.h"
+#include "../common/start_game.h"
+#include "../common/start_moving.h"
+#include "../common/stop_moving.h"
+
 using namespace SDL2pp;
 
 const float RATE = 1 / 60;

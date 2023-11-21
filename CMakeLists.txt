@@ -18,11 +18,11 @@ add_executable(client ./src/client/client_main.cpp
 ./src/client/client_sender_thread.cpp
 ./src/client/client_worldview.cpp
 ./src/client/client_worm_view.cpp
+./src/client/client_protocol.cpp
 ./src/common/socket.cpp 
 ./src/common/liberror.cpp 
 ./src/common/resolver.cpp 
-./src/common/resolvererror.cpp
-./src/common/protocol.cpp)
+./src/common/resolvererror.cpp)
 
 
 target_link_libraries(client PUBLIC pthread)
@@ -42,17 +42,15 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/world.cpp
 					  ./src/server/worm_body.cpp
 					  ./src/server/beam_body.cpp
+					  ./src/server/server_protocol.cpp
 					  ./src/common/socket.cpp 
 					  ./src/common/liberror.cpp 
 					  ./src/common/resolver.cpp 
-					  ./src/common/resolvererror.cpp
-					  ./src/common/protocol.cpp)
+					  ./src/common/resolvererror.cpp)
 
 target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)
 target_link_libraries(server PUBLIC yaml-cpp)
-
-target_compile_definitions(server PRIVATE SERVER_BUILD)
 
 # Agregar el ejecutable de pruebas y especificar los archivos fuente
 #add_executable(tests ./tests/protocol_tests.cpp

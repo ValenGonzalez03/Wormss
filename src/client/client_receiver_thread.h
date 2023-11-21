@@ -4,13 +4,13 @@
 #include <string>
 
 #include "../common/message.h"
-#include "../common/protocol.h"
+#include "client_protocol.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 
 class ClientReceiverThread : public Thread {
 private:
-  Protocol &prot;
+  ClientProtocol &prot;
   Queue<GameState> &receiver_queue;
 
   // Elimino posibilidad de copias y operador =
@@ -18,7 +18,7 @@ private:
   ClientReceiverThread &operator=(const ClientReceiverThread &) = delete;
 
 public:
-  explicit ClientReceiverThread(Protocol &protocol,
+  explicit ClientReceiverThread(ClientProtocol &protocol,
                                 Queue<GameState> &recv_queue);
 
   virtual void run() override;

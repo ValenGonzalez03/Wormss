@@ -1,6 +1,6 @@
 #include "player_sender_thread.h"
 
-PlayerSender::PlayerSender(Protocol& protocol, std::shared_ptr<Queue<GameState>> sender_queue, std::atomic<bool>& keep_playing) :
+PlayerSender::PlayerSender(ServerProtocol& protocol, std::shared_ptr<Queue<GameState>> sender_queue, std::atomic<bool>& keep_playing) :
         protocol(protocol), sender_queue(sender_queue), keep_playing(keep_playing) {}
 
 void PlayerSender::run() {

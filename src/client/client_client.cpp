@@ -40,9 +40,21 @@ int Client::run() {
   client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
 
   state.prev_ticks = SDL_GetTicks();
-  CreateGame new_game;
 
-  prot.send_command(new_game);
+  //Aca lobby con un loop
+  //devuelve un mensaje que dice se crea o se une y el codigo
+
+  //Si creas partida:
+    
+    CreateGame new_game;
+    prot.send_command(new_game);
+    // Recibe del server el player_id y game_id
+    //prot.recv_game_info() (player_id, game_id)
+
+  //Si unis a partida
+    // Recibe el player_id
+    //prot.recv
+
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo

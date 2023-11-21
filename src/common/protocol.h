@@ -13,6 +13,7 @@
 #include "liberror.h"
 #include "create_game.h"
 #include "join_game.h"
+#include "start_game.h"
 #include "start_moving.h"
 #include "stop_moving.h"
 
@@ -34,6 +35,8 @@ public:
   void send_command(Command &cmd);
 
   std::shared_ptr<Command> process_command();
+
+  std::shared_ptr<Command> process_command_lobby();
 
   void send_game_state(GameState& game_state);
 

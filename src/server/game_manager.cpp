@@ -9,8 +9,8 @@
 GameManager::GameManager() {}
 
 void GameManager::initialize_game() {
-  world.create_beam(0, 0);
-  worm = world.create_worm(0, 4);
+  world.create_beam(0, 1);
+  worm = world.create_worm(1, 4);
   worms_list.push_back(worm);
   // worms_list.push_back(world.create_worm(1, 4));
 }

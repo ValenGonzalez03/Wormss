@@ -22,7 +22,7 @@ private:
   const float width = 1;
   const float height = 1;
   const float density = 1;
-  const float friction = 1;
+  const float friction = 0.9;
   
   bool is_moving = false;
   uint8_t state = STOPPED;

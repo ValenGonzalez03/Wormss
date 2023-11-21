@@ -12,9 +12,9 @@ class BeamBody {
 	const float pos_y;
 	float angle = 0;
 	const float width = 6;
-	const float height = 0.80;
+	const float height = 0.8;
 	float density = 1;
-	float friction = 1;
+	float friction = 0.9;
 
 	public:
 	explicit BeamBody(b2World* world, float pos_x, float pos_y);

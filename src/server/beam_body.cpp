@@ -9,7 +9,7 @@ BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y): world(
     body = world->CreateBody(&bodyDef);
     
     b2PolygonShape polygonShape;
-    polygonShape.SetAsBox(width, height, b2Vec2(0, 0), 0);
+    polygonShape.SetAsBox(width, height, b2Vec2(0, 0), angle);
   
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &polygonShape;

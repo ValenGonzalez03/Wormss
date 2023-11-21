@@ -18,11 +18,11 @@ void ClientHandler::run() {
 				
 				runnable_command->run();
 				
-				/*
+				
 				receiver_queue = games_handler.create_game(sender_queue, 0);
 				sender.start();
 				in_game = true;
-				*/
+				
 				
 			} else {			   // comunicacion asincronica
 				std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command();

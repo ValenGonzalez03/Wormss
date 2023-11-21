@@ -3,12 +3,13 @@
 
 #include "box2d/box2d.h"
 #include <stdio.h>
+#include "../common/worm_states.h"
 
 #define LEFT 0
 #define RIGHT 1
 
-#define STOPPED 0
-#define MOVING 1
+//#define STOPPED 0
+//#define MOVING 1
 
 class WormBody {
 private:
@@ -25,7 +26,7 @@ private:
   const float friction = 0.1;
   
   bool is_moving = false;
-  uint8_t state = STOPPED;
+  uint8_t state = WORM_STATES::STOPPED;
 
 public:
   explicit WormBody(b2World* world, float pos_x, float pos_y);

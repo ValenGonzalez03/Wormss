@@ -16,7 +16,6 @@ struct client_SDL {
   // Create resource pool
   ResourcePool resource_pool = ResourcePool(renderer);
   WorldView world_view = WorldView(resource_pool, renderer);
-  SDL2pp::Texture *worm_walking = resource_pool.get_worm_walking();
 };
 
 #endif

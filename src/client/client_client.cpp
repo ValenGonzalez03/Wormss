@@ -43,7 +43,7 @@ int Client::run() {
   //client_sdl.world_view.add_long_beam(3, 3);
 
   // Enable alpha blending for the sprites
-  client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
+  //client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
 
   state.prev_ticks = SDL_GetTicks();
 

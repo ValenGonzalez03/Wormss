@@ -5,6 +5,7 @@
 #include "../common/game_state.h"
 #include "client_position_converter.h"
 #include "client_state.h"
+#include "../common/worm_states.h"
 
 class WormView {
 private:

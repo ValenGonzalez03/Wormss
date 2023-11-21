@@ -22,7 +22,8 @@ add_executable(client ./src/client/client_main.cpp
 ./src/common/socket.cpp 
 ./src/common/liberror.cpp 
 ./src/common/resolver.cpp 
-./src/common/resolvererror.cpp)
+./src/common/resolvererror.cpp
+./src/common/worm_states)
 
 
 target_link_libraries(client PUBLIC pthread)
@@ -46,7 +47,8 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/common/socket.cpp 
 					  ./src/common/liberror.cpp 
 					  ./src/common/resolver.cpp 
-					  ./src/common/resolvererror.cpp)
+					  ./src/common/resolvererror.cpp
+					  ./src/common/worm_states.cpp)
 
 target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)

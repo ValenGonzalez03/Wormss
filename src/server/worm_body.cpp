@@ -49,7 +49,7 @@ void WormBody::move_right() {
 
 
 void WormBody::start_moving(const uint8_t &dir) { 
-	state = MOVING;
+	state = WORM_STATES::MOVING;
 	if (dir == LEFT) {
 		is_moving = true;
 		direction = LEFT; 
@@ -61,7 +61,7 @@ void WormBody::start_moving(const uint8_t &dir) {
 
 void WormBody::stop_moving() { 
 	is_moving = false;	// probablemente no sea necesario con el state
-	state = STOPPED;
+	state = WORM_STATES::STOPPED;
 }
 
 b2Vec2 WormBody::get_position() { return body->GetPosition(); }

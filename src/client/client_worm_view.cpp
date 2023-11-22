@@ -17,6 +17,7 @@ void WormView::render(int frame, Worm &worm, client_state &worm_state) {
 
 void WormView::render_worm_idle(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state) {
   worm_state.run_phase = 0;
+  SDL_RendererFlip flip = choose_flip_direction(worm);
   walking_texture.SetAlphaMod(255);
   walking_texture.SetBlendMode(SDL_BLENDMODE_BLEND);
   renderer.Copy(
@@ -25,24 +26,18 @@ void WormView::render_worm_idle(int frame, int pos_x, int pos_y, Worm &worm, cli
     SDL2pp::Rect(pos_x, pos_y, 40, 40),    // Destination
     0.0,                                   // don't rotate
     SDL2pp::NullOpt,                       // rotation center - not needed
-    SDL_FLIP_HORIZONTAL                    // horizontal flip
+    flip                    // horizontal flip
 );
 }
 
 void WormView::render_worm_running(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state) {
-  SDL_RendererFlip flip = SDL_FLIP_NONE; // Sin volteo por defecto
+  SDL_RendererFlip flip = choose_flip_direction(worm);
   walking_texture.SetBlendMode(SDL_BLENDMODE_BLEND);
-  worm_state.run_phase = (frame / 50) % 15;
-  int src_x = 10, src_y = 10; // by default, standing sprite
-  // Voltear horizontalmente solo si te estás moviendo a la izquierda
-  if (worm.get_direction() == LEFT) { //worm.get_direction() == LEFT
-      //flip = SDL_FLIP_NONE;
-  }
-  else if (worm.get_direction() == RIGHT) { //worm.get_direction() == RIGHT
-    flip = SDL_FLIP_HORIZONTAL;
-  }
-  src_x = 10;
-  src_y = 10 + 60 * worm_state.run_phase; //Corregir?
+  worm_state.run_phase = ((frame / 50) % 11) + 4;
+  std::cout << "frame: " << frame << std::endl;
+  //int src_x = 10, src_y = 10; // by default, standing sprite
+  int src_x = 10; // + 1 * worm_state.run_phase;
+  int src_y = 10 + 60 * worm_state.run_phase; //Corregir?
 
   walking_texture.SetAlphaMod(255); // sprite is fully opaque
   renderer.Copy(

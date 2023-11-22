@@ -20,7 +20,8 @@ BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y): world(
     body->CreateFixture(&fixtureDef);
 }
 
-BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y, int angle): world(world), pos_x(pos_x), pos_y(pos_y), angle(angle) {
+BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y, int angle, float length) : 
+                world(world), pos_x(pos_x), pos_y(pos_y), angle(angle), width(length) {
 	b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
     bodyDef.position.Set(pos_x, pos_y);

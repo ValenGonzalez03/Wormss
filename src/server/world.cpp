@@ -13,8 +13,8 @@ BeamBody* World::create_beam(float pos_x, float pos_y) {
   return beam;
 }
 
-BeamBody* World::create_beam(float pos_x, float pos_y, int angle) {
-  BeamBody* beam = new BeamBody(world, pos_x, pos_y, angle);
+BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) {
+  BeamBody* beam = new BeamBody(world, pos_x, pos_y, angle, length);
   beams.push_back(beam);
   return beam;
 }

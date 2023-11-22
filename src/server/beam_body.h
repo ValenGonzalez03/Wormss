@@ -22,7 +22,7 @@ class BeamBody {
 	BeamBody(const BeamBody&) = delete;
 	BeamBody& operator=(const BeamBody&) = delete;
 
-	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle);
+	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
 };
 
 #endif

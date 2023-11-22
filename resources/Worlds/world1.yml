@@ -1,0 +1,16 @@
+name: "Nivel 1"
+background: "fondo1.jpg"
+beams:
+  - position_x: 10.0
+    position_y: 20.0
+    angle: 5.0
+    length: 3.0
+  - position_x: 30.0
+    position_y: 15.0
+    angle: 10.0
+    length: 6.0
+spawn_points:
+  - position_x: 5.0
+    position_y: 5.0
+  - position_x: 25.0
+    position_y: 25.0

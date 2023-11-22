@@ -5,7 +5,7 @@
 
 struct client_state {
   bool is_running = false; // whether the character is currently running
-  int run_phase = -1;      // run animation phase
+  int run_phase = 0;      // run animation phase
   float position_x = 0.0;  // player position
   int direction = 0;
   // cppcheck-suppress unusedStructMember

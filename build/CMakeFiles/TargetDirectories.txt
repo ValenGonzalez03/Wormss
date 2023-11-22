@@ -1,4 +1,0 @@
-/home/lucas/Desktop/taller/tpg-worms/Worms/build/CMakeFiles/client.dir
-/home/lucas/Desktop/taller/tpg-worms/Worms/build/CMakeFiles/server.dir
-/home/lucas/Desktop/taller/tpg-worms/Worms/build/CMakeFiles/edit_cache.dir
-/home/lucas/Desktop/taller/tpg-worms/Worms/build/CMakeFiles/rebuild_cache.dir

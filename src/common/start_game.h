@@ -21,7 +21,6 @@ public:
     void send(Socket &skt, bool* was_closed) override {
         skt.sendall(&code, sizeof(code), was_closed);
     }
-
     void receive(Socket &skt, bool* was_closed) override {}
  
 	// PROVISORIAS
@@ -32,7 +31,6 @@ public:
     uint8_t get_game_id() override {
 		return -1;
 	}
-
 };
 
 #endif

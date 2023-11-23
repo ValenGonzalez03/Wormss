@@ -28,7 +28,6 @@ public:
         skt.sendall(&game_id, sizeof(game_id), was_closed);
     }
 
-    #ifdef SERVER_BUILD
     void receive(Socket &skt, bool* was_closed) override {
         skt.recvall(&game_id, sizeof(game_id), was_closed);
     }
@@ -40,7 +39,6 @@ public:
     uint8_t get_game_id() override {
 		return game_id;
 	}
-    #endif
 };
 
 #endif

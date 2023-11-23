@@ -30,7 +30,6 @@ public:
     skt.sendall(&direction, sizeof(direction), was_closed);
   }
 
-
   void receive(Socket &skt, bool *was_closed) override {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
@@ -47,7 +46,6 @@ public:
   uint8_t get_direction() {
     return direction;
   }
-
 };
 
 #endif

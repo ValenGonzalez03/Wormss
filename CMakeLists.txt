@@ -40,7 +40,6 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/server_game.cpp
 					  ./src/server/game_manager.cpp
 					  ./src/server/broadcaster.cpp
-					  ./src/server/lobby_result.cpp
 					  ./src/server/world.cpp
 					  ./src/server/worm_body.cpp
 					  ./src/server/beam_body.cpp

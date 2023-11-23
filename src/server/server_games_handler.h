@@ -7,7 +7,6 @@
 
 #include "server_game.h"
 #include "command_runnable_game.h"
-#include "lobby_result.h"
 
 class Command;
 
@@ -17,6 +16,8 @@ private:
     std::list<Game*> games;	
     int games_counter = 0;
 
+    Game* get_game(const int& game_id);
+
 public:
     GamesHandler();
 
@@ -24,9 +25,11 @@ public:
 
     void delete_game(const int& game_id);
 	
-	std::unique_ptr<LobbyResult> create_game(std::shared_ptr<Queue<GameState>> sender_queue, int& game_id, int& player_id);
+	Queue<std::shared_ptr<RunnableCommandGame>>* create_game(std::shared_ptr<Queue<GameState>> sender_queue, int& game_id, int& player_id);
 
-	std::unique_ptr<LobbyResult> join_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& game_id, int& player_id);
+	Queue<std::shared_ptr<RunnableCommandGame>>* join_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& game_id, int& player_id);
+
+    void start_game(const int& game_id, const int& player_id);
     
     bool game_exist(int game_id);
     

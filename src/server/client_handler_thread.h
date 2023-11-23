@@ -6,6 +6,8 @@
 #include "player_sender_thread.h"
 #include "server_games_handler.h"
 #include "lobby_result.h"
+#include "command_runnable_lobby.h"
+#include "command_runnable_game.h"
 
 class ClientHandler : public Thread {
 	private:
@@ -13,6 +15,7 @@ class ClientHandler : public Thread {
 	ServerProtocol& protocol;
 	GamesHandler& games_handler;
 	PlayerSender& sender;
+	Queue<std::shared_ptr<RunnableCommandGame>>* game_commands;
 	std::shared_ptr<Queue<GameState>> sender_queue;
 	std::atomic<bool>& keep_playing;
 	std::atomic<bool>& in_game;
@@ -34,10 +37,6 @@ class ClientHandler : public Thread {
 	 * Joinea el hilo Sender.
 	 */
 	void join_sender();
-
-	void create_game(Command *command);
-
-	void join_game(Command *command);
 		
 	~ClientHandler();
 	

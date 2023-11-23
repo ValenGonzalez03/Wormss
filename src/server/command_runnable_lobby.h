@@ -3,9 +3,7 @@
 
 #include "command_runnable.h"
 #include "server_games_handler.h"
-//#include "player_sender_thread.h"
 #include "lobby_result.h"
-//#include "../server/client_handler_thread.h"
 
 class RunnableCommandLobby : RunnableCommand {
 

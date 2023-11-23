@@ -36,6 +36,8 @@ public:
 
   void send_game_state(GameState& game_state);
 
+  void send_id(const int id);
+
   void close_socket();
 };
 

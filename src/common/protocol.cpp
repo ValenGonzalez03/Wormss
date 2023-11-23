@@ -68,7 +68,7 @@ GameState Protocol::process_game_state() {
   memcpy(buf.data(), &worms_amount, sizeof(worms_amount));
   skt.recvall(&buf[1], worms_amount * sizeof(Worm), &was_closed);
 
-  return GameState(skt, &was_closed, buf);
+  return GameState(skt, &was_closed);
 }
 
 void Protocol::close_socket() {

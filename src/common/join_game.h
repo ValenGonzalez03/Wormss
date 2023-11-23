@@ -20,7 +20,7 @@ public:
 
     // Constructor from server side
     JoinGame(int clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::JOIN_GAME, clt_id) {
-        //receive(skt, was_closed);
+        receive(skt, was_closed);
     }
 
     void send(Socket &skt, bool* was_closed) override {
@@ -28,7 +28,6 @@ public:
         skt.sendall(&game_id, sizeof(game_id), was_closed);
     }
 
-    #ifdef SERVER_BUILD
     void receive(Socket &skt, bool* was_closed) override {
         skt.recvall(&game_id, sizeof(game_id), was_closed);
     }
@@ -40,7 +39,6 @@ public:
     uint8_t get_game_id() override {
 		return game_id;
 	}
-    #endif
 };
 
 #endif

@@ -34,7 +34,7 @@ private:
   std::map<int,std::shared_ptr<Queue<GameState>>> queues_sender;
   Broadcaster broadcaster;
   Queue<std::shared_ptr<RunnableCommandGame>> commands;
-  int game_id;
+  uint8_t game_id;
   int last_player_id_added = 0;
   bool keep_playing = true;
   bool started = false;
@@ -44,7 +44,7 @@ private:
   
 
 public:
-  explicit Game(int &game_id);
+  explicit Game(uint8_t &game_id);
 
   Queue<std::shared_ptr<RunnableCommandGame>>* add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
 											  const int& player_id);
@@ -59,7 +59,7 @@ public:
 
   void stop();
 
-  bool compare_id(const int &another_game_id);
+  bool compare_id(const uint8_t &another_game_id);
 
   void push_game_state();
   

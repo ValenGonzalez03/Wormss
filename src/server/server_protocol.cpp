@@ -56,6 +56,11 @@ void ServerProtocol::send_game_state(GameState& game_state) {
   game_state.serialize(skt, &was_closed);
 }
 
+void ServerProtocol::send_id(const int id) {
+  bool was_closed = false;
+  skt.sendall(&id, sizeof(id), &was_closed);
+}
+
 void ServerProtocol::close_socket() {
   skt.shutdown(2);
   skt.close();

@@ -21,7 +21,6 @@ public:
     void receive(Socket &skt, bool* was_closed) {
         command->receive(skt, was_closed);
     }
-
 };
 
 

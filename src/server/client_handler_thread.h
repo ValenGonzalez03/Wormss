@@ -4,8 +4,8 @@
 #include "../common/thread.h"
 #include "../common/socket.h"
 #include "../common/command.h"
-#include "player_sender_thread.h"
 #include "server_games_handler.h"
+#include "player_sender_thread.h"
 
 class ClientHandler : public Thread {
 	private:
@@ -35,9 +35,9 @@ class ClientHandler : public Thread {
 	 */
 	void join_sender();
 
-	void create_game(Command *command);
+	void create_game();
 
-	void join_game(Command *command);
+	void join_game(const uint8_t& game_id);
 		
 	~ClientHandler();
 	

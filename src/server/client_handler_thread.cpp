@@ -18,11 +18,10 @@ void ClientHandler::run() {
 				int player_id;
 				
 				std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby();
+				//runnable_command->receive();
 				
-				runnable_command->run(games_handler, sender, sender_queue, game_id, player_id);
-				
-				in_game = true;
-				sender.start();
+				//runnable_command->run(games_handler, sender, sender_queue, game_id, player_id);
+				runnable_command->run(*this);
 			} else {			   // comunicacion asincronica
 				std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command();
 				receiver_queue->push(runnable_command);
@@ -38,16 +37,18 @@ void ClientHandler::run() {
 	}
 }
 
-void ClientHandler::create_game(Command *command) {
-	receiver_queue = games_handler.create_game(sender_queue, command->get_client_id());
-	in_game = true;
-	sender.start();
+void ClientHandler::create_game() {
+	uint8_t game_id;
+	int player_id;
+	receiver_queue = games_handler.create_game(sender_queue, game_id, player_id);
+	sender.send_id(game_id);
+	sender.send_id(player_id);
 }
 
-void ClientHandler::join_game(Command *command) {
-	receiver_queue = games_handler.join_game(sender_queue, command->get_client_id(), command->get_game_id());
-	in_game = true;
-	sender.start();
+void ClientHandler::join_game(const uint8_t& game_id) {
+	int player_id;
+	receiver_queue = games_handler.join_game(sender_queue, game_id, player_id);
+	sender.send_id(player_id);
 }
 
 void ClientHandler::join_sender() {

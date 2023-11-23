@@ -5,7 +5,7 @@
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(int &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
+Game::Game(uint8_t &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
   game_manager.initialize_game();
 }
 
@@ -73,7 +73,7 @@ void Game::update(int& it) {
 
 void Game::stop() { keep_playing = false; }
 
-bool Game::compare_id(const int &another_game_id) {
+bool Game::compare_id(const uint8_t& another_game_id) {
   return (game_id == another_game_id);
 }
 

@@ -46,7 +46,6 @@ int Client::run() {
   //client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
 
   state.prev_ticks = SDL_GetTicks();
-  CreateGame new_game;
 
   //Aca lobby con un loop
   //devuelve un mensaje que dice se crea o se une y el codigo

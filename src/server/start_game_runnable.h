@@ -10,8 +10,10 @@ public:
 
     RunnableStartGame(int clt_id, Socket &skt, bool *was_closed) : RunnableCommandLobby(std::make_shared<StartGame>(clt_id, skt, was_closed)) {}
 
-    void run(/* Alguna clase de server para comandos de lobby*/) override {
-        
+    std::unique_ptr<LobbyResult> run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue, int& game_id, int& player_id) override {
+        std::unique_ptr<LobbyResult> lobby_result = games_handler.create_game(sender_queue, game_id, player_id);
+        //sender.send_id(player_id);
+        return lobby_result;
     }
 
 };

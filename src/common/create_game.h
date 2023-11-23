@@ -24,7 +24,6 @@ public:
         skt.sendall(&code, sizeof(code), was_closed);
     }
 
-    #ifdef SERVER_BUILD
     void receive(Socket &skt, bool* was_closed) override {}
 	
 	// PROVISORIAS
@@ -35,7 +34,6 @@ public:
     uint8_t get_game_id() override {
 		return -1;
 	}
-    #endif
 };
 
 

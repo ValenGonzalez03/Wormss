@@ -21,26 +21,28 @@ void GamesHandler::delete_game(const int& game_id) {
     games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, int& game_id, int& player_id) {
+std::unique_ptr<LobbyResult> GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, int& game_id, int& player_id) {
 	std::lock_guard<std::mutex> lck(m);
 	Game* game = new Game(games_counter);
     game_id = games_counter;
 	games_counter++;
 	add_game(game);
-	//game->start();
-	return game->add_player(sender_queue, player_id);
+	game->start();
+	game->add_player(sender_queue, player_id);
+	return std::make_unique<LobbyResult>(player_id, game_id, game->add_player(sender_queue, player_id));
 }
 
-Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& game_id, int& player_id) {
+std::unique_ptr<LobbyResult> GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const int& game_id, int& player_id) {
 	std::lock_guard<std::mutex> lck(m);
+	Queue<std::shared_ptr<RunnableCommandGame>>* commands_queue = nullptr;
 	for (auto& current_game: games) {
         if (current_game->compare_id(game_id)) {
 			if (!current_game->is_started()) {
-				return current_game->add_player(sender_queue, player_id);
+				commands_queue = current_game->add_player(sender_queue, player_id);
 			}
 		}
     }
-    return nullptr;
+    return std::make_unique<LobbyResult>(player_id, game_id, commands_queue);
 }
 
 bool GamesHandler::game_exist(int game_id) {

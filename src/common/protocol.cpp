@@ -1,3 +1,4 @@
+/*
 #include "protocol.h"
 
 // Algunos posibles codigos de acciones que puede realizar el cliente para que
@@ -75,3 +76,5 @@ void Protocol::close_socket() {
   skt.shutdown(2);
   skt.close();
 }
+
+*/

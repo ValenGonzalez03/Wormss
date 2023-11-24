@@ -13,6 +13,8 @@ private:
   b2World* world;
   std::list<WormBody*> worms;
   std::list<BeamBody*> beams;
+  std::string name = "";
+  //std::string background = "";
 
 public:
   explicit World();
@@ -31,6 +33,7 @@ public:
 	
   ~World();
 
+/*
   void print_beams () {
     for (auto &beam : beams) {
       beam->print_beam();
@@ -43,6 +46,23 @@ public:
       std::cout << "pos_x: " << worm->get_pos_x() << std::endl;
       std::cout << "pos_y: " << worm->get_pos_y() << std::endl;
     }
+  }
+*/
+
+  std::string get_name() {
+    return this->name;
+  }
+
+//  std::string get_background() {
+//    return this->background;
+//  }
+
+  std::list<WormBody*> get_worms() {
+    return this->worms;
+  }
+
+  std::list<BeamBody*> get_beams() {
+    return this->beams;
   }
 	
   World(const World &) = delete;

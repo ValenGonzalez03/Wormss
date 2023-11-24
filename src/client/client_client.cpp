@@ -54,8 +54,8 @@ int Client::run() {
     
     std::shared_ptr<CreateGame> create_game = std::make_shared<CreateGame>();
     sender_queue.push(create_game);
-    std::shared_ptr<StartGame> start_game = std::make_shared<StartGame>();
-    sender_queue.push(start_game);
+    //std::shared_ptr<StartGame> start_game = std::make_shared<StartGame>();
+    //sender_queue.push(start_game);
     // Recibe del server el player_id y game_id
     //prot.recv_game_info(); (player_id, game_id)
     //prot.recv_world(client_sdl.world_view);

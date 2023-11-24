@@ -32,6 +32,22 @@ class BeamBody {
 		std::cout << "width: " << width << std::endl;
 		std::cout << "height: " << height << std::endl;
 	}
+
+	float get_pos_x() {
+		return this->pos_x;
+	}
+
+	float get_pos_y() {
+		return this->pos_y;
+	}
+
+	int get_angle() {
+		return this->angle;
+	}
+
+	float get_width() {
+		return this->width;
+	}
 };
 
 #endif

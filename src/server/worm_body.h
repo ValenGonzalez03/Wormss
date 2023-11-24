@@ -4,6 +4,7 @@
 #include "box2d/box2d.h"
 #include <stdio.h>
 #include "../common/worm_states.h"
+#include <iostream>
 
 #define LEFT 0
 #define RIGHT 1

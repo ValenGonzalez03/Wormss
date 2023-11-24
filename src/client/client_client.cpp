@@ -46,21 +46,24 @@ int Client::run() {
   //client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
 
   state.prev_ticks = SDL_GetTicks();
-  //CreateGame new_game;
 
   //Aca lobby con un loop
   //devuelve un mensaje que dice se crea o se une y el codigo
 
   //Si creas partida:
     
-    CreateGame new_game;
-    prot.send_command(new_game);
+    std::shared_ptr<CreateGame> create_game = std::make_shared<CreateGame>();
+    sender_queue.push(create_game);
+    std::shared_ptr<StartGame> start_game = std::make_shared<StartGame>();
+    sender_queue.push(start_game);
     // Recibe del server el player_id y game_id
-    //prot.recv_game_info() (player_id, game_id)
+    //prot.recv_game_info(); (player_id, game_id)
+    //prot.recv_world(client_sdl.world_view);
 
   //Si unis a partida
     // Recibe el player_id
-    //prot.recv
+    //prot.recv_player_id();
+    //prot.recv_world(client_sdl.world_view);
 
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina

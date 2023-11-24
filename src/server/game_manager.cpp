@@ -1,7 +1,6 @@
 #include "game_manager.h"
 #include "box2d/box2d.h"
 #include <stdio.h>
-#include "worlds_reader.h"
 
 // cambiar despues
 #define LEFT 0
@@ -10,14 +9,18 @@
 GameManager::GameManager() {}
 
 void GameManager::initialize_game() {
+  /*
   WorldsReader worlds_reader;
-  std::vector<World> worlds = worlds_reader.read_yaml_files(RESOURCES_PATH + "Worlds/");
+  std::vector<std::shared_ptr<World>> worlds = worlds_reader.read_yaml_files(std::filesystem::path(RESOURCES_PATH) / "Worlds");
+  for (auto &world : worlds){
+    world->print_beams();
+    world->print_worms();
+  }
+  */
   world.create_beam(0, 1, 0, 6);
   world.create_beam(6,1,30, 6);
-  //world.create_beam(8,1,2);
   worm = world.create_worm(0, 7);
-  worms_list.push_back(worm);
-  // worms_list.push_back(world.create_worm(1, 4));
+  //worms_list.push_back(worm);
 }
 
 void GameManager::add_player(const int &player_id) {

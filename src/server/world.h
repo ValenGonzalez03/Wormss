@@ -6,6 +6,7 @@
 #include "worm_body.h"
 #include <list>
 #include <stdio.h>
+#include <iostream>
 
 class World {
 private:
@@ -29,6 +30,20 @@ public:
   void delete_beams();
 	
   ~World();
+
+  void print_beams () {
+    for (auto &beam : beams) {
+      beam->print_beam();
+    }
+  }
+
+  void print_worms () {
+    for (auto &worm : worms) {
+      std::cout << "WORM" << std::endl;
+      std::cout << "pos_x: " << worm->get_pos_x() << std::endl;
+      std::cout << "pos_y: " << worm->get_pos_y() << std::endl;
+    }
+  }
 	
   World(const World &) = delete;
   World &operator=(const World &) = delete;

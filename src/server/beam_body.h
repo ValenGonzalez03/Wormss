@@ -3,6 +3,7 @@
 
 #include "box2d/box2d.h"
 #include <stdio.h>
+#include <iostream>
 
 class BeamBody {
 	private:
@@ -23,6 +24,14 @@ class BeamBody {
 	BeamBody& operator=(const BeamBody&) = delete;
 
 	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
+
+	void print_beam() {
+		std::cout << "BEAM" << std::endl;
+		std::cout << "pos_x: " << pos_x << std::endl;
+		std::cout << "pos_y: " << pos_y << std::endl;
+		std::cout << "width: " << width << std::endl;
+		std::cout << "height: " << height << std::endl;
+	}
 };
 
 #endif

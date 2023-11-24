@@ -20,6 +20,8 @@ private:
   SDL2pp::Renderer &renderer;
   std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
   std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
+  std::map<std::string, Mix_Chunk*> sounds;
+  Mix_Music* gMusic = NULL;
 
   void add_texture(const std::string &texture_name,
                    const std::string &image_path) {
@@ -74,6 +76,12 @@ public:
 
   // Devuelve un ptr a la textura del worm caminando
   SDL2pp::Texture *get_worm_walking() { return get_texture(WORM_WALKING); }
+
+/*
+  void add_sound(const std::string sound_name, const std::string &sound_path) {
+    Mix_Chunk * 
+  }
+*/
 
   // Ver inicialización (NO USAR)
   void add_font(const std::string &font_name, const std::string &font_path,

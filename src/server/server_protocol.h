@@ -36,12 +36,21 @@ public:
 
   void send_game_state(GameState& game_state);
 
+  // Envía el tamaño de una cadena y luego la cadena
+  void send_string(std::string str, bool* was_closed);
+
+  // Multiplica un número flotante por 100 para mandarlo
+  // como uint por el socket, al recibirlo hay que
+  // dividirlo por 100 para obtener otra vez el num original
+  void send_float(float n, bool* was_closed);
+
+//////////////////////////////////////////////////////////////////////
+///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
+//////////////////////////////////////////////////////////////////////
+
   // Envía el mundo pasado por parámetro por el socket
   // (nombre, background path, vigas, spawn_points)
   void send_world(World& world);
-
-  // Envía el tamaño de una cadena y luego la cadena
-  void send_string(std::string str, bool* was_closed);
 
   // Envía las características de una viga
   // (pos_x, pos_y, angle, width)
@@ -50,10 +59,13 @@ public:
   // Envía las carac de un spawn_point del mundo
   void send_spawn_point(WormBody &worm, bool* was_closed);
 
-  // Multiplica un número flotante por 100 para mandarlo
-  // como uint por el socket, al recibirlo hay que
-  // dividirlo por 100 para obtener otra vez el num original
-  void send_float(float n, bool* was_closed);
+  // Recibe una lista de punteros a mundos y envía la cantidad de
+  // mundos y sus nombres por socket
+  void send_worlds_names(std::vector<std::shared_ptr<World>>& worlds, bool* was_closed);
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 
   void close_socket();
 };

@@ -14,7 +14,7 @@ private:
   std::list<WormBody*> worms;
   std::list<BeamBody*> beams;
   std::string name = "";
-  //std::string background = "";
+  std::string background = "";
 
 public:
   explicit World();
@@ -53,9 +53,9 @@ public:
     return this->name;
   }
 
-//  std::string get_background() {
-//    return this->background;
-//  }
+  std::string get_background() {
+    return this->background;
+  }
 
   std::list<WormBody*> get_worms() {
     return this->worms;
@@ -63,6 +63,14 @@ public:
 
   std::list<BeamBody*> get_beams() {
     return this->beams;
+  }
+
+  void set_name(std::string new_name) {
+    this->name = new_name;
+  }
+
+  void set_background(std::string new_background) {
+    this->background = new_background;
   }
 	
   World(const World &) = delete;

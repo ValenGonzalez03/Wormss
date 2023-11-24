@@ -81,6 +81,9 @@ bool GamesHandler::game_exist(int game_id) {
 void GamesHandler::reap_dead() {
 	auto dead = [](Game* game) {
         if (game->is_dead()) {
+			if (game->is_started()) {
+				game->join();
+			}
             game->join();
             delete game;
             return true;
@@ -101,8 +104,10 @@ std::list<int>* GamesHandler::obtain_all_games_id() {
 
 GamesHandler::~GamesHandler() {
 	for (auto& current_game: games) {
-		current_game->stop();
-		current_game->join();
+		if (current_game->is_started()) {
+			current_game->stop();
+			current_game->join();
+		}
         delete current_game;
     }
     games.clear();

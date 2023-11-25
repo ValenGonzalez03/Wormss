@@ -37,6 +37,10 @@ public:
   
   void move_right();
   
+  void apply_horizontal_impulse(float desired_vel);
+  
+  void apply_vertical_impulse(float jump_speed);
+  
   void start_moving(const uint8_t &dir);
   
   void stop_moving();

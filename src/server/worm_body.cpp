@@ -22,22 +22,17 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y)
 }
 
 void WormBody::move_left() {
-  direction = LEFT;
-  b2Vec2 body_vel = body->GetLinearVelocity();
-  float desired_vel = -vel;
-  
-  float vel_change = desired_vel - body_vel.x;
-  float mass = body->GetMass();
-  float impulse = mass * vel_change;
-  
-  body->ApplyLinearImpulse(b2Vec2(impulse, 0), body->GetWorldCenter(), true);
+  direction = LEFT;  
+  apply_horizontal_impulse(-vel);
 }
 	
 void WormBody::move_right() {
-  direction = RIGHT;
+  direction = RIGHT;  
+  apply_horizontal_impulse(vel);
+}
+
+void WormBody::apply_horizontal_impulse(float desired_vel) {
   b2Vec2 body_vel = body->GetLinearVelocity();
-  float desired_vel = vel;
-  
   float vel_change = desired_vel - body_vel.x;
   float mass = body->GetMass();
   float impulse = mass * vel_change;
@@ -45,6 +40,10 @@ void WormBody::move_right() {
   body->ApplyLinearImpulse(b2Vec2(impulse, 0), body->GetWorldCenter(), true);
 }
 
+void WormBody::apply_vertical_impulse(float jump_speed) {
+  float impulse = body->GetMass() * jump_speed;
+  body->ApplyLinearImpulse(b2Vec2(0, impulse), body->GetWorldCenter(), true);
+}
 
 void WormBody::start_moving(const uint8_t &dir) { 
 	state = WORM_STATES::MOVING;

@@ -16,10 +16,10 @@ private:
 
 public:
     // Constructor from client side
-    JoinGame(int game_id) : Command(CODE_PLAYER_COMM::JOIN_GAME, 0), game_id(game_id) {}
+    JoinGame(uint8_t game_id) : Command(CODE_PLAYER_COMM::JOIN_GAME, 0), game_id(game_id) {}
 
     // Constructor from server side
-    JoinGame(int clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::JOIN_GAME, clt_id) {
+    JoinGame(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::JOIN_GAME, clt_id) {
         receive(skt, was_closed);
     }
 

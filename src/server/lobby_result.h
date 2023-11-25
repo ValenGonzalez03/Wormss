@@ -14,7 +14,7 @@ private:
   bool was_game_started = false;
   
 public:
-  explicit LobbyResult(const int& player_id, const uint8_t& game_id, Queue<std::shared_ptr<RunnableCommandGame>>* commands) : 
+  explicit LobbyResult(const uint8_t& player_id, const uint8_t& game_id, Queue<std::shared_ptr<RunnableCommandGame>>* commands) : 
 						player_id(player_id), game_id(game_id), commands(commands) {}
 
   Queue<std::shared_ptr<RunnableCommandGame>>* get_commands() {

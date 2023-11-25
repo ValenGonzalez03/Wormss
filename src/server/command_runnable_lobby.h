@@ -12,7 +12,7 @@ public:
 
     RunnableCommandLobby(std::shared_ptr<Command> command) : RunnableCommand(command) {}
 
-    virtual std::unique_ptr<LobbyResult> run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue, uint8_t& game_id, int& player_id) = 0;
+    virtual std::unique_ptr<LobbyResult> run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue, uint8_t& game_id, uint8_t& player_id) = 0;
 
 };
 

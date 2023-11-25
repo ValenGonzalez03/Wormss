@@ -7,13 +7,9 @@
 #include "start_game_runnable.h"
 #include "start_moving_runnable.h"
 #include "stop_moving_runnable.h"
+#include "jump_runnable.h"
 
 ServerProtocol::ServerProtocol(Socket &&socket) : skt(std::move(socket)) {}
-
-void ServerProtocol::send_id(const int id) {
-  bool was_closed = false;
-  skt.sendall(&id, sizeof(id), &was_closed);
-}
 
 std::shared_ptr<RunnableCommandGame> ServerProtocol::process_command() {
   bool was_closed = false;
@@ -29,6 +25,8 @@ std::shared_ptr<RunnableCommandGame> ServerProtocol::process_command() {
     return std::make_shared<RunnableStartMoving>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_MOVING) {
     return std::make_shared<RunnableStopMoving>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::JUMP) {
+    return std::make_shared<RunnableJump>(client_id, skt, &was_closed);
   } else {
     throw std::runtime_error("Error de comando de juego");
   }
@@ -60,7 +58,7 @@ void ServerProtocol::send_game_state(GameState &game_state) {
   game_state.serialize(skt, &was_closed);
 }
 
-void ServerProtocol::send_id(const int id) {
+void ServerProtocol::send_id(const uint8_t id) {
   bool was_closed = false;
   skt.sendall(&id, sizeof(id), &was_closed);
 }

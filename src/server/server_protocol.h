@@ -30,15 +30,13 @@ public:
   ServerProtocol(ServerProtocol &&) = default;
   ServerProtocol &operator=(ServerProtocol &&) = default;
 
-  void send_id(const int id);
-
   std::shared_ptr<RunnableCommandGame> process_command();
 
   std::shared_ptr<RunnableCommandLobby> process_command_lobby();
 
   void send_game_state(GameState &game_state);
 
-  void send_id(const int id);
+  void send_id(const uint8_t id);
 
   void close_socket();
 };

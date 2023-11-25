@@ -21,7 +21,7 @@ void ClientHandler::run() {
         // protocol.send_games_id();
 
         uint8_t game_id = 0;
-        int player_id = 0;
+        uint8_t player_id = 0;
 
         std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby();
 

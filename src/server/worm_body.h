@@ -28,7 +28,6 @@ private:
   const float density = 1;
   const float friction = 0.1;
   
-  bool is_moving = false;
   uint8_t state = WORM_STATES::STOPPED;
 
 public:
@@ -40,7 +39,9 @@ public:
   
   void start_moving(const uint8_t &dir);
   
-  void stop_moving(); 
+  void stop_moving();
+
+  void jump(const uint8_t &dir);
   
   b2Vec2 get_position();
   

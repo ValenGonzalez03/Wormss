@@ -1,5 +1,5 @@
-#ifndef START_MOVING_H_
-#define START_MOVING_H_
+#ifndef JUMP_H_
+#define JUMP_H_
 
 #include "command.h"
 //#include "protocol.h"
@@ -7,21 +7,21 @@
 
 // Forward declaration de CODE_PLAYER_COMM
 namespace CODE_PLAYER_COMM {
-extern uint8_t START_MOVING;
+extern uint8_t JUMP;
 }
 
-class StartMoving : public Command {
+class Jump : public Command {
 private:
   uint8_t direction;
 
 public:
   // Constructor from client side with direction passed by parameter
-  explicit StartMoving(uint8_t dir)
-      : Command(CODE_PLAYER_COMM::START_MOVING, 0), direction(dir) {}
+  explicit Jump(uint8_t dir)
+      : Command(CODE_PLAYER_COMM::JUMP, 0), direction(dir) {}
 
   // Constructor from server side with direction received by socket
-  StartMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
-      : Command(CODE_PLAYER_COMM::START_MOVING, clt_id) {
+  Jump(uint8_t clt_id, Socket &skt, bool *was_closed)
+      : Command(CODE_PLAYER_COMM::JUMP, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
 
@@ -32,12 +32,12 @@ public:
 
   void receive(Socket &skt, bool *was_closed) override {
     skt.recvall(&direction, sizeof(direction), was_closed);
-  }
+}
 	
 	// PROVISORIAS
-	uint8_t get_client_id() override {
-		return client_id;
-	}
+    uint8_t get_client_id() override {
+        return client_id;
+    }
 	
   uint8_t get_game_id() override {
 		return -1;

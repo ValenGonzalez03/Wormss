@@ -14,7 +14,7 @@ public:
     StartGame() : Command(CODE_PLAYER_COMM::START_GAME, 0) {}
 
     // Constructor from server side
-    StartGame(int clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::START_GAME, clt_id) {
+    StartGame(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::START_GAME, clt_id) {
         //receive(skt, was_closed);
     }
 

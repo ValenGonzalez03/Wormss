@@ -11,7 +11,7 @@ protected:
   uint8_t client_id;
 
 public:
-  Command(uint8_t cod, int clt_id) : code(cod), client_id(clt_id) {}
+  Command(uint8_t cod, uint8_t clt_id) : code(cod), client_id(clt_id) {}
 
   // Debe enviar el codigo y los datos adicionales
   // de ser necesario

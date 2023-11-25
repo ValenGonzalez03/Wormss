@@ -10,7 +10,7 @@ Game::Game(uint8_t &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
 }
 
 Queue<std::shared_ptr<RunnableCommandGame>> *Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
-                                   const int &player_id) {
+                                   const uint8_t &player_id) {
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
   last_player_id_added = player_id;
@@ -18,7 +18,7 @@ Queue<std::shared_ptr<RunnableCommandGame>> *Game::add_player(std::shared_ptr<Qu
   return &commands;
 }
 
-void Game::delete_player(const int &player_id) {
+void Game::delete_player(const uint8_t &player_id) {
   broadcaster.delete_queue(player_id);
   game_manager.delete_player(player_id);
 }
@@ -86,6 +86,6 @@ bool Game::is_started() { return started; }
 
 bool Game::is_dead() { return not keep_playing; }
 
-int Game::get_game_id() {
+uint8_t Game::get_game_id() {
 	return game_id;
 }

@@ -16,7 +16,7 @@ private:
     std::list<Game*> games;	
     int games_counter = 0;
 
-    Game* get_game(const int& game_id);
+    Game* get_game(const uint8_t& game_id);
 
 public:
     GamesHandler();
@@ -25,17 +25,17 @@ public:
 
     void delete_game(const int& game_id);
 	
-	Queue<std::shared_ptr<RunnableCommandGame>>* create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t& game_id, int& player_id);
+	Queue<std::shared_ptr<RunnableCommandGame>>* create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t& game_id, uint8_t& player_id);
 
-	Queue<std::shared_ptr<RunnableCommandGame>>* join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t& game_id, int& player_id);
+	Queue<std::shared_ptr<RunnableCommandGame>>* join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t& game_id, uint8_t& player_id);
 
-    void start_game(const uint8_t& game_id, const int& player_id);
+    void start_game(const uint8_t& game_id, const uint8_t& player_id);
     
-    bool game_exist(int game_id);
+    bool game_exist(uint8_t game_id);
     
     void reap_dead();
     
-    std::list<int>* obtain_all_games_id();
+    std::list<uint8_t>* obtain_all_games_id();
     
     ~GamesHandler();
     

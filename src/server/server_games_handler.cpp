@@ -21,7 +21,7 @@ void GamesHandler::delete_game(const int& game_id) {
     games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t& game_id, int& player_id) {
+Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t& game_id, uint8_t& player_id) {
 	std::lock_guard<std::mutex> lck(m);
     uint8_t game_id_aux = games_counter;
 	Game* game = new Game(game_id_aux);
@@ -32,7 +32,7 @@ Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::create_game(std::shar
 	return commands_queue;
 }
 
-Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t& game_id, int& player_id) {
+Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t& game_id, uint8_t& player_id) {
 	std::lock_guard<std::mutex> lck(m);
 	Queue<std::shared_ptr<RunnableCommandGame>>* commands_queue = nullptr;
     Game* game = get_game(game_id);
@@ -47,7 +47,7 @@ Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::join_game(std::shared
     return commands_queue;
 }
 
-void GamesHandler::start_game(const uint8_t& game_id, const int& player_id) {
+void GamesHandler::start_game(const uint8_t& game_id, const uint8_t& player_id) {
     if (player_id != 1) return;
     std::lock_guard<std::mutex> lck(m);
 	Game* game = get_game(game_id);
@@ -60,7 +60,7 @@ void GamesHandler::start_game(const uint8_t& game_id, const int& player_id) {
     }
 }
 
-Game* GamesHandler::get_game(const int& game_id) {
+Game* GamesHandler::get_game(const uint8_t& game_id) {
     for (auto& current_game: games) {
         if (current_game->compare_id(game_id)) {
 			return current_game;
@@ -69,7 +69,7 @@ Game* GamesHandler::get_game(const int& game_id) {
     return nullptr;
 }
 
-bool GamesHandler::game_exist(int game_id) {
+bool GamesHandler::game_exist(uint8_t game_id) {
 	std::lock_guard<std::mutex> lck(m);
 	for (auto& current_game: games) {
         if (current_game->compare_id(game_id)) {
@@ -95,8 +95,8 @@ void GamesHandler::reap_dead() {
     games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-std::list<int>* GamesHandler::obtain_all_games_id() {
-	std::list<int>* games_id;
+std::list<uint8_t>* GamesHandler::obtain_all_games_id() {
+	std::list<uint8_t>* games_id;
 	for (auto& current_game: games) {
 		games_id->push_back(current_game->get_game_id());
     }

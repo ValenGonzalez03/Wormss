@@ -52,6 +52,10 @@ void GameManager::stop_moving() {
   worm->stop_moving();
 }
 
+void GameManager::jump(const uint8_t &player_id, const uint8_t &direction) {
+  worm->jump(direction);
+}
+
 GameState GameManager::get_state() {
   GameState game_state;
   for (auto &current_worm: worms_list) {

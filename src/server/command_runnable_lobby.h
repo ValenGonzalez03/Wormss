@@ -2,7 +2,8 @@
 #define RUNNABLE_COMMAND_LOBBY_H_
 
 #include "command_runnable.h"
-#include "client_handler_thread.h"
+#include "server_games_handler.h"
+#include "lobby_result.h"
 
 //class ClientHandler;
 
@@ -11,7 +12,8 @@ public:
 
     RunnableCommandLobby(std::shared_ptr<Command> command) : RunnableCommand(command) {}
 
-    virtual void run(ClientHandler& client_handler) = 0;
+    virtual std::unique_ptr<LobbyResult> run(GamesHandler& games_handler, std::shared_ptr<Queue<GameState>> sender_queue, uint8_t& game_id, int& player_id) = 0;
+
 };
 
 #endif

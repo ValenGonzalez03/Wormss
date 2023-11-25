@@ -28,17 +28,42 @@ Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::create_game(std::shar
     game_id = games_counter;
 	games_counter++;
 	add_game(game);
-	//game->start();
-	return game->add_player(sender_queue, player_id);
+    Queue<std::shared_ptr<RunnableCommandGame>>* commands_queue = game->add_player(sender_queue, player_id);
+	return commands_queue;
 }
 
 Queue<std::shared_ptr<RunnableCommandGame>>* GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t& game_id, int& player_id) {
 	std::lock_guard<std::mutex> lck(m);
-	for (auto& current_game: games) {
+	Queue<std::shared_ptr<RunnableCommandGame>>* commands_queue = nullptr;
+    Game* game = get_game(game_id);
+    if (game == nullptr) {
+        return nullptr;
+    }
+
+    if (!game->is_started()) {
+        commands_queue = game->add_player(sender_queue, player_id);
+    }
+		
+    return commands_queue;
+}
+
+void GamesHandler::start_game(const uint8_t& game_id, const int& player_id) {
+    if (player_id != 1) return;
+    std::lock_guard<std::mutex> lck(m);
+	Game* game = get_game(game_id);
+    if (game == nullptr) {
+        return;
+    }
+
+    if (!game->is_started()) {
+        game->start();
+    }
+}
+
+Game* GamesHandler::get_game(const int& game_id) {
+    for (auto& current_game: games) {
         if (current_game->compare_id(game_id)) {
-			if (!current_game->is_started()) {
-				return current_game->add_player(sender_queue, player_id);
-			}
+			return current_game;
 		}
     }
     return nullptr;
@@ -57,6 +82,9 @@ bool GamesHandler::game_exist(int game_id) {
 void GamesHandler::reap_dead() {
 	auto dead = [](Game* game) {
         if (game->is_dead()) {
+			if (game->is_started()) {
+				game->join();
+			}
             game->join();
             delete game;
             return true;
@@ -77,8 +105,10 @@ std::list<int>* GamesHandler::obtain_all_games_id() {
 
 GamesHandler::~GamesHandler() {
 	for (auto& current_game: games) {
-		current_game->stop();
-		current_game->join();
+		if (current_game->is_started()) {
+			current_game->stop();
+			current_game->join();
+		}
         delete current_game;
     }
     games.clear();

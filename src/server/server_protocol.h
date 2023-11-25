@@ -9,11 +9,11 @@
 
 #include "../common/command.h"
 #include "../common/game_state.h"
-#include "../common/socket.h"
 #include "../common/liberror.h"
+#include "../common/socket.h"
 
-#include "command_runnable_lobby.h"
 #include "command_runnable_game.h"
+#include "command_runnable_lobby.h"
 
 class ServerProtocol {
 private:
@@ -30,11 +30,13 @@ public:
   ServerProtocol(ServerProtocol &&) = default;
   ServerProtocol &operator=(ServerProtocol &&) = default;
 
+  void send_id(const int id);
+
   std::shared_ptr<RunnableCommandGame> process_command();
 
   std::shared_ptr<RunnableCommandLobby> process_command_lobby();
 
-  void send_game_state(GameState& game_state);
+  void send_game_state(GameState &game_state);
 
   void send_id(const int id);
 

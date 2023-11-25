@@ -3,9 +3,11 @@
 
 #include "../common/thread.h"
 #include "../common/socket.h"
-#include "../common/command.h"
-#include "server_games_handler.h"
 #include "player_sender_thread.h"
+#include "server_games_handler.h"
+#include "lobby_result.h"
+#include "command_runnable_lobby.h"
+#include "command_runnable_game.h"
 
 class ClientHandler : public Thread {
 	private:
@@ -13,10 +15,11 @@ class ClientHandler : public Thread {
 	ServerProtocol& protocol;
 	GamesHandler& games_handler;
 	PlayerSender& sender;
+	Queue<std::shared_ptr<RunnableCommandGame>>* game_commands;
 	std::shared_ptr<Queue<GameState>> sender_queue;
 	std::atomic<bool>& keep_playing;
 	std::atomic<bool>& in_game;
-	Queue<std::shared_ptr<RunnableCommandGame>>* receiver_queue;
+	std::unique_ptr<LobbyResult> lobby_result;
 	
 	public:
 	/*
@@ -34,10 +37,6 @@ class ClientHandler : public Thread {
 	 * Joinea el hilo Sender.
 	 */
 	void join_sender();
-
-	void create_game();
-
-	void join_game(const uint8_t& game_id);
 		
 	~ClientHandler();
 	

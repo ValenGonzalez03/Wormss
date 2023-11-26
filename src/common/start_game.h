@@ -34,7 +34,7 @@ public:
   // PROVISORIAS
   uint8_t get_client_id() override { return client_id; }
 
-  uint8_t get_game_id() override { return -1; }
+  uint8_t get_game_id() override { return game_id; }
 };
 
 #endif

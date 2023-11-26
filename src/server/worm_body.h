@@ -29,6 +29,8 @@ private:
   const float friction = 0.1;
   
   uint8_t state = WORM_STATES::STOPPED;
+  
+  bool m_contacting = false;
 
 public:
   explicit WormBody(b2World* world, float pos_x, float pos_y);
@@ -62,6 +64,10 @@ public:
   uint8_t get_state();
   
   void update();
+  
+  // POR AHORA DE PRUEBA
+  void start_contact();
+  void end_contact();
   
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;

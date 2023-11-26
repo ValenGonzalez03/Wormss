@@ -90,7 +90,6 @@ void GamesHandler::reap_dead() {
       if (game->is_started()) {
         game->join();
       }
-      game->join();
       delete game;
       return true;
     }

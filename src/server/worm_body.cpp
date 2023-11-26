@@ -19,6 +19,8 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y)
   fixtureDef.friction = friction;
   
   body->CreateFixture(&fixtureDef);
+  body->SetFixedRotation(true);
+  body->GetUserData().pointer = (uintptr_t)this;
 }
 
 void WormBody::move_left() {
@@ -89,3 +91,7 @@ void WormBody::update() {
 		}
 	}
 }
+
+// POR AHORA DE PRUEBA
+void WormBody::start_contact() { m_contacting = true; }
+void WormBody::end_contact() { m_contacting = false; }

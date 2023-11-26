@@ -4,9 +4,9 @@
 
 ClientProtocol::ClientProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
-int ClientProtocol::receive_id() {
+uint8_t ClientProtocol::receive_id() {
   bool was_closed = false;
-  int id = 0;
+  uint8_t id = 0;
   // esto habria que chequearlo, no se si funcionaria bien
   skt.recvall(&id, sizeof(id), &was_closed);
   return id;

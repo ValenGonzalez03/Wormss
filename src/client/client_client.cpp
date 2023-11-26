@@ -75,8 +75,9 @@ int Client::run() {
   // Recibe el player_id
   int player_id = prot.receive_id();
   // Si se crea una partida tambien se recibe el game_id
+  int game_id;
   if (option_selected == 'c') {
-    int game_id = prot.receive_id();
+    game_id = prot.receive_id();
   }
 
   char command_lobby;
@@ -86,7 +87,7 @@ int Client::run() {
         << std::endl;
     std::cin >> command_lobby;
   }
-  StartGame start = StartGame();
+  StartGame start = StartGame(game_id);
   prot.send_command(start);
 
   // ---------------------------------------------------------------------------

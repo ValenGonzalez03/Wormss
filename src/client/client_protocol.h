@@ -27,7 +27,7 @@ public:
   ClientProtocol(ClientProtocol &&) = default;
   ClientProtocol &operator=(ClientProtocol &&) = default;
 
-  int receive_id();
+  uint8_t receive_id();
 
   void send_command(Command &cmd);
 

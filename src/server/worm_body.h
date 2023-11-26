@@ -45,6 +45,10 @@ public:
   
   void stop_moving();
 
+  void jump_left();
+  
+  void jump_right();
+
   void jump(const uint8_t &dir);
   
   b2Vec2 get_position();

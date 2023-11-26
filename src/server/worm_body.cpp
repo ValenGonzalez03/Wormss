@@ -22,12 +22,10 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y)
 }
 
 void WormBody::move_left() {
-  direction = LEFT;  
   apply_horizontal_impulse(-vel);
 }
 	
 void WormBody::move_right() {
-  direction = RIGHT;  
   apply_horizontal_impulse(vel);
 }
 
@@ -47,19 +45,29 @@ void WormBody::apply_vertical_impulse(float jump_speed) {
 
 void WormBody::start_moving(const uint8_t &dir) { 
 	state = WORM_STATES::MOVING;
-	if (dir == LEFT) {
-		direction = LEFT; 
-	} else if (dir == RIGHT) {
-		direction = RIGHT;
-	}
+	direction = dir;
 }
 
 void WormBody::stop_moving() { 
 	state = WORM_STATES::STOPPED;
 }
 
+void WormBody::jump_left() {
+  apply_vertical_impulse(-vel);
+}
+
+void WormBody::jump_right() {
+  apply_vertical_impulse(vel);
+}
+
 void WormBody::jump(const uint8_t &dir) {
   state = WORM_STATES::JUMPING;
+  direction = dir;
+  if (dir == LEFT) {
+    jump_left();
+  } else {
+    jump_right();
+  }
 }
 
 b2Vec2 WormBody::get_position() { return body->GetPosition(); }

@@ -9,12 +9,12 @@
 #include "../common/constant_rate_loop.h"
 #include "../common/game_state.h"
 #include "../common/queue.h"
+#include "client_SDL.h"
 #include "client_protocol.h"
 #include "client_receiver_thread.h"
 #include "client_resource_pool.h"
 #include "client_sender_thread.h"
 #include "client_state.h"
-#include "client_SDL.h"
 
 class Client : public ConstantRateLoop {
 private:
@@ -59,10 +59,6 @@ public:
   // Devuelve false si el cliente no cerro el programa, devuelve true en caso
   // contrario.
   bool func_to_execute() override;
-
-  // Convierte una posicion en metros a una posicion en pixeles.
-  //Position convert_to_pixels(Position &pos);
-
 };
 
 #endif

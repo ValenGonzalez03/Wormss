@@ -9,11 +9,11 @@
 
 #include "../common/command.h"
 #include "../common/game_state.h"
-#include "../common/socket.h"
 #include "../common/liberror.h"
+#include "../common/socket.h"
 
-#include "command_runnable_lobby.h"
 #include "command_runnable_game.h"
+#include "command_runnable_lobby.h"
 
 class ServerProtocol {
 private:
@@ -34,7 +34,9 @@ public:
 
   std::shared_ptr<RunnableCommandLobby> process_command_lobby();
 
-  void send_game_state(GameState& game_state);
+  void send_game_state(GameState &game_state);
+
+  void send_id(const uint8_t id);
 
   // Envía el mundo pasado por parámetro por el socket
   // (nombre, background path, vigas, spawn_points)

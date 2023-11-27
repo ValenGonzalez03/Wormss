@@ -4,6 +4,7 @@
 #include "beam_body.h"
 #include "box2d/box2d.h"
 #include "worm_body.h"
+#include "contact_listener.h"
 #include <list>
 #include <stdio.h>
 #include <iostream>

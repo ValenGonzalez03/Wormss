@@ -2,12 +2,12 @@
 
 Broadcaster::Broadcaster() {}
 
-void Broadcaster::add_queue(const std::shared_ptr<Queue<GameState>> sender_queue, const int &player_id) {
+void Broadcaster::add_queue(const std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id) {
   std::lock_guard<std::mutex> lck(m);
   queues_sender[player_id] = sender_queue;
 }
 
-void Broadcaster::delete_queue(const int &player_id) {
+void Broadcaster::delete_queue(const uint8_t &player_id) {
   std::lock_guard<std::mutex> lck(m);
   queues_sender.erase(player_id);
 }

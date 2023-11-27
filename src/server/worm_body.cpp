@@ -19,27 +19,26 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y)
   fixtureDef.friction = friction;
   
   body->CreateFixture(&fixtureDef);
+  body->SetFixedRotation(true);
+  body->GetUserData().pointer = (uintptr_t)this;
+  
+  //sensor
+  polygonShape.SetAsBox(0.3, 0.3, b2Vec2(pos_x, -0.5), 0);
+  fixtureDef.isSensor = true;
+  b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
+  footSensorFixture->GetUserData().pointer = (uintptr_t)3;
 }
 
 void WormBody::move_left() {
-  direction = LEFT;
-  is_moving = true;
-  b2Vec2 body_vel = body->GetLinearVelocity();
-  float desired_vel = -vel;
-  
-  float vel_change = desired_vel - body_vel.x;
-  float mass = body->GetMass();
-  float impulse = mass * vel_change;
-  
-  body->ApplyLinearImpulse(b2Vec2(impulse, 0), body->GetWorldCenter(), true);
+  apply_horizontal_impulse(-vel);
 }
 	
 void WormBody::move_right() {
-  direction = RIGHT;
-  is_moving = true;
+  apply_horizontal_impulse(vel);
+}
+
+void WormBody::apply_horizontal_impulse(float desired_vel) {
   b2Vec2 body_vel = body->GetLinearVelocity();
-  float desired_vel = vel;
-  
   float vel_change = desired_vel - body_vel.x;
   float mass = body->GetMass();
   float impulse = mass * vel_change;
@@ -47,27 +46,42 @@ void WormBody::move_right() {
   body->ApplyLinearImpulse(b2Vec2(impulse, 0), body->GetWorldCenter(), true);
 }
 
+void WormBody::apply_vertical_impulse(float jump_speed) {
+  float impulse = body->GetMass() * jump_speed;
+  body->ApplyLinearImpulse(b2Vec2(0, impulse), body->GetWorldCenter(), true);
+}
 
 void WormBody::start_moving(const uint8_t &dir) { 
 	state = WORM_STATES::MOVING;
-	if (dir == LEFT) {
-		is_moving = true;
-		direction = LEFT; 
-	} else if (dir == RIGHT) {
-		is_moving = true;
-		direction = RIGHT;
-	}
+	direction = dir;
 }
 
 void WormBody::stop_moving() { 
-	is_moving = false;	// probablemente no sea necesario con el state
 	state = WORM_STATES::STOPPED;
+}
+
+void WormBody::jump_left() {
+  apply_vertical_impulse(-vel);
+}
+
+void WormBody::jump_right() {
+  apply_vertical_impulse(vel);
+}
+
+void WormBody::jump(const uint8_t &dir) {
+  state = WORM_STATES::JUMPING;
+  direction = dir;
+  if (dir == LEFT) {
+    jump_left();
+  } else {
+    jump_right();
+  }
 }
 
 b2Vec2 WormBody::get_position() { return body->GetPosition(); }
 
 float WormBody::get_pos_x() { return body->GetPosition().x; }
-	
+
 float WormBody::get_pos_y() { return body->GetPosition().y; }
 
 uint8_t WormBody::get_direction() { return direction; }
@@ -75,7 +89,7 @@ uint8_t WormBody::get_direction() { return direction; }
 uint8_t WormBody::get_state() { return state; }
 
 void WormBody::update() {
-	if (is_moving) {
+	if (state == WORM_STATES::MOVING) {
 		if (direction == LEFT) {
 			move_left();
 		} else {
@@ -83,3 +97,32 @@ void WormBody::update() {
 		}
 	}
 }
+
+bool WormBody::is_facing_left() { return (direction == LEFT); }
+
+bool WormBody::is_facing_right() { return (direction == RIGHT); }
+
+bool WormBody::is_stopped() { return (WORM_STATES::STOPPED); }
+
+void WormBody::start_contact_with(WormBody* another_worm) {
+	if (state == WORM_STATES::STOPPED) {
+		if (another_worm->is_stopped()) return;
+		another_worm->start_contact_with(this);
+	} else {
+		if (is_facing_left()) {
+			apply_horizontal_impulse(vel);
+		} else {
+			apply_horizontal_impulse(-vel);
+		}
+	}
+}
+	
+void WormBody::end_contact_with(WormBody* another_worm) { }
+
+void WormBody::fall_in_ground() { state = WORM_STATES::STOPPED; }
+
+void WormBody::start_jumping() { state = WORM_STATES::JUMPING; }
+
+// POR AHORA DE PRUEBA
+void WormBody::start_contact() { m_contacting = true; }
+void WormBody::end_contact() { m_contacting = false; }

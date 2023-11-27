@@ -28,6 +28,9 @@ void ClientHandler::run() {
 
         lobby_result =
             runnable_command->run(games_handler, sender_queue, player_id);
+        if (lobby_result == nullptr) {
+          continue;
+        }
 
         game_commands = lobby_result->get_commands();
 

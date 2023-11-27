@@ -65,9 +65,23 @@ public:
   
   void update();
   
+  bool is_facing_left();
+  
+  bool is_facing_right();
+  
+  bool is_stopped();
+  
   // POR AHORA DE PRUEBA
   void start_contact();
   void end_contact();
+  
+  void start_contact_with(WormBody* another_worm);
+  
+  void end_contact_with(WormBody* another_worm);
+  
+  void fall_in_ground();
+
+  void start_jumping();
   
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;

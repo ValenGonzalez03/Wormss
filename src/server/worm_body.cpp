@@ -21,6 +21,12 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y)
   body->CreateFixture(&fixtureDef);
   body->SetFixedRotation(true);
   body->GetUserData().pointer = (uintptr_t)this;
+  
+  //sensor
+  polygonShape.SetAsBox(0.3, 0.3, b2Vec2(pos_x, -0.5), 0);
+  fixtureDef.isSensor = true;
+  b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
+  footSensorFixture->GetUserData().pointer = (uintptr_t)3;
 }
 
 void WormBody::move_left() {
@@ -91,6 +97,31 @@ void WormBody::update() {
 		}
 	}
 }
+
+bool WormBody::is_facing_left() { return (direction == LEFT); }
+
+bool WormBody::is_facing_right() { return (direction == RIGHT); }
+
+bool WormBody::is_stopped() { return (WORM_STATES::STOPPED); }
+
+void WormBody::start_contact_with(WormBody* another_worm) {
+	if (state == WORM_STATES::STOPPED) {
+		if (another_worm->is_stopped()) return;
+		another_worm->start_contact_with(this);
+	} else {
+		if (is_facing_left()) {
+			apply_horizontal_impulse(vel);
+		} else {
+			apply_horizontal_impulse(-vel);
+		}
+	}
+}
+	
+void WormBody::end_contact_with(WormBody* another_worm) { }
+
+void WormBody::fall_in_ground() { state = WORM_STATES::STOPPED; }
+
+void WormBody::start_jumping() { state = WORM_STATES::JUMPING; }
 
 // POR AHORA DE PRUEBA
 void WormBody::start_contact() { m_contacting = true; }

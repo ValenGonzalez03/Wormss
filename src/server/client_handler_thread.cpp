@@ -32,10 +32,11 @@ void ClientHandler::run() {
           continue;
         }
 
-        game_commands = lobby_result->get_commands();
+        //game_commands = lobby_result->get_commands();
 
         if (lobby_result->get_game_created() ||
             lobby_result->get_player_joined()) {
+		  game_commands = lobby_result->get_commands();
           sender.send_id(player_id);
         }
         if (lobby_result->get_game_created()) {

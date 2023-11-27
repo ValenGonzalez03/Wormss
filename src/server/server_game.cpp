@@ -26,6 +26,7 @@ void Game::delete_player(const uint8_t &player_id) {
 
 void Game::run() {
   try {
+	started = true;
     auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     int it = 0;
     bool was_closed = false;

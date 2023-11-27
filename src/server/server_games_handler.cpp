@@ -52,7 +52,7 @@ GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue,
 
 void GamesHandler::start_game(const uint8_t &game_id,
                               const uint8_t &player_id) {
-  if (player_id != 1)
+  if (player_id != 0)
     return;
   std::lock_guard<std::mutex> lck(m);
   Game *game = get_game(game_id);

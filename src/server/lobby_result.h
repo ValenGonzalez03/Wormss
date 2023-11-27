@@ -6,8 +6,8 @@
 
 class LobbyResult {
 private:
-  const uint8_t &player_id;
-  const int &game_id;
+  const uint8_t player_id;
+  const int game_id;
   Queue<std::shared_ptr<RunnableCommandGame>> *commands;
   bool was_game_created = false;
   bool was_player_joined = false;

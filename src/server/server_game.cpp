@@ -9,8 +9,9 @@ Game::Game(int &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
   game_manager.initialize_game();
 }
 
-Queue<std::shared_ptr<RunnableCommandGame>> *Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, 
-                                   const int &player_id) {
+Queue<std::shared_ptr<RunnableCommandGame>> *
+Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
+                 const uint8_t &player_id) {
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
   last_player_id_added = player_id;
@@ -18,14 +19,15 @@ Queue<std::shared_ptr<RunnableCommandGame>> *Game::add_player(std::shared_ptr<Qu
   return &commands;
 }
 
-void Game::delete_player(const int &player_id) {
+void Game::delete_player(const uint8_t &player_id) {
   broadcaster.delete_queue(player_id);
   game_manager.delete_player(player_id);
 }
 
 void Game::run() {
   try {
-	auto t1 = time_point_cast<milliseconds>(steady_clock::now());
+	started = true;
+    auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     int it = 0;
     bool was_closed = false;
     while (keep_playing) {
@@ -63,17 +65,17 @@ void Game::run() {
   }
 }
 
-void Game::update(int& it) {
+void Game::update(int &it) {
   std::shared_ptr<RunnableCommandGame> runnable_command;
   while (commands.try_pop(runnable_command)) {
-	  runnable_command->run(game_manager);
-	  //it--;
+    runnable_command->run(game_manager);
+    // it--;
   }
 }
 
 void Game::stop() { keep_playing = false; }
 
-bool Game::compare_id(const int &another_game_id) {
+bool Game::compare_id(const uint8_t &another_game_id) {
   return (game_id == another_game_id);
 }
 
@@ -86,6 +88,4 @@ bool Game::is_started() { return started; }
 
 bool Game::is_dead() { return not keep_playing; }
 
-int Game::get_game_id() {
-	return game_id;
-}
+uint8_t Game::get_game_id() { return game_id; }

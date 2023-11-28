@@ -29,8 +29,9 @@ private:
   const float density = 1;
   const float friction = 0.1;
   
-  bool is_moving = false;
   uint8_t state = WORM_STATES::STOPPED;
+  
+  bool m_contacting = false;
 
 public:
   explicit WormBody(b2World* world, float pos_x, float pos_y);
@@ -39,9 +40,19 @@ public:
   
   void move_right();
   
+  void apply_horizontal_impulse(float desired_vel);
+  
+  void apply_vertical_impulse(float jump_speed);
+  
   void start_moving(const uint8_t &dir);
   
-  void stop_moving(); 
+  void stop_moving();
+
+  void jump_left();
+  
+  void jump_right();
+
+  void jump(const uint8_t &dir);
   
   b2Vec2 get_position();
   
@@ -54,6 +65,24 @@ public:
   uint8_t get_state();
   
   void update();
+  
+  bool is_facing_left();
+  
+  bool is_facing_right();
+  
+  bool is_stopped();
+  
+  // POR AHORA DE PRUEBA
+  void start_contact();
+  void end_contact();
+  
+  void start_contact_with(WormBody* another_worm);
+  
+  void end_contact_with(WormBody* another_worm);
+  
+  void fall_in_ground();
+
+  void start_jumping();
   
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;

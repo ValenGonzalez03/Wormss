@@ -1,23 +1,27 @@
 #include "player_sender_thread.h"
+#include <arpa/inet.h>
 
-PlayerSender::PlayerSender(ServerProtocol& protocol, std::shared_ptr<Queue<GameState>> sender_queue, std::atomic<bool>& keep_playing) :
-        protocol(protocol), sender_queue(sender_queue), keep_playing(keep_playing) {}
+PlayerSender::PlayerSender(ServerProtocol &protocol,
+                           std::shared_ptr<Queue<GameState>> sender_queue,
+                           std::atomic<bool> &keep_playing)
+    : protocol(protocol), sender_queue(sender_queue),
+      keep_playing(keep_playing) {}
 
 void PlayerSender::run() {
-    bool was_closed = false;
-    try {
-        while (keep_playing) {
-			GameState game_state = sender_queue->pop();
-			protocol.send_game_state(game_state);
-        }
-    } catch (const std::exception& err) {
-	}
+  bool was_closed = false;
+  try {
+    while (keep_playing) {
+      GameState game_state = sender_queue->pop();
+      protocol.send_game_state(game_state);
+    }
+  } catch (const std::exception &err) {
+  }
 }
 
 void PlayerSender::send_id(const int id) {
-    //protocol.send_id(id);
+  int id_net = htonl(id);
+  protocol.send_id(id_net);
+  // protocol.send_id(id);
 }
 
-PlayerSender::~PlayerSender() {
-    keep_playing = false;
-}
+PlayerSender::~PlayerSender() { keep_playing = false; }

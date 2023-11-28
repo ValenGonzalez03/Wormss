@@ -4,6 +4,7 @@
 #include "beam_body.h"
 #include "box2d/box2d.h"
 #include "worm_body.h"
+#include "contact_listener.h"
 #include <list>
 #include <stdio.h>
 #include <iostream>
@@ -15,6 +16,7 @@ private:
   std::list<BeamBody*> beams;
   std::string name = "";
   std::string background = "";
+  ContactListener contact_listener;
 
 public:
   explicit World();

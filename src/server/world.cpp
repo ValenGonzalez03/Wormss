@@ -5,6 +5,7 @@
 World::World() {
   b2Vec2 gravity(0.0f, -10.0f);
   world = new b2World(gravity);
+  world->SetContactListener(&contact_listener);
 }
 
 BeamBody* World::create_beam(float pos_x, float pos_y) {

@@ -41,6 +41,8 @@ public:
   
   void stop_moving();
 
+  void jump(const uint8_t &player_id, const uint8_t &direction);
+
   GameState get_state();
 
   // SOLO DE PRUEBA

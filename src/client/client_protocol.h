@@ -9,10 +9,9 @@
 
 #include "../common/command.h"
 #include "../common/game_state.h"
-#include "../common/socket.h"
 #include "../common/liberror.h"
 #include "client_worldview.h"
-
+#include "../common/socket.h"
 
 class ClientProtocol {
 private:
@@ -28,6 +27,8 @@ public:
   // Implemento move semantics
   ClientProtocol(ClientProtocol &&) = default;
   ClientProtocol &operator=(ClientProtocol &&) = default;
+
+  uint8_t receive_id();
 
   void send_command(Command &cmd);
 

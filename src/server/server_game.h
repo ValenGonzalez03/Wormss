@@ -9,14 +9,14 @@
 #include <chrono>
 #include <cmath>
 
-#include "../common/command.h"
+#include "../common/commands/command.h"
 #include "../common/constant_rate_loop.h"
 #include "../common/game_state.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 #include "broadcaster.h"
-#include "command_runnable_game.h"
 #include "game_manager.h"
+#include "runnable_commands/command_runnable_game.h"
 
 #define MAX_PLAYERS 2
 #define MS_PER_UPDATE 10
@@ -46,7 +46,7 @@ public:
 
   Queue<std::shared_ptr<RunnableCommandGame>> *
   add_player(std::shared_ptr<Queue<GameState>> sender_queue,
-            uint8_t &player_id);
+             uint8_t &player_id);
 
   void delete_player(const uint8_t &player_id);
 

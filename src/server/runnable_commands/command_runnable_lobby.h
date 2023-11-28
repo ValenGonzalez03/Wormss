@@ -1,9 +1,9 @@
 #ifndef RUNNABLE_COMMAND_LOBBY_H_
 #define RUNNABLE_COMMAND_LOBBY_H_
 
+#include "../lobby_result.h"
+#include "../server_games_handler.h"
 #include "command_runnable.h"
-#include "lobby_result.h"
-#include "server_games_handler.h"
 
 // class ClientHandler;
 

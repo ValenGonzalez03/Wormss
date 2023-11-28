@@ -3,10 +3,10 @@
 
 #include "../common/socket.h"
 #include "../common/thread.h"
-#include "command_runnable_game.h"
-#include "command_runnable_lobby.h"
 #include "lobby_result.h"
 #include "player_sender_thread.h"
+#include "runnable_commands/command_runnable_game.h"
+#include "runnable_commands/command_runnable_lobby.h"
 #include "server_games_handler.h"
 
 class ClientHandler : public Thread {

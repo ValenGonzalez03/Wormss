@@ -1,9 +1,9 @@
 #ifndef CLIENT_LOBBY_H
 #define CLIENT_LOBBY_H
 
-#include "../common/create_game.h"
-#include "../common/join_game.h"
-#include "../common/start_game.h"
+#include "../common/commands/create_game.h"
+#include "../common/commands/join_game.h"
+#include "../common/commands/start_game.h"
 #include "client_protocol.h"
 #include <iostream>
 

@@ -2,12 +2,12 @@
 
 #include "../common/protocol_codes.h"
 
-#include "create_game_runnable.h"
-#include "join_game_runnable.h"
-#include "start_game_runnable.h"
-#include "start_moving_runnable.h"
-#include "stop_moving_runnable.h"
-#include "jump_runnable.h"
+#include "runnable_commands/create_game_runnable.h"
+#include "runnable_commands/join_game_runnable.h"
+#include "runnable_commands/jump_runnable.h"
+#include "runnable_commands/start_game_runnable.h"
+#include "runnable_commands/start_moving_runnable.h"
+#include "runnable_commands/stop_moving_runnable.h"
 
 ServerProtocol::ServerProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
@@ -68,14 +68,14 @@ void ServerProtocol::close_socket() {
   skt.close();
 }
 
-void ServerProtocol::send_string(std::string str, bool* was_closed) {
+void ServerProtocol::send_string(std::string str, bool *was_closed) {
   uint16_t string_length = str.size();
   uint16_t string_length_be = ntohs(string_length);
   skt.sendall(&string_length_be, sizeof(string_length_be), was_closed);
   skt.sendall(str.c_str(), str.size(), was_closed);
 }
 
-void ServerProtocol::send_float(float n,bool* was_closed) {
+void ServerProtocol::send_float(float n, bool *was_closed) {
   uint16_t number = uint(n * 100);
   uint16_t number_be = htons(number);
   skt.sendall(&number_be, sizeof(number_be), was_closed);
@@ -84,14 +84,14 @@ void ServerProtocol::send_float(float n,bool* was_closed) {
 //////////////////////////////////////////////////////////////////////
 ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
 //////////////////////////////////////////////////////////////////////
-void ServerProtocol::send_world(World& world) {
+void ServerProtocol::send_world(World &world) {
   bool was_closed = false;
   // Mando el nombre del mundo
   send_string(world.get_name(), &was_closed);
-  
+
   // Mando el path del background del mundo
   send_string(world.get_background(), &was_closed);
-  
+
   // Mando la cant de vigas y sus datos
   uint16_t beams_number = world.get_beams().size();
   uint16_t beams_number_be = htons(beams_number);
@@ -111,7 +111,7 @@ void ServerProtocol::send_world(World& world) {
   */
 }
 
-void ServerProtocol::send_beam(BeamBody &beam, bool* was_closed) {
+void ServerProtocol::send_beam(BeamBody &beam, bool *was_closed) {
   int16_t beam_angle = static_cast<int16_t>(beam.get_angle());
   int16_t beam_angle_be = htons(beam_angle);
   send_float(beam.get_pos_x(), was_closed);
@@ -120,12 +120,13 @@ void ServerProtocol::send_beam(BeamBody &beam, bool* was_closed) {
   send_float(beam.get_width(), was_closed);
 }
 
-void ServerProtocol::send_spawn_point(WormBody &worm, bool* was_closed) {
+void ServerProtocol::send_spawn_point(WormBody &worm, bool *was_closed) {
   send_float(worm.get_pos_x(), was_closed);
   send_float(worm.get_pos_y(), was_closed);
 }
 
-void ServerProtocol::send_worlds_names(std::vector<std::shared_ptr<World>>& worlds, bool* was_closed) {
+void ServerProtocol::send_worlds_names(
+    std::vector<std::shared_ptr<World>> &worlds, bool *was_closed) {
   uint16_t worlds_number = worlds.size();
   uint16_t worlds_number_be = htons(worlds_number);
   skt.sendall(&worlds_number_be, sizeof(worlds_number_be), was_closed);

@@ -2,7 +2,7 @@
 #define LOBBY_RESULT_H
 
 #include "../common/queue.h"
-#include "command_runnable_game.h"
+#include "runnable_commands/command_runnable_game.h"
 
 class LobbyResult {
 private:

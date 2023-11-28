@@ -5,7 +5,7 @@
 #include <string>
 #include <utility>
 
-#include "../common/command.h"
+#include "../common/commands/command.h"
 #include "../common/constant_rate_loop.h"
 #include "../common/game_state.h"
 #include "../common/queue.h"

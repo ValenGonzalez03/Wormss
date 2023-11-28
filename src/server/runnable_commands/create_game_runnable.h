@@ -1,7 +1,7 @@
 #ifndef RUNNABLE_CREATE_GAME_H_
 #define RUNNABLE_CREATE_GAME_H_
 
-#include "../common/create_game.h"
+#include "../../common/commands/create_game.h"
 #include "command_runnable_lobby.h"
 
 class RunnableCreateGame : public RunnableCommandLobby {

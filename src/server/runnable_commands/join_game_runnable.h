@@ -1,7 +1,7 @@
 #ifndef RUNNABLE_JOIN_GAME_H_
 #define RUNNABLE_JOIN_GAME_H_
 
-#include "../common/join_game.h"
+#include "../../common/commands/join_game.h"
 #include "command_runnable_lobby.h"
 
 class RunnableJoinGame : public RunnableCommandLobby {

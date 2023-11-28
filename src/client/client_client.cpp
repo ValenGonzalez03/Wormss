@@ -2,12 +2,12 @@
 
 #include <list>
 
-#include "../common/create_game.h"
-#include "../common/join_game.h"
-#include "../common/jump.h"
-#include "../common/start_game.h"
-#include "../common/start_moving.h"
-#include "../common/stop_moving.h"
+#include "../common/commands/create_game.h"
+#include "../common/commands/join_game.h"
+#include "../common/commands/jump.h"
+#include "../common/commands/start_game.h"
+#include "../common/commands/start_moving.h"
+#include "../common/commands/stop_moving.h"
 
 using namespace SDL2pp;
 
@@ -49,8 +49,6 @@ int Client::run() {
   state.prev_ticks = SDL_GetTicks();
 
   // std::this_thread::sleep_for(std::chrono::seconds(30));
-
-  // ---------------------------------------------------------------------------
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo

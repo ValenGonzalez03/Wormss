@@ -46,7 +46,7 @@ public:
 
   Queue<std::shared_ptr<RunnableCommandGame>> *
   add_player(std::shared_ptr<Queue<GameState>> sender_queue,
-             const uint8_t &player_id);
+            uint8_t &player_id);
 
   void delete_player(const uint8_t &player_id);
 

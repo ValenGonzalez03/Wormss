@@ -11,10 +11,11 @@ Game::Game(int &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
 
 Queue<std::shared_ptr<RunnableCommandGame>> *
 Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
-                 const uint8_t &player_id) {
+                uint8_t &player_id) {
+  last_player_id_added++;
+  player_id = last_player_id_added;
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
-  last_player_id_added = player_id;
   push_game_state();
   return &commands;
 }

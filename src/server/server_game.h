@@ -8,6 +8,9 @@
 
 #include <chrono>
 #include <cmath>
+#include "math.h"
+#include <unistd.h>
+#include <iostream>
 
 #include "../common/commands/command.h"
 #include "../common/constant_rate_loop.h"
@@ -35,7 +38,8 @@ private:
   Broadcaster broadcaster;
   Queue<std::shared_ptr<RunnableCommandGame>> commands;
   uint8_t game_id;
-  uint8_t last_player_id_added = 0;
+  uint8_t last_player_id = 0;
+  uint8_t current_turn_id = 1;
   bool keep_playing = true;
   bool started = false;
   GameManager game_manager;

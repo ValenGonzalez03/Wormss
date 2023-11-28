@@ -28,13 +28,14 @@ private:
   const float height = 1;
   const float density = 1;
   const float friction = 0.1;
+  uint8_t id;
   
   uint8_t state = WORM_STATES::STOPPED;
   
   bool m_contacting = false;
 
 public:
-  explicit WormBody(b2World* world, float pos_x, float pos_y);
+  explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
   
   void move_left();
   
@@ -53,6 +54,8 @@ public:
   void jump_right();
 
   void jump(const uint8_t &dir);
+
+  uint8_t get_id();
   
   b2Vec2 get_position();
   

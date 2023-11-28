@@ -13,25 +13,30 @@ private:
   int current_players = 0;
   int current_player_id;
   int current_worm_id;
-  std::list<int> players;
+  uint8_t current_turn_id = 1;
+  std::list<uint8_t> players;
   //std::map <int, WormBody>
   std::list<WormBody*> worms_list;
 	
   // PARA PRUEBAS
-  WormBody *worm;
+  //WormBody *worm;
 	
   float timeStep = 1.0f / 60.0f;
   int32 velocityIterations = 6;
   int32 positionIterations = 2;
+
+  WormBody* get_worm(const uint8_t& player_id);
 
 public:
   explicit GameManager();
 
   void initialize_game();
 
-  void add_player(const int &player_id);
+  void add_player(const uint8_t &player_id);
 
-  void delete_player(const int &player_id);
+  void delete_player(const uint8_t &player_id);
+
+  void set_current_turn_id(const uint8_t& id);
 
   void step();
 
@@ -39,7 +44,7 @@ public:
 
   void move(const uint8_t &player_id, const uint8_t &direction);
   
-  void stop_moving();
+  void stop_moving(const uint8_t &player_id);
 
   void jump(const uint8_t &player_id, const uint8_t &direction);
 

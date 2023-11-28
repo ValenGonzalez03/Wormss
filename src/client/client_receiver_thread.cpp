@@ -10,7 +10,7 @@ void ClientReceiverThread::run() {
     try {
       GameState game_state = prot.process_game_state();
       receiver_queue.push(game_state);
-
+      
     } catch (const std::exception &e) {
       receiver_queue.close();
       _keep_running = false;

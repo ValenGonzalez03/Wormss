@@ -16,7 +16,7 @@ const float RATE = 1 / 60;
 
 Client::Client(ClientProtocol &&prot)
     : prot(std::move(prot)), receiver_queue(), sender_queue(),
-      receiver(prot, receiver_queue), sender(prot, sender_queue), state(),
+      receiver(this->prot, receiver_queue), sender(this->prot, sender_queue), state(),
       client_sdl() {}
 
 void Client::start_threads() {
@@ -30,6 +30,7 @@ void Client::join_threads() {
 }
 
 int Client::run() {
+  
   // Initialize SDL library
   SDL sdl(SDL_INIT_VIDEO);
 
@@ -48,12 +49,9 @@ int Client::run() {
 
   state.prev_ticks = SDL_GetTicks();
 
-  // std::this_thread::sleep_for(std::chrono::seconds(30));
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
-
-  start_threads(); // Inicializo los threads sender y receiver
 
   loop(std::chrono::duration<float>((float)RATE));
 
@@ -74,17 +72,23 @@ bool Client::func_to_execute() {
   if (execute_event(event)) // Si execute_event devuelve true, se
     return true;            // quiere cerrar el juego
   // ---------------------------------------------------------------------------
-
   // TRY-POP DE LA RECEIVER QUEUE
   // ---------------------------------------------------------------------------
   GameState game_state = GameState();
 
+  game_state.add_worm(2,2,1,0);
+
+  try {
   bool was_received = receiver_queue.pop_last_one(game_state);
 
   if (!was_received) {
     game_state = state.last_game_state;
   } else {
     state.last_game_state = game_state;
+  }
+
+  } catch(const std::exception &e){
+    std::cerr << e.what();
   }
 
   // ---------------------------------------------------------------------------
@@ -115,6 +119,7 @@ bool Client::func_to_execute() {
       "Position: " +
       std::to_string(game_state.get_worms().front().get_pos_x()) +
       ", running: " + (state.is_running ? "true" : "false") +
+      ", jumping: " + (state.is_jumping ? "true" : "false") +
       ", direction: " + std::to_string(int(state.direction));
 
   Font font(RESOURCES_PATH "/Vera.ttf", 12);

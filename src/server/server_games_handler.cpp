@@ -62,6 +62,7 @@ void GamesHandler::start_game(const uint8_t &game_id,
 
   if (!game->is_started()) {
     game->start();
+    game->push_game_state();
   }
 }
 

@@ -40,6 +40,13 @@ float ClientProtocol::recv_float(bool* was_closed) {
   return final_number;
 }
 
+void ClientProtocol::send_string(std::string str, bool* was_closed) {
+  uint16_t string_length = str.size();
+  uint16_t string_length_be = ntohs(string_length);
+  skt.sendall(&string_length_be, sizeof(string_length_be), was_closed);
+  skt.sendall(str.c_str(), str.size(), was_closed);
+}
+
 //////////////////////////////////////////////////////////////////////
 ///////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
 //////////////////////////////////////////////////////////////////////
@@ -54,6 +61,13 @@ std::vector<std::string> ClientProtocol::recv_worlds_names(bool* was_closed) {
     names.push_back(name);
   }
   return names;
+}
+
+void ClientProtocol::send_world_name_selected(std::string& world_name, bool* was_closed) {
+  uint16_t world_name_length = world_name.size();
+  uint16_t world_name_length_be = htons(world_name_length);
+  skt.sendall(&world_name_length_be, sizeof(world_name_length_be), was_closed);
+  send_string(world_name, was_closed);
 }
 
 

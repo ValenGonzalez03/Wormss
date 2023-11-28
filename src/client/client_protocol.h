@@ -37,6 +37,9 @@ public:
   // Recibe una cadena por socket y la devuelve
   std::string recv_string(bool *was_closed);
 
+  // Envía el tamaño de una cadena y luego la cadena
+  void send_string(std::string str, bool* was_closed);
+
   // Recibe un 'float' por socket, lo transforma y
   // lo devuelve
   float recv_float(bool* was_closed);
@@ -50,6 +53,9 @@ public:
 
   // Recibe una viga y la agrega al mundo
   void recv_and_add_beam(WorldView& world, bool* was_closed);
+
+  // Envía el nombre del mundo elegido
+  void send_world_name_selected(std::string& world_name, bool* was_closed);
 
 
   void close_socket();

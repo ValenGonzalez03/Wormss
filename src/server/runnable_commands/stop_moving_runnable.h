@@ -7,7 +7,7 @@
 class RunnableStopMoving : public RunnableCommandGame {
 
 public:
-  RunnableStopMoving(int clt_id, Socket &skt, bool *was_closed)
+  RunnableStopMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
       : RunnableCommandGame(
             std::make_shared<StopMoving>(clt_id, skt, was_closed)) {}
 

@@ -5,7 +5,7 @@
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(int &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
+Game::Game(uint8_t &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
   game_manager.initialize_game();
 }
 

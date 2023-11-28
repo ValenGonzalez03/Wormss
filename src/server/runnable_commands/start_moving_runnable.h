@@ -7,7 +7,7 @@
 class RunnableStartMoving : public RunnableCommandGame {
 
 public:
-  explicit RunnableStartMoving(int clt_id, Socket &skt, bool *was_closed)
+  explicit RunnableStartMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
       : RunnableCommandGame(
             std::make_shared<StartMoving>(clt_id, skt, was_closed)) {}
 

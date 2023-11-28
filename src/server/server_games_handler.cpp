@@ -21,13 +21,13 @@ void GamesHandler::delete_game(const int &game_id) {
 
 Queue<std::shared_ptr<RunnableCommandGame>> *
 GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue,
-                          int *game_id, uint8_t &player_id) {
+                          uint8_t& game_id, uint8_t &player_id) {
   std::lock_guard<std::mutex> lck(m);
-  *game_id = games_counter;
-  Game *game = new Game(*game_id);
+  game_id = games_counter;
+  Game *game = new Game(game_id);
   games_counter++;
   add_game(game);
-  std::cout << "id_game: " + std::to_string(*game_id) << std::endl;
+  std::cout << "id_game: " + std::to_string(game_id) << std::endl;
   Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue =
       game->add_player(sender_queue, player_id);
   return commands_queue;

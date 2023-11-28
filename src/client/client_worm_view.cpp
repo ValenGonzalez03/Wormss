@@ -49,3 +49,19 @@ void WormView::render_worm_running(int frame, int pos_x, int pos_y, Worm &worm, 
     flip                                      // horizontal flip
   );
 }
+
+void WormView::render_worm_jumping(int frame, int pos_x, int pos_y, Worm &worm, client_state &worm_state) {
+  
+}
+
+
+SDL_RendererFlip WormView::choose_flip_direction(Worm &worm) {
+  SDL_RendererFlip flip = SDL_FLIP_NONE; // Sin volteo por defecto
+  if (worm.get_direction() == LEFT) { //worm.get_direction() == LEFT
+    //flip = SDL_FLIP_NONE;
+  }
+  else if (worm.get_direction() == RIGHT) { //worm.get_direction() == RIGHT
+    flip = SDL_FLIP_HORIZONTAL;
+  }
+  return flip;
+}

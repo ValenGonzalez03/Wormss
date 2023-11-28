@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     Socket skt(hostname.c_str(), servname.c_str());
     Client client(std::move(skt));
 
-    client.start_threads();
+    //client.start_threads();
     int result = client.run(); // Como manejo los errores? return result?
     client.join_threads();
 

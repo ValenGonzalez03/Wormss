@@ -7,6 +7,7 @@
 #include "../common/start_game.h"
 #include "../common/start_moving.h"
 #include "../common/stop_moving.h"
+#include "../common/jump.h"
 
 using namespace SDL2pp;
 
@@ -53,7 +54,7 @@ int Client::run() {
   // Por ahora una pequeña interaccion mediante la terminal para que el cliente
   // decida si crear una partida o unirse a una, si se quiere unir debe ingresar
   // el codigo del juego.
-  char option_selected;
+  char option_selected = '\0';
   do {
     std::cout << "Ingrese 'c' si quiere crear una partida o 'j' si quiere "
                  "unirse a una:"
@@ -62,6 +63,7 @@ int Client::run() {
   } while (option_selected != 'c' && option_selected != 'j');
 
   if (option_selected == 'c') {
+    std::cout << "Juego creado, esperando jugadores..." << std::endl;
     CreateGame create_comm = CreateGame();
     prot.send_command(create_comm);
   } else if (option_selected == 'j') {
@@ -74,13 +76,16 @@ int Client::run() {
 
   // Recibe el player_id
   int player_id = prot.receive_id();
+  std::cout << "Tu player_id es: " << player_id << std::endl;
   // Si se crea una partida tambien se recibe el game_id
   int game_id;
   if (option_selected == 'c') {
+    std::cout << "b1" << std::endl;
     game_id = prot.receive_id();
+    std::cout << "El game id es: " << game_id << std::endl;
   }
 
-  char command_lobby;
+  char command_lobby = '\0';
   while (command_lobby != 's') {
     std::cout
         << "El creador de la partida cuando quiere empezarla debe ingresar 's'"
@@ -94,6 +99,9 @@ int Client::run() {
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
+
+  start_threads(); //Inicializo los threads sender y receiver
+
   loop(std::chrono::duration<float>((float)RATE));
 
   return 0;
@@ -150,74 +158,7 @@ bool Client::func_to_execute() {
   client_sdl.renderer.Clear();
   client_sdl.world_view.render(frame_ticks, state);
 
-  // // Update game state for this frame:
-  // // if character is runnung, move it to the right
-  // if (state.is_running) {
-  //   if (state.direction == RIGHT) {
-  //   state.position_x += frame_delta * 0.2;
-  //   state.run_phase =
-  //       (frame_ticks / 50) % 15; // Algunos retoques en run_phase para que se
-  //                                // vea mas fluido y con todos los frames
-  //   }
-  //   else if (state.direction == LEFT) {
-  //     state.position_x += frame_delta * 0.2 * -1;
-  //     state.run_phase =
-  //       (frame_ticks / 50) % 15;
-  //   }
-  // } else {
-  //   state.run_phase = 0;
-  // }
-
-  // If player passes past the right side of the window, wrap him
-  // to the left side
-  // if (pos_x_px > client_sdl.renderer.GetOutputWidth() - 30)
-  //  pos_x_px = client_sdl.renderer.GetOutputWidth() - 30;
-  // else if (pos_x_px < 0)
-  //  pos_x_px = 0;
-
-  // Clear screen
-  // client_sdl.renderer.Clear();
-
-  // SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL; // Sin volteo por defecto
-
-  // Pick sprite from sprite atlas based on whether
-  // player is running and run animation phase
-  // int src_x = 10, src_y = 10; // by default, standing sprite
-  // if (state.is_running) {
-  // Voltear horizontalmente solo si te estás moviendo a la izquierda
-  //  if (worm.get_direction() == LEFT) {
-  //    flip = SDL_FLIP_NONE;
-  //  }
-  //  src_x = 10;
-  //  src_y = 10 + 60 * state.run_phase;
-  //}
-
-  /*
-    if (state.is_running) {
-      // one of 15 run animation sprites
-      src_x = 10;
-      src_y = 10 + 60 * state.run_phase;
-    }
-  */
-
-  // client_sdl.world_view.render(1, state);
-
-  // Draw player sprite
-  // client_sdl.worm_walking->SetAlphaMod(255); // sprite is fully opaque
-  // client_sdl.renderer.Copy(
-  //    *client_sdl.worm_walking, Rect(src_x, src_y, 40, 40), // Size
-  //    Rect((int)pos_x_px, vcenter - 40, 40, 40),    // Destination
-  //    0.0,                                                  // don't rotate
-  //    NullOpt, // rotation center - not needed
-  //    flip     // horizontal flip
-  //);
-
-  // client_sdl.resource_pool.add_font("Vera20", "/Vera.ttf", 20);
-  // client_sdl.resource_pool.add_font("Vera12", "/Vera.ttf", 12);
-  // std::shared_ptr<Font> vera20_font_ptr =
-  // client_sdl.resource_pool.get_font("Vera20"); std::shared_ptr<Font>
-  // vera12_font_ptr = client_sdl.resource_pool.get_font("Vera12");
-
+  
   std::string text =
       "Position: " +
       std::to_string(game_state.get_worms().front().get_pos_x()) +
@@ -258,11 +199,32 @@ void Client::handle_stop_moving(bool &is_running) {
   is_running = false;
 }
 
+void Client::handle_jump_forward(bool &is_jumping) {
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(state.direction);
+  sender_queue.try_push(cmd);
+  is_jumping = true;
+}
+
+void Client::handle_jump_backward(bool &is_jumping) {
+  int jump_direction = get_opposite_direction();
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(jump_direction);
+  sender_queue.try_push(cmd);
+  is_jumping = true;
+}
+
+int Client::get_opposite_direction() {
+  if (state.direction == LEFT)
+    return RIGHT;
+  else // if (state.direction == RIGHT)
+    return LEFT;
+}
+
 void Client::handle_finish_game() {
   prot.close_socket();
   sender_queue.close();
   // receiver_queue.close();
 }
+
 
 bool Client::execute_event(SDL_Event &event) {
   while (SDL_PollEvent(&event)) {
@@ -272,27 +234,39 @@ bool Client::execute_event(SDL_Event &event) {
 
     } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
       switch (event.key.keysym.sym) {
-      case SDLK_ESCAPE:
-      case SDLK_q:
-        handle_finish_game();
-        return true;
-      case SDLK_RIGHT:
-        if (!state.is_running)
-          handle_start_moving(RIGHT, state.is_running);
-        break;
-      case SDLK_LEFT:
-        if (!state.is_running)
-          handle_start_moving(LEFT, state.is_running);
-        break;
+        case SDLK_ESCAPE:
+        case SDLK_q:
+          handle_finish_game();
+          return true;
+        case SDLK_RIGHT:
+          if (!state.is_running)
+            handle_start_moving(RIGHT, state.is_running);
+          break;
+        case SDLK_LEFT:
+          if (!state.is_running)
+            handle_start_moving(LEFT, state.is_running);
+          break;
+        case SDLK_RETURN:
+          if (!state.is_jumping)
+            handle_jump_forward(state.is_jumping);
+          break;
+        case SDLK_BACKSPACE:
+          if (!state.is_jumping)
+            handle_jump_backward(state.is_jumping);
+          break;
       }
 
     } else if (event.type == SDL_KEYUP) { // Suelta una tecla
       switch (event.key.keysym.sym) {
-      case SDLK_RIGHT:
-      case SDLK_LEFT:
-        if (state.is_running)
-          handle_stop_moving(state.is_running);
-        break;
+        case SDLK_RIGHT:
+        case SDLK_LEFT:
+          if (state.is_running)
+            handle_stop_moving(state.is_running);
+          break;
+        case SDLK_RETURN:
+        case SDLK_BACKSPACE:
+          state.is_jumping = false;
+          break;
       }
     }
   }
@@ -371,3 +345,74 @@ bool Client::execute_event(SDL_Event &event) {
                 renderer.Copy(text_sprite, NullOpt, Rect(0, 0,
    text_sprite.GetWidth(), text_sprite.GetHeight()));
 */
+
+
+
+   // // Update game state for this frame:
+  // // if character is runnung, move it to the right
+  // if (state.is_running) {
+  //   if (state.direction == RIGHT) {
+  //   state.position_x += frame_delta * 0.2;
+  //   state.run_phase =
+  //       (frame_ticks / 50) % 15; // Algunos retoques en run_phase para que se
+  //                                // vea mas fluido y con todos los frames
+  //   }
+  //   else if (state.direction == LEFT) {
+  //     state.position_x += frame_delta * 0.2 * -1;
+  //     state.run_phase =
+  //       (frame_ticks / 50) % 15;
+  //   }
+  // } else {
+  //   state.run_phase = 0;
+  // }
+
+  // If player passes past the right side of the window, wrap him
+  // to the left side
+  // if (pos_x_px > client_sdl.renderer.GetOutputWidth() - 30)
+  //  pos_x_px = client_sdl.renderer.GetOutputWidth() - 30;
+  // else if (pos_x_px < 0)
+  //  pos_x_px = 0;
+
+  // Clear screen
+  // client_sdl.renderer.Clear();
+
+  // SDL_RendererFlip flip = SDL_FLIP_HORIZONTAL; // Sin volteo por defecto
+
+  // Pick sprite from sprite atlas based on whether
+  // player is running and run animation phase
+  // int src_x = 10, src_y = 10; // by default, standing sprite
+  // if (state.is_running) {
+  // Voltear horizontalmente solo si te estás moviendo a la izquierda
+  //  if (worm.get_direction() == LEFT) {
+  //    flip = SDL_FLIP_NONE;
+  //  }
+  //  src_x = 10;
+  //  src_y = 10 + 60 * state.run_phase;
+  //}
+
+  /*
+    if (state.is_running) {
+      // one of 15 run animation sprites
+      src_x = 10;
+      src_y = 10 + 60 * state.run_phase;
+    }
+  */
+
+  // client_sdl.world_view.render(1, state);
+
+  // Draw player sprite
+  // client_sdl.worm_walking->SetAlphaMod(255); // sprite is fully opaque
+  // client_sdl.renderer.Copy(
+  //    *client_sdl.worm_walking, Rect(src_x, src_y, 40, 40), // Size
+  //    Rect((int)pos_x_px, vcenter - 40, 40, 40),    // Destination
+  //    0.0,                                                  // don't rotate
+  //    NullOpt, // rotation center - not needed
+  //    flip     // horizontal flip
+  //);
+
+  // client_sdl.resource_pool.add_font("Vera20", "/Vera.ttf", 20);
+  // client_sdl.resource_pool.add_font("Vera12", "/Vera.ttf", 12);
+  // std::shared_ptr<Font> vera20_font_ptr =
+  // client_sdl.resource_pool.get_font("Vera20"); std::shared_ptr<Font>
+  // vera12_font_ptr = client_sdl.resource_pool.get_font("Vera12");
+

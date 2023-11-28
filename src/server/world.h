@@ -16,6 +16,7 @@ private:
   std::list<BeamBody*> beams;
   std::string name = "";
   //std::string background = "";
+  ContactListener contact_listener;
 
 public:
   explicit World();

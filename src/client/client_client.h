@@ -47,6 +47,14 @@ private:
   // o false en caso contrario
   bool execute_event(SDL_Event &event);
 
+  // Maneja el evento de saltar
+  void handle_jump_forward(bool &is_jumping);
+
+  void handle_jump_backward(bool &is_jumping);
+
+  int get_opposite_direction();
+
+
 public:
   explicit Client(Socket &&skt);
 

@@ -13,7 +13,10 @@
 #define LONG_BEAM_PATH "/Images/Weapons/grdl4.png"
 
 #define WORM_WALKING "worm_walking"
-#define WORM_WALKING_PATH "/Images/Worms/wwalk.png"
+#define WORM_WALKING_PATH "/Images/Worms/wwalk2.png"
+
+#define WORM_JUMPING "worm_jumping"
+#define WORM_JUMPING_PATH "/Images/Worms/wjump.png"
 
 class ResourcePool {
 private:
@@ -57,6 +60,8 @@ private:
   // Agrega la textura del gusano caminando al map de texturas
   void add_worm_walking() { add_texture(WORM_WALKING, WORM_WALKING_PATH); }
 
+  void add_worm_jumping() { add_texture(WORM_JUMPING, WORM_JUMPING_PATH); }
+
 public:
 
   // Crea la Resource pool y le carga las texturas
@@ -64,6 +69,7 @@ public:
     add_short_beam();
     add_long_beam();
     add_worm_walking();
+    add_worm_jumping();
     // add_font("Vera20", "/Vera.ttf", 20);
     // add_font("Vera12", "/Vera.ttf", 12);
   }

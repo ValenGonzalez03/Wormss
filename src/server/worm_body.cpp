@@ -2,8 +2,8 @@
 #include "box2d/box2d.h"
 #include <stdio.h>
 
-WormBody::WormBody(b2World* world, float pos_x, float pos_y)
-	: world(world), pos_x(pos_x), pos_y(pos_y) {
+WormBody::WormBody(b2World* world, float pos_x, float pos_y, uint8_t id)
+	: world(world), pos_x(pos_x), pos_y(pos_y), id(id) {
   b2BodyDef bodyDef;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x, pos_y);
@@ -76,6 +76,10 @@ void WormBody::jump(const uint8_t &dir) {
   } else {
     jump_right();
   }
+}
+
+uint8_t WormBody::get_id() {
+  return id;
 }
 
 b2Vec2 WormBody::get_position() { return body->GetPosition(); }

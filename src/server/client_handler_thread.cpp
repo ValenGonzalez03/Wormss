@@ -11,7 +11,6 @@ ClientHandler::ClientHandler(Socket &skt, ServerProtocol &protocol,
 
 void ClientHandler::run() {
   bool was_closed = false;
-  // int player_id = 0;
   // std::shared_ptr<Command> command = std::make_shared<StartMoving>(0); SOLO
   // PARA PRUEBAS
   try {
@@ -19,9 +18,6 @@ void ClientHandler::run() {
       if (not in_game) { // comunicacion sincronica
         // std::list<int>* games_id = games_handler.obtain_all_games_id();
         // protocol.send_games_id();
-
-        // uint8_t game_id = 0;
-        // uint8_t player_id = 0;
 
         std::shared_ptr<RunnableCommandLobby> runnable_command =
             protocol.process_command_lobby();
@@ -31,8 +27,6 @@ void ClientHandler::run() {
         if (lobby_result == nullptr) {
           continue;
         }
-
-        //game_commands = lobby_result->get_commands();
 
         if (lobby_result->get_game_created() ||
         lobby_result->get_player_joined()) {

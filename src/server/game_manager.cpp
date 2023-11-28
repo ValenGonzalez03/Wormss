@@ -19,18 +19,25 @@ void GameManager::initialize_game() {
   */
   world.create_beam(0, 1, 0, 6);
   world.create_beam(6,1,30, 6);
-  worm = world.create_worm(0, 7);
-  //worms_list.push_back(worm);
+
+  for (uint8_t player_id : players) {
+    WormBody* worm = world.create_worm(0, 7, player_id);
+    worms_list.push_back(worm);
+  }
 }
 
-void GameManager::add_player(const int &player_id) {
+void GameManager::add_player(const uint8_t &player_id) {
   current_players++;
   players.push_back(player_id);
 }
 
-void GameManager::delete_player(const int &player_id) {
+void GameManager::delete_player(const uint8_t &player_id) {
   current_players--;
   players.remove(player_id);
+}
+
+void GameManager::set_current_turn_id(const uint8_t& id) {
+  current_turn_id = id;
 }
 
 void GameManager::step() {
@@ -38,27 +45,43 @@ void GameManager::step() {
 }
 
 void GameManager::update() {
+  WormBody* worm = get_worm(current_turn_id); // verificar si no le tiene que pasar el player_id tambien
   worm->update();
 }
 
+WormBody* GameManager::get_worm(const uint8_t& player_id) {
+  for (auto it = worms_list.begin(); it != worms_list.end(); ++it) {
+    if ((*it)->get_id() == player_id) {
+      return (*it);
+    }
+  }
+  return nullptr;
+}
+
 void GameManager::move(const uint8_t &player_id, const uint8_t &direction) {
-  // obtain worm
-  /*
-  if (direction == LEFT) {
-    worm->move_left();
-  } else if (direction == RIGHT) {
-    worm->move_right();
-  }*/
-  
+  if (player_id != current_turn_id) {
+    return;
+  }
+
+  WormBody* worm = get_worm(player_id);
   worm->start_moving(direction);
 }
 
-void GameManager::stop_moving() {
-  // obtain worm
+void GameManager::stop_moving(const uint8_t &player_id) {
+  if (player_id != current_turn_id) {
+    return;
+  }
+  
+  WormBody* worm = get_worm(player_id);
   worm->stop_moving();
 }
 
 void GameManager::jump(const uint8_t &player_id, const uint8_t &direction) {
+  if (player_id != current_turn_id) {
+    return;
+  }
+
+  WormBody* worm = get_worm(player_id);
   worm->jump(direction);
 }
 
@@ -72,6 +95,6 @@ GameState GameManager::get_state() {
 }
 
 // SOLO DE PRUEBA
-b2Vec2 GameManager::get_worm_position() { return worm->get_position(); }
+b2Vec2 GameManager::get_worm_position() { return get_worm(current_turn_id)->get_position(); }
 
 GameManager::~GameManager() {}

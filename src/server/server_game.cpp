@@ -1,7 +1,4 @@
 #include "server_game.h"
-#include "math.h"
-#include <chrono>
-#include <unistd.h>
 
 #define QUEUE_MAX_SIZE 20
 
@@ -12,8 +9,8 @@ Game::Game(uint8_t &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {
 Queue<std::shared_ptr<RunnableCommandGame>> *
 Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
                 uint8_t &player_id) {
-  last_player_id_added++;
-  player_id = last_player_id_added;
+  last_player_id++;
+  player_id = last_player_id;
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
   push_game_state();
@@ -28,10 +25,24 @@ void Game::delete_player(const uint8_t &player_id) {
 void Game::run() {
   try {
 	started = true;
-    auto t1 = time_point_cast<milliseconds>(steady_clock::now());
-    int it = 0;
     bool was_closed = false;
+    int it = 0;
+    auto t1 = time_point_cast<milliseconds>(steady_clock::now());
+    auto start_turn_time = std::chrono::steady_clock::now();
+    
     while (keep_playing) {
+      auto current_time = std::chrono::steady_clock::now();
+      auto elapsed_turn_time = std::chrono::duration_cast<std::chrono::seconds>(current_time - start_turn_time).count();
+      if (elapsed_turn_time >= 60) {
+        if (current_turn_id == last_player_id) {
+          current_turn_id = 1;
+        } else {
+          current_turn_id++;
+        }
+        game_manager.set_current_turn_id(current_turn_id);
+        start_turn_time = std::chrono::steady_clock::now();
+      }
+
       update(it);
       game_manager.update();
       game_manager.step();

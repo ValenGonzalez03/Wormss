@@ -19,9 +19,7 @@ void PlayerSender::run() {
 }
 
 void PlayerSender::send_id(const uint8_t id) {
-  // int id_net = htonl(id);
   protocol.send_id(id);
-  // protocol.send_id(id);
 }
 
 PlayerSender::~PlayerSender() { keep_playing = false; }

@@ -54,9 +54,8 @@ private:
 
   int get_opposite_direction();
 
-
 public:
-  explicit Client(Socket &&skt);
+  explicit Client(ClientProtocol &&prot);
 
   void start_threads();
 

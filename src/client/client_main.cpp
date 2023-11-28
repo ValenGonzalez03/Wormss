@@ -1,4 +1,6 @@
 #include "client_client.h"
+#include "client_lobby.h"
+#include "client_protocol.h"
 #include <iostream>
 
 #define SUCCESS 0
@@ -15,9 +17,15 @@ int main(int argc, char *argv[]) {
     const std::string &servname = argv[2];
 
     Socket skt(hostname.c_str(), servname.c_str());
-    Client client(std::move(skt));
+    ClientProtocol protocol(std::move(skt));
 
-    //client.start_threads();
+    // Ejecucion del Lobby del cliente
+    Lobby lobby(protocol);
+    lobby.run_lobby();
+
+    // Ejecucion de una partida desde el lado del cliente
+    Client client(std::move(protocol));
+    // client.start_threads();
     int result = client.run(); // Como manejo los errores? return result?
     client.join_threads();
 

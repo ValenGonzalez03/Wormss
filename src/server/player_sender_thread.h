@@ -19,9 +19,9 @@ public:
    * */
   explicit PlayerSender(ServerProtocol &protocol,
                         std::shared_ptr<Queue<GameState>> sender_queue,
-                        std::atomic<bool>& keep_playing);
+                        std::atomic<bool> &keep_playing);
 
-  void send_id(const int id);
+  void send_id(const uint8_t id);
 
   /*
    * Ejecuta el loop del hilo Sender.

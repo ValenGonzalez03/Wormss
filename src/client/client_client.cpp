@@ -99,6 +99,8 @@ int Client::run() {
   StartGame start = StartGame(game_id);
   prot.send_command(start);
 
+  //std::this_thread::sleep_for(std::chrono::seconds(30));
+
   // ---------------------------------------------------------------------------
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina

@@ -10,7 +10,7 @@ extern uint8_t START_GAME;
 
 class StartGame : public Command {
 private:
-  int game_id;
+  uint8_t game_id; // uint8_t game_id  CAMBIAR !?
 
 public:
   // Constructor from client side

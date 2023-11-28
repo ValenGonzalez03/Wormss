@@ -10,6 +10,7 @@
 #include "../common/command.h"
 #include "../common/game_state.h"
 #include "../common/liberror.h"
+#include "client_worldview.h"
 #include "../common/socket.h"
 
 class ClientProtocol {
@@ -32,6 +33,24 @@ public:
   void send_command(Command &cmd);
 
   GameState process_game_state();
+
+  // Recibe una cadena por socket y la devuelve
+  std::string recv_string(bool *was_closed);
+
+  // Recibe un 'float' por socket, lo transforma y
+  // lo devuelve
+  float recv_float(bool* was_closed);
+
+  // Recibe la cantidad de nombres; los nombres de los mundos y los devuelve
+  std::vector<std::string> recv_worlds_names(bool* was_closed);
+
+  // Recibe el mundo y lo carga
+  // nombre, background, vigas
+  void recv_world(WorldView& world, bool* was_closed);
+
+  // Recibe una viga y la agrega al mundo
+  void recv_and_add_beam(WorldView& world, bool* was_closed);
+
 
   void close_socket();
 };

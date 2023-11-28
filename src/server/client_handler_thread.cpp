@@ -29,8 +29,8 @@ void ClientHandler::run() {
         }
 
         if (lobby_result->get_game_created() ||
-        lobby_result->get_player_joined()) {
-		      game_commands = lobby_result->get_commands();
+            lobby_result->get_player_joined()) {
+          game_commands = lobby_result->get_commands();
           sender.send_id(player_id);
         }
         if (lobby_result->get_game_created()) {
@@ -42,6 +42,7 @@ void ClientHandler::run() {
 
       } else { // comunicacion asincronica
         std::cout << "id_player: " + std::to_string(player_id) << std::endl;
+        // std::cout << "Llego aca" << std::endl;
         std::shared_ptr<RunnableCommandGame> runnable_command =
             protocol.process_command(player_id);
         game_commands->try_push(runnable_command);

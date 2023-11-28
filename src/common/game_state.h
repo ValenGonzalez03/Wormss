@@ -182,7 +182,7 @@ public:
   GameState(Socket &skt, bool *was_closed) : worms_list(0) {
     uint8_t worms_amount = 0;
     skt.recvall(&worms_amount, sizeof(worms_amount), was_closed);
-    std::cout << "worms amount:" << worms_amount << std::endl;
+    std::cout << "worms amount:" << std::to_string(worms_amount) << std::endl;
     for (int i = 0; i < worms_amount; i++) {
       Worm worm(skt);
       worms_list.push_back(worm);

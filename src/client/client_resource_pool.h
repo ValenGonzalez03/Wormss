@@ -24,6 +24,7 @@ private:
   std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
   std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
   std::map<std::string, Mix_Chunk*> sounds;
+  std::shared_ptr<SDL2pp::Texture> background;
   Mix_Music* gMusic = NULL;
 
   void add_texture(const std::string &texture_name,
@@ -62,16 +63,20 @@ private:
 
   void add_worm_jumping() { add_texture(WORM_JUMPING, WORM_JUMPING_PATH); }
 
+  
+
 public:
 
   // Crea la Resource pool y le carga las texturas
-  explicit ResourcePool(SDL2pp::Renderer &rend) : renderer(rend) {
+  explicit ResourcePool(SDL2pp::Renderer &rend) : renderer(rend) {}
+
+  void initialize () {
     add_short_beam();
     add_long_beam();
     add_worm_walking();
     add_worm_jumping();
-    // add_font("Vera20", "/Vera.ttf", 20);
-    // add_font("Vera12", "/Vera.ttf", 12);
+    //add_font("Vera20", "/Vera.ttf", 20);
+    //add_font("Vera12", "/Vera.ttf", 12);
   }
 
   // Devuelve un ptr a la textura del short_beam
@@ -92,8 +97,12 @@ public:
   // Ver inicialización (NO USAR)
   void add_font(const std::string &font_name, const std::string &font_path,
                 int font_size) {
+    try {
     SDL2pp::Font font(RESOURCES_PATH + font_path, font_size);
     this->fonts[font_name] = std::make_shared<SDL2pp::Font>(std::move(font));
+    } catch(const std::exception &err) {
+      std::cout << "Error al agregar la fuente: " << font_name << std::endl;
+    }
   }
 
   // Ver inicialización (NO USAR)
@@ -104,6 +113,33 @@ public:
     }
     return it->second;
   }
+
+  void add_background(const std::string &image_path) {
+    std::cout << "add_background" << std::endl;
+    SDL2pp::Surface surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
+    Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
+
+    background = std::make_shared<SDL2pp::Texture>(
+        renderer, surface.SetColorKey(
+                      true, color_key)); // Esta color_key es especifica para
+                                         // los fondos de los gusanos.
+    // Para imagenes con otros fondos no haria efecto, por lo que si hay
+    // distintas habria que poner ifs.
+  }
+
+  std::shared_ptr<SDL2pp::Texture> get_background() {
+    try {
+      std::cout << "get_background" << std::endl;
+      return background;
+    } catch (const std::exception &e) {
+      throw std::runtime_error("Background not found.");
+    }
+  }
+
+
+  ~ResourcePool() {}
+
+
 };
 
 #endif

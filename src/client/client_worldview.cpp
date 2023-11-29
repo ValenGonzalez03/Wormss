@@ -19,8 +19,9 @@ void WorldView::add_long_beam(int pos_x, int pos_y, int angle) {
 }
 
 void WorldView::render(int frame, client_state &worm_state) { //Gamestate game_state
+  WormView worm_view(renderer, *resource_pool.get_worm_walking()); // Ver de hacer una sola instancia
   //Renderizar fondo
-    WormView worm_view(renderer, *resource_pool.get_worm_walking()); // Ver de hacer una sola instancia
+  //render_background();
   for (auto &beam : beams) {
     beam.render(frame);
   }
@@ -36,6 +37,27 @@ void WorldView::render(int frame, client_state &worm_state) { //Gamestate game_s
 
 void WorldView::update(GameState &game_state) {
   this->worms = game_state.get_worms();
+}
+
+void WorldView::set_background(const std::string path) {
+  resource_pool.add_background(path);
+}
+
+
+void WorldView::render_background() {
+  std::shared_ptr<SDL2pp::Texture> background = resource_pool.get_background();
+  if (background){
+    renderer.Copy(
+      *background, 
+      SDL2pp::Rect(0,0,background->GetWidth(),background->GetHeight()),          // Size
+      SDL2pp::Rect(0,0,renderer.GetOutputWidth(), renderer.GetOutputHeight()),    // Destination
+      0.0,                                   // don't rotate
+      SDL2pp::NullOpt,                       // rotation center - not needed
+      SDL_FLIP_NONE);                    // horizontal flip
+  }
+  else {
+    throw std::runtime_error("No existe el background");
+  }
 }
 
 

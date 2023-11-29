@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
     // Ejecucion de una partida desde el lado del cliente
     Client client(std::move(protocol));
-    client.start_threads();
+    //client.start_threads();
     int result = client.run(); // Como manejo los errores? return result?
     client.join_threads();
 

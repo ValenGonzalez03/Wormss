@@ -32,23 +32,22 @@ void Client::join_threads() {
 int Client::run() {
   
   // Initialize SDL library
-  SDL sdl(SDL_INIT_VIDEO);
+  SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
   // Initialize SDL_ttf library
   SDLTTF ttf;
 
-  // client_sdl.world_view.add_short_beam(100, 100);
-  // client_sdl.world_view.add_short_beam(200, 200);
-  // client_sdl.world_view.add_short_beam(250, 20);
+  client_sdl.resource_pool.initialize();
+
   client_sdl.world_view.add_long_beam(0, 1, 0);
   client_sdl.world_view.add_long_beam(6, 1, 30);
-  // client_sdl.world_view.add_long_beam(3, 3);
 
-  // Enable alpha blending for the sprites
-  // client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
+  //std::string background_path = "/Images/Backgrounds/background2.jpg";
+  //client_sdl.world_view.set_background(background_path);
 
   state.prev_ticks = SDL_GetTicks();
 
+  start_threads();
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
@@ -76,17 +75,15 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   GameState game_state = GameState();
 
-  game_state.add_worm(2,2,1,0);
+  //game_state.add_worm(2,2,1,0);
 
   try {
-  bool was_received = receiver_queue.pop_last_one(game_state);
-
-  if (!was_received) {
-    game_state = state.last_game_state;
-  } else {
-    state.last_game_state = game_state;
-  }
-
+    bool was_received = receiver_queue.pop_last_one(game_state);
+    if (!was_received) {
+      game_state = state.last_game_state;
+    } else {
+      state.last_game_state = game_state;
+    }
   } catch(const std::exception &e){
     std::cerr << e.what();
   }
@@ -97,8 +94,8 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
 
   // PRUEBA RENDERIZADO MULTIPLES WORMS
-  // state.last_game_state.add_worm(1.3, 1.5, 1, 0);
-  // state.last_game_state.add_worm(5.2, 5.8, 0, 0);
+  //state.last_game_state.add_worm(1.3, 1.5, 1, 0);
+  //state.last_game_state.add_worm(5.2, 5.8, 0, 0);
   client_sdl.world_view.update(state.last_game_state);
 
   std::list<Worm> worms = state.last_game_state.get_worms();

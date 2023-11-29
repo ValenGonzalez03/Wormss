@@ -13,6 +13,8 @@ private:
   // SDL2pp::Texture &standing_texture;
   std::vector<SDL2pp::Texture *> &walking_texture;
   // SDL2pp::Texture &shooting_texture;
+  
+  SDL_RendererFlip choose_flip_direction(Worm &worm);
 public:
   // Crea un WormView con un renderer y las texturas correspondientes
   explicit WormView(SDL2pp::Renderer &rend,
@@ -35,7 +37,6 @@ public:
   void render_worm_jumping(int frame, int pos_x, int pos_y, Worm &worm,
                            client_state &worm_state);
 
-  SDL_RendererFlip choose_flip_direction(Worm &worm);
 };
 
 #endif

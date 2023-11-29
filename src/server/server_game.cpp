@@ -13,7 +13,7 @@ Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
   player_id = last_player_id;
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
-  push_game_state();
+  //push_game_state();
   return &commands;
 }
 

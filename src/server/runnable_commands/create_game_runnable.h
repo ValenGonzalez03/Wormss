@@ -13,8 +13,7 @@ public:
 
   std::unique_ptr<LobbyResult>
   run(GamesHandler &games_handler,
-      std::shared_ptr<Queue<GameState>> sender_queue,
-      uint8_t &player_id) override {
+      std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id) override {
     uint8_t game_id;
     Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue =
         games_handler.create_game(sender_queue, game_id, player_id);

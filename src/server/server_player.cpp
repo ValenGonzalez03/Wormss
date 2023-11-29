@@ -12,7 +12,10 @@ Player::Player(Socket &&peer, GamesHandler &games_handler,
       client_handler(skt, protocol, games_handler, sender, sender_queue,
                      keep_playing, in_game, player_id) {}
 
-void Player::start() { client_handler.start(); }
+void Player::start() {
+  client_handler.start();
+  //sender.start();
+}
 
 void Player::kill() {
   if (not is_dead()) {

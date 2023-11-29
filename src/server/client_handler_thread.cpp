@@ -28,18 +28,20 @@ void ClientHandler::run() {
           continue;
         }
 
-        if (lobby_result->get_game_created() ||
-        lobby_result->get_player_joined()) {
-		      game_commands = lobby_result->get_commands();
-          sender.send_id(player_id);
+        if (lobby_result->get_game_started()) {
+          in_game = true;
+          sender.start();
+          continue;
         }
+        
+        game_commands = lobby_result->get_commands();
+        sender.send_id(player_id);
         if (lobby_result->get_game_created()) {
           sender.send_id(lobby_result->get_game_id());
-        } else if (lobby_result->get_game_started()) {
+        } else if (lobby_result->get_player_joined()) {
           in_game = true;
           sender.start();
         }
-
       } else { // comunicacion asincronica
         std::cout << "id_player: " + std::to_string(player_id) << std::endl;
         std::shared_ptr<RunnableCommandGame> runnable_command =

@@ -13,9 +13,8 @@ public:
             std::make_shared<StartGame>(clt_id, skt, was_closed)) {}
 
   std::unique_ptr<LobbyResult>
-  run(GamesHandler &games_handler,
-      std::shared_ptr<Queue<GameState>> sender_queue,
-      uint8_t &player_id) override {
+  run(GamesHandler &games_handler, 
+      std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id) override {
 
     games_handler.start_game(command->get_game_id(), player_id);
     std::unique_ptr<LobbyResult> lobby_result = std::make_unique<LobbyResult>(

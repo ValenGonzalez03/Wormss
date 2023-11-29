@@ -8,6 +8,7 @@ namespace CODE_PLAYER_COMM {
 uint8_t CREATE_GAME = 0x01;
 uint8_t JOIN_GAME = 0x02;
 uint8_t START_GAME = 0x03;
+uint8_t GAME_STARTED = 0x04;
 uint8_t START_MOVING = 0x05;
 uint8_t STOP_MOVING = 0x06;
 uint8_t JUMP = 0x07;

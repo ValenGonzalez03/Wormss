@@ -37,4 +37,10 @@ BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y, int ang
     fixtureDef.friction = friction;
     
     body->CreateFixture(&fixtureDef);
+
+    /*polygonShape.SetAsBox(width, width, b2Vec2(0, 0), angleInRadians);
+    fixtureDef.isSensor = true;
+    b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
+    b2FixtureUserData data = footSensorFixture->GetUserData();
+    data.pointer = (uintptr_t)3;*/
 }

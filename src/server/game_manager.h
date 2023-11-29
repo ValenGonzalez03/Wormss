@@ -13,7 +13,7 @@ private:
   int current_players = 0;
   int current_player_id;
   int current_worm_id;
-  uint8_t current_turn_id = 1;
+  uint8_t current_turn_id = 0;
   std::list<uint8_t> players;
   //std::map <int, WormBody>
   std::list<WormBody*> worms_list;

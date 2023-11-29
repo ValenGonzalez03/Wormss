@@ -35,7 +35,7 @@ private:
       for (const auto& spawn_point : file["spawn_points"]) {
           float position_x = spawn_point["position_x"].as<float>();
           float position_y = spawn_point["position_y"].as<float>();
-          world->create_worm(position_x, position_y, 1); // CAMBIAR A PASARLE EL ID REAL DE LOS WORMS
+          world->create_worm(position_x, position_y, 0); // CAMBIAR A PASARLE EL ID REAL DE LOS WORMS
       }
     }
     else {

@@ -29,7 +29,7 @@ typedef duration<float, duration<float>> dur_ms;
 typedef time_point<steady_clock, milliseconds> time_p_ms;
 typedef duration<float> dur_f;
 
-// class Command;
+//class Command;
 
 class Game : public Thread {
 private:
@@ -39,7 +39,7 @@ private:
   Queue<std::shared_ptr<RunnableCommandGame>> commands;
   uint8_t game_id;
   uint8_t last_player_id = 0;
-  uint8_t current_turn_id = 1;
+  uint8_t current_turn_id = 0;
   bool keep_playing = true;
   bool started = false;
   GameManager game_manager;

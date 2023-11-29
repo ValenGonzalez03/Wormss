@@ -49,6 +49,8 @@ public:
     if (option_selected == 'c') {
       game_id = prot.receive_id();
       std::cout << "El game id es: " << game_id << std::endl;
+    } else if (option_selected == 'j') {
+      return;
     }
 
     char command_lobby = '\0';

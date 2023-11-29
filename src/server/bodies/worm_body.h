@@ -25,6 +25,7 @@ private:
   uint8_t direction = RIGHT;
   float angle = 0;
   float vel = 0.5;
+  float jump_vel = 5;
   const float width = 1;
   const float height = 1;
   const float density = 1;

@@ -145,8 +145,8 @@ public:
     uint16_t pos_y = uint(pos.get_position_y() * 100);
     uint16_t pos_x_be = htons(pos_x);
     uint16_t pos_y_be = htons(pos_y);
-    std::cout << "final_pos_x: " << pos.get_position_x() << std::endl;
-    std::cout << "final_pos_y: " << pos.get_position_y() << std::endl;
+    //std::cout << "final_pos_x: " << pos.get_position_x() << std::endl;
+    //std::cout << "final_pos_y: " << pos.get_position_y() << std::endl;
     skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
     skt.sendall(&pos_y_be, sizeof(pos_y_be), was_closed);
     // Hago send de la direccion

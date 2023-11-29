@@ -6,12 +6,16 @@ Game::Game(uint8_t &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {}
 
 Queue<std::shared_ptr<RunnableCommandGame>> *
 Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
-                 uint8_t &player_id) {
-  last_player_id++;
-  player_id = last_player_id;
+                uint8_t &player_id) {
+  if (last_player_id == 0) {
+    player_id = last_player_id;
+  } else {
+    last_player_id++;
+    player_id = last_player_id;
+  }
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
-  push_game_state();
+  //push_game_state();
   return &commands;
 }
 
@@ -23,8 +27,7 @@ void Game::delete_player(const uint8_t &player_id) {
 void Game::run() {
   try {
     game_manager.initialize_game();
-
-    started = true;
+	  started = true;
     bool was_closed = false;
     int it = 0;
     auto t1 = time_point_cast<milliseconds>(steady_clock::now());
@@ -37,7 +40,7 @@ void Game::run() {
                                    .count();
       if (elapsed_turn_time >= 60) {
         if (current_turn_id == last_player_id) {
-          current_turn_id = 1;
+          current_turn_id = 0;
         } else {
           current_turn_id++;
         }

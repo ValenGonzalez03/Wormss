@@ -61,16 +61,15 @@ void WormBody::stop_moving() {
 }
 
 void WormBody::jump_left() {
-  apply_vertical_impulse(vel*10);
+  apply_vertical_impulse(jump_vel); // CAMBIAR A QUE SALTE PARA ATRAS, PERO ASI FUNCIONA EL SALTO A LA IZQUIERDA
 }
 
 void WormBody::jump_right() {
-  apply_vertical_impulse(vel*10);
+  apply_vertical_impulse(jump_vel);
 }
 
 void WormBody::jump(const uint8_t &dir) {
-  if (state == WORM_STATES::JUMPING) return;
-  state = WORM_STATES::JUMPING;
+  //state = WORM_STATES::JUMPING;
   direction = dir;
   if (dir == LEFT) {
     jump_left();

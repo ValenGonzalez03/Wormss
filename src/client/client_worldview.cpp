@@ -24,7 +24,7 @@ void WorldView::render(int frame, client_state &worm_state) { //Gamestate game_s
   auto walking_textures = resource_pool.get_worm_walking();
   WormView worm_view(renderer, walking_textures); // Ver de hacer una sola instancia
   //Renderizar fondo
-  //render_background();
+  render_background();
   for (auto &beam : beams) {
     beam.render(frame);
   }

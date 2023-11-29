@@ -42,8 +42,8 @@ int Client::run() {
   client_sdl.world_view.add_long_beam(0, 1, 0);
   client_sdl.world_view.add_long_beam(6, 1, 30);
 
-  //std::string background_path = "/Images/Backgrounds/background2.jpg";
-  //client_sdl.world_view.set_background(background_path);
+  std::string background_path = "/Images/Backgrounds/background2.jpg";
+  client_sdl.world_view.set_background(background_path);
 
   state.prev_ticks = SDL_GetTicks();
 
@@ -76,7 +76,7 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   GameState game_state = GameState();
 
-  game_state.add_worm(2, 2, 1, 0);
+  //game_state.add_worm(2, 2, 1, 0);
 
   try {
     bool was_received = receiver_queue.pop_last_one(game_state);
@@ -208,6 +208,7 @@ void Client::handle_jump_forward(bool &is_jumping) {
   std::shared_ptr<Jump> cmd = std::make_shared<Jump>(state.direction);
   sender_queue.try_push(cmd);
   is_jumping = true;
+  //state.is_running = false;
 }
 
 void Client::handle_jump_backward(bool &is_jumping) {
@@ -215,6 +216,7 @@ void Client::handle_jump_backward(bool &is_jumping) {
   std::shared_ptr<Jump> cmd = std::make_shared<Jump>(jump_direction);
   sender_queue.try_push(cmd);
   is_jumping = true;
+  //state.is_running = false;
 }
 
 int Client::get_opposite_direction() {

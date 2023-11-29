@@ -135,10 +135,7 @@ public:
 
     background = std::make_shared<SDL2pp::Texture>(
         renderer, surface.SetColorKey(
-                      true, color_key)); // Esta color_key es especifica para
-                                         // los fondos de los gusanos.
-    // Para imagenes con otros fondos no haria efecto, por lo que si hay
-    // distintas habria que poner ifs.
+                      true, color_key));
   }
 
   std::shared_ptr<SDL2pp::Texture> get_background() {

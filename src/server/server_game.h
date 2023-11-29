@@ -6,11 +6,11 @@
 #include <map>
 #include <mutex>
 
+#include "math.h"
 #include <chrono>
 #include <cmath>
-#include "math.h"
-#include <unistd.h>
 #include <iostream>
+#include <unistd.h>
 
 #include "../common/commands/command.h"
 #include "../common/constant_rate_loop.h"
@@ -60,7 +60,7 @@ public:
 
   void update(int &it);
 
-  void stop();
+  void stop() override;
 
   bool compare_id(const uint8_t &another_game_id);
 

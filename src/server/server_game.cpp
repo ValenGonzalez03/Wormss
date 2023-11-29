@@ -83,7 +83,6 @@ void Game::update(int &it) {
   std::shared_ptr<RunnableCommandGame> runnable_command;
   while (commands.try_pop(runnable_command)) {
     runnable_command->run(game_manager);
-    std::cout << "Llega aca 2" << std::endl;
     // it--;
   }
 }

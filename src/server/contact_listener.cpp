@@ -1,5 +1,5 @@
 #include "contact_listener.h"
-#include "worm_body.h"
+#include "bodies/worm_body.h"
 
 void ContactListener::BeginContact(b2Contact* contact) {
 	/*	PARA DETECTAR CUANDO SE TOCA EL SUELO

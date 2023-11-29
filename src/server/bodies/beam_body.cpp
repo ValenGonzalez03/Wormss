@@ -38,3 +38,9 @@ BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y, int ang
     
     body->CreateFixture(&fixtureDef);
 }
+
+void BeamBody::start_contact_with(Body* another_body) { }
+
+void BeamBody::start_contact_with(WormBody* worm) { }
+	
+void BeamBody::end_contact_with(Body* another_body) { }

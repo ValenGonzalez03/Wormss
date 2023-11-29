@@ -17,7 +17,7 @@ public:
 
   // Constructor from server side for code consistency but doesn't do anything
   // different from the other
-  StopMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
+  explicit StopMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
       : Command(CODE_PLAYER_COMM::STOP_MOVING, clt_id) {
     // receive(skt, was_closed);
   }
@@ -29,7 +29,7 @@ public:
   void receive(Socket &skt, bool *was_closed) override {}
 
   // PROVISORIAS
-  uint8_t get_client_id() override { return -1; }
+  uint8_t get_client_id() override { return client_id; }
 
   uint8_t get_game_id() override { return -1; }
 };

@@ -20,7 +20,7 @@ public:
       : Command(CODE_PLAYER_COMM::JUMP, 0), direction(dir) {}
 
   // Constructor from server side with direction received by socket
-  Jump(uint8_t clt_id, Socket &skt, bool *was_closed)
+  explicit Jump(uint8_t clt_id, Socket &skt, bool *was_closed)
       : Command(CODE_PLAYER_COMM::JUMP, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }

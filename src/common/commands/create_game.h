@@ -13,10 +13,10 @@ extern uint8_t CREATE_GAME;
 class CreateGame : public Command {
 public:
   // Constructor from client side
-  CreateGame() : Command(CODE_PLAYER_COMM::CREATE_GAME, 0) {}
+  explicit CreateGame() : Command(CODE_PLAYER_COMM::CREATE_GAME, 0) {}
 
   // Constructor from server side
-  CreateGame(uint8_t clt_id, Socket &skt, bool *was_closed)
+  explicit CreateGame(uint8_t clt_id, Socket &skt, bool *was_closed)
       : Command(CODE_PLAYER_COMM::CREATE_GAME, clt_id) {
     // receive(skt, was_closed);
   }

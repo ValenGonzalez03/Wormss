@@ -41,8 +41,9 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/game_manager.cpp
 					  ./src/server/broadcaster.cpp
 					  ./src/server/world.cpp
-					  ./src/server/worm_body.cpp
-					  ./src/server/beam_body.cpp
+					  ./src/server/bodies/body.cpp
+					  ./src/server/bodies/worm_body.cpp
+					  ./src/server/bodies/beam_body.cpp
 					  ./src/server/server_protocol.cpp
 					  ./src/server/contact_listener.cpp
 					  ./src/common/socket.cpp 

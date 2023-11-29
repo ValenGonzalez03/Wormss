@@ -20,7 +20,7 @@ public:
       : Command(CODE_PLAYER_COMM::START_MOVING, 0), direction(dir) {}
 
   // Constructor from server side with direction received by socket
-  StartMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
+  explicit StartMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
       : Command(CODE_PLAYER_COMM::START_MOVING, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }

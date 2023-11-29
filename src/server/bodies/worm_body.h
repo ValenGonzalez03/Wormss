@@ -3,7 +3,8 @@
 
 #include "box2d/box2d.h"
 #include <stdio.h>
-#include "../common/worm_states.h"
+#include "../../common/worm_states.h"
+#include "body.h"
 #include <iostream>
 
 #define LEFT 0
@@ -15,7 +16,7 @@
 #define LEFT 0
 #define RIGHT 1
 
-class WormBody {
+class WormBody : public Body{
 private:
   b2World* world;
   b2Body* body;
@@ -79,13 +80,15 @@ public:
   void start_contact();
   void end_contact();
   
-  void start_contact_with(WormBody* another_worm);
+  void start_contact_with(Body* another_body) override;
   
-  void end_contact_with(WormBody* another_worm);
+  void start_contact_with(WormBody* another_worm) override;
+	  
+  void end_contact_with(Body* another_body) override;
   
-  void fall_in_ground();
+  void hit_a_surface();
 
-  void start_jumping();
+  void move_away_from_surface();
   
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;

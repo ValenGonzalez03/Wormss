@@ -61,14 +61,15 @@ void WormBody::stop_moving() {
 }
 
 void WormBody::jump_left() {
-  apply_vertical_impulse(-vel);
+  apply_vertical_impulse(vel*10);
 }
 
 void WormBody::jump_right() {
-  apply_vertical_impulse(vel);
+  apply_vertical_impulse(vel*10);
 }
 
 void WormBody::jump(const uint8_t &dir) {
+  if (state == WORM_STATES::JUMPING) return;
   state = WORM_STATES::JUMPING;
   direction = dir;
   if (dir == LEFT) {
@@ -108,7 +109,11 @@ bool WormBody::is_facing_right() { return (direction == RIGHT); }
 
 bool WormBody::is_stopped() { return (WORM_STATES::STOPPED); }
 
-void WormBody::start_contact_with(WormBody* another_worm) {
+void WormBody::start_contact_with(Body* another_body) { 
+	another_body->start_contact_with(this);
+}
+
+void WormBody::start_contact_with(WormBody* another_worm) { 
 	if (state == WORM_STATES::STOPPED) {
 		if (another_worm->is_stopped()) return;
 		another_worm->start_contact_with(this);
@@ -121,11 +126,16 @@ void WormBody::start_contact_with(WormBody* another_worm) {
 	}
 }
 	
-void WormBody::end_contact_with(WormBody* another_worm) { }
+void WormBody::end_contact_with(Body* another_body) { 
+}
 
-void WormBody::fall_in_ground() { state = WORM_STATES::STOPPED; }
+void WormBody::hit_a_surface() { 
+	state = WORM_STATES::STOPPED;
+}
 
-void WormBody::start_jumping() { state = WORM_STATES::JUMPING; }
+void WormBody::move_away_from_surface() { 
+	state = WORM_STATES::JUMPING;
+}
 
 // POR AHORA DE PRUEBA
 void WormBody::start_contact() { m_contacting = true; }

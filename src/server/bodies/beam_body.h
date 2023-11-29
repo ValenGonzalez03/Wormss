@@ -2,10 +2,13 @@
 #define BEAM_BODY_H
 
 #include "box2d/box2d.h"
+#include "body.h"
 #include <stdio.h>
 #include <iostream>
 
-class BeamBody {
+class WormBody;
+
+class BeamBody : public Body {
 	private:
 	b2World* world;
 	b2Body* body;
@@ -19,6 +22,12 @@ class BeamBody {
 
 	public:
 	explicit BeamBody(b2World* world, float pos_x, float pos_y);
+	
+	void start_contact_with(Body* another_body) override;
+	
+	void start_contact_with(WormBody* worm) override;
+	
+    void end_contact_with(Body* another_body) override;
 	
 	BeamBody(const BeamBody&) = delete;
 	BeamBody& operator=(const BeamBody&) = delete;

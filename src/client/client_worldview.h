@@ -16,6 +16,8 @@ private:
   std::vector<Beam> beams;
   std::list<Worm> worms;
 
+  void render_background();
+
 public:
   // Crea una WorldView con una referencia a una resource pool
   // y a un renderer
@@ -38,6 +40,10 @@ public:
   void render(int frame, client_state &worm_state);
 
   //void render_text(const std::string text, std::string font_name, int pos_x, int pos_y);
+
+  // Setea un background al mundo
+  void set_background(const std::string path);
+
 };
 
 #endif

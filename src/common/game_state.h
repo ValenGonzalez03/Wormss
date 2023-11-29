@@ -117,12 +117,12 @@ public:
   explicit Worm(Position pos, u_int8_t dir, uint8_t st)
       : pos(pos), direction(dir), state(st) {}
 
-  Worm(Socket &skt) : pos(0, 0) {
+  explicit Worm(Socket &skt) : pos(0, 0) {
     bool was_closed = false;
     deserialize(skt, &was_closed);
   }
 
-  // Recibe la pos, la direccion, el state, etc del gusano
+  // Recibe la pos, la direccion, el state, etc del gusano (Lado cliente)
   void deserialize(Socket &skt, bool *was_closed) {
     uint16_t pos_x;
     uint16_t pos_y;
@@ -130,15 +130,15 @@ public:
     skt.recvall(&pos_y, sizeof(pos_y), was_closed);
     float final_pos_x = ntohs(pos_x) / 100.0;
     float final_pos_y = ntohs(pos_y) / 100.0;
-    std::cout << "final_pos_x: " << final_pos_x << std::endl;
-    std::cout << "final_pos_y: " << final_pos_y << std::endl;
+    // std::cout << "final_pos_x: " << final_pos_x << std::endl;
+    // std::cout << "final_pos_y: " << final_pos_y << std::endl;
     Position position(final_pos_x, final_pos_y);
     this->pos = position;
     skt.recvall(&(this->direction), sizeof(this->direction), was_closed);
     skt.recvall(&(this->state), sizeof(this->state), was_closed);
   }
 
-  // Envia los datos del gusano
+  // Envia los datos del gusano (Lado servidor)
   void serialize(Socket &skt, bool *was_closed) {
     // Hago send de la position
     uint16_t pos_x = uint(pos.get_position_x() * 100);
@@ -159,9 +159,9 @@ public:
 
   float get_pos_y() { return pos.get_position_y(); }
 
-  unsigned int get_direction() { return direction; }
+  uint8_t get_direction() { return direction; }
 
-  unsigned int get_state() { return state; }
+  uint8_t get_state() { return state; }
 
   // Devuelve la pos del gusano. Uso const para evitar que sea modificada
   Position get_position() const { return pos; }
@@ -182,7 +182,8 @@ public:
   GameState(Socket &skt, bool *was_closed) : worms_list(0) {
     uint8_t worms_amount = 0;
     skt.recvall(&worms_amount, sizeof(worms_amount), was_closed);
-    std::cout << "worms amount:" << worms_amount << std::endl;
+    // std::cout << "worms amount:" << std::to_string(worms_amount) <<
+    // std::endl;
     for (int i = 0; i < worms_amount; i++) {
       Worm worm(skt);
       worms_list.push_back(worm);

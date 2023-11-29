@@ -14,11 +14,11 @@ private:
 
 public:
   // Constructor from client side
-  StartGame(int game_id)
+  explicit StartGame(int game_id)
       : game_id(game_id), Command(CODE_PLAYER_COMM::START_GAME, 0) {}
 
   // Constructor from server side
-  StartGame(uint8_t clt_id, Socket &skt, bool *was_closed)
+  explicit StartGame(uint8_t clt_id, Socket &skt, bool *was_closed)
       : Command(CODE_PLAYER_COMM::START_GAME, clt_id) {
     receive(skt, was_closed);
   }

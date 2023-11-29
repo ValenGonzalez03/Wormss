@@ -54,6 +54,8 @@ private:
 
   int get_opposite_direction();
 
+  std::string print_state(uint8_t state);
+
 public:
   explicit Client(ClientProtocol &&prot);
 

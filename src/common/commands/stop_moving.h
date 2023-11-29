@@ -17,7 +17,7 @@ public:
 
   // Constructor from server side for code consistency but doesn't do anything
   // different from the other
-  StopMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
+  explicit StopMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
       : Command(CODE_PLAYER_COMM::STOP_MOVING, clt_id) {
     // receive(skt, was_closed);
   }

@@ -159,9 +159,9 @@ public:
 
   float get_pos_y() { return pos.get_position_y(); }
 
-  unsigned int get_direction() { return direction; }
+  uint8_t get_direction() { return direction; }
 
-  unsigned int get_state() { return state; }
+  uint8_t get_state() { return state; }
 
   // Devuelve la pos del gusano. Uso const para evitar que sea modificada
   Position get_position() const { return pos; }

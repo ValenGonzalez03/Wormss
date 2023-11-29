@@ -11,13 +11,13 @@
 
 using namespace SDL2pp;
 
-const float RATE = 1 / 60;
+const float RATE = (float)(1.0 / 60.0);
 // const float RATIO_MTS_PX = 210.0 / 9.0; // 23,3 periodico
 
 Client::Client(ClientProtocol &&prot)
     : prot(std::move(prot)), receiver_queue(), sender_queue(),
-      receiver(this->prot, receiver_queue), sender(this->prot, sender_queue), state(),
-      client_sdl() {}
+      receiver(this->prot, receiver_queue), sender(this->prot, sender_queue),
+      state(), client_sdl() {}
 
 void Client::start_threads() {
   sender.start();
@@ -30,7 +30,7 @@ void Client::join_threads() {
 }
 
 int Client::run() {
-  
+
   // Initialize SDL library
   SDL sdl(SDL_INIT_VIDEO);
 
@@ -48,7 +48,6 @@ int Client::run() {
   // client_sdl.worm_walking->SetBlendMode(SDL_BLENDMODE_BLEND);
 
   state.prev_ticks = SDL_GetTicks();
-
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
@@ -72,36 +71,39 @@ bool Client::func_to_execute() {
   if (execute_event(event)) // Si execute_event devuelve true, se
     return true;            // quiere cerrar el juego
   // ---------------------------------------------------------------------------
+
   // TRY-POP DE LA RECEIVER QUEUE
   // ---------------------------------------------------------------------------
   GameState game_state = GameState();
 
-  game_state.add_worm(2,2,1,0);
+  game_state.add_worm(2, 2, 1, 0);
 
   try {
-  bool was_received = receiver_queue.pop_last_one(game_state);
+    bool was_received = receiver_queue.pop_last_one(game_state);
 
-  if (!was_received) {
-    game_state = state.last_game_state;
-  } else {
-    state.last_game_state = game_state;
-  }
+    // Si no pudo recibir el game_state se queda con el ultimo game_state
+    // popeado, en caso contrario utiliza el nuevo.
+    if (!was_received) {
+      game_state = state.last_game_state;
+    } else {
+      state.last_game_state = game_state;
+    }
 
-  } catch(const std::exception &e){
+  } catch (const std::exception &e) {
     std::cerr << e.what();
   }
 
   // ---------------------------------------------------------------------------
 
-  // RENDER DE TEXTURAS
-  // ---------------------------------------------------------------------------
-
   // PRUEBA RENDERIZADO MULTIPLES WORMS
   // state.last_game_state.add_worm(1.3, 1.5, 1, 0);
   // state.last_game_state.add_worm(5.2, 5.8, 0, 0);
-  client_sdl.world_view.update(state.last_game_state);
 
-  std::list<Worm> worms = state.last_game_state.get_worms();
+  // UPDATE ESTADO DEL JUEGO
+  // ---------------------------------------------------------------------------
+  client_sdl.world_view.update(game_state);
+
+  std::list<Worm> worms = game_state.get_worms();
   int worm_n = 0;
   for (auto &worm : worms) {
     worm_n++;
@@ -112,14 +114,16 @@ bool Client::func_to_execute() {
     std::cout << "state: " << worm.get_state() << std::endl;
   }
 
+  // ---------------------------------------------------------------------------
+
+  // RENDER DE TEXTURAS
+  // ---------------------------------------------------------------------------
   client_sdl.renderer.Clear();
   client_sdl.world_view.render(frame_ticks, state);
-
   std::string text =
       "Position: " +
       std::to_string(game_state.get_worms().front().get_pos_x()) +
-      ", running: " + (state.is_running ? "true" : "false") +
-      ", jumping: " + (state.is_jumping ? "true" : "false") +
+      ", state: " + (print_state(game_state.get_worms().front().get_state())) +
       ", direction: " + std::to_string(int(state.direction));
 
   Font font(RESOURCES_PATH "/Vera.ttf", 12);
@@ -137,49 +141,7 @@ bool Client::func_to_execute() {
   // Show rendered frame
   client_sdl.renderer.Present();
 
-  // Frame limiter: sleep for a little bit to not eat 100% of CPU
-  SDL_Delay(1);
-
   return false;
-}
-
-void Client::handle_start_moving(int direction, bool &is_running) {
-  std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(direction);
-  sender_queue.try_push(cmd);
-  is_running = true;
-  state.direction = direction;
-}
-
-void Client::handle_stop_moving(bool &is_running) {
-  std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>();
-  sender_queue.try_push(cmd);
-  is_running = false;
-}
-
-void Client::handle_jump_forward(bool &is_jumping) {
-  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(state.direction);
-  sender_queue.try_push(cmd);
-  is_jumping = true;
-}
-
-void Client::handle_jump_backward(bool &is_jumping) {
-  int jump_direction = get_opposite_direction();
-  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(jump_direction);
-  sender_queue.try_push(cmd);
-  is_jumping = true;
-}
-
-int Client::get_opposite_direction() {
-  if (state.direction == LEFT)
-    return RIGHT;
-  else // if (state.direction == RIGHT)
-    return LEFT;
-}
-
-void Client::handle_finish_game() {
-  prot.close_socket();
-  sender_queue.close();
-  // receiver_queue.close();
 }
 
 bool Client::execute_event(SDL_Event &event) {
@@ -227,6 +189,60 @@ bool Client::execute_event(SDL_Event &event) {
     }
   }
   return false;
+}
+
+void Client::handle_start_moving(int direction, bool &is_running) {
+  std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(direction);
+  sender_queue.try_push(cmd);
+  is_running = true;
+  state.direction = direction;
+}
+
+void Client::handle_stop_moving(bool &is_running) {
+  std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>();
+  sender_queue.try_push(cmd);
+  is_running = false;
+}
+
+void Client::handle_jump_forward(bool &is_jumping) {
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(state.direction);
+  sender_queue.try_push(cmd);
+  is_jumping = true;
+}
+
+void Client::handle_jump_backward(bool &is_jumping) {
+  int jump_direction = get_opposite_direction();
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(jump_direction);
+  sender_queue.try_push(cmd);
+  is_jumping = true;
+}
+
+int Client::get_opposite_direction() {
+  if (state.direction == LEFT)
+    return RIGHT;
+  else // if (state.direction == RIGHT)
+    return LEFT;
+}
+
+void Client::handle_finish_game() {
+  prot.close_socket();
+  sender_queue.close();
+  // receiver_queue.close();
+}
+
+std::string Client::print_state(uint8_t state) {
+  switch (state) {
+  case 0:
+    return "idle";
+  case 1:
+    return "running";
+  case 2:
+    return "shooting";
+  case 3:
+    return "jumping";
+  default:
+    return " ";
+  }
 }
 
 // ------------------------------------------------------------------------

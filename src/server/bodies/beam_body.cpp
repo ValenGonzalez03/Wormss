@@ -2,7 +2,7 @@
 #include "beam_body.h"
 #include <stdio.h>
 
-BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y): world(world), pos_x(pos_x), pos_y(pos_y) {
+BeamBody::BeamBody(b2World* world, float pos_x, float pos_y) : Body(world, pos_x, pos_y, 0, 6, 0.8, 1, 0.5) {
 	b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
     bodyDef.position.Set(pos_x, pos_y);
@@ -20,8 +20,8 @@ BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y): world(
     body->CreateFixture(&fixtureDef);
 }
 
-BeamBody::BeamBody(b2World* world, const float pos_x, const float pos_y, int angle, float length) : 
-                world(world), pos_x(pos_x), pos_y(pos_y), angle(angle), width(length) {
+BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width) : 
+                Body(world, pos_x, pos_y, angle, width, 0.8, 1, 0.5) {
 	b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
     bodyDef.position.Set(pos_x, pos_y);

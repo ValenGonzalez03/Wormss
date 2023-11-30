@@ -5,7 +5,7 @@
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
 WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
-    : world(world), pos_x(pos_x), pos_y(pos_y), id(id) {
+    : Body(world, pos_x, pos_y, 0, 1, 1, 1, 0.1), id(id) {
   b2BodyDef bodyDef;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x, pos_y);
@@ -64,7 +64,9 @@ void WormBody::jump_left() {
 void WormBody::jump_right() { apply_vertical_impulse(jump_vel); }
 
 void WormBody::jump(const uint8_t &dir) {
-  // state = WORM_STATES::JUMPING;
+  if (state == WORM_STATES::JUMPING)
+    return;
+  state = WORM_STATES::JUMPING;
   direction = dir;
   if (dir == LEFT) {
     jump_left();

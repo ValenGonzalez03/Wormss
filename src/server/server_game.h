@@ -45,8 +45,12 @@ private:
   GameManager game_manager;
   std::chrono::duration<float> rate = std::chrono::duration<float>((float)RATE);
 
+  GameConfig &config;
+
 public:
-  explicit Game(uint8_t &game_id);
+  //explicit Game(uint8_t &game_id);
+
+  explicit Game(uint8_t &game_id, GameConfig &game_config);
 
   Queue<std::shared_ptr<RunnableCommandGame>> *
   add_player(std::shared_ptr<Queue<GameState>> sender_queue,

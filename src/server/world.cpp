@@ -18,8 +18,16 @@ BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) 
   return beam;
 }
 
+
 WormBody* World::create_worm(float pos_x, float pos_y, const uint8_t& player_id) {
   WormBody* worm = new WormBody(&world, pos_x, pos_y, player_id);
+  worms.push_back(worm);
+  return worm;
+}
+
+
+WormBody* World::create_worm(float pos_x, float pos_y, float vel, int health, const uint8_t& player_id) {
+  WormBody* worm = new WormBody(&world, pos_x, pos_y, vel, health, player_id);
   worms.push_back(worm);
   return worm;
 }

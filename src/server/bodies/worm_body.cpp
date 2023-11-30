@@ -29,6 +29,33 @@ WormBody::WormBody(b2World* world, float pos_x, float pos_y, uint8_t id)
   footSensorFixture->GetUserData().pointer = (uintptr_t)3;
 }
 
+WormBody::WormBody(b2World* world, float pos_x, float pos_y, float vel, int health, uint8_t id)
+	: world(world), pos_x(pos_x), pos_y(pos_y), vel(vel), id(id), health(health) {
+  b2BodyDef bodyDef;
+  bodyDef.type = b2_dynamicBody;
+  bodyDef.position.Set(pos_x, pos_y);
+  bodyDef.angle = angle;
+  body = world->CreateBody(&bodyDef);
+  
+  b2PolygonShape polygonShape;
+  polygonShape.SetAsBox(width , height);
+  
+  b2FixtureDef fixtureDef;
+  fixtureDef.shape = &polygonShape;
+  fixtureDef.density = density;
+  fixtureDef.friction = friction;
+  
+  body->CreateFixture(&fixtureDef);
+  body->SetFixedRotation(true);
+  body->GetUserData().pointer = (uintptr_t)this;
+  
+  //sensor
+  polygonShape.SetAsBox(0.3, 0.3, b2Vec2(pos_x, -0.5), 0);
+  fixtureDef.isSensor = true;
+  b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
+  footSensorFixture->GetUserData().pointer = (uintptr_t)3;
+}
+
 void WormBody::move_left() {
   apply_horizontal_impulse(-vel);
 }
@@ -134,6 +161,11 @@ void WormBody::hit_a_surface() {
 
 void WormBody::move_away_from_surface() { 
 	state = WORM_STATES::JUMPING;
+}
+
+void WormBody::show_vel_and_health() {
+  std::cout << "worm vel: " << vel << std::endl;
+  std::cout << "worm health: " << health << std::endl; 
 }
 
 // POR AHORA DE PRUEBA

@@ -2,7 +2,10 @@
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(uint8_t &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {}
+//Game::Game(uint8_t &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {}
+
+Game::Game(uint8_t &game_id, GameConfig &game_config) : 
+game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config) {}
 
 Queue<std::shared_ptr<RunnableCommandGame>> *
 Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
@@ -26,7 +29,7 @@ void Game::delete_player(const uint8_t &player_id) {
 
 void Game::run() {
   try {
-    game_manager.initialize_game();
+    game_manager.initialize_game(config);
 	  started = true;
     bool was_closed = false;
     int it = 0;

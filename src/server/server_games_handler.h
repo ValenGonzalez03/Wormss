@@ -15,6 +15,7 @@ private:
   std::mutex m;
   std::list<Game *> games;
   int games_counter = 0;
+  GameConfig games_config = GameConfig(std::string(RESOURCES_PATH) + "/game_config.yml");
 
   Game *get_game(const uint8_t &game_id);
 

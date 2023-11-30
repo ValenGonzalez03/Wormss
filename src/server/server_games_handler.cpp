@@ -24,7 +24,7 @@ GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue,
                           uint8_t& game_id, uint8_t &player_id) {
   std::lock_guard<std::mutex> lck(m);
   game_id = games_counter;
-  Game *game = new Game(game_id);
+  Game *game = new Game(game_id, games_config);
   games_counter++;
   add_game(game);
   std::cout << "id_game: " + std::to_string(game_id) << std::endl;

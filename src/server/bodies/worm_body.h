@@ -24,7 +24,7 @@ private:
   float pos_y;
   uint8_t direction = RIGHT;
   float angle = 0;
-  float vel = 0.5;
+  float vel;
   float jump_vel = 5;
   const float width = 1;
   const float height = 1;
@@ -36,8 +36,13 @@ private:
   
   bool m_contacting = false;
 
+  int health;
+
 public:
   explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
+
+  // Constructor con pos_x, pos_y, velocidad, vida, etc
+  explicit WormBody(b2World* world, float pos_x, float pos_y, float vel, int health, uint8_t id);
   
   void move_left();
   
@@ -90,6 +95,8 @@ public:
   void hit_a_surface();
 
   void move_away_from_surface();
+
+  void show_vel_and_health();
   
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;

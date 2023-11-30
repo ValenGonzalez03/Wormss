@@ -142,7 +142,6 @@ public:
 
   std::shared_ptr<SDL2pp::Texture> get_background() {
     try {
-      std::cout << "get_background" << std::endl;
       return background;
     } catch (const std::exception &e) {
       throw std::runtime_error("Background not found.");

@@ -16,8 +16,8 @@ private:
     std::string name = file["name"].as<std::string>();
     std::string background = file["background"].as<std::string>();
 
-    //world->add_name(name);
-    //world->add_background(background);
+    world->set_name(name);
+    world->set_background(background);
 
     // Leo las vigas
     if (file["beams"]) {

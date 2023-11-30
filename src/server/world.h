@@ -26,6 +26,8 @@ public:
 	BeamBody *create_beam(float pos_x, float pos_y, int angle, float length);
 
   WormBody *create_worm(float pos_x, float pos_y, const uint8_t& player_id);
+
+  WormBody* create_worm(float pos_x, float pos_y, float vel, int health, const uint8_t& player_id);
 	
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 	

@@ -6,6 +6,7 @@
 #include "world.h"
 #include <stdio.h>
 #include "worlds_reader.h"
+#include "game_config.h"
 
 class GameManager {
 private:
@@ -30,7 +31,7 @@ private:
 public:
   explicit GameManager();
 
-  void initialize_game();
+  void initialize_game(GameConfig &game_config);
 
   void add_player(const uint8_t &player_id);
 

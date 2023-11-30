@@ -8,7 +8,7 @@
 
 GameManager::GameManager() {}
 
-void GameManager::initialize_game() {
+void GameManager::initialize_game(GameConfig &game_config) {
   /*
   WorldsReader worlds_reader;
   std::vector<std::shared_ptr<World>> worlds =
@@ -20,8 +20,11 @@ void GameManager::initialize_game() {
   world.create_beam(0, 1, 0, 6);
   world.create_beam(6, 1, 30, 6);
 
+  std::cout << "worm_speed " << game_config.get_worm_speed() << std::endl;
+  std::cout << "worm_life " << game_config.get_worm_life() << std::endl;
+
   for (uint8_t player_id : players) {
-    WormBody *worm = world.create_worm(0, 7, player_id);
+    WormBody *worm = world.create_worm(0, 7,game_config.get_worm_speed(), game_config.get_worm_life(), player_id);
     worms_list.push_back(worm);
   }
 }

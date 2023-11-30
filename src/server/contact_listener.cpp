@@ -5,9 +5,11 @@
 
 
 void ContactListener::BeginContact(b2Contact* contact) {
-	
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
+	
+	b2Body* bodyA = fixtureA->GetBody();
+    b2Body* bodyB = fixtureB->GetBody();
 	
 	b2BodyUserData& dataA = fixtureA->GetBody()->GetUserData();
     b2BodyUserData& dataB = fixtureB->GetBody()->GetUserData();
@@ -25,9 +27,9 @@ void ContactListener::BeginContact(b2Contact* contact) {
 			wormB->hit_a_surface();
 		}
     }
-    
-	Body* body = reinterpret_cast<Body*>(dataA.pointer);
-	Body* another_body = reinterpret_cast<Body*>(dataB.pointer);
+	
+	WormBody* body = reinterpret_cast<WormBody*>(dataA.pointer);
+	WormBody* another_body = reinterpret_cast<WormBody*>(dataB.pointer);
 	
 	if(body && another_body) {
 		body->start_contact_with(another_body);

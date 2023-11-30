@@ -25,7 +25,7 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
   body->GetUserData().pointer = (uintptr_t)this;
 
   // sensor
-  polygonShape.SetAsBox(0.3, 0.3, b2Vec2(pos_x, -0.5), 0);
+  polygonShape.SetAsBox(0.3, 0.6, b2Vec2(pos_x, -0.5), 0);
   fixtureDef.isSensor = true;
   b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
   footSensorFixture->GetUserData().pointer = (uintptr_t)3;
@@ -50,28 +50,40 @@ void WormBody::apply_vertical_impulse(float jump_speed) {
 }
 
 void WormBody::start_moving(const uint8_t &dir) {
+  if (state == WORM_STATES::JUMPING) return;
   state = WORM_STATES::MOVING;
   direction = dir;
 }
 
 void WormBody::stop_moving() { state = WORM_STATES::STOPPED; }
 
-void WormBody::jump_left() {
-  apply_vertical_impulse(jump_vel); // CAMBIAR A QUE SALTE PARA ATRAS, PERO ASI
-                                    // FUNCIONA EL SALTO A LA IZQUIERDA
+void WormBody::jump_backward() {
+  apply_vertical_impulse(jump_vel_backward); 
+  if (direction == LEFT) {
+	  apply_horizontal_impulse(vel);
+  } else {
+	  apply_horizontal_impulse(-vel);
+  }
 }
 
-void WormBody::jump_right() { apply_vertical_impulse(jump_vel); }
+void WormBody::jump_forward() { 
+  apply_vertical_impulse(jump_vel_forward); 
+  if (direction == LEFT) {
+	  apply_horizontal_impulse(-(vel + 0.1));
+  } else {
+	  apply_horizontal_impulse(vel + 0.1);
+  }
+}
 
 void WormBody::jump(const uint8_t &dir) {
   if (state == WORM_STATES::JUMPING)
     return;
   state = WORM_STATES::JUMPING;
-  direction = dir;
+  //direction = dir;
   if (dir == LEFT) {
-    jump_left();
+    jump_backward();
   } else {
-    jump_right();
+    jump_forward();
   }
 }
 
@@ -97,6 +109,11 @@ void WormBody::aim_down() {
 }
 
 void WormBody::stop_aiming() { state = WORM_STATES::STOPPED; }
+
+void WormBody::teleport(float pos_x, float pos_y) {
+  body->SetTransform( b2Vec2(pos_x, pos_y), 0);
+  body->SetAwake(true);
+}
 
 uint8_t WormBody::get_id() { return id; }
 
@@ -138,6 +155,7 @@ void WormBody::start_contact_with(Body *another_body) {
 }
 
 void WormBody::start_contact_with(WormBody *another_worm) {
+  /*
   if (state == WORM_STATES::STOPPED) {
     if (another_worm->is_stopped())
       return;
@@ -149,6 +167,7 @@ void WormBody::start_contact_with(WormBody *another_worm) {
       apply_horizontal_impulse(-vel);
     }
   }
+  */
 }
 
 void WormBody::end_contact_with(Body *another_body) {}

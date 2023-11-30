@@ -21,7 +21,8 @@ private:
   uint8_t aim_direction;
   float aiming_angle = 0;
   float vel = 0.5;
-  float jump_vel = 5;
+  float jump_vel_backward = 5;
+  float jump_vel_forward = 3;
   uint8_t id;
 
   uint8_t state = WORM_STATES::STOPPED;
@@ -43,9 +44,9 @@ public:
 
   void stop_moving();
 
-  void jump_left();
+  void jump_backward();
 
-  void jump_right();
+  void jump_forward();
 
   void jump(const uint8_t &dir);
 
@@ -56,6 +57,8 @@ public:
   void aim_down();
 
   void stop_aiming();
+  
+  void teleport(float pos_x, float pos_y);
 
   uint8_t get_id();
 

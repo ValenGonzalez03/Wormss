@@ -44,6 +44,7 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/bodies/body.cpp
 					  ./src/server/bodies/worm_body.cpp
 					  ./src/server/bodies/beam_body.cpp
+					  ./src/server/bodies/water_body.cpp
 					  ./src/server/server_protocol.cpp
 					  ./src/server/contact_listener.cpp
 					  ./src/common/socket.cpp 

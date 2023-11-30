@@ -11,13 +11,13 @@ Dependencia (..>)
 @startuml
 class Beam {
   - position : Position
-  - texture : SDL2pp::Texture* 
-  - &renderer : SDL2pp::Renderer
+  - texture : Texture* 
+  - &renderer : Renderer
   - angle : int
   - pivot : SDL_Point
 
-  + Beam(Position &pos, std::vector<SDL2pp::Texture *> &beam_texture,
-       SDL2pp::Renderer &rend, int angle)
+  + Beam(Position &pos, std::vector<Texture *> &beam_texture,
+       Renderer &rend, int angle)
   + render(int frame): void
 }
 
@@ -46,12 +46,22 @@ class PositionConverter {
   + PositionConverter()
   + convert_from_m_to_px(float m) : int
   + convert_position_to_px(Position pos) : Position
-
 }
 
 class ClientProtocol {
   - skt : Socket
   + ClientProtocol::ClientProtocol(Socket &&socket)
+  + receive_id() : uint8_t
+  + send_command(Command &cmd) : void
+  + process_game_state() : GameState
+  + recv_string(bool* was_closed) : string
+  + send_string(string str, bool* was_closed) : void
+  + recv_float(bool* was_closed) : float
+  + recv_world_names(bool* was_closed) : vector<string>
+  + recv_world(WorldView &world, bool* was_closed)
+  + recv_and_add_beam(WorldView &world, bool* was_closed) : void
+  + send_world_name_selected(string world_name, bool* was_closed): void
+  + close_socket() : void
 }
 
 class ClientReceiverThread {
@@ -67,6 +77,19 @@ class ResourcePool {
   - sounds : map<string, Mix_Chunk*> 
   - background : shared_ptr<Texture> 
   - gMusic : Mix_Music*
+  - add_texture(string texture_name, string path, int width, int height, int amount_frames) : void
+  - get_texture(string name) : vector<Texture*>
+  - add_short_beam() : void
+  - add_long_beam() : void
+  - add_worm_walking() : void
+  - add_worm_jumping() : void
+  + ResourcePool(Renderer &rend)
+  + initialize() : void
+  + get_short_beam_texture() : vector<Texture*>
+  + get_long_beam_texture() : vector<Texture*>
+  + get_worm_walking() : vector<Texture*>
+  + add_background(string path) : void
+  + get_background() : shared_ptr<Texture*>
 }
 
 struct client_SDL {
@@ -116,7 +139,32 @@ class WormView {
   - choose_flip_direction(Worm &worm) : SDL_RendererFlip
 }
 
+class Socket {}
+
+class Queue {}
+
+class Worm {}
+
 ConstantRateLoop --|> Client
+
 Thread --|> ClientReceiverThread
+Thread --|> ClientSenderThread
+
+ClientProtocol --> Socket
+client_SDL --> WorldView
+client_SDL --> ResourcePool
+
+WorldView --> ResourcePool
+WorldView --> Beam
+WorldView --> WormView
+
+WormView --> Worm
+
+Client --> ClientReceiverThread
+Client --> ClientSenderThread
+Client --> Queue
+Client --> client_SDL
+Client --> ClientProtocol
+
 @enduml
 ```

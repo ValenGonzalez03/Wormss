@@ -28,6 +28,7 @@ private:
   std::map<std::string, Mix_Chunk*> sounds;
   std::shared_ptr<SDL2pp::Texture> background;
   Mix_Music* gMusic = NULL;
+  unsigned int music_volume = 20;
 
   void add_texture(const std::string &texture_name,
                    const std::string &image_path, int width, int height,
@@ -83,6 +84,7 @@ public:
     add_long_beam();
     add_worm_walking();
     add_worm_jumping();
+    add_music(std::string(RESOURCES_PATH) + "/Sounds/music.wav");
     //add_font("Vera20", "/Vera.ttf", 20);
     //add_font("Vera12", "/Vera.ttf", 12);
   }
@@ -144,6 +146,36 @@ public:
       return background;
     } catch (const std::exception &e) {
       throw std::runtime_error("Background not found.");
+    }
+  }
+
+  //Load music
+  void add_music(std::string absolute_path) {
+    gMusic = Mix_LoadMUS( (absolute_path).c_str() );
+    if( gMusic == NULL ) {
+      throw std::runtime_error( "Failed to load music!: Incorrect path");
+    }
+  }
+
+  void play_music() {
+    if( gMusic == NULL ) {
+      throw std::runtime_error( "Failed to play music!: No music loaded");
+    }
+    Mix_PlayMusic(gMusic, -1);
+    Mix_VolumeMusic(music_volume);
+  }
+
+  void turn_music_volume_down() {
+    if (music_volume >= 10) {
+      music_volume -= 10;
+      Mix_VolumeMusic(music_volume);
+    }
+  }
+
+  void turn_music_volume_up() {
+    if (music_volume <= 110) {
+      music_volume += 10;
+      Mix_VolumeMusic(music_volume);
     }
   }
 

@@ -37,7 +37,14 @@ int Client::run() {
   // Initialize SDL_ttf library
   SDLTTF ttf;
 
+  // Initialize SDLMIXER library
+  SDLMixer mixer;
+  if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
+      throw std::runtime_error("SDL_mixer could not initialize!");
+  }
+
   client_sdl.resource_pool.initialize();
+  client_sdl.resource_pool.play_music();
 
   client_sdl.world_view.add_long_beam(0, 1, 0);
   client_sdl.world_view.add_long_beam(6, 1, 30);
@@ -172,6 +179,11 @@ bool Client::execute_event(SDL_Event &event) {
         if (!state.is_jumping)
           handle_jump_backward(state.is_jumping);
         break;
+      case SDLK_i:
+          client_sdl.resource_pool.turn_music_volume_down();
+        break;
+      case SDLK_o:
+          client_sdl.resource_pool.turn_music_volume_up();
       }
 
     } else if (event.type == SDL_KEYUP) { // Suelta una tecla

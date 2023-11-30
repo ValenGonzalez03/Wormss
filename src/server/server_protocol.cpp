@@ -5,13 +5,16 @@
 #include "runnable_commands/create_game_runnable.h"
 #include "runnable_commands/join_game_runnable.h"
 #include "runnable_commands/jump_runnable.h"
+#include "runnable_commands/start_aiming_runnable.h"
 #include "runnable_commands/start_game_runnable.h"
 #include "runnable_commands/start_moving_runnable.h"
+#include "runnable_commands/stop_aiming_runnable.h"
 #include "runnable_commands/stop_moving_runnable.h"
 
 ServerProtocol::ServerProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
-std::shared_ptr<RunnableCommandGame> ServerProtocol::process_command(const uint8_t& client_id) {
+std::shared_ptr<RunnableCommandGame>
+ServerProtocol::process_command(const uint8_t &client_id) {
   bool was_closed = false;
   uint8_t code;
   skt.recvall(&code, sizeof(code), &was_closed);
@@ -26,6 +29,10 @@ std::shared_ptr<RunnableCommandGame> ServerProtocol::process_command(const uint8
     return std::make_shared<RunnableStopMoving>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::JUMP) {
     return std::make_shared<RunnableJump>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::START_AIMING) {
+    return std::make_shared<RunnableStartAiming>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::STOP_AIMING) {
+    return std::make_shared<RunnableStopAiming>(client_id, skt, &was_closed);
   } else {
     throw std::runtime_error("Error de comando de juego");
   }

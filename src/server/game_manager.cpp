@@ -88,10 +88,29 @@ void GameManager::jump(const uint8_t &player_id, const uint8_t &direction) {
   worm->jump(direction);
 }
 
+void GameManager::aim(const uint8_t &player_id, const uint8_t &direction) {
+  if (player_id != current_turn_id) {
+    return;
+  }
+
+  WormBody *worm = get_worm(player_id);
+  worm->start_aiming(direction);
+}
+
+void GameManager::stop_aiming(const uint8_t &player_id) {
+  if (player_id != current_turn_id) {
+    return;
+  }
+
+  WormBody *worm = get_worm(player_id);
+  worm->stop_aiming();
+}
+
 GameState GameManager::get_state() {
   GameState game_state;
   for (auto &current_worm : worms_list) {
-    game_state.add_worm(current_worm->get_pos_x(), current_worm->get_pos_y(),
+    game_state.add_worm(current_worm->get_id(), current_worm->get_pos_x(),
+                        current_worm->get_pos_y(),
                         current_worm->get_direction(),
                         current_worm->get_state()); // CAMBIAR LUEGO
   }

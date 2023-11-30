@@ -5,19 +5,22 @@
 #include "../common/commands/create_game.h"
 #include "../common/commands/join_game.h"
 #include "../common/commands/jump.h"
+#include "../common/commands/start_aiming.h"
 #include "../common/commands/start_game.h"
 #include "../common/commands/start_moving.h"
+#include "../common/commands/stop_aiming.h"
 #include "../common/commands/stop_moving.h"
+#include "../common/worm_states.h"
 
 using namespace SDL2pp;
 
 const float RATE = (float)(1.0 / 60.0);
 // const float RATIO_MTS_PX = 210.0 / 9.0; // 23,3 periodico
 
-Client::Client(ClientProtocol &&prot)
+Client::Client(ClientProtocol &&prot, uint8_t player_id)
     : prot(std::move(prot)), receiver_queue(), sender_queue(),
       receiver(this->prot, receiver_queue), sender(this->prot, sender_queue),
-      state(), client_sdl() {}
+      state(), client_sdl(), player_id(player_id) {}
 
 void Client::start_threads() {
   sender.start();
@@ -61,8 +64,8 @@ bool Client::func_to_execute() {
   // Timing: calculate difference between this and previous frame
   // in milliseconds
   unsigned int frame_ticks = SDL_GetTicks();
-  unsigned int frame_delta = frame_ticks - state.prev_ticks;
-  state.prev_ticks = frame_ticks;
+  // unsigned int frame_delta = frame_ticks - state.prev_ticks;
+  // state.prev_ticks = frame_ticks;
 
   // EVENT LOOP
   // ---------------------------------------------------------------------------
@@ -76,7 +79,7 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   GameState game_state = GameState();
 
-  //game_state.add_worm(2, 2, 1, 0);
+  // game_state.add_worm(2, 2, 1, 0);
 
   try {
     bool was_received = receiver_queue.pop_last_one(game_state);
@@ -103,15 +106,15 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   client_sdl.world_view.update(game_state);
 
-  std::list<Worm> worms = game_state.get_worms();
+  std::map<uint8_t, Worm> worms = game_state.get_worms();
   int worm_n = 0;
   for (auto &worm : worms) {
     worm_n++;
     std::cout << "worm_n: " << worm_n << std::endl;
-    std::cout << "posx: " << worm.get_pos_x() << std::endl;
-    std::cout << "posy: " << worm.get_pos_y() << std::endl;
-    std::cout << "dir: " << worm.get_direction() << std::endl;
-    std::cout << "state: " << worm.get_state() << std::endl;
+    std::cout << "posx: " << worm.second.get_pos_x() << std::endl;
+    std::cout << "posy: " << worm.second.get_pos_y() << std::endl;
+    std::cout << "dir: " << worm.second.get_direction() << std::endl;
+    std::cout << "state: " << worm.second.get_state() << std::endl;
   }
 
   // ---------------------------------------------------------------------------
@@ -122,9 +125,11 @@ bool Client::func_to_execute() {
   client_sdl.world_view.render(frame_ticks, state);
   std::string text =
       "Position: " +
-      std::to_string(game_state.get_worms().front().get_pos_x()) +
-      ", state: " + (print_state(game_state.get_worms().front().get_state())) +
-      ", direction: " + std::to_string(int(state.direction));
+      std::to_string(game_state.get_worms()[player_id].get_pos_x()) +
+      ", state: " +
+      (print_state(game_state.get_worms()[player_id].get_state())) +
+      ", direction: " +
+      std::to_string(game_state.get_worms()[player_id].get_direction());
 
   Font font(RESOURCES_PATH "/Vera.ttf", 12);
 
@@ -145,6 +150,7 @@ bool Client::func_to_execute() {
 }
 
 bool Client::execute_event(SDL_Event &event) {
+  auto worm_client = state.last_game_state.get_worms()[player_id];
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) { // Cierra el juego
       handle_finish_game();
@@ -157,20 +163,28 @@ bool Client::execute_event(SDL_Event &event) {
         handle_finish_game();
         return true;
       case SDLK_RIGHT:
-        if (!state.is_running)
-          handle_start_moving(RIGHT, state.is_running);
+        if (worm_client.get_state() != WORM_STATES::MOVING)
+          handle_start_moving(RIGHT);
         break;
       case SDLK_LEFT:
-        if (!state.is_running)
-          handle_start_moving(LEFT, state.is_running);
+        if (worm_client.get_state() != WORM_STATES::MOVING)
+          handle_start_moving(LEFT);
         break;
       case SDLK_RETURN:
-        if (!state.is_jumping)
-          handle_jump_forward(state.is_jumping);
+        if (worm_client.get_state() != WORM_STATES::JUMPING)
+          handle_jump_forward(worm_client.get_direction());
         break;
       case SDLK_BACKSPACE:
-        if (!state.is_jumping)
-          handle_jump_backward(state.is_jumping);
+        if (worm_client.get_state() != WORM_STATES::JUMPING)
+          handle_jump_backward(worm_client.get_direction());
+        break;
+      case SDLK_UP:
+        if (worm_client.get_state() != WORM_STATES::AIMING)
+          handle_start_aiming(UP);
+        break;
+      case SDLK_DOWN:
+        if (worm_client.get_state() != WORM_STATES::AIMING)
+          handle_start_aiming(DOWN);
         break;
       }
 
@@ -178,12 +192,17 @@ bool Client::execute_event(SDL_Event &event) {
       switch (event.key.keysym.sym) {
       case SDLK_RIGHT:
       case SDLK_LEFT:
-        if (state.is_running)
-          handle_stop_moving(state.is_running);
+        if (worm_client.get_state() == WORM_STATES::MOVING)
+          handle_stop_moving();
         break;
       case SDLK_RETURN:
       case SDLK_BACKSPACE:
         state.is_jumping = false;
+        break;
+      case SDLK_UP:
+      case SDLK_DOWN:
+        if (worm_client.get_state() == WORM_STATES::AIMING)
+          handle_stop_aiming();
         break;
       }
     }
@@ -191,39 +210,48 @@ bool Client::execute_event(SDL_Event &event) {
   return false;
 }
 
-void Client::handle_start_moving(int direction, bool &is_running) {
+void Client::handle_start_moving(int direction) {
   std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(direction);
   sender_queue.try_push(cmd);
-  is_running = true;
-  state.direction = direction;
+  // is_running = true;
+  // state.direction = direction;
 }
 
-void Client::handle_stop_moving(bool &is_running) {
+void Client::handle_stop_moving() {
   std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>();
   sender_queue.try_push(cmd);
-  is_running = false;
+  // is_running = false;
 }
 
-void Client::handle_jump_forward(bool &is_jumping) {
-  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(state.direction);
+void Client::handle_jump_forward(uint8_t worm_dir) {
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(worm_dir);
   sender_queue.try_push(cmd);
-  is_jumping = true;
-  //state.is_running = false;
+  // state.is_running = false;
 }
 
-void Client::handle_jump_backward(bool &is_jumping) {
-  int jump_direction = get_opposite_direction();
+void Client::handle_jump_backward(uint8_t worm_dir) {
+  int jump_direction = get_opposite_direction(worm_dir);
   std::shared_ptr<Jump> cmd = std::make_shared<Jump>(jump_direction);
   sender_queue.try_push(cmd);
-  is_jumping = true;
-  //state.is_running = false;
+  // state.is_running = false;
 }
 
-int Client::get_opposite_direction() {
-  if (state.direction == LEFT)
-    return RIGHT;
-  else // if (state.direction == RIGHT)
-    return LEFT;
+void Client::handle_start_aiming(int direction) {
+  std::shared_ptr<StartAiming> cmd = std::make_shared<StartAiming>(direction);
+  sender_queue.try_push(cmd);
+}
+
+void Client::handle_stop_aiming() {
+  std::shared_ptr<StopAiming> cmd = std::make_shared<StopAiming>();
+  sender_queue.try_push(cmd);
+}
+
+int Client::get_opposite_direction(uint8_t worm_dir) {
+  return (worm_dir == LEFT ? RIGHT : LEFT);
+  // if (worm_dir == LEFT)
+  //   return RIGHT;
+  // else // if (state.direction == RIGHT)
+  //   return LEFT;
 }
 
 void Client::handle_finish_game() {
@@ -239,9 +267,11 @@ std::string Client::print_state(uint8_t state) {
   case 1:
     return "running";
   case 2:
-    return "shooting";
-  case 3:
     return "jumping";
+  case 3:
+    return "aiming";
+  case 4:
+    return "shooting";
   default:
     return " ";
   }

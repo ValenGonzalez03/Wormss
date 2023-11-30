@@ -25,39 +25,47 @@ private:
   ClientReceiverThread receiver;
   ClientSenderThread sender;
 
-  std::map<int, std::function<void()>> controls;
-
   client_state state;
 
   client_SDL client_sdl;
 
-  // Maneja el evento de comenzar a moverse al apretar
-  // alguna tecla de movimiento
-  void handle_start_moving(int direction, bool &is_running);
-
-  // Maneja el evento de dejar de moverse al soltar la tecla
-  // de movimiento
-  void handle_stop_moving(bool &is_running);
-
-  // Maneja el cierre del juego cuando se aprieta la 'q' o
-  // la x para cerrar
-  void handle_finish_game();
+  uint8_t player_id;
 
   // Ejecuta un evento y devuelve true si se quiere cerrar el juego
   // o false en caso contrario
   bool execute_event(SDL_Event &event);
 
+  // Maneja el evento de comenzar a moverse al apretar
+  // alguna tecla de movimiento
+  void handle_start_moving(int direction);
+
+  // Maneja el evento de dejar de moverse al soltar la tecla
+  // de movimiento
+  void handle_stop_moving();
+
+  // Maneja el cierre del juego cuando se aprieta la 'q' o
+  // la x para cerrar
+  void handle_finish_game();
+
   // Maneja el evento de saltar
-  void handle_jump_forward(bool &is_jumping);
+  void handle_jump_forward(uint8_t worm_dir);
 
-  void handle_jump_backward(bool &is_jumping);
+  void handle_jump_backward(uint8_t worm_dir);
 
-  int get_opposite_direction();
+  void handle_start_aiming(int direction);
+
+  void handle_stop_aiming();
+
+  void handle_start_shooting();
+
+  void handle_stop_shooting();
+
+  int get_opposite_direction(uint8_t worm_dir);
 
   std::string print_state(uint8_t state);
 
 public:
-  explicit Client(ClientProtocol &&prot);
+  explicit Client(ClientProtocol &&prot, uint8_t player_id);
 
   void start_threads();
 

@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
     lobby.run_lobby();
 
     // Ejecucion de una partida desde el lado del cliente
-    Client client(std::move(protocol));
-    //client.start_threads();
+    Client client(std::move(protocol), lobby.get_player_id());
+    // client.start_threads();
     int result = client.run(); // Como manejo los errores? return result?
     client.join_threads();
 

@@ -1,14 +1,25 @@
 #ifndef BODY_H
 #define BODY_H
 
+#include "box2d/box2d.h"
+
 class WormBody;
 
 class Body {
-private:
+protected:
+  b2World* world;
+	b2Body* body;
+	const float pos_x; 
+	const float pos_y;
+	int angle;
+	const float width;
+	const float height;
+	float density;
+	float friction;
 
 public:
-  Body();
-  
+  Body(b2World* world, const float pos_x, const float pos_y, int angle, const float width, const float height, float density, float friction);
+
   virtual void start_contact_with(Body* another_body) = 0;
   virtual void start_contact_with(WormBody* worm) = 0;
   //virtual void start_contact_with(BeamBody* b) = 0;

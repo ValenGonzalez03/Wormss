@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 WormBody::WormBody(b2World* world, float pos_x, float pos_y, uint8_t id)
-	: world(world), pos_x(pos_x), pos_y(pos_y), id(id) {
+	: Body(world, pos_x, pos_y, 0, 1, 1, 1, 0.1), id(id) {
   b2BodyDef bodyDef;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x, pos_y);

@@ -10,18 +10,11 @@ class WormBody;
 
 class BeamBody : public Body {
 	private:
-	b2World* world;
-	b2Body* body;
-	const float pos_x; 
-	const float pos_y;
-	int angle = 0;
-	const float width = 6;
-	const float height = 0.8;
-	float density = 1;
-	float friction = 0.5;
 
 	public:
 	explicit BeamBody(b2World* world, float pos_x, float pos_y);
+
+	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width);
 	
 	void start_contact_with(Body* another_body) override;
 	
@@ -32,7 +25,7 @@ class BeamBody : public Body {
 	BeamBody(const BeamBody&) = delete;
 	BeamBody& operator=(const BeamBody&) = delete;
 
-	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
+	//explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
 
 	void print_beam() {
 		std::cout << "BEAM" << std::endl;

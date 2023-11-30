@@ -18,18 +18,9 @@
 
 class WormBody : public Body{
 private:
-  b2World* world;
-  b2Body* body;
-  float pos_x; 
-  float pos_y;
   uint8_t direction = RIGHT;
-  float angle = 0;
   float vel = 0.5;
   float jump_vel = 5;
-  const float width = 1;
-  const float height = 1;
-  const float density = 1;
-  const float friction = 0.1;
   uint8_t id;
   
   uint8_t state = WORM_STATES::STOPPED;

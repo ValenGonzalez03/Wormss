@@ -69,7 +69,8 @@ void WormBody::jump_right() {
 }
 
 void WormBody::jump(const uint8_t &dir) {
-  //state = WORM_STATES::JUMPING;
+  if (state == WORM_STATES::JUMPING) return;
+  state = WORM_STATES::JUMPING;
   direction = dir;
   if (dir == LEFT) {
     jump_left();

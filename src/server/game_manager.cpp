@@ -24,6 +24,7 @@ void GameManager::initialize_game() {
     WormBody *worm = world.create_worm(0, 7, player_id);
     worms_list.push_back(worm);
   }
+	//world.create_worm(4, 7, 5);
 }
 
 void GameManager::add_player(const uint8_t &player_id) {

@@ -8,13 +8,11 @@
 
 class WormBody;
 
-class BeamBody : public Body {
+class WaterBody : public Body {
 	private:
 
 	public:
-	explicit BeamBody(b2World* world, float pos_x, float pos_y);
-
-	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width);
+	explicit WaterBody(b2World* world, float pos_x, float pos_y, float width, float height);
 	
 	void start_contact_with(Body* another_body) override;
 	
@@ -22,13 +20,11 @@ class BeamBody : public Body {
 	
     void end_contact_with(Body* another_body) override;
 	
-	BeamBody(const BeamBody&) = delete;
-	BeamBody& operator=(const BeamBody&) = delete;
+	WaterBody(const WaterBody&) = delete;
+	WaterBody& operator=(const WaterBody&) = delete;
 
-	//explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
-
-	void print_beam() {
-		std::cout << "BEAM" << std::endl;
+	void print_water() {
+		std::cout << "WATER" << std::endl;
 		std::cout << "pos_x: " << pos_x << std::endl;
 		std::cout << "pos_y: " << pos_y << std::endl;
 		std::cout << "width: " << width << std::endl;
@@ -43,8 +39,8 @@ class BeamBody : public Body {
 		return this->pos_y;
 	}
 
-	int get_angle() {
-		return this->angle;
+	int get_height() {
+		return this->height;
 	}
 
 	float get_width() {

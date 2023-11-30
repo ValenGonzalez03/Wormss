@@ -10,6 +10,9 @@ public:
   void BeginContact(b2Contact* contact);
   
   void EndContact(b2Contact* contact);
+  
+  //ContactListener(const ContactListener&) = delete;
+  //ContactListener& operator=(const ContactListener&) = delete;
 };
 
 #endif

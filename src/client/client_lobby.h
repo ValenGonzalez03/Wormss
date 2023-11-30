@@ -10,9 +10,10 @@
 class Lobby {
 private:
   ClientProtocol &prot;
+  uint8_t player_id;
 
 public:
-  Lobby(ClientProtocol &prot) : prot(prot) {}
+  explicit Lobby(ClientProtocol &prot) : prot(prot), player_id(-1) {}
 
   void run_lobby() {
     char option_selected = '\0';
@@ -35,17 +36,17 @@ public:
       prot.send_command(create_comm);
     } else if (option_selected == 'j') {
       std::cout << "Ingrese el codigo de la partida para unirse:" << std::endl;
-      int game_id;
+      int game_id = 0;
       std::cin >> game_id;
       JoinGame join_comm(game_id);
       prot.send_command(join_comm);
     }
 
     // Recibe el player_id
-    int player_id = prot.receive_id();
+    player_id = prot.receive_id();
     std::cout << "Tu player_id es: " << player_id << std::endl;
     // Si se crea una partida tambien se recibe el game_id
-    int game_id;
+    int game_id = 0;
     if (option_selected == 'c') {
       game_id = prot.receive_id();
       std::cout << "El game id es: " << game_id << std::endl;
@@ -63,6 +64,8 @@ public:
     StartGame start = StartGame(game_id);
     prot.send_command(start);
   }
+
+  uint8_t get_player_id() { return player_id; }
 };
 
 #endif

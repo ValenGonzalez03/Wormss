@@ -10,12 +10,8 @@ game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config) {}
 Queue<std::shared_ptr<RunnableCommandGame>> *
 Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
                 uint8_t &player_id) {
-  if (last_player_id == 0) {
-    player_id = last_player_id;
-  } else {
-    last_player_id++;
-    player_id = last_player_id;
-  }
+  player_id = players_counter;
+  players_counter++;
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
   //push_game_state();
@@ -29,6 +25,7 @@ void Game::delete_player(const uint8_t &player_id) {
 
 void Game::run() {
   try {
+    std::cout << "GAME STARTED" << std::endl;
     game_manager.initialize_game(config);
 	  started = true;
     bool was_closed = false;
@@ -42,7 +39,7 @@ void Game::run() {
                                    current_time - start_turn_time)
                                    .count();
       if (elapsed_turn_time >= 60) {
-        if (current_turn_id == last_player_id) {
+        if (current_turn_id == players_counter - 1) {
           current_turn_id = 0;
         } else {
           current_turn_id++;
@@ -53,7 +50,10 @@ void Game::run() {
 
       update(it);
       game_manager.update();
+      std::cout << "FINISH WORM UPDATE" << std::endl;
       game_manager.step();
+
+      std::cout << "FINISH UPDATE" << std::endl;
 
       push_game_state();
 

@@ -48,11 +48,18 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
     throw LibError(errno, "Socket is closed.");
   }
 
+  //WorldsReader worlds_reader;
+  //std::vector<std::shared_ptr<World>> worlds = worlds_reader.read_yaml_files(std::string(RESOURCES_PATH) + "/Worlds");
+  
   if (code == CODE_PLAYER_COMM::CREATE_GAME) {
+    //send_worlds_names(worlds, &was_closed);
+    //std::string world_selected = recv_string(&was_closed);
+    //std::cout << "world_selected: " << world_selected << std::endl;
     return std::make_shared<RunnableCreateGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
     return std::make_shared<RunnableJoinGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::START_GAME) {
+    //send_world(*(worlds.at(0)));
     return std::make_shared<RunnableStartGame>(client_id, skt, &was_closed);
   } else {
     throw std::runtime_error("Error de comando de lobby");
@@ -81,11 +88,23 @@ void ServerProtocol::send_string(std::string str, bool *was_closed) {
   skt.sendall(str.c_str(), str.size(), was_closed);
 }
 
+std::string ServerProtocol::recv_string(bool* was_closed) {
+  uint16_t string_length;
+  skt.recvall(&string_length, sizeof(string_length), was_closed);
+  uint16_t string_length_be = ntohs(string_length);
+  std::cout << "str_length: " << string_length_be << std::endl;
+  char buffer[string_length_be + 1];
+  skt.recvall(buffer, string_length_be, was_closed);
+  buffer[string_length] = '\0';
+  return std::string(buffer);
+}
+
 void ServerProtocol::send_float(float n, bool *was_closed) {
   uint16_t number = uint(n * 100);
   uint16_t number_be = htons(number);
   skt.sendall(&number_be, sizeof(number_be), was_closed);
 }
+
 
 //////////////////////////////////////////////////////////////////////
 ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////

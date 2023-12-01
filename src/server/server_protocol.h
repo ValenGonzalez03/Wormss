@@ -38,6 +38,8 @@ public:
 
   void send_id(const uint8_t id);
 
+  std::string recv_string(bool* was_closed);
+
   // Envía el tamaño de una cadena y luego la cadena
   void send_string(std::string str, bool *was_closed);
 

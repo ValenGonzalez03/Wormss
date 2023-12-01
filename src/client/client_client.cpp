@@ -46,11 +46,16 @@ int Client::run() {
       throw std::runtime_error("SDL_mixer could not initialize!");
   }
 
+  // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS)
   client_sdl.resource_pool.initialize();
   client_sdl.resource_pool.play_music();
 
   client_sdl.world_view.add_long_beam(0, 1, 0);
   client_sdl.world_view.add_long_beam(6, 1, 30);
+
+  // RECIBO EL MUNDO DEL SERVER
+  //bool was_closed = false;
+  //prot.recv_world(client_sdl.world_view, &was_closed);
 
   std::string background_path = "/Images/Backgrounds/background2.jpg";
   client_sdl.world_view.set_background(background_path);

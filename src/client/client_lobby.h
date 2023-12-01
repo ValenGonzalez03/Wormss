@@ -25,21 +25,28 @@ public:
     } while (option_selected != 'c' && option_selected != 'j');
 
     if (option_selected == 'c') {
-      // Elegir escenario
-      //  bool was_closed = false;
-      //  std::vector<std::string> world_names =
-      //  prot.recv_worlds_names(&was_closed); std::cout << "Juego creado,
-      //  esperando jugadores..." << std::endl;
-      // Elijo un world
-      //  prot.send_world_name_selected(world_name);
       CreateGame create_comm = CreateGame();
       prot.send_command(create_comm);
+/*
+      // Elegir escenario
+      bool was_closed = false;
+      std::vector<std::string> world_names = prot.recv_worlds_names(&was_closed);
+      for (auto &name : world_names) {
+        std::cout << name << std::endl;
+      }
+      std::cout << "Juego creado, esperando jugadores..." << std::endl;
+      // Elijo un world
+      //std::string world_selected = "Nivel 1";
+      //prot.send_world_name_selected(world_selected, &was_closed);
+      // Recibo el world en el cliente
+*/
     } else if (option_selected == 'j') {
       std::cout << "Ingrese el codigo de la partida para unirse:" << std::endl;
       int game_id = 0;
       std::cin >> game_id;
       JoinGame join_comm(game_id);
       prot.send_command(join_comm);
+      // Recibo el world en el cliente
     }
 
     // Recibe el player_id
@@ -66,6 +73,7 @@ public:
   }
 
   uint8_t get_player_id() { return player_id; }
+
 };
 
 #endif

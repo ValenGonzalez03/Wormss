@@ -1,5 +1,5 @@
 name: "Nivel 1"
-background: "fondo1.jpg"
+background: "Background1.jpg"
 beams:
   - position_x: 10.0
     position_y: 20.0

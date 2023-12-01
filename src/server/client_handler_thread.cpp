@@ -22,6 +22,8 @@ void ClientHandler::run() {
         std::shared_ptr<RunnableCommandLobby> runnable_command =
             protocol.process_command_lobby();
 
+        std::cout << "client handler" << std::endl;
+
         lobby_result =
             runnable_command->run(games_handler, sender_queue, player_id);
         if (lobby_result == nullptr) {
@@ -37,7 +39,12 @@ void ClientHandler::run() {
         game_commands = lobby_result->get_commands();
         sender.send_id(player_id);
         if (lobby_result->get_game_created()) {
-          sender.send_id(lobby_result->get_game_id());
+          uint8_t game_id = lobby_result->get_game_id();
+          sender.send_id(game_id);
+          sender.send_worlds_names(lobby_result->get_worlds_names());
+          int world_id = protocol.recv_world_id(&was_closed);
+          World selected_world = games_handler.select_world(world_id, game_id);
+          sender.send_world(selected_world);
         } else if (lobby_result->get_player_joined()) {
           in_game = true;
           sender.start();

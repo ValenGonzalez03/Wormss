@@ -24,6 +24,8 @@ public:
       std::cin >> option_selected;
     } while (option_selected != 'c' && option_selected != 'j');
 
+    bool was_closed = false;
+
     if (option_selected == 'c') {
       CreateGame create_comm = CreateGame();
       prot.send_command(create_comm);
@@ -57,6 +59,18 @@ public:
     if (option_selected == 'c') {
       game_id = prot.receive_id();
       std::cout << "El game id es: " << game_id << std::endl;
+      std::vector<std::string> world_names = prot.recv_worlds_names(&was_closed);
+      std::cout << "Elige un numero de escenario: " << game_id << std::endl;
+      int i = 0;
+      for (auto &world_name : world_names) {
+        std::cout << i << ": " << world_name << std::endl;
+        i++;
+      }
+
+      int world_id;
+      std::cin >> world_id;
+
+      prot.send_world_id(world_id, &was_closed);
     } else if (option_selected == 'j') {
       return;
     }

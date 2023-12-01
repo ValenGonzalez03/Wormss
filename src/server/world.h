@@ -6,6 +6,7 @@
 #include "bodies/worm_body.h"
 #include "contact_listener.h"
 #include <list>
+#include <vector>
 #include <stdio.h>
 #include <iostream>
 
@@ -16,6 +17,7 @@ private:
   std::list<BeamBody*> beams;
   std::string name = "";
   std::string background = "";
+  std::vector<std::vector<float>> spawn_points;
   ContactListener contact_listener;
 
 public:
@@ -76,9 +78,39 @@ public:
   void set_background(std::string new_background) {
     this->background = new_background;
   }
+
+  void add_spawn_point(float pos_x, float pos_y) {
+    std::vector<float> spawn_point;
+    spawn_point.push_back(pos_x);
+    spawn_point.push_back(pos_y);
+    spawn_points.push_back(spawn_point);
+  }
 	
-  World(const World &) = delete;
-  World &operator=(const World &) = delete;
+  World(const World& other)
+        : world(b2World(b2Vec2(0.0f, -10.0f))),
+          worms(other.worms),
+          //beams(other.beams),
+          name(other.name),
+          background(other.background),
+          spawn_points(other.spawn_points),
+          contact_listener(other.contact_listener) {
+        world.SetContactListener(&contact_listener);
+        for (const auto& beam : other.beams) {
+          create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
+        }
+  }
+
+  World &operator=(const World& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    beams = other.beams;
+    name = other.name;
+    background = other.background;
+
+    return *this;
+  }
 };
 
 #endif

@@ -44,6 +44,11 @@ void GameManager::set_current_turn_id(const uint8_t &id) {
   current_turn_id = id;
 }
 
+void GameManager::set_world(World& selected_world) {
+  world = selected_world;
+  std::cout << "finish world set" << std::endl;
+}
+
 void GameManager::step() {
   world.step(timeStep, velocityIterations, positionIterations);
 }

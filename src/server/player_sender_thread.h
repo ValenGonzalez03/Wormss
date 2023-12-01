@@ -23,6 +23,10 @@ public:
 
   void send_id(const uint8_t id);
 
+  void send_worlds_names(const std::vector<std::string>& world_names);
+
+  void send_world(World& world);
+
   /*
    * Ejecuta el loop del hilo Sender.
    * */

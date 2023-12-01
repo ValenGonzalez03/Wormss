@@ -99,6 +99,10 @@ bool Game::compare_id(const uint8_t &another_game_id) {
   return (game_id == another_game_id);
 }
 
+void Game::set_world(World world) {
+  game_manager.set_world(world);
+}
+
 void Game::push_game_state() {
   GameState game_state = game_manager.get_state();
   broadcaster.broadcast(game_state);

@@ -38,6 +38,8 @@ public:
 
   void send_id(const uint8_t id);
 
+  int recv_world_id(bool* was_closed);
+
   std::string recv_string(bool* was_closed);
 
   // Envía el tamaño de una cadena y luego la cadena
@@ -65,7 +67,7 @@ public:
 
   // Recibe una lista de punteros a mundos y envía la cantidad de
   // mundos y sus nombres por socket
-  void send_worlds_names(std::vector<std::shared_ptr<World>> &worlds,
+  void send_worlds_names(const std::vector<std::string>& world_names,
                          bool *was_closed);
 
   //////////////////////////////////////////////////////////////////////

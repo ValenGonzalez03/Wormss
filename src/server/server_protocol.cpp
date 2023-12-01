@@ -43,8 +43,9 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
   uint8_t code;
   uint8_t client_id = 0;
   skt.recvall(&code, sizeof(code), &was_closed);
-
+  std::cout << (int)code << std::endl;
   if (was_closed) {
+    std::cout << "socket closed" << std::endl;
     throw LibError(errno, "Socket is closed.");
   }
 
@@ -55,6 +56,7 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
     //send_worlds_names(worlds, &was_closed);
     //std::string world_selected = recv_string(&was_closed);
     //std::cout << "world_selected: " << world_selected << std::endl;
+    std::cout << "protocol" << std::endl;
     return std::make_shared<RunnableCreateGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
     return std::make_shared<RunnableJoinGame>(client_id, skt, &was_closed);
@@ -79,6 +81,12 @@ void ServerProtocol::send_id(const uint8_t id) {
 void ServerProtocol::close_socket() {
   skt.shutdown(2);
   skt.close();
+}
+
+int ServerProtocol::recv_world_id(bool* was_closed) {
+  int id = 0;
+  skt.recvall(&id, sizeof(id), was_closed);
+  return id;
 }
 
 void ServerProtocol::send_string(std::string str, bool *was_closed) {
@@ -151,12 +159,12 @@ void ServerProtocol::send_spawn_point(WormBody &worm, bool *was_closed) {
 }
 
 void ServerProtocol::send_worlds_names(
-    std::vector<std::shared_ptr<World>> &worlds, bool *was_closed) {
-  uint16_t worlds_number = worlds.size();
+    const std::vector<std::string>& world_names, bool *was_closed) {
+  uint16_t worlds_number = world_names.size();
   uint16_t worlds_number_be = htons(worlds_number);
   skt.sendall(&worlds_number_be, sizeof(worlds_number_be), was_closed);
-  for (auto &world : worlds) {
-    send_string(world->get_name(), was_closed);
+  for (auto &world_name : world_names) {
+    send_string(world_name, was_closed);
   }
 }
 

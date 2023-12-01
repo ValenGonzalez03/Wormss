@@ -132,7 +132,7 @@ public:
 
   void add_background(const std::string &image_path) {
     std::cout << "add_background" << std::endl;
-    SDL2pp::Surface surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
+    SDL2pp::Surface surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + "/Images/Backgrounds/" + image_path);
     Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
 
     background = std::make_shared<SDL2pp::Texture>(

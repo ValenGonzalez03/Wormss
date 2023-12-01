@@ -68,6 +68,8 @@ public:
 
   bool compare_id(const uint8_t &another_game_id);
 
+  void set_world(World world);
+
   void push_game_state();
 
   bool is_started();

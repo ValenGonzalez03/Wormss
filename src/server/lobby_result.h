@@ -7,16 +7,17 @@
 class LobbyResult {
 private:
   const uint8_t player_id;
-  const int game_id;
+  const uint8_t game_id;
   Queue<std::shared_ptr<RunnableCommandGame>> *commands;
+  std::vector<std::string> world_names;
   bool was_game_created = false;
   bool was_player_joined = false;
   bool was_game_started = false;
 
 public:
   explicit LobbyResult(const uint8_t &player_id, const uint8_t &game_id,
-                       Queue<std::shared_ptr<RunnableCommandGame>> *commands)
-      : player_id(player_id), game_id(game_id), commands(commands) {}
+                       Queue<std::shared_ptr<RunnableCommandGame>> *commands, std::vector<std::string> world_names)
+      : player_id(player_id), game_id(game_id), commands(commands), world_names(world_names) {}
 
   Queue<std::shared_ptr<RunnableCommandGame>> *get_commands() {
     return commands;
@@ -34,7 +35,9 @@ public:
 
   bool get_game_started() { return was_game_started; }
 
-  int get_game_id() { return game_id; }
+  uint8_t get_game_id() { return game_id; }
+
+  std::vector<std::string>& get_worlds_names() { return world_names; }
 
   LobbyResult(const LobbyResult &) = delete;
   LobbyResult &operator=(const LobbyResult &) = delete;

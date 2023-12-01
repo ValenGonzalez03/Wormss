@@ -43,9 +43,7 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
   uint8_t code;
   uint8_t client_id = 0;
   skt.recvall(&code, sizeof(code), &was_closed);
-  std::cout << (int)code << std::endl;
   if (was_closed) {
-    std::cout << "socket closed" << std::endl;
     throw LibError(errno, "Socket is closed.");
   }
 
@@ -56,7 +54,6 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
     //send_worlds_names(worlds, &was_closed);
     //std::string world_selected = recv_string(&was_closed);
     //std::cout << "world_selected: " << world_selected << std::endl;
-    std::cout << "protocol" << std::endl;
     return std::make_shared<RunnableCreateGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
     return std::make_shared<RunnableJoinGame>(client_id, skt, &was_closed);

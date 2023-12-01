@@ -22,8 +22,6 @@ void ClientHandler::run() {
         std::shared_ptr<RunnableCommandLobby> runnable_command =
             protocol.process_command_lobby();
 
-        std::cout << "client handler" << std::endl;
-
         lobby_result =
             runnable_command->run(games_handler, sender_queue, player_id);
         if (lobby_result == nullptr) {

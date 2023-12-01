@@ -50,10 +50,7 @@ void Game::run() {
 
       update(it);
       game_manager.update();
-      std::cout << "FINISH WORM UPDATE" << std::endl;
       game_manager.step();
-
-      std::cout << "FINISH UPDATE" << std::endl;
 
       push_game_state();
 

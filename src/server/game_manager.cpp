@@ -17,16 +17,24 @@ void GameManager::initialize_game(GameConfig &game_config) {
     world->print_worms();
   }
   */
-  world.create_beam(0, 1, 0, 6);
+  /* world.create_beam(0, 1, 0, 6);
   world.create_beam(6, 1, 30, 6);
 
   std::cout << "worm_speed " << game_config.get_worm_speed() << std::endl;
-  std::cout << "worm_life " << game_config.get_worm_life() << std::endl;
+  std::cout << "worm_life " << game_config.get_worm_life() << std::endl; */
 
+  std::cout << "init game" << std::endl;
+  int i = 0;
+  std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
   for (uint8_t player_id : players) {
-    WormBody *worm = world.create_worm(0, 7,game_config.get_worm_speed(), game_config.get_worm_life(), player_id);
+    std::cout << (int)player_id << std::endl;
+    std::cout << spawn_points[i][0] << std::endl;
+    std::cout << spawn_points[i][1] << std::endl;
+    WormBody *worm = world.create_worm(spawn_points[i][0], spawn_points[i][1],game_config.get_worm_speed(), game_config.get_worm_life(), player_id);
     worms_list.push_back(worm);
+    i++;
   }
+  std::cout << "finish init game" << std::endl;
   // world.create_worm(4, 7, 5);
 }
 
@@ -44,17 +52,19 @@ void GameManager::set_current_turn_id(const uint8_t &id) {
   current_turn_id = id;
 }
 
-void GameManager::set_world(World& selected_world) {
+void GameManager::set_world(World selected_world) {
   world = selected_world;
-  std::cout << "finish world set" << std::endl;
 }
 
 void GameManager::step() {
+  std::cout << "gm step" << std::endl;
   world.step(timeStep, velocityIterations, positionIterations);
+  std::cout << "finish gm step" << std::endl;
 }
 
 void GameManager::update() {
   for (WormBody *worm : worms_list) {
+    std::cout << "gm update" << std::endl;
     worm->update();
   }
   // WormBody* worm = get_worm(current_turn_id); // verificar si no le tiene que

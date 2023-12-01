@@ -65,8 +65,8 @@ World GamesHandler::select_world(int world_id, const uint8_t& game_id) {
     std::string world_name= world->get_name();
     if (world_name == selected_world_name) {
       get_game(game_id)->set_world(*world);
-      std::cout << "world_name" << std::endl;
       selected_world = *world;
+      std::cout << "world selected" << std::endl;
       return selected_world;
     }
   }

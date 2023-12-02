@@ -111,11 +111,12 @@ public:
         return *this;
     }
 
-    world = b2World(b2Vec2(0.0f, -10.0f));
-    
+    this->world = b2World(b2Vec2(0.0f, -10.0f));
+
     for (const auto& beam : other.beams) {
       this->create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
     }
+
     for (const auto& spawn_point : other.spawn_points) {
       this->add_spawn_point(spawn_point[0], spawn_point[1]);
     }

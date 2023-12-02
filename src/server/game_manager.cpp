@@ -52,6 +52,11 @@ void GameManager::set_current_turn_id(const uint8_t &id) {
 void GameManager::set_world(World& selected_world) {
   world = selected_world;
 }
+
+World& GameManager::get_world() {
+  return this->world;
+}
+
 /*
 void GameManager::set_world(World selected_world) {
   for (const auto& beam : selected_world.get_beams()) {

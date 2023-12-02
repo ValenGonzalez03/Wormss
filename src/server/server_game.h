@@ -70,6 +70,8 @@ public:
 
   void set_world(World& world);
 
+  World& get_world();
+
   void push_game_state();
 
   bool is_started();

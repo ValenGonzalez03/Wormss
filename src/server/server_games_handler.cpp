@@ -71,6 +71,15 @@ World GamesHandler::select_world(int world_id, const uint8_t& game_id) {
   return selected_world;
 }
 
+World& GamesHandler::select_world(const uint8_t& game_id) {
+  for (const auto& game : games) {
+    if (game_id == game->get_game_id()){
+      return game->get_world();
+    }
+  }
+  throw std::runtime_error("World not found");
+}
+
 void GamesHandler::start_game(const uint8_t &game_id,
                               const uint8_t &player_id) {
   if (player_id != 0)

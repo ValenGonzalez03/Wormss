@@ -17,10 +17,20 @@ WaterBody::WaterBody(b2World* world, float pos_x, float pos_y, float width, floa
     fixtureDef.friction = friction;
     
     body->CreateFixture(&fixtureDef);
+    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 }
 
-void WaterBody::start_contact_with(Body* another_body) { }
+void WaterBody::start_contact_with(Body* another_body) { 
+	if (another_body->get_type() == WORM) {
+	}
+}
 
-void WaterBody::start_contact_with(WormBody* worm) { }
+void WaterBody::start_contact_with(WormBody* worm) { 
+	//worm->start_contact_with(this);
+}
+
+void WaterBody::start_contact_with(WaterBody* water) {}
 	
 void WaterBody::end_contact_with(Body* another_body) { }
+
+int WaterBody::get_type() {return WATER;}

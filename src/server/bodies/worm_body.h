@@ -28,6 +28,7 @@ private:
   uint8_t state = WORM_STATES::STOPPED;
 
   bool m_contacting = false;
+  int num_foot_contacts = 0;
 
   int health;
 
@@ -91,7 +92,9 @@ public:
 
   void start_contact_with(Body *another_body) override;
 
-  void start_contact_with(WormBody *another_worm) override;
+  void start_contact_with(WormBody *another_worm);
+  
+  void start_contact_with(WaterBody *water);
 
   void end_contact_with(Body *another_body) override;
 
@@ -100,6 +103,14 @@ public:
   void move_away_from_surface();
 
   void show_vel_and_health();
+  
+  void take_damage(int damage);
+  
+  void die();
+  
+  void shoot_bazooka();
+  
+  int get_type() override;
   
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;

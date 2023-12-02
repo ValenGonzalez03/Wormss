@@ -13,7 +13,7 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
   body = world->CreateBody(&bodyDef);
 
   b2PolygonShape polygonShape;
-  polygonShape.SetAsBox(width, height);
+  polygonShape.SetAsBox(width/2, height/2);
 
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &polygonShape;
@@ -25,7 +25,7 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
   body->GetUserData().pointer = (uintptr_t)this;
 
   // sensor
-  polygonShape.SetAsBox(0.3, 0.6, b2Vec2(pos_x, -0.5), 0);
+  polygonShape.SetAsBox(width/2, 0.6, b2Vec2(pos_x, -0.2), 0);
   fixtureDef.isSensor = true;
   b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
   footSensorFixture->GetUserData().pointer = (uintptr_t)3;
@@ -178,7 +178,20 @@ bool WormBody::is_facing_right() { return (direction == RIGHT); }
 bool WormBody::is_stopped() { return (WORM_STATES::STOPPED); }
 
 void WormBody::start_contact_with(Body *another_body) {
-  another_body->start_contact_with(this);
+  if (another_body->get_type() == WORM) {
+		std::cout << "GUSANO CHOCO CON UN GUSANO\n";
+  }
+  
+  if (another_body->get_type() == WATER) {
+		std::cout << "GUSANO CHOCO CON AGUA\n";
+		die();
+  }
+  
+  if (another_body->get_type() == BAZOOKA) {
+		std::cout << "GUSANO CHOCO CON MUNICION DE BAZOOKA\n";
+		//take_damage(another_body->get_damage());
+  }
+  
 }
 
 void WormBody::start_contact_with(WormBody *another_worm) {
@@ -197,17 +210,39 @@ void WormBody::start_contact_with(WormBody *another_worm) {
   */
 }
 
+void WormBody::start_contact_with(WaterBody *water) {
+	//die();
+}
+
 void WormBody::end_contact_with(Body *another_body) {}
 
-void WormBody::hit_a_surface() { state = WORM_STATES::STOPPED; }
+void WormBody::hit_a_surface() { 
+  num_foot_contacts++;
+  state = WORM_STATES::STOPPED; }
 
-void WormBody::move_away_from_surface() { state = WORM_STATES::JUMPING; }
+void WormBody::move_away_from_surface() {
+  num_foot_contacts--;
+  if (num_foot_contacts == 0) {
+	  state = WORM_STATES::JUMPING;
+  }
+}
 
 void WormBody::show_vel_and_health() {
   std::cout << "worm vel: " << vel << std::endl;
   std::cout << "worm health: " << health << std::endl; 
 }
 
+void WormBody::take_damage(int damage) {
+  health -= damage;
+}
+
+void WormBody::die() {
+  //state = WORM_STATES::DEATH;
+}
+
 // POR AHORA DE PRUEBA
 void WormBody::start_contact() { m_contacting = true; }
 void WormBody::end_contact() { m_contacting = false; }
+
+int WormBody::get_type() {
+	return WORM;}

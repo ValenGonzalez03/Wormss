@@ -4,6 +4,10 @@
 #include "bodies/beam_body.h"
 #include "box2d/box2d.h"
 #include "bodies/worm_body.h"
+#include "bodies/water_body.h"
+#include "bodies/weapons/bazooka.h"
+#include "bodies/weapons/banana.h"
+#include "bodies/weapons/dynamite.h"
 #include "contact_listener.h"
 #include <list>
 #include <vector>
@@ -15,6 +19,7 @@ private:
   b2World world;
   std::list<WormBody*> worms;
   std::list<BeamBody*> beams;
+  std::list<Body*> bodies;
   std::string name = "";
   std::string background = "";
   std::vector<std::vector<float>> spawn_points;
@@ -25,11 +30,19 @@ public:
 	
   BeamBody *create_beam(float pos_x, float pos_y);
 
-	BeamBody *create_beam(float pos_x, float pos_y, int angle, float length);
+  BeamBody *create_beam(float pos_x, float pos_y, int angle, float length);
 
   WormBody *create_worm(float pos_x, float pos_y, const uint8_t& player_id);
 
   WormBody* create_worm(float pos_x, float pos_y, float vel, int health, const uint8_t& player_id);
+  
+  void create_water(float pos_x, float pos_y, float width, int height);
+  
+  void create_bazooka_missile(float pos_x, float pos_y);
+  
+  void create_banana(float pos_x, float pos_y);
+  
+  void create_dynamite(float pos_x, float pos_y);
 	
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 	

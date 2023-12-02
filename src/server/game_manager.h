@@ -41,6 +41,8 @@ public:
 
   void set_world(World& selected_world);
 
+  World& get_world();
+
   void step();
 
   void update();

@@ -17,15 +17,19 @@ void GameManager::initialize_game(GameConfig &game_config) {
     world->print_worms();
   }
   */
-  world.create_beam(0, 1, 0, 6);
+  /* world.create_beam(0, 1, 0, 6);
   world.create_beam(6, 1, 30, 6);
 
   std::cout << "worm_speed " << game_config.get_worm_speed() << std::endl;
-  std::cout << "worm_life " << game_config.get_worm_life() << std::endl;
+  std::cout << "worm_life " << game_config.get_worm_life() << std::endl; */
 
+  int i = 0;
+  std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
   for (uint8_t player_id : players) {
-    WormBody *worm = world.create_worm(0, 7,game_config.get_worm_speed(), game_config.get_worm_life(), player_id);
+    std::cout << "worm created" << std::endl;
+    WormBody *worm = world.create_worm(spawn_points[i][0], spawn_points[i][1],game_config.get_worm_speed(), game_config.get_worm_life(), player_id);
     worms_list.push_back(worm);
+    i++;
   }
   // world.create_worm(4, 7, 5);
 }
@@ -44,17 +48,39 @@ void GameManager::set_current_turn_id(const uint8_t &id) {
   current_turn_id = id;
 }
 
+
 void GameManager::set_world(World& selected_world) {
   world = selected_world;
-  std::cout << "finish world set" << std::endl;
 }
 
+World& GameManager::get_world() {
+  return this->world;
+}
+
+/*
+void GameManager::set_world(World selected_world) {
+  for (const auto& beam : selected_world.get_beams()) {
+      world.create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
+    }
+
+    for (const auto& spawn_point : selected_world.get_spawn_points()) {
+      world.add_spawn_point(spawn_point[0], spawn_point[1]);
+    }
+
+    world.set_name(selected_world.get_name());
+    world.set_background(selected_world.get_background());
+}
+*/
+
 void GameManager::step() {
+  //std::cout << "gm step" << std::endl;
   world.step(timeStep, velocityIterations, positionIterations);
+  //std::cout << "finish gm step" << std::endl;
 }
 
 void GameManager::update() {
   for (WormBody *worm : worms_list) {
+    //std::cout << "gm update" << std::endl;
     worm->update();
   }
   // WormBody* worm = get_worm(current_turn_id); // verificar si no le tiene que

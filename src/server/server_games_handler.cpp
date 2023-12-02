@@ -62,15 +62,22 @@ World GamesHandler::select_world(int world_id, const uint8_t& game_id) {
   std::string selected_world_name = world_names[world_id];
   World selected_world;
   for (const auto& world : worlds) {
-    std::string world_name= world->get_name();
+    std::string world_name = world->get_name();
     if (world_name == selected_world_name) {
       get_game(game_id)->set_world(*world);
-      std::cout << "world_name" << std::endl;
-      selected_world = *world;
-      return selected_world;
+      return *world;
     }
   }
   return selected_world;
+}
+
+World& GamesHandler::select_world(const uint8_t& game_id) {
+  for (const auto& game : games) {
+    if (game_id == game->get_game_id()){
+      return game->get_world();
+    }
+  }
+  throw std::runtime_error("World not found");
 }
 
 void GamesHandler::start_game(const uint8_t &game_id,

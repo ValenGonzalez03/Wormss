@@ -22,31 +22,32 @@ class Beam {
 }
 
 class Client {
-  - prot : ClientProtocol
   - receiver_queue : Queue<GameState>
   - sender_queue : Queue<std::shared_ptr<Command>>
-  - receiver : ClientReceiverThread
-  - sender : ClientSenderThread
-  - state : client_state
-  - client_sdl : client_SDL
   - handle_jump_forward(bool &is_jumping) : void
   - handle_jump_backward(bool &is_jumping) : void
   - get_opposite_direction() : int
   - print_state(uint8_t state) : string 
+  - func_to_execute() : bool
+}
+
+class ConstantRateLoop {
+  + loop(dur_f rate) : void
+  + drop_and_rest(float rest, float rate, time_p_ms* t1, int* it) : void
+  {abstract} + func_to_execute() : bool
 }
 
 class Lobby {
   - &prot : ClientProtocol
   + Lobby(ClientProtocol &prot)
   + run_lobby() : void
-
 }
 
-class PositionConverter {
-  + PositionConverter()
-  + convert_from_m_to_px(float m) : int
-  + convert_position_to_px(Position pos) : Position
-}
+'class PositionConverter {
+'  + PositionConverter()
+'  + convert_from_m_to_px(float m) : int
+'  + convert_position_to_px(Position pos) : 'Position
+'}
 
 class ClientProtocol {
   - skt : Socket
@@ -145,10 +146,10 @@ class Queue {}
 
 class Worm {}
 
-ConstantRateLoop --|> Client
+ConstantRateLoop <|-- Client
 
-Thread --|> ClientReceiverThread
-Thread --|> ClientSenderThread
+ClientReceiverThread --|> Thread
+ClientSenderThread --|> Thread
 
 ClientProtocol --> Socket
 client_SDL --> WorldView
@@ -160,11 +161,14 @@ WorldView --> WormView
 
 WormView --> Worm
 
+Lobby --> ClientProtocol
+
 Client --> ClientReceiverThread
 Client --> ClientSenderThread
 Client --> Queue
 Client --> client_SDL
 Client --> ClientProtocol
+Client --> client_state
 
 @enduml
 ```

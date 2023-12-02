@@ -47,21 +47,28 @@ private:
   // la x para cerrar
   void handle_finish_game();
 
-  // Maneja el evento de saltar
+  // Maneja el evento de saltar hacia adelante
   void handle_jump_forward(uint8_t worm_dir);
 
+  // Maneja el evento de saltar hacia atrás
   void handle_jump_backward(uint8_t worm_dir);
 
+  // Maneja el evento de comienzo de apuntado
   void handle_start_aiming(int direction);
 
+  // Maneja el evento de finalización de apuntado
   void handle_stop_aiming();
 
+  // Maneja el evento de comienzo de disparo
   void handle_start_shooting();
 
+  // Maneja el evento de finalización de disparo
   void handle_stop_shooting();
 
+  // Obtiene la posición opuesta del gusano
   int get_opposite_direction(uint8_t worm_dir);
 
+  // Muestra el estado del gusano
   std::string print_state(uint8_t state);
 
 public:

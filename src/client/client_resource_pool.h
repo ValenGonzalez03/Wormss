@@ -104,6 +104,7 @@ public:
     return get_texture(WORM_WALKING);
   }
 
+  
   /*
     void add_sound(const std::string sound_name, const std::string &sound_path)
     { Mix_Chunk *
@@ -179,7 +180,17 @@ public:
   }
 
 
-  ~ResourcePool() {}
+  ~ResourcePool() {
+    // Elimino las texturas
+    for (auto& pair : texture_arrays) {
+      std::vector<SDL2pp::Texture*>& textures = pair.second;
+      for (SDL2pp::Texture* texture : textures) {
+        delete texture;
+      }
+      textures.clear();
+    }
+    texture_arrays.clear();
+  }
 
 
 };

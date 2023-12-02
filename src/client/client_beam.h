@@ -32,16 +32,7 @@ public:
         pivot, // rotation center - not needed
         SDL_FLIP_NONE);
   }
-  /*
-    renderer.Copy(
-    walking_texture,
-    SDL2pp::Rect(10, 10, 40, 40),          // Size
-    SDL2pp::Rect(pos_x, pos_y, 40, 40),    // Destination
-    0.0,                                   // don't rotate
-    SDL2pp::NullOpt,                       // rotation center - not needed
-    SDL_FLIP_HORIZONTAL                    // horizontal flip
-);
-  */
+  
 };
 
 #endif

@@ -11,6 +11,6 @@ beams:
     length: 3.0
 spawn_points:
   - position_x: 3.0
-    position_y: 3.0
+    position_y: 7.0
   - position_x: 2.0
     position_y: 2.0

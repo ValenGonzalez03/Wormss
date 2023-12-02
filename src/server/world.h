@@ -9,10 +9,11 @@
 #include <vector>
 #include <stdio.h>
 #include <iostream>
+#include <memory>
 
 class World {
 private:
-  b2World world;
+  std::shared_ptr<b2World> world;
   std::list<WormBody*> worms;
   std::list<BeamBody*> beams;
   std::string name = "";
@@ -91,12 +92,12 @@ public:
   }
 	
   World(const World& other)
-        : world(b2World(b2Vec2(0.0f, -10.0f))),
+        : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f))),
           worms(other.worms),
           name(other.name),
           background(other.background),
           contact_listener(other.contact_listener) {
-        world.SetContactListener(&contact_listener);
+        world->SetContactListener(&contact_listener);
         for (const auto& beam : other.beams) {
           create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
         }
@@ -111,7 +112,7 @@ public:
         return *this;
     }
 
-    world = b2World(b2Vec2(0.0f, -10.0f));
+    this->world = std::make_shared<b2World>(b2Vec2(0.0f, -10.0f));
     
     for (const auto& beam : other.beams) {
       this->create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
@@ -123,7 +124,7 @@ public:
     this->name = other.name;
     this->background = other.background;
     this->contact_listener = other.contact_listener;
-    world.SetContactListener(&contact_listener);
+    world->SetContactListener(&contact_listener);
 
     return *this;
   }

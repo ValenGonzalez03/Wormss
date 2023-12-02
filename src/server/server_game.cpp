@@ -50,10 +50,7 @@ void Game::run() {
 
       update(it);
       game_manager.update();
-      std::cout << "FINISH WORM UPDATE" << std::endl;
       game_manager.step();
-
-      std::cout << "FINISH UPDATE" << std::endl;
 
       push_game_state();
 
@@ -97,6 +94,14 @@ void Game::stop() { keep_playing = false; }
 
 bool Game::compare_id(const uint8_t &another_game_id) {
   return (game_id == another_game_id);
+}
+
+void Game::set_world(World& world) {
+  game_manager.set_world(world);
+}
+
+World& Game::get_world(){
+  return game_manager.get_world();
 }
 
 void Game::push_game_state() {

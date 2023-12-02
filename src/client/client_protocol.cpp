@@ -71,11 +71,15 @@ void ClientProtocol::send_world_name_selected(std::string& world_name, bool* was
   send_string(world_name, was_closed);
 }
 
+void ClientProtocol::send_world_id(int world_id, bool *was_closed) {
+  skt.sendall(&world_id, sizeof(world_id), was_closed);
+}
 
 void ClientProtocol::recv_world(WorldView& world, bool* was_closed) {
   std::string world_name = recv_string(was_closed);
   std::string background_name = recv_string(was_closed);
-  //world.set_background(std::string(RESOURCES_PATH) + "/Images/Backgrounds" + background_name);
+  std::cout << background_name << std::endl;
+  world.set_background(background_name);
   
   // Recibo cant de vigas y caracteristicas vigas
   uint16_t beams_number;

@@ -2,9 +2,17 @@
 #define BASEBALL_BAT_H
 
 #include "weapon.h"
+#include "../../bodies/body.h"
 
 class BaseballBat : public Weapon {
-    explicit BaseballBat(b2World* world, float pos_x, float pos_y) : Weapon(world, pos_x, pos_y, true, true, false, false, false, false, 10000, 10, 0, 0, 0) {}
+	public:
+    explicit BaseballBat(b2World* world, float pos_x, float pos_y);
+
+	void start_contact_with(Body* another_body) override;
+	
+	void end_contact_with(Body* another_body) override;
+	
+	int get_type() override;
 };
 
 #endif

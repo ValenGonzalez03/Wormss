@@ -57,6 +57,8 @@ public:
   // Envía el nombre del mundo elegido
   void send_world_name_selected(std::string &world_name, bool *was_closed);
 
+  void send_world_id(int world_id, bool *was_closed);
+
   void close_socket();
 };
 

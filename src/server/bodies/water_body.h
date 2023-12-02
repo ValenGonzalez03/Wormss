@@ -1,12 +1,12 @@
-#ifndef BEAM_BODY_H
-#define BEAM_BODY_H
+#ifndef WATER_BODY_H
+#define WATER_BODY_H
 
 #include "box2d/box2d.h"
 #include "body.h"
 #include <stdio.h>
 #include <iostream>
 
-class WormBody;
+//class WormBody;
 
 class WaterBody : public Body {
 	private:
@@ -16,7 +16,9 @@ class WaterBody : public Body {
 	
 	void start_contact_with(Body* another_body) override;
 	
-	void start_contact_with(WormBody* worm) override;
+	void start_contact_with(WormBody* worm) ;
+	
+	void start_contact_with(WaterBody* water) ;
 	
     void end_contact_with(Body* another_body) override;
 	
@@ -46,6 +48,8 @@ class WaterBody : public Body {
 	float get_width() {
 		return this->width;
 	}
+	
+	int get_type() override;
 };
 
 #endif

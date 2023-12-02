@@ -50,15 +50,15 @@ int Client::run() {
   client_sdl.resource_pool.initialize();
   client_sdl.resource_pool.play_music();
 
-  client_sdl.world_view.add_long_beam(0, 1, 0);
-  client_sdl.world_view.add_long_beam(6, 1, 30);
+  //client_sdl.world_view.add_long_beam(0, 1, 0);
+  //client_sdl.world_view.add_long_beam(6, 1, 30);
 
   // RECIBO EL MUNDO DEL SERVER
-  //bool was_closed = false;
-  //prot.recv_world(client_sdl.world_view, &was_closed);
+  bool was_closed = false;
+  prot.recv_world(client_sdl.world_view, &was_closed);
 
-  std::string background_path = "/Images/Backgrounds/background2.jpg";
-  client_sdl.world_view.set_background(background_path);
+  //std::string background_path = "/Images/Backgrounds/background2.jpg";
+  //client_sdl.world_view.set_background(background_path);
 
   state.prev_ticks = SDL_GetTicks();
 

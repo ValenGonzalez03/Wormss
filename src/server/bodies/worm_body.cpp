@@ -155,7 +155,7 @@ uint8_t WormBody::get_direction() { return direction; }
 uint8_t WormBody::get_state() { return state; }
 
 void WormBody::update() {
-  std::cout << "worm update" << std::endl;
+  //std::cout << "worm update" << std::endl;
   if (state == WORM_STATES::MOVING) {
     if (direction == LEFT) {
       move_left();

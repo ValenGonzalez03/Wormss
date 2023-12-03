@@ -26,6 +26,14 @@ Bazooka::Bazooka(b2World *world, float pos_x, float pos_y)
   std::cout << "VAZOOKA FUE CREADA\n";
 }
 
+void Bazooka::shoot() {
+	
+}
+    
+void Bazooka::explode() {
+	
+}
+
 void Bazooka::start_contact_with(Body* another_body) {
 	if (another_body->get_type() == WORM) {
 		std::cout << "BAZOOKA CHOCO CON UN GUSANO\n";

@@ -9,6 +9,10 @@ class Bazooka : public Weapon {
 	public:
     explicit Bazooka(b2World* world, float pos_x, float pos_y);
     
+    void shoot();
+    
+    void explode();
+    
     void start_contact_with(Body* another_body) override;
 	
 	void end_contact_with(Body* another_body) override;

@@ -25,7 +25,7 @@ private:
   float jump_vel_forward = 3;
   uint8_t id;
 
-  uint8_t state = WORM_STATES::STOPPED;
+  uint8_t state = WORM_STATES::INACTIVE;
 
   bool m_contacting = false;
   int num_foot_contacts = 0;
@@ -85,6 +85,8 @@ public:
   bool is_facing_right();
 
   bool is_stopped();
+  
+  bool is_inactive();
 
   // POR AHORA DE PRUEBA
   void start_contact();

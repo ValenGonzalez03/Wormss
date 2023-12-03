@@ -178,9 +178,12 @@ bool WormBody::is_facing_right() { return (direction == RIGHT); }
 
 bool WormBody::is_stopped() { return (WORM_STATES::STOPPED); }
 
+bool WormBody::is_inactive() { return (state == WORM_STATES::INACTIVE); }
+
 void WormBody::start_contact_with(Body *another_body) {
   if (another_body->get_type() == WORM) {
-		std::cout << "GUSANO CHOCO CON UN GUSANO\n";
+		//std::cout << "GUSANO CHOCO CON UN GUSANO\n";
+		reinterpret_cast<WormBody*>(another_body)->start_contact_with(this);
   }
   
   if (another_body->get_type() == WATER) {
@@ -196,9 +199,8 @@ void WormBody::start_contact_with(Body *another_body) {
 }
 
 void WormBody::start_contact_with(WormBody *another_worm) {
-  /*
-  if (state == WORM_STATES::STOPPED) {
-    if (another_worm->is_stopped())
+  if (is_inactive()) {
+    if (another_worm->is_inactive())
       return;
     another_worm->start_contact_with(this);
   } else {
@@ -208,7 +210,6 @@ void WormBody::start_contact_with(WormBody *another_worm) {
       apply_horizontal_impulse(-vel);
     }
   }
-  */
 }
 
 void WormBody::start_contact_with(WaterBody *water) {
@@ -219,7 +220,10 @@ void WormBody::end_contact_with(Body *another_body) {}
 
 void WormBody::hit_a_surface() { 
   num_foot_contacts++;
-  state = WORM_STATES::STOPPED; }
+  if (not is_inactive()) {
+	  state = WORM_STATES::STOPPED;
+  } 
+}
 
 void WormBody::move_away_from_surface() {
   num_foot_contacts--;

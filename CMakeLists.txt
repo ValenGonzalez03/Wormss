@@ -19,6 +19,10 @@ add_executable(client ./src/client/client_main.cpp
 ./src/client/client_worldview.cpp
 ./src/client/client_worm_view.cpp
 ./src/client/client_protocol.cpp
+./src/client/client_beam.cpp
+./src/client/client_lobby.cpp
+./src/client/client_position_converter.cpp
+./src/client/client_resource_pool.cpp
 ./src/common/socket.cpp 
 ./src/common/liberror.cpp 
 ./src/common/resolver.cpp 

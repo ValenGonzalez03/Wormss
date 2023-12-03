@@ -1,5 +1,9 @@
 #include "client_worm_view.h"
 
+WormView::WormView(SDL2pp::Renderer &rend,
+                    std::vector<SDL2pp::Texture *> &walking)
+      : renderer(rend), walking_texture(walking) {}
+
 void WormView::render(int frame, Worm &worm, client_state &worm_state) {
   PositionConverter converter;
   Position pos_in_px = converter.convert_position_to_px(worm.get_position());

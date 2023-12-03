@@ -18,8 +18,7 @@ private:
 public:
   // Crea un WormView con un renderer y las texturas correspondientes
   explicit WormView(SDL2pp::Renderer &rend,
-                    std::vector<SDL2pp::Texture *> &walking)
-      : renderer(rend), walking_texture(walking) {}
+                    std::vector<SDL2pp::Texture *> &walking);
 
   // Renderiza el worm pasado por parámetro según el estado del
   // mismo

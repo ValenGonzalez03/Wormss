@@ -21,8 +21,7 @@ private:
 public:
   // Crea una WorldView con una referencia a una resource pool
   // y a un renderer
-  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
-      : resource_pool(res_pool), renderer(rend) {}
+  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend);
 
   // Convierte la posicion pasada por parámetro de m a px,
   // crea la short_beam y la agrega al WorldView

@@ -1,5 +1,8 @@
 #include "client_worldview.h"
 
+WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
+    : resource_pool(res_pool), renderer(rend) {}
+
 void WorldView::add_short_beam(int pos_x, int pos_y, int angle) {
   PositionConverter converter;
   Position pos_in_m(pos_x, pos_y);

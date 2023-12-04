@@ -4,7 +4,7 @@
 #include "../body.h"
 
 class Weapon : public Body {
-private:
+protected:
     bool gunsight;
     bool melee;
     bool variable_power;

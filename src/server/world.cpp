@@ -6,24 +6,25 @@ World::World() : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f)))  {
   world->SetContactListener(&contact_listener);
 }
 
-BeamBody* World::create_beam(float pos_x, float pos_y) {
-  BeamBody* beam = new BeamBody(world.get(), pos_x, pos_y);
-  beams.push_back(beam);
-  return beam;
-}
+//BeamBody* World::create_beam(float pos_x, float pos_y) {
+//  BeamBody* beam = new BeamBody(world.get(), pos_x, pos_y);
+//  beams.push_back(beam);
+//  return beam;
+//}
 
 BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) {
   BeamBody* beam = new BeamBody(world.get(), pos_x, pos_y, angle, length);
   beams.push_back(beam);
+  beam->print_beam();
   return beam;
 }
 
 
-WormBody* World::create_worm(float pos_x, float pos_y, const uint8_t& player_id) {
-  WormBody* worm = new WormBody(world.get(), pos_x, pos_y, player_id);
-  worms.push_back(worm);
-  return worm;
-}
+//WormBody* World::create_worm(float pos_x, float pos_y, const uint8_t& player_id) {
+//  WormBody* worm = new WormBody(world.get(), pos_x, pos_y, player_id);
+//  worms.push_back(worm);
+//  return worm;
+//}
 
 
 WormBody* World::create_worm(float pos_x, float pos_y, float vel, int health, const uint8_t& player_id) {

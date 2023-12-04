@@ -2,6 +2,7 @@
 #include "beam_body.h"
 #include <stdio.h>
 
+/*
 BeamBody::BeamBody(b2World* world, float pos_x, float pos_y) : Body(world, pos_x, pos_y, 0, 6, 0.8, 1, 0.5) {
 	b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
@@ -20,6 +21,7 @@ BeamBody::BeamBody(b2World* world, float pos_x, float pos_y) : Body(world, pos_x
     body->CreateFixture(&fixtureDef);
     body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 }
+*/
 
 BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width) : 
                 Body(world, pos_x, pos_y, angle, width, 0.8, 1, 0.5) {

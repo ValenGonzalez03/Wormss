@@ -4,6 +4,7 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
+/*
 WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
     : Body(world, pos_x, pos_y, 0, 1, 1, 1, 0.1), id(id) {
   b2BodyDef bodyDef;
@@ -30,9 +31,10 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
   b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
   footSensorFixture->GetUserData().pointer = (uintptr_t)3;
 }
+*/
 
 WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int health, uint8_t id)
-    : Body(world, pos_x, pos_y, 0, 1, 1, 1, 0.1), vel(vel), id(id), health(health) {
+    : Body(world, pos_x, pos_y, 0, 1.5, 1.5, 1, 0.1), vel(vel), id(id), health(health) {
   b2BodyDef bodyDef;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x, pos_y);
@@ -40,7 +42,7 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int heal
   body = world->CreateBody(&bodyDef);
 
   b2PolygonShape polygonShape;
-  polygonShape.SetAsBox(width, height);
+  polygonShape.SetAsBox(width/2, height/2);
 
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &polygonShape;

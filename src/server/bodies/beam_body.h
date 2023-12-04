@@ -12,7 +12,7 @@ class BeamBody : public Body {
 	private:
 
 	public:
-	explicit BeamBody(b2World* world, float pos_x, float pos_y);
+	//explicit BeamBody(b2World* world, float pos_x, float pos_y);
 
 	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width);
 	

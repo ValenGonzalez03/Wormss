@@ -64,6 +64,12 @@ target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)
 target_link_libraries(server PUBLIC yaml-cpp)
 
+
+add_executable(editor ./level_editor/main.cpp
+./level_editor/lobby.cpp
+./level_editor/file_editor.cpp)
+
+target_link_libraries(editor PUBLIC yaml-cpp)
 # Agregar el ejecutable de pruebas y especificar los archivos fuente
 #add_executable(tests ./tests/protocol_tests.cpp
 #					./src/common/socket.cpp 

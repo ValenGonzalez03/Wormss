@@ -33,7 +33,7 @@ private:
   int health;
 
 public:
-  explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
+  //explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
 
   // Constructor con pos_x, pos_y, velocidad, vida, etc
   explicit WormBody(b2World* world, float pos_x, float pos_y, float vel, int health, uint8_t id);

@@ -11,20 +11,17 @@ void World::initialize(client_SDL& client_sdl){
 void World::add_short_beam_texture(client_SDL& client_sdl){
   std::cout << "Agrego textura viga corta" << std::endl;
   SDL2pp::Surface src_surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + SHORT_BEAM_PATH);
-  SDL2pp::Texture* new_texture = new SDL2pp::Texture(client_sdl.renderer, src_surface);
-  this->short_beam_texture = new_texture;
+  this->short_beam_texture = new SDL2pp::Texture(client_sdl.renderer, src_surface);
 }
 
 void World::add_long_beam_texture(client_SDL& client_sdl) {
   SDL2pp::Surface src_surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + LONG_BEAM_PATH);
-  SDL2pp::Texture* new_texture = new SDL2pp::Texture(client_sdl.renderer, src_surface);
-  this->short_beam_texture = new_texture;
+  this->long_beam_texture = new SDL2pp::Texture(client_sdl.renderer, src_surface);
 }
 
 void World::add_worm_texture(client_SDL& client_sdl) {
   SDL2pp::Surface src_surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + WORM_WALKING_PATH);
-  SDL2pp::Texture* new_texture = new SDL2pp::Texture(client_sdl.renderer, src_surface);
-  this->short_beam_texture = new_texture;
+  this->worm_texture = new SDL2pp::Texture(client_sdl.renderer, src_surface);
 }
 
 void World::set_name(std::string new_name) {
@@ -59,13 +56,13 @@ void World::add_spawn_point(SpawnPoint spawn) {
   this->spawn_points.push_back(spawn);
 }
 
-void World::render() {
+void World::render(client_SDL& client_sdl) {
   for (auto &beam : beams) {
-    //beam.render(renderer);
+    beam.render(client_sdl, short_beam_texture, long_beam_texture);
     std::cout << "beam" << std::endl;
   }
   for (auto &spawn_point : spawn_points) {
-    //spawn_point.render(renderer);
+    //spawn_point.render(client_sdl, worm_texture);
     std::cout << "spawn_point" << std::endl;
   }
 }
@@ -83,18 +80,7 @@ SDL2pp::Texture* World::get_worm_walking() {
 }
 
 World::~World() {
-      if (short_beam_texture != nullptr) {
-        delete short_beam_texture;
-        short_beam_texture = nullptr;
-    }
-
-    if (long_beam_texture != nullptr) {
-        delete long_beam_texture;
-        long_beam_texture = nullptr;
-    }
-
-    if (worm_texture != nullptr) {
-        delete worm_texture;
-        worm_texture = nullptr;
-    }
+    delete short_beam_texture;
+    delete long_beam_texture;
+    delete worm_texture;
 }

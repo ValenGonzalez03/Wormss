@@ -59,7 +59,7 @@ public:
 
   void add_spawn_point(SpawnPoint spawn);
 
-  void render();
+  void render(client_SDL& client_sdl);
 
   // Devuelve un ptr a la textura del short_beam
   SDL2pp::Texture* get_short_beam_texture();

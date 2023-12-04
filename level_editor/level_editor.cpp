@@ -24,7 +24,7 @@ void LevelEditor::run() {
       return;                 // cierra el editor
       
     client_sdl.renderer.Clear();
-    world.render();
+    world.render(client_sdl);
 
     // Show rendered frame
     client_sdl.renderer.Present();

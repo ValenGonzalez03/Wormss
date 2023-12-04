@@ -35,6 +35,7 @@ void Lobby::show_menu() const {
 void Lobby::create_new_level() {
   FileEditor file_editor;
   World new_world;
+
   std::string file_path = std::string(RESOURCES_PATH) + "/Worlds/";
   std::string level_name = get_lvl_name_from_usr();
   std::cout << "level_name: " << level_name << std::endl;
@@ -42,12 +43,14 @@ void Lobby::create_new_level() {
 
   new_world.set_name(level_name);
   new_world.set_background_name("background1.jpg");
-  new_world.add_beam(Beam(3,3,0,6));
-  new_world.add_spawn_point(SpawnPoint(4,5));
 
-  //LevelEditor level_editor;
-  //levelEditor.create_new_level();
+  LevelEditor level_editor(new_world);
+  level_editor.run();
+  
+
+  std::cout << "b1" << std::endl;
   file_editor.create_yaml_file(file_name, new_world);
+  std::cout << "b2" << std::endl;
 }
 
 
@@ -81,7 +84,7 @@ void Lobby::edit_existing_level() {
   int count = 1;
   std::vector<std::string> levelFiles;
 
-  // Recorro la carpeta y muestra los archivos de niveles disponibles
+  // Recorro la carpeta y muestro los archivos de niveles disponibles
   for (const auto& entry : fs::directory_iterator(folderPath)) {
     std::cout << count << " - " << entry.path().filename() << '\n';
     levelFiles.push_back(entry.path().string());
@@ -95,13 +98,15 @@ void Lobby::edit_existing_level() {
   if (selectedLevel > 0 && selectedLevel <= static_cast<int>(levelFiles.size())) {
     std::cout << "Abriendo y editando el nivel: " << levelFiles[selectedLevel - 1] << '\n';
     // Leo el archivo y lo cargo en un World
-    World world = file_editor.read_existing_level(levelFiles[selectedLevel -1]);
-    // Acá edito el World
-    Beam beam(2,2,0,3);
-    world.add_beam(beam);
+    World existing_world = file_editor.read_existing_level(levelFiles[selectedLevel -1]);
+    // Edito el World
+    LevelEditor level_editor(existing_world);
+    level_editor.run();
 
     //Lo guardo con el mismo nombre
-    file_editor.create_yaml_file(levelFiles[selectedLevel-1], world);
+    std::cout << "b1" << std::endl;
+    file_editor.create_yaml_file(levelFiles[selectedLevel-1], existing_world);
+    std::cout << "b2" << std::endl;
   } else {
     std::cout << "Selección no válida. Volviendo al lobby.\n";
   }

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-//#include "LevelEditor.h"  // Asegúrate de incluir la clase LevelEditor aquí
+#include "level_editor.h"
 #include "file_editor.h"
 
 namespace fs = std::filesystem;

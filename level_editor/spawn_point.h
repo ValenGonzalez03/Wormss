@@ -5,6 +5,7 @@ class SpawnPoint{
 private:
     float pos_x;
     float pos_y;
+    SDL2pp::Texture* worm;
 public:
     SpawnPoint(float posx, float posy) : pos_x(posx), pos_y(posy) {}
 

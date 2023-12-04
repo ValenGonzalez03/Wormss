@@ -67,9 +67,13 @@ target_link_libraries(server PUBLIC yaml-cpp)
 
 add_executable(editor ./level_editor/main.cpp
 ./level_editor/lobby.cpp
-./level_editor/file_editor.cpp)
+./level_editor/file_editor.cpp
+./level_editor/position_converter.cpp
+./level_editor/level_editor.cpp
+./level_editor/world.cpp)
 
 target_link_libraries(editor PUBLIC yaml-cpp)
+target_link_libraries(editor PUBLIC SDL2pp::SDL2pp)
 # Agregar el ejecutable de pruebas y especificar los archivos fuente
 #add_executable(tests ./tests/protocol_tests.cpp
 #					./src/common/socket.cpp 

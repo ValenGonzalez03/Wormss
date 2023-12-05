@@ -7,8 +7,8 @@ void FileEditor::create_yaml_file(const std::string& file_path, World& world) {
   YAML::Emitter emitter;
   
   emitter << YAML::BeginMap;
-  emitter << YAML::Key << "name" << YAML::Value << "Nivel 2";
-  emitter << YAML::Key << "background" << YAML::Value << "background2.jpg";
+  emitter << YAML::Key << "name" << YAML::Value << level_name;
+  emitter << YAML::Key << "background" << YAML::Value << background_name;
 
   emitter << YAML::Key << "beams" << YAML::Value << YAML::BeginSeq;
   for (auto& beam : world.get_beams()) {

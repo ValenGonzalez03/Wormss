@@ -26,7 +26,6 @@ private:
   void render_text();
 
 public:
-  //explicit LevelEditor();
 
   explicit LevelEditor(World& world);
 

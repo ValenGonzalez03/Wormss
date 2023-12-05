@@ -2,8 +2,6 @@
 
 using namespace SDL2pp;
 
-//LevelEditor::LevelEditor(){}
-
 LevelEditor::LevelEditor(World& world) : world(world) {}
 
 void LevelEditor::run() {
@@ -12,8 +10,6 @@ void LevelEditor::run() {
 
   // Initialize SDL_ttf library
   SDLTTF ttf;
-
-  //client_SDL client_sdl;
 
   world.initialize(client_sdl);
 
@@ -28,7 +24,6 @@ void LevelEditor::run() {
 
     render_text();
 
-    // Show rendered frame
     client_sdl.renderer.Present();
 
     SDL_Delay(16);
@@ -155,12 +150,12 @@ void LevelEditor::render_text() {
   std::string text = "Viga corta: s + click izquierdo\n"
                      "Viga larga: l + click izquierdo\n"
                      "Spawn: w + click izquierdo\n"
-                     "Cambiar ángulo: tecla de espacio\n"
+                     "Cambiar angulo: tecla de espacio\n"
                      "Eliminar viga: z\n"
                      "Eliminar spawn: x\n"
-                     "Beam angle: " + std::to_string(beam_angle);
+                     "Angulo viga: " + std::to_string(beam_angle);
 
-  Font font(RESOURCES_PATH "/Vera.ttf", 12);
+  Font font(RESOURCES_PATH "/Vera.ttf", 15);
 
   std::istringstream textStream(text);
   std::string line;

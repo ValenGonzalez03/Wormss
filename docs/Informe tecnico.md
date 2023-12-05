@@ -1,0 +1,1 @@
+![img.png](client_structure.png)

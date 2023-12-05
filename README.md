@@ -45,3 +45,11 @@ Y en una tercera:
 ```
 
 De esta forma tenemos a tiburoncin como intermediario entre cliente y servidor, mostrándonos los bytes enviados y recibidos.
+
+## Compilación y ejecución del level editor
+
+Para el desarrollo del level editor se optó por crear otro archivo ejecutable que también se compila al compilar con cmake. Este archivo se podrá correr escribiendo en una consola:
+
+```console
+./editor
+```

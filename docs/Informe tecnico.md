@@ -47,11 +47,57 @@ El cliente consta con una estructura de 3 hilos:
 
 ![img.png](server_structure2.png)
 
+El servidor consta de 2 hilos para la estructura del servidor:
 
+* Main: Es el encargado de correr el server.
+
+* ServerAccept: Este hilo se encarga de aceptar a todos los jugadores, crearles el sender_queue y crear una clase Player para cada jugador conectado, pasandole el socket aceptado y la sender_queue entre otras cosas.
+
+Luego hay 2 hilos para cada jugador:
+
+* ClientHandler: Hace el rol del receiver para cada jugador, recibiendo los comandos que éste le envíe por socket y ejecutandolos. Separa la logica de los comandos del lobby y los comandos de la partida. También es el que se encarga de hacerle un start al sender una vez que empezó la partida.
+
+* PlayerSender: Es el sender de cada jugador, se queda esperando que haya algun GameState que mandar en la queue de game states y se la manda al jugador. También se encarga de mandarle cosas al jugador antes de que empiece la partida, como el id de la partida, del jugador, los posibles escenarios a elegir o el escenario elegido que tiene que renderizar.
+
+Por último esta el hilo Game:
+
+* Game: Tiene el loop de la logica principal del juego. También se encarga de pushear los GameState a la sender_queue de todos los jugadores.
 
 ### Clases servidor
 
 ![img.png](server_general_class_diagram2.png)
+
+* ServerAccept: Este hilo se encarga de aceptar a todos los jugadores, crearles el sender_queue y crear una clase Player para cada jugador conectado, pasandole el socket aceptado y la sender_queue entre otras cosas.
+
+* ServerProtocol: contiene la comunicación entre el servidor y el cliente. Se encarga de crear y devolver los comandos.
+
+* RunnableCommands: Son los comandos, tanto del lobby como de la partida, que ejecutan la logica de lo recibido por el jugador.
+
+* LobbyResult: Es el resultado que devuelven los comandos, con toda la información que el ClientHandler necesita.
+
+* Player: Contenedor de ClientHandler y PlayerSender.
+
+* ClientHandler: Hace el rol del receiver para cada jugador, recibiendo los comandos que éste le envíe por socket y ejecutandolos. Separa la logica de los comandos del lobby y los comandos de la partida. También es el que se encarga de hacerle un start al sender una vez que empezó la partida.
+
+* PlayerSender: Es el sender de cada jugador, se queda esperando que haya algun GameState que mandar en la queue de game states y se la manda al jugador. También se encarga de mandarle cosas al jugador antes de que empiece la partida, como el id de la partida, del jugador, los posibles escenarios a elegir o el escenario elegido que tiene que renderizar.
+
+* GamesHandler: Contiene una lista de todos los Games y se encarga de crear las partidas, agregar a los jugadores a las partidas correspondientes y de empezar las partidas. También tiene una lista de todos los mundos posibles y se encarga de setearlos a las partidas una vez elegidos.
+
+* Broadcaster: Se encarga de pushear el GameState del Game a cada sender_queue.
+
+* GameManager: Es el creador del World y el que conecta la logica principal de la partida en Game con el worm y verifica si el jugador que intenta llamar a un comando es al que le pertenece el turno actual.
+
+* Bodies: Son los bodies usados por el motor fisico Box2d y contienen la logica del comportamiento fisico de cada body. Dentro se encuentran WormBody, BeamBody, WaterBody y las armas Weapons.
+
+* ContactListener: Logica fisicas del comienzo y final del contacto entre cuerpos, para manejar el salto.
+
+* ExplosionManager: Logica fisicas de la explosión.
+
+* World: Mundo de la partida y contenedor del b2World de Box2d. Tiene los worms, beams y spawn_points de la partida.
+
+* WorldsReader: Lector de los Worlds y sus spawn_points en el archivo YAML.
+
+* GameConfig: Lector de la configuración de los worms en el archivo YAML.
 
 
 ## Clases comunes

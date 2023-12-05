@@ -55,12 +55,13 @@ public:
 
   std::vector<SpawnPoint> get_spawn_points();
 
-  void add_beam(Beam beam);
+  void add_beam(float x, float y, float rotation, float length);
 
   void add_spawn_point(SpawnPoint spawn);
 
   void render(client_SDL& client_sdl);
 
+/*
   // Devuelve un ptr a la textura del short_beam
   SDL2pp::Texture* get_short_beam_texture();
 
@@ -69,6 +70,7 @@ public:
 
   // Devuelve un ptr a la textura del worm caminando
   SDL2pp::Texture* get_worm_walking();
+*/
 
   ~World();
 };

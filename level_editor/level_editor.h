@@ -6,7 +6,16 @@
 class LevelEditor {
 private:
   World& world;
-  //client_SDL client_sdl;
+  client_SDL client_sdl;
+  bool placing_short_beam = false;
+  bool placing_long_beam = false;
+  bool placing_spawn_point = false;
+
+  void handle_add_short_beam(int pos_x, int pos_y);
+
+  void handle_add_long_beam(int pos_x, int pos_y);
+
+  void handle_add_spawn_point(int pos_x, int pos_y);
 
 public:
   //explicit LevelEditor();
@@ -16,6 +25,8 @@ public:
   void run();
 
   bool execute_event(SDL_Event &event);
+
+  void print_beams();
 };
 
 #endif

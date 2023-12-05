@@ -57,7 +57,7 @@ World FileEditor::read_existing_level(const std::string& file_path) {
         float length = beam["length"].as<float>();
         Beam new_beam(position_x, position_y, angle, length);
         // Agregar la viga al mundo (world)
-        world.add_beam(new_beam);
+        world.add_beam(position_x, position_y, angle, length);
       }
     }
 

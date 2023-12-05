@@ -9,7 +9,6 @@ void World::initialize(client_SDL& client_sdl){
 }
 
 void World::add_short_beam_texture(client_SDL& client_sdl){
-  std::cout << "Agrego textura viga corta" << std::endl;
   SDL2pp::Surface src_surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + SHORT_BEAM_PATH);
   this->short_beam_texture = new SDL2pp::Texture(client_sdl.renderer, src_surface);
 }
@@ -48,8 +47,8 @@ std::vector<SpawnPoint> World::get_spawn_points() {
   return this->spawn_points;
 }
 
-void World::add_beam(Beam beam) {
-  this->beams.push_back(beam);
+void World::add_beam(float x, float y, float rotation, float length) {
+  this->beams.emplace_back(x,y,rotation,length);
 }
 
 void World::add_spawn_point(SpawnPoint spawn) {
@@ -59,14 +58,13 @@ void World::add_spawn_point(SpawnPoint spawn) {
 void World::render(client_SDL& client_sdl) {
   for (auto &beam : beams) {
     beam.render(client_sdl, short_beam_texture, long_beam_texture);
-    std::cout << "beam" << std::endl;
   }
   for (auto &spawn_point : spawn_points) {
-    //spawn_point.render(client_sdl, worm_texture);
-    std::cout << "spawn_point" << std::endl;
+    spawn_point.render(client_sdl, worm_texture);
   }
 }
 
+/*
 SDL2pp::Texture* World::get_short_beam_texture() {
   return this->short_beam_texture;
 }
@@ -78,6 +76,7 @@ SDL2pp::Texture* World::get_long_beam_texture() {
 SDL2pp::Texture* World::get_worm_walking() {
   return this->worm_texture;
 }
+*/
 
 World::~World() {
     delete short_beam_texture;

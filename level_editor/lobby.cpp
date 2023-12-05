@@ -38,7 +38,6 @@ void Lobby::create_new_level() {
 
   std::string file_path = std::string(RESOURCES_PATH) + "/Worlds/";
   std::string level_name = get_lvl_name_from_usr();
-  std::cout << "level_name: " << level_name << std::endl;
   std::string file_name = file_path + level_name + ".yml";
 
   new_world.set_name(level_name);
@@ -48,9 +47,7 @@ void Lobby::create_new_level() {
   level_editor.run();
   
 
-  std::cout << "b1" << std::endl;
   file_editor.create_yaml_file(file_name, new_world);
-  std::cout << "b2" << std::endl;
 }
 
 
@@ -62,7 +59,6 @@ std::string Lobby::get_lvl_name_from_usr() {
     std::cin >> levelName;
 
     std::string filePath = std::string(RESOURCES_PATH) + "/Worlds/" + levelName + ".yml";
-    std::cout << "filePath: " << filePath << std::endl;
     if (std::filesystem::exists(filePath)) {
       std::cout << "Por favor, elija otro nombre.\n";
     } else {
@@ -104,9 +100,7 @@ void Lobby::edit_existing_level() {
     level_editor.run();
 
     //Lo guardo con el mismo nombre
-    std::cout << "b1" << std::endl;
     file_editor.create_yaml_file(levelFiles[selectedLevel-1], existing_world);
-    std::cout << "b2" << std::endl;
   } else {
     std::cout << "Selección no válida. Volviendo al lobby.\n";
   }

@@ -14,8 +14,8 @@ private:
   PositionConverter converter;
 
 public:
-  Beam(float posx, float posy, float angle, float length) : 
-    pos_x(posx), pos_y(posy), angle(angle), length(length) {}
+  Beam(float posx, float posy, float angle, float width) : 
+    pos_x(posx), pos_y(posy), angle(angle), length(width) {}
   
   float get_pos_x() {
     return this->pos_x;
@@ -37,7 +37,7 @@ public:
     SDL_Point pivot = {0, 0};
     int pos_x_px = converter.convert_from_m_to_px(pos_x);
     int pos_y_px = client_sdl.window.GetHeight() - converter.convert_from_m_to_px(pos_y);
-    if (length = 3.0) {
+    if (length == 3.0) {
       sb_text->SetAlphaMod(255);
       int sbeam_height = sb_text->GetHeight();
       int sbeam_width = sb_text->GetWidth();
@@ -50,7 +50,7 @@ public:
                         pivot, // rotation center - not needed
                         SDL_FLIP_NONE);
     }
-    else if (length = 6.0) {
+    else if (length == 6.0) {
       lb_text->SetAlphaMod(255);
       int lbeam_height = lb_text->GetHeight();
       int lbeam_width = lb_text->GetWidth();

@@ -76,22 +76,4 @@ add_executable(editor ./level_editor/main.cpp
 
 target_link_libraries(editor PUBLIC yaml-cpp)
 target_link_libraries(editor PUBLIC SDL2pp::SDL2pp)
-# Agregar el ejecutable de pruebas y especificar los archivos fuente
-#add_executable(tests ./tests/protocol_tests.cpp
-#					./src/common/socket.cpp 
-#					./src/common/liberror.cpp 
-#					./src/common/resolver.cpp 
-#					./src/common/resolvererror.cpp
-#					./src/common/protocol.cpp)
 
-# Enlazar con Catch2
-#find_package(Catch2 REQUIRED)
-#target_link_libraries(tests PRIVATE Catch2::Catch2 Catch2::Catch2WithMain)
-
-
-############################################
-#find_package(Catch2 CONFIG REQUIRED)
-#include(CTest)
-#include(Catch)
-#catch_discover_tests(tests)
-###########################################

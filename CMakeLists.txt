@@ -54,6 +54,8 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/bodies/weapons/dynamite.cpp
 					  ./src/server/server_protocol.cpp
 					  ./src/server/contact_listener.cpp
+					  ./src/server/query_callback.cpp
+					  ./src/server/explosion_manager.cpp
 					  ./src/common/socket.cpp 
 					  ./src/common/liberror.cpp 
 					  ./src/common/resolver.cpp 

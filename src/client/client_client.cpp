@@ -186,6 +186,8 @@ bool Client::execute_event(SDL_Event &event) {
         if (worm_client.get_state() != WORM_STATES::AIMING)
           handle_start_aiming(DOWN);
         break;
+      case SDLK_1:
+        break;
       }
 
     } else if (event.type == SDL_KEYUP) { // Suelta una tecla

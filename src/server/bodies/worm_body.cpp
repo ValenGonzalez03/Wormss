@@ -110,6 +110,8 @@ uint8_t WormBody::get_direction() { return direction; }
 
 uint8_t WormBody::get_state() { return state; }
 
+float WormBody::get_aiming_angle() { return aiming_angle; }
+
 void WormBody::update() {
   if (state == WORM_STATES::MOVING) {
     if (direction == LEFT) {

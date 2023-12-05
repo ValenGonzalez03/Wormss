@@ -1,5 +1,7 @@
 #include "client_worm_view.h"
 
+#include <cmath>
+
 void WormView::render(int frame, Worm &worm, client_state &worm_state) {
   PositionConverter converter;
   Position pos_in_px = converter.convert_position_to_px(worm.get_position());
@@ -13,8 +15,11 @@ void WormView::render(int frame, Worm &worm, client_state &worm_state) {
   std::cout << "Posy en px: " << pos_y << std::endl;
   if (worm.get_state() == WORM_STATES::MOVING)
     render_worm_running(frame, pos_x, pos_y, worm, worm_state);
-  else // worm.get_state() == idle == 0
+  else if (worm.get_state() == WORM_STATES::AIMING) {
+    render_worm_aiming(frame, pos_x, pos_y, worm);
+  } else { // worm.get_state() == idle == 0
     render_worm_idle(frame, pos_x, pos_y, worm, worm_state);
+  }
 }
 
 void WormView::render_worm_idle(int frame, int pos_x, int pos_y, Worm &worm,
@@ -58,6 +63,23 @@ void WormView::render_worm_running(int frame, int pos_x, int pos_y, Worm &worm,
 
 void WormView::render_worm_jumping(int frame, int pos_x, int pos_y, Worm &worm,
                                    client_state &worm_state) {}
+
+void WormView::render_worm_aiming(int frame, int pos_x, int pos_y, Worm &worm) {
+  SDL_RendererFlip flip = choose_flip_direction(worm);
+  auto angle = worm.get_aim_angle();
+  auto normalized_angle = (angle / M_PI_2);
+  auto frame_position =
+      16 + (int)(normalized_angle * ((aiming_texture.size() / 2)));
+  std::cout << "angle: " << angle << std::endl;
+  std::cout << "Normalized angle: " << normalized_angle << std::endl;
+
+  aiming_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
+  aiming_texture[frame_position]->SetAlphaMod(255);
+
+  renderer.Copy(*aiming_texture[frame_position], SDL2pp::NullOpt,
+                SDL2pp::Rect((int)pos_x, pos_y, 60, 60), 0.0, SDL2pp::NullOpt,
+                flip);
+}
 
 SDL_RendererFlip WormView::choose_flip_direction(Worm &worm) {
   SDL_RendererFlip flip = SDL_FLIP_NONE; // Sin volteo por defecto

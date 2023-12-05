@@ -23,8 +23,10 @@ void WorldView::add_long_beam(int pos_x, int pos_y, int angle) {
 void WorldView::render(int frame,
                        client_state &worm_state) { // Gamestate game_state
   auto walking_textures = resource_pool.get_worm_walking();
-  WormView worm_view(renderer,
-                     walking_textures); // Ver de hacer una sola instancia
+  auto jumping_textures = resource_pool.get_worm_jumping();
+  auto aiming_textures = resource_pool.get_worm_aiming();
+  WormView worm_view(renderer, walking_textures, jumping_textures,
+                     aiming_textures); // Ver de hacer una sola instancia
   // Renderizar fondo
   render_background();
   for (auto &beam : beams) {

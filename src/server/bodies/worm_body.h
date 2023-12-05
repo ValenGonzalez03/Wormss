@@ -69,6 +69,8 @@ public:
 
   uint8_t get_state();
 
+  float get_aiming_angle();
+
   void update();
 
   bool is_facing_left();

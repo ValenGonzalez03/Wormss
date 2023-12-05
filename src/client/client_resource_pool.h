@@ -20,14 +20,17 @@
 #define WORM_JUMPING "worm_jumping"
 #define WORM_JUMPING_PATH "/Images/Worms/wjump.png"
 
+#define WORM_AIMING "worm_aiming"
+#define WORM_AIMING_PATH "/Images/Worms/wbaz.png"
+
 class ResourcePool {
 private:
   SDL2pp::Renderer &renderer;
   std::map<std::string, std::vector<SDL2pp::Texture *>> texture_arrays;
   std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
-  std::map<std::string, Mix_Chunk*> sounds;
+  std::map<std::string, Mix_Chunk *> sounds;
   std::shared_ptr<SDL2pp::Texture> background;
-  Mix_Music* gMusic = NULL;
+  Mix_Music *gMusic = NULL;
 
   void add_texture(const std::string &texture_name,
                    const std::string &image_path, int width, int height,
@@ -72,19 +75,22 @@ private:
     add_texture(WORM_JUMPING, WORM_JUMPING_PATH, 60, 60, 10);
   }
 
-  
+  void add_worm_aiming() {
+    add_texture(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32);
+  }
 
 public:
   // Crea la Resource pool y le carga las texturas
   explicit ResourcePool(SDL2pp::Renderer &rend) : renderer(rend) {}
 
-  void initialize () {
+  void initialize() {
     add_short_beam();
     add_long_beam();
     add_worm_walking();
     add_worm_jumping();
-    //add_font("Vera20", "/Vera.ttf", 20);
-    //add_font("Vera12", "/Vera.ttf", 12);
+    add_worm_aiming();
+    // add_font("Vera20", "/Vera.ttf", 20);
+    // add_font("Vera12", "/Vera.ttf", 12);
   }
 
   // Devuelve un ptr a la textura del short_beam
@@ -102,6 +108,14 @@ public:
     return get_texture(WORM_WALKING);
   }
 
+  std::vector<SDL2pp::Texture *> get_worm_jumping() {
+    return get_texture(WORM_JUMPING);
+  }
+
+  std::vector<SDL2pp::Texture *> get_worm_aiming() {
+    return get_texture(WORM_AIMING);
+  }
+
   /*
     void add_sound(const std::string sound_name, const std::string &sound_path)
     { Mix_Chunk *
@@ -112,9 +126,9 @@ public:
   void add_font(const std::string &font_name, const std::string &font_path,
                 int font_size) {
     try {
-    SDL2pp::Font font(RESOURCES_PATH + font_path, font_size);
-    this->fonts[font_name] = std::make_shared<SDL2pp::Font>(std::move(font));
-    } catch(const std::exception &err) {
+      SDL2pp::Font font(RESOURCES_PATH + font_path, font_size);
+      this->fonts[font_name] = std::make_shared<SDL2pp::Font>(std::move(font));
+    } catch (const std::exception &err) {
       std::cout << "Error al agregar la fuente: " << font_name << std::endl;
     }
   }
@@ -134,8 +148,7 @@ public:
     Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
 
     background = std::make_shared<SDL2pp::Texture>(
-        renderer, surface.SetColorKey(
-                      true, color_key));
+        renderer, surface.SetColorKey(true, color_key));
   }
 
   std::shared_ptr<SDL2pp::Texture> get_background() {
@@ -147,10 +160,7 @@ public:
     }
   }
 
-
   ~ResourcePool() {}
-
-
 };
 
 #endif

@@ -113,7 +113,8 @@ GameState GameManager::get_state() {
     game_state.add_worm(current_worm->get_id(), current_worm->get_pos_x(),
                         current_worm->get_pos_y(),
                         current_worm->get_direction(),
-                        current_worm->get_state()); // CAMBIAR LUEGO
+                        current_worm->get_state(),
+                        current_worm->get_aiming_angle()); // CAMBIAR LUEGO
   }
 
   return game_state;

@@ -87,7 +87,6 @@ std::shared_ptr<SDL2pp::Font> ResourcePool::get_font(const std::string &font_nam
 }
 
 void ResourcePool::add_background(const std::string &image_path) {
-  std::cout << "add_background" << std::endl;
   SDL2pp::Surface surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + "/Images/Backgrounds/" + image_path);
   Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
 

@@ -26,7 +26,6 @@ std::string ClientProtocol::recv_string(bool* was_closed) {
   uint16_t string_length;
   skt.recvall(&string_length, sizeof(string_length), was_closed);
   uint16_t string_length_be = ntohs(string_length);
-  std::cout << "str_length: " << string_length_be << std::endl;
   char buffer[string_length_be + 1];
   skt.recvall(buffer, string_length_be, was_closed);
   buffer[string_length] = '\0';
@@ -58,10 +57,8 @@ std::vector<std::string> ClientProtocol::recv_worlds_names(bool* was_closed) {
   uint16_t names_number;
   skt.recvall(&names_number, sizeof(names_number), was_closed);
   uint16_t names_number_be = ntohs(names_number);
-  std::cout << "worlds_names_n: " << names_number_be << std::endl;
   for (int i = 0; i < names_number_be; i++) {
     std::string name = recv_string(was_closed);
-    std::cout << "Name: " << name << std::endl;
     names.push_back(name);
   }
   return names;
@@ -78,7 +75,6 @@ void ClientProtocol::send_world_id(int world_id, bool *was_closed) {
 void ClientProtocol::recv_world(WorldView& world, bool* was_closed) {
   std::string world_name = recv_string(was_closed);
   std::string background_name = recv_string(was_closed);
-  std::cout << background_name << std::endl;
   world.set_background(background_name);
   
   // Recibo cant de vigas y caracteristicas vigas
@@ -103,11 +99,6 @@ void ClientProtocol::recv_and_add_beam(WorldView& world, bool* was_closed) {
   int beam_angle_int = static_cast<int>(beam_angle_be);
   
   float width = recv_float(was_closed);
-
-  std::cout << "beam pos_x: " << pos_x << std::endl;
-  std::cout << "beam pos_y: " << pos_x << std::endl;
-  std::cout << "beam angle: " << beam_angle_int << std::endl;
-  std::cout << "beam width: " << width << std::endl;
 
   if (width == 6) {
     world.add_long_beam(pos_x, pos_y, beam_angle_int);

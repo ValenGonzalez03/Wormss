@@ -13,59 +13,26 @@ private:
   uint8_t player_id;
 
 public:
-  explicit Lobby(ClientProtocol &prot) : prot(prot), player_id(-1) {}
+  explicit Lobby(ClientProtocol &prot);
 
-  void run_lobby() {
-    char option_selected = '\0';
-    do {
-      std::cout << "Ingrese 'c' si quiere crear una partida o 'j' si quiere "
-                   "unirse a una:"
-                << std::endl;
-      std::cin >> option_selected;
-    } while (option_selected != 'c' && option_selected != 'j');
+  void print_menu();
 
-    if (option_selected == 'c') {
-      // Elegir escenario
-      //  bool was_closed = false;
-      //  std::vector<std::string> world_names =
-      //  prot.recv_worlds_names(&was_closed); std::cout << "Juego creado,
-      //  esperando jugadores..." << std::endl;
-      // Elijo un world
-      //  prot.send_world_name_selected(world_name);
-      CreateGame create_comm = CreateGame();
-      prot.send_command(create_comm);
-    } else if (option_selected == 'j') {
-      std::cout << "Ingrese el codigo de la partida para unirse:" << std::endl;
-      int game_id = 0;
-      std::cin >> game_id;
-      JoinGame join_comm(game_id);
-      prot.send_command(join_comm);
-    }
+  char get_option();
 
-    // Recibe el player_id
-    player_id = prot.receive_id();
-    std::cout << "Tu player_id es: " << player_id << std::endl;
-    // Si se crea una partida tambien se recibe el game_id
-    int game_id = 0;
-    if (option_selected == 'c') {
-      game_id = prot.receive_id();
-      std::cout << "El game id es: " << game_id << std::endl;
-    } else if (option_selected == 'j') {
-      return;
-    }
+  int get_world_id(std::vector<std::string>& world_names);
 
-    char command_lobby = '\0';
-    while (command_lobby != 's') {
-      std::cout << "El creador de la partida cuando quiere empezarla debe "
-                   "ingresar 's'"
-                << std::endl;
-      std::cin >> command_lobby;
-    }
-    StartGame start = StartGame(game_id);
-    prot.send_command(start);
-  }
+  void create_game(ClientProtocol& prot, int& player_id, bool* was_closed);
 
-  uint8_t get_player_id() { return player_id; }
+  void join_game(ClientProtocol& prot, int& player_id, bool *was_closed);
+
+  void show_worlds(const std::vector<std::string>& world_names);
+
+  void wait_start_command(ClientProtocol& prot, int game_id);
+
+  void run_lobby();
+
+  uint8_t get_player_id();
+
 };
 
 #endif

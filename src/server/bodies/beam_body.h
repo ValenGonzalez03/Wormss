@@ -6,19 +6,21 @@
 #include <stdio.h>
 #include <iostream>
 
-class WormBody;
+//class WormBody;
 
 class BeamBody : public Body {
 	private:
 
 	public:
-	explicit BeamBody(b2World* world, float pos_x, float pos_y);
+	//explicit BeamBody(b2World* world, float pos_x, float pos_y);
 
 	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width);
 	
 	void start_contact_with(Body* another_body) override;
 	
-	void start_contact_with(WormBody* worm) override;
+	void start_contact_with(WormBody* worm) ;
+	
+	void start_contact_with(WaterBody *water) ;
 	
     void end_contact_with(Body* another_body) override;
 	
@@ -50,6 +52,8 @@ class BeamBody : public Body {
 	float get_width() {
 		return this->width;
 	}
+	
+	int get_type() override;
 };
 
 #endif

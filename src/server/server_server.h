@@ -7,10 +7,12 @@
 #include "../common/socket.h"
 */
 #include <string>
+#include "world.h"
+#include "game_config.h"
 
 class Server {
   const std::string &servname;
-
+  
 public:
   /*
    * Constructor de la clase.

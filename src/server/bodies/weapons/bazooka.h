@@ -2,9 +2,25 @@
 #define BAZOOKA_H
 
 #include "weapon.h"
+#include "../../../server/explosion_manager.h"
+#include "../../bodies/body.h"
+#include <iostream>
 
 class Bazooka : public Weapon {
-    explicit Bazooka(b2World* world, float pos_x, float pos_y) : Weapon(world, pos_x, pos_y, true, false, true, false, false, true, 10000, 50, 2, 0, 0) {}
+	private:
+	ExplosionManager explosion_manager;
+	
+	public:
+    explicit Bazooka(b2World* world, float pos_x, float pos_y);
+    
+    void shoot();
+    
+    void explode();
+    
+    void start_contact_with(Body* another_body) override;
+	
+	void end_contact_with(Body* another_body) override;
+	
+	int get_type() override;
 };
-
 #endif

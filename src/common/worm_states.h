@@ -10,6 +10,7 @@ extern uint8_t MOVING;
 extern uint8_t AIMING;
 extern uint8_t SHOOTING;
 extern uint8_t JUMPING;
+extern uint8_t INACTIVE;
 } // namespace WORM_STATES
 
 #endif

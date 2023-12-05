@@ -16,8 +16,8 @@ private:
     std::string name = file["name"].as<std::string>();
     std::string background = file["background"].as<std::string>();
 
-    //world->add_name(name);
-    //world->add_background(background);
+    world->set_name(name);
+    world->set_background(background);
 
     // Leo las vigas
     if (file["beams"]) {
@@ -35,7 +35,8 @@ private:
       for (const auto& spawn_point : file["spawn_points"]) {
           float position_x = spawn_point["position_x"].as<float>();
           float position_y = spawn_point["position_y"].as<float>();
-          world->create_worm(position_x, position_y, 0); // CAMBIAR A PASARLE EL ID REAL DE LOS WORMS
+          // Agrego los puntos de spawn al vector de puntos de spawn
+          world->add_spawn_point(position_x, position_y);
       }
     }
     else {

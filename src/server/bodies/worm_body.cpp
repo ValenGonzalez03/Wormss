@@ -4,6 +4,7 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
+/*
 WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
     : Body(world, pos_x, pos_y, 0, 1, 1, 1, 0.1), id(id) {
   b2BodyDef bodyDef;
@@ -13,7 +14,7 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
   body = world->CreateBody(&bodyDef);
 
   b2PolygonShape polygonShape;
-  polygonShape.SetAsBox(width, height);
+  polygonShape.SetAsBox(width/2, height/2);
 
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &polygonShape;
@@ -25,7 +26,35 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
   body->GetUserData().pointer = (uintptr_t)this;
 
   // sensor
-  polygonShape.SetAsBox(0.3, 0.3, b2Vec2(pos_x, -0.5), 0);
+  polygonShape.SetAsBox(width/2, 0.6, b2Vec2(pos_x, -0.2), 0);
+  fixtureDef.isSensor = true;
+  b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
+  footSensorFixture->GetUserData().pointer = (uintptr_t)3;
+}
+*/
+
+WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int health, uint8_t id)
+    : Body(world, pos_x, pos_y, 0, 1.5, 1.5, 1, 0.1), vel(vel), id(id), health(health) {
+  b2BodyDef bodyDef;
+  bodyDef.type = b2_dynamicBody;
+  bodyDef.position.Set(pos_x, pos_y);
+  bodyDef.angle = angle;
+  body = world->CreateBody(&bodyDef);
+
+  b2PolygonShape polygonShape;
+  polygonShape.SetAsBox(width/2, height/2);
+
+  b2FixtureDef fixtureDef;
+  fixtureDef.shape = &polygonShape;
+  fixtureDef.density = density;
+  fixtureDef.friction = friction;
+
+  body->CreateFixture(&fixtureDef);
+  body->SetFixedRotation(true);
+  body->GetUserData().pointer = (uintptr_t)this;
+
+  // sensor
+  polygonShape.SetAsBox(0.3, 0.6, b2Vec2(pos_x, -0.5), 0);
   fixtureDef.isSensor = true;
   b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
   footSensorFixture->GetUserData().pointer = (uintptr_t)3;
@@ -50,28 +79,40 @@ void WormBody::apply_vertical_impulse(float jump_speed) {
 }
 
 void WormBody::start_moving(const uint8_t &dir) {
+  if (state == WORM_STATES::JUMPING) return;
   state = WORM_STATES::MOVING;
   direction = dir;
 }
 
 void WormBody::stop_moving() { state = WORM_STATES::STOPPED; }
 
-void WormBody::jump_left() {
-  apply_vertical_impulse(jump_vel); // CAMBIAR A QUE SALTE PARA ATRAS, PERO ASI
-                                    // FUNCIONA EL SALTO A LA IZQUIERDA
+void WormBody::jump_backward() {
+  apply_vertical_impulse(jump_vel_backward); 
+  if (direction == LEFT) {
+	  apply_horizontal_impulse(vel);
+  } else {
+	  apply_horizontal_impulse(-vel);
+  }
 }
 
-void WormBody::jump_right() { apply_vertical_impulse(jump_vel); }
+void WormBody::jump_forward() { 
+  apply_vertical_impulse(jump_vel_forward); 
+  if (direction == LEFT) {
+	  apply_horizontal_impulse(-(vel + 0.1));
+  } else {
+	  apply_horizontal_impulse(vel + 0.1);
+  }
+}
 
 void WormBody::jump(const uint8_t &dir) {
   if (state == WORM_STATES::JUMPING)
     return;
   state = WORM_STATES::JUMPING;
-  direction = dir;
+  //direction = dir;
   if (dir == LEFT) {
-    jump_left();
+    jump_backward();
   } else {
-    jump_right();
+    jump_forward();
   }
 }
 
@@ -98,6 +139,11 @@ void WormBody::aim_down() {
 
 void WormBody::stop_aiming() { state = WORM_STATES::STOPPED; }
 
+void WormBody::teleport(float pos_x, float pos_y) {
+  body->SetTransform( b2Vec2(pos_x, pos_y), 0);
+  body->SetAwake(true);
+}
+
 uint8_t WormBody::get_id() { return id; }
 
 b2Vec2 WormBody::get_position() { return body->GetPosition(); }
@@ -113,6 +159,7 @@ uint8_t WormBody::get_state() { return state; }
 float WormBody::get_aiming_angle() { return aiming_angle; }
 
 void WormBody::update() {
+  //std::cout << "worm update" << std::endl;
   if (state == WORM_STATES::MOVING) {
     if (direction == LEFT) {
       move_left();
@@ -135,13 +182,29 @@ bool WormBody::is_facing_right() { return (direction == RIGHT); }
 
 bool WormBody::is_stopped() { return (WORM_STATES::STOPPED); }
 
+bool WormBody::is_inactive() { return (state == WORM_STATES::INACTIVE); }
+
 void WormBody::start_contact_with(Body *another_body) {
-  another_body->start_contact_with(this);
+  if (another_body->get_type() == WORM) {
+		//std::cout << "GUSANO CHOCO CON UN GUSANO\n";
+		reinterpret_cast<WormBody*>(another_body)->start_contact_with(this);
+  }
+  
+  if (another_body->get_type() == WATER) {
+		std::cout << "GUSANO CHOCO CON AGUA\n";
+		die();
+  }
+  
+  if (another_body->get_type() == BAZOOKA) {
+		std::cout << "GUSANO CHOCO CON MUNICION DE BAZOOKA\n";
+		//take_damage(another_body->get_damage());
+  }
+  
 }
 
 void WormBody::start_contact_with(WormBody *another_worm) {
-  if (state == WORM_STATES::STOPPED) {
-    if (another_worm->is_stopped())
+  if (is_inactive()) {
+    if (another_worm->is_inactive())
       return;
     another_worm->start_contact_with(this);
   } else {
@@ -153,12 +216,42 @@ void WormBody::start_contact_with(WormBody *another_worm) {
   }
 }
 
+void WormBody::start_contact_with(WaterBody *water) {
+	//die();
+}
+
 void WormBody::end_contact_with(Body *another_body) {}
 
-void WormBody::hit_a_surface() { state = WORM_STATES::STOPPED; }
+void WormBody::hit_a_surface() { 
+  num_foot_contacts++;
+  if (not is_inactive()) {
+	  state = WORM_STATES::STOPPED;
+  } 
+}
 
-void WormBody::move_away_from_surface() { state = WORM_STATES::JUMPING; }
+void WormBody::move_away_from_surface() {
+  num_foot_contacts--;
+  if (num_foot_contacts == 0) {
+	  state = WORM_STATES::JUMPING;
+  }
+}
+
+void WormBody::show_vel_and_health() {
+  std::cout << "worm vel: " << vel << std::endl;
+  std::cout << "worm health: " << health << std::endl; 
+}
+
+void WormBody::take_damage(int damage) {
+  health -= damage;
+}
+
+void WormBody::die() {
+  //state = WORM_STATES::DEATH;
+}
 
 // POR AHORA DE PRUEBA
 void WormBody::start_contact() { m_contacting = true; }
 void WormBody::end_contact() { m_contacting = false; }
+
+int WormBody::get_type() {
+	return WORM;}

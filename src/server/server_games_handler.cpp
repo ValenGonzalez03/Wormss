@@ -1,10 +1,17 @@
 #include "server_games_handler.h"
 
-GamesHandler::GamesHandler() {}
+GamesHandler::GamesHandler() {
+  WorldsReader worlds_reader;
+  worlds = worlds_reader.read_yaml_files(std::filesystem::path(RESOURCES_PATH) / "Worlds");
+  for (const auto& world : worlds) {
+    std::string world_stage = world->get_name();
+    world_names.push_back(world_stage);
+  }
+}
 
 void GamesHandler::add_game(Game *game) { games.push_back(game); }
 
-void GamesHandler::delete_game(const int &game_id) {
+void GamesHandler::delete_game(const uint8_t &game_id) {
   std::lock_guard<std::mutex> lck(m);
   auto dead = [game_id](Game *game) {
     if (game->compare_id(game_id)) {
@@ -21,13 +28,14 @@ void GamesHandler::delete_game(const int &game_id) {
 
 Queue<std::shared_ptr<RunnableCommandGame>> *
 GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue,
-                          uint8_t& game_id, uint8_t &player_id) {
+                          uint8_t& game_id, uint8_t &player_id, std::vector<std::string>& names) {
   std::lock_guard<std::mutex> lck(m);
   game_id = games_counter;
-  Game *game = new Game(game_id);
+  Game *game = new Game(game_id, games_config);
   games_counter++;
   add_game(game);
-  std::cout << "id_game: " + std::to_string(game_id) << std::endl;
+  //std::cout << "id_game: " + std::to_string(game_id) << std::endl;
+  names = world_names;
   Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue =
       game->add_player(sender_queue, player_id);
   return commands_queue;
@@ -48,6 +56,28 @@ GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue,
   }
 
   return commands_queue;
+}
+
+World GamesHandler::select_world(int world_id, const uint8_t& game_id) {
+  std::string selected_world_name = world_names[world_id];
+  World selected_world;
+  for (const auto& world : worlds) {
+    std::string world_name = world->get_name();
+    if (world_name == selected_world_name) {
+      get_game(game_id)->set_world(*world);
+      return *world;
+    }
+  }
+  return selected_world;
+}
+
+World& GamesHandler::select_world(const uint8_t& game_id) {
+  for (const auto& game : games) {
+    if (game_id == game->get_game_id()){
+      return game->get_world();
+    }
+  }
+  throw std::runtime_error("World not found");
 }
 
 void GamesHandler::start_game(const uint8_t &game_id,

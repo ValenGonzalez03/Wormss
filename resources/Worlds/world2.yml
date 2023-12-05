@@ -1,16 +1,32 @@
 name: "Nivel 2"
-background: "fondo2.jpg"
+background: "background2.jpg"
 beams:
-  - position_x: 15.0
-    position_y: 30.0
+  - position_x: 3.0
+    position_y: 3.0
     angle: 0.0
     length: 6.0
-  - position_x: 40.0
-    position_y: 10.0
-    angle: 5.0
-    length: 3.0
+  - position_x: 5.0
+    position_y: 2.0
+    angle: 10.0
+    length: 6.0
+  - position_x: 7.0
+    position_y: 2.0
+    angle: 0.0
+    length: 6.0
+  - position_x: 13.0
+    position_y: 2.0
+    angle: 0.0
+    length: 6.0
+  - position_x: 19.0
+    position_y: 2.0
+    angle: 0.0
+    length: 6.0
+  - position_x: 25.0
+    position_y: 2.0
+    angle: 0.0
+    length: 6.0
 spawn_points:
-  - position_x: 10.0
-    position_y: 10.0
-  - position_x: 30.0
-    position_y: 30.0
+  - position_x: 3.0
+    position_y: 8.0
+  - position_x: 2.0
+    position_y: 8.0

@@ -26,18 +26,10 @@ std::string ClientProtocol::recv_string(bool* was_closed) {
   uint16_t string_length;
   skt.recvall(&string_length, sizeof(string_length), was_closed);
   uint16_t string_length_be = ntohs(string_length);
-  char buffer[string_length_be + 1]; //CORREGIR?
-  skt.recvall(buffer, sizeof(string_length_be), was_closed);
+  char buffer[string_length_be + 1];
+  skt.recvall(buffer, string_length_be, was_closed);
   buffer[string_length] = '\0';
   return std::string(buffer);
-}
-
-float ClientProtocol::recv_float(bool* was_closed) {
-  uint16_t number;
-  skt.recvall(&number, sizeof(number), was_closed);
-  uint16_t number_be = ntohs(number);
-  float final_number = number_be * 100;
-  return final_number;
 }
 
 void ClientProtocol::send_string(std::string str, bool* was_closed) {
@@ -46,6 +38,15 @@ void ClientProtocol::send_string(std::string str, bool* was_closed) {
   skt.sendall(&string_length_be, sizeof(string_length_be), was_closed);
   skt.sendall(str.c_str(), str.size(), was_closed);
 }
+
+float ClientProtocol::recv_float(bool* was_closed) {
+  uint16_t number;
+  skt.recvall(&number, sizeof(number), was_closed);
+  uint16_t number_be = ntohs(number);
+  float final_number = number_be / 100;
+  return final_number;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 ///////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
@@ -64,16 +65,17 @@ std::vector<std::string> ClientProtocol::recv_worlds_names(bool* was_closed) {
 }
 
 void ClientProtocol::send_world_name_selected(std::string& world_name, bool* was_closed) {
-  uint16_t world_name_length = world_name.size();
-  uint16_t world_name_length_be = htons(world_name_length);
-  skt.sendall(&world_name_length_be, sizeof(world_name_length_be), was_closed);
   send_string(world_name, was_closed);
 }
 
+void ClientProtocol::send_world_id(int world_id, bool *was_closed) {
+  skt.sendall(&world_id, sizeof(world_id), was_closed);
+}
 
 void ClientProtocol::recv_world(WorldView& world, bool* was_closed) {
   std::string world_name = recv_string(was_closed);
-  std::string backgorund_path = recv_string(was_closed);
+  std::string background_name = recv_string(was_closed);
+  world.set_background(background_name);
   
   // Recibo cant de vigas y caracteristicas vigas
   uint16_t beams_number;

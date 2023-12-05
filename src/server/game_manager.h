@@ -5,6 +5,7 @@
 #include "box2d/box2d.h"
 #include "world.h"
 #include "worlds_reader.h"
+#include "game_config.h"
 #include <stdio.h>
 
 class GameManager {
@@ -30,13 +31,17 @@ private:
 public:
   explicit GameManager();
 
-  void initialize_game();
+  void initialize_game(GameConfig &game_config);
 
   void add_player(const uint8_t &player_id);
 
   void delete_player(const uint8_t &player_id);
 
   void set_current_turn_id(const uint8_t &id);
+
+  void set_world(World& selected_world);
+
+  World& get_world();
 
   void step();
 

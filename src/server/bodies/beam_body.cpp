@@ -2,6 +2,7 @@
 #include "beam_body.h"
 #include <stdio.h>
 
+/*
 BeamBody::BeamBody(b2World* world, float pos_x, float pos_y) : Body(world, pos_x, pos_y, 0, 6, 0.8, 1, 0.5) {
 	b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
@@ -18,7 +19,9 @@ BeamBody::BeamBody(b2World* world, float pos_x, float pos_y) : Body(world, pos_x
     fixtureDef.friction = friction;
     
     body->CreateFixture(&fixtureDef);
+    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 }
+*/
 
 BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width) : 
                 Body(world, pos_x, pos_y, angle, width, 0.8, 1, 0.5) {
@@ -37,6 +40,7 @@ BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float wi
     fixtureDef.friction = friction;
     
     body->CreateFixture(&fixtureDef);
+    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 
     /*polygonShape.SetAsBox(width, width, b2Vec2(0, 0), angleInRadians);
     fixtureDef.isSensor = true;
@@ -45,8 +49,12 @@ BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float wi
     data.pointer = (uintptr_t)3;*/
 }
 
-void BeamBody::start_contact_with(Body* another_body) { }
+void BeamBody::start_contact_with(Body* another_body) { 
+	if (another_body->get_type() == WORM) {}
+}
 
 void BeamBody::start_contact_with(WormBody* worm) { }
 	
 void BeamBody::end_contact_with(Body* another_body) { }
+
+int BeamBody::get_type() {return BEAM;}

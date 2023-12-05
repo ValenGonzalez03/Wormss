@@ -20,17 +20,24 @@ private:
   uint8_t direction = RIGHT;
   uint8_t aim_direction;
   float aiming_angle = 0;
-  float vel = 0.5;
-  float jump_vel = 5;
+  float vel;
+  float jump_vel_backward = 5;
+  float jump_vel_forward = 3;
   uint8_t id;
 
-  uint8_t state = WORM_STATES::STOPPED;
+  uint8_t state = WORM_STATES::INACTIVE;
 
   bool m_contacting = false;
+  int num_foot_contacts = 0;
+
+  int health;
 
 public:
-  explicit WormBody(b2World *world, float pos_x, float pos_y, uint8_t id);
+  //explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
 
+  // Constructor con pos_x, pos_y, velocidad, vida, etc
+  explicit WormBody(b2World* world, float pos_x, float pos_y, float vel, int health, uint8_t id);
+  
   void move_left();
 
   void move_right();
@@ -43,9 +50,9 @@ public:
 
   void stop_moving();
 
-  void jump_left();
+  void jump_backward();
 
-  void jump_right();
+  void jump_forward();
 
   void jump(const uint8_t &dir);
 
@@ -56,6 +63,8 @@ public:
   void aim_down();
 
   void stop_aiming();
+  
+  void teleport(float pos_x, float pos_y);
 
   uint8_t get_id();
 
@@ -78,6 +87,8 @@ public:
   bool is_facing_right();
 
   bool is_stopped();
+  
+  bool is_inactive();
 
   // POR AHORA DE PRUEBA
   void start_contact();
@@ -85,7 +96,9 @@ public:
 
   void start_contact_with(Body *another_body) override;
 
-  void start_contact_with(WormBody *another_worm) override;
+  void start_contact_with(WormBody *another_worm);
+  
+  void start_contact_with(WaterBody *water);
 
   void end_contact_with(Body *another_body) override;
 
@@ -93,8 +106,18 @@ public:
 
   void move_away_from_surface();
 
-  WormBody(const WormBody &) = delete;
-  WormBody &operator=(const WormBody &) = delete;
+  void show_vel_and_health();
+  
+  void take_damage(int damage);
+  
+  void die();
+  
+  void shoot_bazooka();
+  
+  int get_type() override;
+  
+  WormBody(const WormBody&) = delete;
+  WormBody& operator=(const WormBody&) = delete;
 };
 
 #endif

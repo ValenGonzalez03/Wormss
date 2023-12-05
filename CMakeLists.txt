@@ -19,6 +19,10 @@ add_executable(client ./src/client/client_main.cpp
 ./src/client/client_worldview.cpp
 ./src/client/client_worm_view.cpp
 ./src/client/client_protocol.cpp
+./src/client/client_beam.cpp
+./src/client/client_lobby.cpp
+./src/client/client_position_converter.cpp
+./src/client/client_resource_pool.cpp
 ./src/common/socket.cpp 
 ./src/common/liberror.cpp 
 ./src/common/resolver.cpp 
@@ -44,8 +48,14 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/bodies/body.cpp
 					  ./src/server/bodies/worm_body.cpp
 					  ./src/server/bodies/beam_body.cpp
+					  ./src/server/bodies/water_body.cpp
+					  ./src/server/bodies/weapons/bazooka.cpp
+					  ./src/server/bodies/weapons/banana.cpp
+					  ./src/server/bodies/weapons/dynamite.cpp
 					  ./src/server/server_protocol.cpp
 					  ./src/server/contact_listener.cpp
+					  ./src/server/query_callback.cpp
+					  ./src/server/explosion_manager.cpp
 					  ./src/common/socket.cpp 
 					  ./src/common/liberror.cpp 
 					  ./src/common/resolver.cpp 
@@ -56,22 +66,14 @@ target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)
 target_link_libraries(server PUBLIC yaml-cpp)
 
-# Agregar el ejecutable de pruebas y especificar los archivos fuente
-#add_executable(tests ./tests/protocol_tests.cpp
-#					./src/common/socket.cpp 
-#					./src/common/liberror.cpp 
-#					./src/common/resolver.cpp 
-#					./src/common/resolvererror.cpp
-#					./src/common/protocol.cpp)
 
-# Enlazar con Catch2
-#find_package(Catch2 REQUIRED)
-#target_link_libraries(tests PRIVATE Catch2::Catch2 Catch2::Catch2WithMain)
+add_executable(editor ./level_editor/main.cpp
+./level_editor/lobby.cpp
+./level_editor/file_editor.cpp
+./level_editor/position_converter.cpp
+./level_editor/level_editor.cpp
+./level_editor/world.cpp)
 
+target_link_libraries(editor PUBLIC yaml-cpp)
+target_link_libraries(editor PUBLIC SDL2pp::SDL2pp)
 
-############################################
-#find_package(Catch2 CONFIG REQUIRED)
-#include(CTest)
-#include(Catch)
-#catch_discover_tests(tests)
-###########################################

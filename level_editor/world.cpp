@@ -64,6 +64,18 @@ void World::render(client_SDL& client_sdl) {
   }
 }
 
+void World::delete_last_beam() {
+  if (beams.size() > 0){
+    beams.pop_back();
+  }
+}
+
+void World::delete_last_spawn() {
+  if (spawn_points.size() > 0) {
+    spawn_points.pop_back();
+  }
+}
+
 /*
 SDL2pp::Texture* World::get_short_beam_texture() {
   return this->short_beam_texture;

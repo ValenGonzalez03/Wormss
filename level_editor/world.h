@@ -61,6 +61,10 @@ public:
 
   void render(client_SDL& client_sdl);
 
+  void delete_last_beam();
+
+  void delete_last_spawn();
+
 /*
   // Devuelve un ptr a la textura del short_beam
   SDL2pp::Texture* get_short_beam_texture();

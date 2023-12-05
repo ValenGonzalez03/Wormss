@@ -7,6 +7,7 @@ void ResourcePool::initialize() {
   add_long_beam();
   add_worm_walking();
   add_worm_jumping();
+  add_worm_aiming();
   add_music(std::string(RESOURCES_PATH) + "/Sounds/music.wav");
   //add_font("Vera20", "/Vera.ttf", 20);
   //add_font("Vera12", "/Vera.ttf", 12);
@@ -67,6 +68,17 @@ void ResourcePool::add_worm_jumping() {
   add_texture(WORM_JUMPING, WORM_JUMPING_PATH, 60, 60, 10);
 }
 
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() {
+  return get_texture(WORM_JUMPING);
+}
+
+void ResourcePool::add_worm_aiming() {
+  add_texture(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32);
+}
+
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming() {
+  return get_texture(WORM_AIMING);
+}
 
 void ResourcePool::add_font(const std::string &font_name, const std::string &font_path,
               int font_size) {

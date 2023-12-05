@@ -23,9 +23,7 @@ public:
   explicit WormView(SDL2pp::Renderer &rend,
                     std::vector<SDL2pp::Texture *> &walking,
                     std::vector<SDL2pp::Texture *> &jumping,
-                    std::vector<SDL2pp::Texture *> &aiming)
-      : renderer(rend), walking_texture(walking), jumping_texture(jumping),
-        aiming_texture(aiming) {}
+                    std::vector<SDL2pp::Texture *> &aiming);
 
   // Renderiza el worm pasado por parámetro según el estado del
   // mismo
@@ -43,6 +41,7 @@ public:
   void render_worm_jumping(int frame, int pos_x, int pos_y, Worm &worm,
                            client_state &worm_state);
 
+  // Renderiza el worm apuntando cuando este se encuentra en estado "aiming"
   void render_worm_aiming(int frame, int pos_x, int pos_y, Worm &worm);
 };
 

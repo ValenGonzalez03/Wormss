@@ -13,7 +13,7 @@ private:
   std::atomic<bool> is_alive{true};
   std::list<std::shared_ptr<Player>> players;
   GamesHandler games_handler;
-  uint8_t id_counter = 1;
+  uint8_t id_counter = 0;
 
   /*
    * Busca todos los players muertos en la lista de players y los joinea.

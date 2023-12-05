@@ -106,7 +106,7 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   client_sdl.world_view.update(game_state);
 
-  /* Para revisar funcionamiento
+  /* Para revisar funcionamiento 
   std::map<uint8_t, Worm> worms = game_state.get_worms();
   int worm_n = 0;
   for (auto &worm : worms) {
@@ -114,10 +114,10 @@ bool Client::func_to_execute() {
     std::cout << "worm_n: " << worm_n << std::endl;
     std::cout << "posx: " << worm.second.get_pos_x() << std::endl;
     std::cout << "posy: " << worm.second.get_pos_y() << std::endl;
-    std::cout << "dir: " << worm.second.get_direction() << std::endl;
-    std::cout << "state: " << worm.second.get_state() << std::endl;
+    std::cout << "dir: " << std::to_string(worm.second.get_direction()) << std::endl;
+    std::cout << "state: " << std::to_string(worm.second.get_state()) << std::endl;
   }
-  */
+*/
 
   // ---------------------------------------------------------------------------
 
@@ -131,7 +131,10 @@ bool Client::func_to_execute() {
       ", state: " +
       (print_state(game_state.get_worms()[player_id].get_state())) +
       ", direction: " +
-      std::to_string(game_state.get_worms()[player_id].get_direction());
+      std::to_string(game_state.get_worms()[player_id].get_direction()) + 
+      ", player_id: " + 
+      std::to_string(game_state.get_worms()[player_id].get_player_id());
+
 
   Font font(RESOURCES_PATH "/Vera.ttf", 12);
 
@@ -278,7 +281,7 @@ void Client::handle_finish_game() {
 std::string Client::print_state(uint8_t state) {
   switch (state) {
   case 0:
-    return "idle";
+    return "stopped";
   case 1:
     return "running";
   case 2:
@@ -287,6 +290,8 @@ std::string Client::print_state(uint8_t state) {
     return "aiming";
   case 4:
     return "shooting";
+  case 5:
+    return "idle";
   default:
     return " ";
   }

@@ -3,8 +3,11 @@
 #include <cmath>
 
 WormView::WormView(SDL2pp::Renderer &rend,
-                    std::vector<SDL2pp::Texture *> &walking)
-      : renderer(rend), walking_texture(walking) {}
+                std::vector<SDL2pp::Texture *> &walking,
+                std::vector<SDL2pp::Texture *> &jumping,
+                std::vector<SDL2pp::Texture *> &aiming)
+      : renderer(rend), walking_texture(walking), jumping_texture(jumping),
+        aiming_texture(aiming) {}
 
 void WormView::render(int frame, Worm &worm, client_state &worm_state) {
   PositionConverter converter;
@@ -46,12 +49,13 @@ void WormView::render_worm_running(int frame, int pos_x, int pos_y, Worm &worm,
                                    client_state &worm_state) {
   SDL_RendererFlip flip = choose_flip_direction(worm);
   auto normalized_frame = frame / 40;
-  walking_texture[normalized_frame % walking_texture.size()]->SetBlendMode(
+  auto frame_position = normalized_frame % walking_texture.size();
+  walking_texture[frame_position]->SetBlendMode(
       SDL_BLENDMODE_BLEND);
 
-  walking_texture[normalized_frame % walking_texture.size()]->SetAlphaMod(
+  walking_texture[frame_position]->SetAlphaMod(
       255); // sprite is fully opaque
-  renderer.Copy(*walking_texture[normalized_frame % walking_texture.size()],
+  renderer.Copy(*walking_texture[frame_position],
                 SDL2pp::NullOpt, SDL2pp::Rect((int)pos_x, pos_y, 60, 60), 0.0,
                 SDL2pp::NullOpt, flip);
 }

@@ -21,9 +21,9 @@ public:
 
   int get_world_id(std::vector<std::string>& world_names);
 
-  void create_game(ClientProtocol& prot, int& player_id, bool* was_closed);
+  void create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_closed);
 
-  void join_game(ClientProtocol& prot, int& player_id, bool *was_closed);
+  void join_game(ClientProtocol& prot, uint8_t& player_id, bool *was_closed);
 
   void show_worlds(const std::vector<std::string>& world_names);
 

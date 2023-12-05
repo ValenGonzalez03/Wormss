@@ -23,12 +23,12 @@ int Lobby::get_world_id(std::vector<std::string>& world_names) {
   }
 }
 
-void Lobby::create_game(ClientProtocol& prot, int& player_id, bool* was_closed) {
+void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_closed) {
   CreateGame create_comm = CreateGame();
   prot.send_command(create_comm);
 
   player_id = prot.receive_id();
-  std::cout << "Tu player_id es: " << player_id << std::endl;
+  std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 
   int game_id = prot.receive_id();
   std::cout << "GAME ID: " << game_id << std::endl;
@@ -43,7 +43,7 @@ void Lobby::create_game(ClientProtocol& prot, int& player_id, bool* was_closed) 
   wait_start_command(prot, game_id);
 }
 
-void Lobby::join_game(ClientProtocol& prot, int& player_id, bool *was_closed) {
+void Lobby::join_game(ClientProtocol& prot, uint8_t& player_id, bool *was_closed) {
   std::cout << "Ingrese el codigo de la partida para unirse:" << std::endl;
   int game_id = 0;
   std::cin >> game_id;
@@ -52,7 +52,7 @@ void Lobby::join_game(ClientProtocol& prot, int& player_id, bool *was_closed) {
   prot.send_command(join_comm);
 
   player_id = prot.receive_id();
-  std::cout << "Tu player_id es: " << player_id << std::endl;
+  std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 }
 
 void Lobby::show_worlds(const std::vector<std::string>& world_names) {
@@ -80,7 +80,6 @@ void Lobby::run_lobby() {
   } while (option_selected != 'c' && option_selected != 'j');
 
   bool was_closed = false;
-  int player_id = 0;
 
   if (option_selected == 'c') {
     create_game(prot, player_id, &was_closed);

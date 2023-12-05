@@ -41,7 +41,7 @@ void Lobby::create_new_level() {
   std::string file_name = file_path + level_name + ".yml";
 
   new_world.set_name(level_name);
-  new_world.set_background_name("background1.jpg");
+  new_world.set_background_name("Background1.jpg");
 
   LevelEditor level_editor(new_world);
   level_editor.run();

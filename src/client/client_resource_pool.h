@@ -30,7 +30,7 @@ private:
   std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
   std::map<std::string, Mix_Chunk *> sounds;
   std::shared_ptr<SDL2pp::Texture> background;
-  Mix_Music *gMusic = NULL;
+  Mix_Music* gMusic = NULL;
   unsigned int music_volume = 20;
 
   void add_texture(const std::string &texture_name,
@@ -81,7 +81,8 @@ public:
   */
 
   // Ver inicialización (NO USAR)
-  void add_font(const std::string &font_name, const std::string &font_path, int font_size);
+  void add_font(const std::string &font_name, const std::string &font_path,
+                int font_size);
 
   // Ver inicialización (NO USAR)
   std::shared_ptr<SDL2pp::Font> get_font(const std::string &font_name);

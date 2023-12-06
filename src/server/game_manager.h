@@ -16,11 +16,7 @@ private:
   int current_worm_id;
   uint8_t current_turn_id = 0;
   std::list<uint8_t> players;
-  // std::map <int, WormBody>
   std::list<WormBody *> worms_list;
-
-  // PARA PRUEBAS
-  // WormBody *worm;
 
   float timeStep = 1.0f / 60.0f;
   int32 velocityIterations = 6;
@@ -58,9 +54,6 @@ public:
   void stop_aiming(const uint8_t &player_id);
 
   GameState get_state();
-
-  // SOLO DE PRUEBA
-  b2Vec2 get_worm_position();
 
   ~GameManager();
 

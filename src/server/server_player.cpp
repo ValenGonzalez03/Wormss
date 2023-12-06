@@ -14,7 +14,6 @@ Player::Player(Socket &&peer, GamesHandler &games_handler,
 
 void Player::start() {
   client_handler.start();
-  //sender.start();
 }
 
 void Player::kill() {

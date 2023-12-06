@@ -29,11 +29,7 @@ private:
 public:
   explicit World();
 	
-  //BeamBody *create_beam(float pos_x, float pos_y);
-
   BeamBody *create_beam(float pos_x, float pos_y, int angle, float length);
-
-  //WormBody *create_worm(float pos_x, float pos_y, const uint8_t& player_id);
 
   WormBody* create_worm(float pos_x, float pos_y, float vel, int health, const uint8_t& player_id);
   
@@ -52,22 +48,6 @@ public:
   void delete_beams();
 	
   ~World();
-
-/*
-  void print_beams () {
-    for (auto &beam : beams) {
-      beam->print_beam();
-    }
-  }
-
-  void print_worms () {
-    for (auto &worm : worms) {
-      std::cout << "WORM" << std::endl;
-      std::cout << "pos_x: " << worm->get_pos_x() << std::endl;
-      std::cout << "pos_y: " << worm->get_pos_y() << std::endl;
-    }
-  }
-*/
 
   std::string get_name() {
     return this->name;

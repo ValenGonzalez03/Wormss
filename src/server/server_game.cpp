@@ -2,8 +2,6 @@
 
 #define QUEUE_MAX_SIZE 20
 
-//Game::Game(uint8_t &game_id) : game_id(game_id), commands(QUEUE_MAX_SIZE) {}
-
 Game::Game(uint8_t &game_id, GameConfig &game_config) : 
 game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config) {}
 
@@ -14,7 +12,6 @@ Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
   players_counter++;
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
-  //push_game_state();
   return &commands;
 }
 

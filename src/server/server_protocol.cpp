@@ -47,18 +47,11 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
     throw LibError(errno, "Socket is closed.");
   }
 
-  //WorldsReader worlds_reader;
-  //std::vector<std::shared_ptr<World>> worlds = worlds_reader.read_yaml_files(std::string(RESOURCES_PATH) + "/Worlds");
-  
   if (code == CODE_PLAYER_COMM::CREATE_GAME) {
-    //send_worlds_names(worlds, &was_closed);
-    //std::string world_selected = recv_string(&was_closed);
-    //std::cout << "world_selected: " << world_selected << std::endl;
     return std::make_shared<RunnableCreateGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
     return std::make_shared<RunnableJoinGame>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::START_GAME) {
-    //send_world(*(worlds.at(0)));
     return std::make_shared<RunnableStartGame>(client_id, skt, &was_closed);
   } else {
     throw std::runtime_error("Error de comando de lobby");
@@ -129,16 +122,6 @@ void ServerProtocol::send_world(World &world) {
   for (auto &beam : world.get_beams()) {
     send_beam(*beam, &was_closed);
   }
-
-  // Mando la cant de spawn_points y sus datos
-  /* Hace falta mandar spawn_points?
-  uint16_t spawn_number = world.get_worms().size();
-  uint16_t spawn_number_be = htons(spawn_number);
-  skt.sendall(&spawn_number_be, sizeof(spawn_number_be), &was_closed);
-  for (auto &spawn_point : world.get_worms()) {
-    send_spawn_point(*spawn_point, &was_closed);
-  }
-  */
 }
 
 void ServerProtocol::send_beam(BeamBody &beam, bool *was_closed) {

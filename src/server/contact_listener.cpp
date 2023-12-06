@@ -65,20 +65,4 @@ void ContactListener::EndContact(b2Contact* contact) {
 			wormB->move_away_from_surface();
 		}
     }
-	
-	/*
-	b2Body* bodyA = fixtureA->GetBody();
-    b2Body* bodyB = fixtureB->GetBody();
-      
-    b2BodyUserData& dataA = bodyA->GetUserData();
-    b2BodyUserData& dataB = bodyB->GetUserData();
-    
-	Body* body = reinterpret_cast<Body*>(dataA.pointer);
-	Body* another_body = reinterpret_cast<Body*>(dataB.pointer);
-	
-	if(body) {
-		std::cout << "DEJA DE TENER CONTACTO\n";
-		//body->end_contact_with(another_body);
-	}
-	*/
 }

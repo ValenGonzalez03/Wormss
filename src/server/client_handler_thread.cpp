@@ -11,14 +11,9 @@ ClientHandler::ClientHandler(Socket &skt, ServerProtocol &protocol,
 
 void ClientHandler::run() {
   bool was_closed = false;
-  // std::shared_ptr<Command> command = std::make_shared<StartMoving>(0); SOLO
-  // PARA PRUEBAS
   try {
     while (keep_playing) {
-      if (not in_game) { // comunicacion sincronica
-        // std::list<int>* games_id = games_handler.obtain_all_games_id();
-        // protocol.send_games_id();
-
+      if (not in_game) { 
         std::shared_ptr<RunnableCommandLobby> runnable_command =
             protocol.process_command_lobby();
 
@@ -51,9 +46,8 @@ void ClientHandler::run() {
           in_game = true;
           sender.start();
         }
-      } else { // comunicacion asincronica
+      } else {
         std::cout << "id_player: " + std::to_string(player_id) << std::endl;
-        // std::cout << "Llego aca" << std::endl;
         std::shared_ptr<RunnableCommandGame> runnable_command =
             protocol.process_command(player_id);
         game_commands->try_push(runnable_command);
@@ -62,7 +56,6 @@ void ClientHandler::run() {
 
   } catch (const LibError &libError) { // Si se cierra el skt
     keep_playing = false;
-    // std::cerr << "LibError: " << libError.what() << std::endl;
   } catch (const std::runtime_error &runtimeError) { // Si se procesa mal un cmd
     keep_playing = false;
     std::cerr << "RuntimeError: " << runtimeError.what() << std::endl;

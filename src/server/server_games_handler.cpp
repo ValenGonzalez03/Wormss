@@ -34,7 +34,6 @@ GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue,
   Game *game = new Game(game_id, games_config);
   games_counter++;
   add_game(game);
-  //std::cout << "id_game: " + std::to_string(game_id) << std::endl;
   names = world_names;
   Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue =
       game->add_player(sender_queue, player_id);

@@ -29,8 +29,6 @@ typedef duration<float, duration<float>> dur_ms;
 typedef time_point<steady_clock, milliseconds> time_p_ms;
 typedef duration<float> dur_f;
 
-//class Command;
-
 class Game : public Thread {
 private:
   std::mutex m;
@@ -48,8 +46,6 @@ private:
   GameConfig &config;
 
 public:
-  //explicit Game(uint8_t &game_id);
-
   explicit Game(uint8_t &game_id, GameConfig &game_config);
 
   Queue<std::shared_ptr<RunnableCommandGame>> *
@@ -78,7 +74,7 @@ public:
 
   bool is_dead();
 
-  uint8_t get_game_id(); // Provisional
+  uint8_t get_game_id();
 
   Game(const Game &) = delete;
   Game &operator=(const Game &) = delete;

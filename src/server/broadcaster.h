@@ -9,8 +9,6 @@
 #include "../common/game_state.h"
 #include "../common/queue.h"
 
-// class Command;
-
 class Broadcaster {
 private:
   std::mutex m;

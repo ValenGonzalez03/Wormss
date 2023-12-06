@@ -2,27 +2,9 @@
 #include "box2d/box2d.h"
 #include <stdio.h>
 
-// cambiar despues
-#define LEFT 0
-#define RIGHT 1
-
 GameManager::GameManager() {}
 
 void GameManager::initialize_game(GameConfig &game_config) {
-  /*
-  WorldsReader worlds_reader;
-  std::vector<std::shared_ptr<World>> worlds =
-  worlds_reader.read_yaml_files(std::filesystem::path(RESOURCES_PATH) /
-  "Worlds"); for (auto &world : worlds){ world->print_beams();
-    world->print_worms();
-  }
-  */
-  /* world.create_beam(0, 1, 0, 6);
-  world.create_beam(6, 1, 30, 6);
-
-  std::cout << "worm_speed " << game_config.get_worm_speed() << std::endl;
-  std::cout << "worm_life " << game_config.get_worm_life() << std::endl; */
-
   int i = 0;
   std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
   for (uint8_t player_id : players) {
@@ -31,7 +13,6 @@ void GameManager::initialize_game(GameConfig &game_config) {
     worms_list.push_back(worm);
     i++;
   }
-  // world.create_worm(4, 7, 5);
 }
 
 void GameManager::add_player(const uint8_t &player_id) {
@@ -57,34 +38,14 @@ World& GameManager::get_world() {
   return this->world;
 }
 
-/*
-void GameManager::set_world(World selected_world) {
-  for (const auto& beam : selected_world.get_beams()) {
-      world.create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
-    }
-
-    for (const auto& spawn_point : selected_world.get_spawn_points()) {
-      world.add_spawn_point(spawn_point[0], spawn_point[1]);
-    }
-
-    world.set_name(selected_world.get_name());
-    world.set_background(selected_world.get_background());
-}
-*/
-
 void GameManager::step() {
-  //std::cout << "gm step" << std::endl;
   world.step(timeStep, velocityIterations, positionIterations);
-  //std::cout << "finish gm step" << std::endl;
 }
 
 void GameManager::update() {
   for (WormBody *worm : worms_list) {
-    //std::cout << "gm update" << std::endl;
     worm->update();
   }
-  // WormBody* worm = get_worm(current_turn_id); // verificar si no le tiene que
-  // pasar el player_id tambien worm->update();
 }
 
 WormBody *GameManager::get_worm(const uint8_t &player_id) {
@@ -148,15 +109,10 @@ GameState GameManager::get_state() {
                         current_worm->get_pos_y(),
                         current_worm->get_direction(),
                         current_worm->get_state(),
-                        current_worm->get_aiming_angle()); // CAMBIAR LUEGO
+                        current_worm->get_aiming_angle());
   }
 
   return game_state;
-}
-
-// SOLO DE PRUEBA
-b2Vec2 GameManager::get_worm_position() {
-  return get_worm(current_turn_id)->get_position();
 }
 
 GameManager::~GameManager() {}

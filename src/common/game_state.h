@@ -57,9 +57,10 @@ public:
     // Recibo el estado
     skt.recvall(&(this->state), sizeof(this->state), was_closed);
     // Recibo el angulo de apuntado
-    int angle_int;
-    skt.recvall(&angle_int, sizeof(angle_int), was_closed);
-    this->aim_angle = ntohl(angle_int) / 100.0;
+    int angle_int_net;
+    skt.recvall(&angle_int_net, sizeof(angle_int_net), was_closed);
+    int angle_int = ntohl(angle_int_net);
+    this->aim_angle = float(angle_int) / float(100.0);
   }
 
   // Envia los datos del gusano (Lado servidor)

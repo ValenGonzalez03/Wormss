@@ -20,7 +20,7 @@ void ResourcePool::add_texture(const std::string &texture_name,
   std::vector<SDL2pp::Texture *> textures(amount_frames);
   for (int i = 0; i < amount_frames; i++) {
     SDL2pp::Rect src_rect(0, -i * height, width, height);
-    SDL2pp::Surface dst_surface(0, src_rect.w, src_rect.h, 32, 0, 0, 0, 0);
+    SDL2pp::Surface dst_surface(0, src_rect.GetW(), src_rect.GetH(), 32, 0, 0, 0, 0);
     src_surface.Blit(SDL2pp::NullOpt, dst_surface, src_rect);
 
     Uint32 color_key = SDL_MapRGB(dst_surface.Get()->format, 128, 128, 192);
@@ -29,6 +29,56 @@ void ResourcePool::add_texture(const std::string &texture_name,
     textures[i] = texture;
   }
   texture_arrays[texture_name] = textures;
+}
+
+void ResourcePool::add_texture_walking(const std::string &texture_name,
+  const std::string &image_path, int width, int height,
+  int amount_frames)  {
+SDL2pp::Surface src_surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
+std::vector<SDL2pp::Texture *> textures(amount_frames);
+for (int i = 0; i < amount_frames; i++) {
+  SDL2pp::Rect src_rect(0, i * height, width, height);
+  SDL2pp::Surface int_surface(0, src_rect.GetW(), src_rect.GetH(), 32, 0, 0, 0, 0);
+  src_surface.BlitScaled(src_rect, int_surface, SDL2pp::NullOpt);
+  
+  const int offset_x = 19;
+  const int offset_y = 14;
+  SDL2pp::Rect dst_rect(offset_x - i / 3, offset_y, width + offset_x + i / 3 - 57, height + offset_y - 45);
+  SDL2pp::Surface dst_surface(0, dst_rect.GetW(), dst_rect.GetH(), 32, 0, 0, 0, 0);
+  int_surface.BlitScaled(dst_rect, dst_surface, SDL2pp::NullOpt);
+  //SDL2pp::Surface s();
+
+  Uint32 color_key = SDL_MapRGB(dst_surface.Get()->format, 128, 128, 192);
+  SDL2pp::Texture *texture(new SDL2pp::Texture(
+  renderer, dst_surface.SetColorKey(true, color_key)));
+  textures[i] = texture;
+}
+texture_arrays[texture_name] = textures;
+}
+
+void ResourcePool::add_texture_aiming(const std::string &texture_name,
+  const std::string &image_path, int width, int height,
+  int amount_frames)  {
+SDL2pp::Surface src_surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
+std::vector<SDL2pp::Texture *> textures(amount_frames);
+for (int i = 0; i < amount_frames; i++) {
+  SDL2pp::Rect src_rect(0, i * height, width, height);
+  SDL2pp::Surface int_surface(0, src_rect.GetW(), src_rect.GetH(), 32, 0, 0, 0, 0);
+  src_surface.BlitScaled(src_rect, int_surface, SDL2pp::NullOpt);
+  
+  const int offset_x = 17;
+  const int offset_y = 14;
+  SDL2pp::Rect dst_rect(offset_x, offset_y, width + offset_x - 48, height + offset_y - 45);
+  SDL2pp::Surface dst_surface(0, dst_rect.GetW(), dst_rect.GetH(), 32, 0, 0, 0, 0);
+  int_surface.BlitScaled(dst_rect, dst_surface, SDL2pp::NullOpt);
+  //SDL2pp::Surface s();
+
+  Uint32 color_key = SDL_MapRGB(dst_surface.Get()->format, 128, 128, 192);
+  SDL2pp::Texture *texture(new SDL2pp::Texture(
+  renderer, dst_surface.SetColorKey(true, color_key)));
+  textures[i] = texture;
+}
+texture_arrays[texture_name] = textures;
 }
 
 std::vector<SDL2pp::Texture* > ResourcePool::get_texture(const std::string &texture_name)  {
@@ -57,7 +107,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() {
 }
 
 void ResourcePool::add_worm_walking() {
-  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15);
+  add_texture_walking(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() {
@@ -73,7 +123,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() {
 }
 
 void ResourcePool::add_worm_aiming() {
-  add_texture(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32);
+  add_texture_aiming(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming() {

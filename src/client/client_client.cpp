@@ -34,29 +34,31 @@ void Client::join_threads() {
 int Client::run() {
 
   // Initialize SDL library
-  SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-
+  SDL2pp::SDL sdl(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
+  
   // Initialize SDL_ttf library
   SDLTTF ttf;
-
+  
   // Initialize SDLMIXER library
   SDLMixer mixer;
   if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
-      throw std::runtime_error("SDL_mixer could not initialize!");
-  }
-
-  // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS, MUSICA, ETC)
-  client_sdl.resource_pool.initialize();
-  client_sdl.resource_pool.play_music();
-
-
-  // RECIBO EL MUNDO DEL SERVER
-  bool was_closed = false;
-  prot.recv_world(client_sdl.world_view, &was_closed);
-
-  state.prev_ticks = SDL_GetTicks();
-
-  start_threads();
+        throw std::runtime_error("SDL_mixer could not initialize!");
+    }
+    
+    
+    // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS, MUSICA, ETC)
+    client_sdl.resource_pool.initialize();
+    client_sdl.resource_pool.play_music();
+    
+    
+    // RECIBO EL MUNDO DEL SERVER
+    bool was_closed = false;
+    prot.recv_world(client_sdl.world_view, &was_closed);
+    
+    state.prev_ticks = SDL_GetTicks();
+    
+    start_threads();
+    
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
@@ -126,8 +128,10 @@ bool Client::func_to_execute() {
   client_sdl.renderer.Clear();
   client_sdl.world_view.render(frame_ticks, state);
   std::string text =
-      "Position: " +
+      "Pos x: " +
       std::to_string(game_state.get_worms()[player_id].get_pos_x()) +
+      ", Pos y: " +
+      std::to_string(game_state.get_worms()[player_id].get_pos_y()) +
       ", state: " +
       (print_state(game_state.get_worms()[player_id].get_state())) +
       ", direction: " +
@@ -169,12 +173,10 @@ bool Client::execute_event(SDL_Event &event) {
         handle_finish_game();
         return true;
       case SDLK_RIGHT:
-        if (worm_client.get_state() != WORM_STATES::MOVING)
-          handle_start_moving(RIGHT);
+        handle_start_moving(RIGHT);
         break;
       case SDLK_LEFT:
-        if (worm_client.get_state() != WORM_STATES::MOVING)
-          handle_start_moving(LEFT);
+        handle_start_moving(LEFT);
         break;
       case SDLK_RETURN:
         if (worm_client.get_state() != WORM_STATES::JUMPING)

@@ -36,6 +36,14 @@ private:
   void add_texture(const std::string &texture_name,
                    const std::string &image_path, int width, int height,
                    int amount_frames);
+  
+  void add_texture_walking(const std::string &texture_name,
+                    const std::string &image_path, int width, int height,
+                    int amount_frames);
+
+  void add_texture_aiming(const std::string &texture_name,
+    const std::string &image_path, int width, int height,
+    int amount_frames);
 
   // Devuelve la textura guardada en el map de texturas
   // relacionada con el texture_name

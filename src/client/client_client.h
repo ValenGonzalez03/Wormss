@@ -2,6 +2,7 @@
 #define CLIENT_CLIENT_H_
 
 #include <SDL2pp/SDL2pp.hh>
+#include <SDL2/SDL.h>
 #include <string>
 #include <utility>
 

@@ -34,7 +34,7 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
 */
 
 WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int health, uint8_t id)
-    : Body(world, pos_x, pos_y, 0, 1.5, 1.5, 1, 0.1), vel(vel), id(id), health(health) {
+    : Body(world, pos_x, pos_y, 0, 19.0f / 23.3f, 25.0f / 23.3f, 1, 0.1), vel(vel), id(id), health(health) {
   b2BodyDef bodyDef;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x, pos_y);
@@ -42,7 +42,7 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int heal
   body = world->CreateBody(&bodyDef);
 
   b2PolygonShape polygonShape;
-  polygonShape.SetAsBox(width/2, height/2);
+  polygonShape.SetAsBox(width / 2, height / 2);
 
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &polygonShape;
@@ -53,11 +53,11 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int heal
   body->SetFixedRotation(true);
   body->GetUserData().pointer = (uintptr_t)this;
 
-  // sensor
-  polygonShape.SetAsBox(0.3, 0.6, b2Vec2(pos_x, -0.5), 0);
-  fixtureDef.isSensor = true;
-  b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
-  footSensorFixture->GetUserData().pointer = (uintptr_t)3;
+  // // sensor
+  // polygonShape.SetAsBox(0.3, 0.6, b2Vec2(pos_x, -0.5), 0);
+  // fixtureDef.isSensor = true;
+  // b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
+  // footSensorFixture->GetUserData().pointer = (uintptr_t)3;
 }
 
 void WormBody::move_left() { apply_horizontal_impulse(-vel); }

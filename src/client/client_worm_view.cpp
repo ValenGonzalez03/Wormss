@@ -11,9 +11,10 @@ WormView::WormView(SDL2pp::Renderer &rend,
 
 void WormView::render(int frame, Worm &worm, client_state &worm_state) {
   PositionConverter converter;
-  Position pos_in_px = converter.convert_position_to_px(worm.get_position());
-  int pos_x = pos_in_px.get_position_x();
-  int pos_y = pos_in_px.get_position_y();
+  Position pos_in_m = worm.get_position();
+  //Position pos_in_px = converter.convert_position_to_px(worm.get_position());
+  int pos_x = converter.convert_x_from_m_to_px(pos_in_m.get_position_x()) - 21 / 2;
+  int pos_y = converter.convert_y_from_m_to_px(pos_in_m.get_position_y()) - 28 / 2;
   /*
   std::cout << "Posx en m: " << worm.get_position().get_position_x()
             << std::endl;
@@ -29,6 +30,15 @@ void WormView::render(int frame, Worm &worm, client_state &worm_state) {
   } else { // worm.get_state() == idle == 0
     render_worm_idle(frame, pos_x, pos_y, worm, worm_state);
   }
+
+  if (std::getenv("DEBUG") != NULL) {
+    SDL2pp::Rect box(pos_x, pos_y + 3, 19, 25);
+  
+    SDL2pp::Color c(255, 0, 0);
+    renderer.SetDrawColor(c);
+    renderer.DrawRect(box);
+  }
+
 }
 
 void WormView::render_worm_idle(int frame, int pos_x, int pos_y, Worm &worm,
@@ -38,7 +48,7 @@ void WormView::render_worm_idle(int frame, int pos_x, int pos_y, Worm &worm,
   walking_texture.front()->SetAlphaMod(255);
   walking_texture.front()->SetBlendMode(SDL_BLENDMODE_BLEND);
   renderer.Copy(*walking_texture.front(), SDL2pp::NullOpt, // Size
-                SDL2pp::Rect(pos_x, pos_y, 60, 60),        // Destination
+                SDL2pp::Rect(pos_x, pos_y, 21, 28),        // Destination
                 0.0,                                       // don't rotate
                 SDL2pp::NullOpt, // rotation center - not needed
                 flip             // horizontal flip
@@ -56,7 +66,7 @@ void WormView::render_worm_running(int frame, int pos_x, int pos_y, Worm &worm,
   walking_texture[frame_position]->SetAlphaMod(
       255); // sprite is fully opaque
   renderer.Copy(*walking_texture[frame_position],
-                SDL2pp::NullOpt, SDL2pp::Rect((int)pos_x, pos_y, 60, 60), 0.0,
+                SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y, 21, 28), 0.0,
                 SDL2pp::NullOpt, flip);
 }
 
@@ -69,14 +79,14 @@ void WormView::render_worm_aiming(int frame, int pos_x, int pos_y, Worm &worm) {
   auto normalized_angle = (angle / M_PI_2);
   auto frame_position =
       16 + (int)(normalized_angle * ((aiming_texture.size() / 2)));
-  std::cout << "angle: " << angle << std::endl;
-  std::cout << "Normalized angle: " << normalized_angle << std::endl;
+  //std::cout << "angle: " << angle << std::endl;
+  //std::cout << "Normalized angle: " << normalized_angle << std::endl;
 
   aiming_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
   aiming_texture[frame_position]->SetAlphaMod(255);
 
   renderer.Copy(*aiming_texture[frame_position], SDL2pp::NullOpt,
-                SDL2pp::Rect((int)pos_x, pos_y, 60, 60), 0.0, SDL2pp::NullOpt,
+                SDL2pp::Rect((int)pos_x, pos_y, 21, 28), 0.0, SDL2pp::NullOpt,
                 flip);
 }
 

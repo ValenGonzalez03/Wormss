@@ -47,7 +47,7 @@ void ClientHandler::run() {
           sender.start();
         }
       } else {
-        std::cout << "id_player: " + std::to_string(player_id) << std::endl;
+        //std::cout << "id_player: " + std::to_string(player_id) << std::endl;
         std::shared_ptr<RunnableCommandGame> runnable_command =
             protocol.process_command(player_id);
         game_commands->try_push(runnable_command);

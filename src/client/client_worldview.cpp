@@ -3,23 +3,36 @@
 WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
     : resource_pool(res_pool), renderer(rend) {}
 
-void WorldView::add_short_beam(int pos_x, int pos_y, int angle) {
-  PositionConverter converter;
-  Position pos_in_m(pos_x, pos_y);
-  Position beam_pos = converter.convert_position_to_px(pos_in_m);
-  std::vector<SDL2pp::Texture *> beam_texture =
-      resource_pool.get_short_beam_texture();
-  Beam beam(beam_pos, beam_texture, renderer, angle);
-  beams.push_back(beam);
-}
+// void WorldView::add_short_beam(int pos_x, int pos_y, int angle) {
+//   PositionConverter converter;
+//   Position pos_in_m(pos_x, pos_y);
+//   Position beam_pos = converter.convert_position_to_px(pos_in_m);
+//   std::vector<SDL2pp::Texture *> beam_texture =
+//       resource_pool.get_short_beam_texture();
+//   Beam beam(beam_pos, beam_texture, renderer, angle);
+//   beams.push_back(beam);
+// }
 
-void WorldView::add_long_beam(int pos_x, int pos_y, int angle) {
-  PositionConverter converter;
-  Position pos_in_m(pos_x, pos_y);
-  Position beam_pos = converter.convert_position_to_px(pos_in_m);
+void WorldView::add_beam(float pos_x, float pos_y, float width, float height,
+                         int angle) {
+  int pos_x_px = convert_meters_to_pixels_x(pos_x - width / 2);
+  int pos_y_px = convert_meters_to_pixels_y(pos_y + height / 2);
+  int width_px = convert_meters_to_pixels_x(width);
+  int height_px = convert_meters_to_pixels_x(height);
+  // std::cout << "Largo: " << width << std::endl;
+  // std::cout << "Alto: " << height << std::endl;
+  // std::cout << "Pos x (px): " << pos_x_px << std::endl;
+  // std::cout << "Pos y (px): " << pos_y_px << std::endl;
   std::vector<SDL2pp::Texture *> beam_texture =
       resource_pool.get_long_beam_texture();
-  Beam beam(beam_pos, beam_texture, renderer, angle);
+  if (width == 6) {
+    beam_texture = resource_pool.get_long_beam_texture();
+  } else {
+    beam_texture = resource_pool.get_short_beam_texture();
+  }
+
+  Beam beam(width_px, height_px, pos_x_px, pos_y_px, angle, beam_texture,
+            renderer);
   beams.push_back(beam);
 }
 

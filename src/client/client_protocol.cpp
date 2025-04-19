@@ -22,7 +22,7 @@ GameState ClientProtocol::process_game_state() {
   return GameState(skt, &was_closed);
 }
 
-std::string ClientProtocol::recv_string(bool* was_closed) {
+std::string ClientProtocol::recv_string(bool *was_closed) {
   uint16_t string_length;
   skt.recvall(&string_length, sizeof(string_length), was_closed);
   uint16_t string_length_be = ntohs(string_length);
@@ -32,14 +32,14 @@ std::string ClientProtocol::recv_string(bool* was_closed) {
   return std::string(buffer);
 }
 
-void ClientProtocol::send_string(std::string str, bool* was_closed) {
+void ClientProtocol::send_string(std::string str, bool *was_closed) {
   uint16_t string_length = str.size();
   uint16_t string_length_be = ntohs(string_length);
   skt.sendall(&string_length_be, sizeof(string_length_be), was_closed);
   skt.sendall(str.c_str(), str.size(), was_closed);
 }
 
-float ClientProtocol::recv_float(bool* was_closed) {
+float ClientProtocol::recv_float(bool *was_closed) {
   uint16_t number;
   skt.recvall(&number, sizeof(number), was_closed);
   uint16_t number_be = ntohs(number);
@@ -47,12 +47,11 @@ float ClientProtocol::recv_float(bool* was_closed) {
   return final_number;
 }
 
-
 //////////////////////////////////////////////////////////////////////
 ///////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
 //////////////////////////////////////////////////////////////////////
 
-std::vector<std::string> ClientProtocol::recv_worlds_names(bool* was_closed) {
+std::vector<std::string> ClientProtocol::recv_worlds_names(bool *was_closed) {
   std::vector<std::string> names;
   uint16_t names_number;
   skt.recvall(&names_number, sizeof(names_number), was_closed);
@@ -64,7 +63,8 @@ std::vector<std::string> ClientProtocol::recv_worlds_names(bool* was_closed) {
   return names;
 }
 
-void ClientProtocol::send_world_name_selected(std::string& world_name, bool* was_closed) {
+void ClientProtocol::send_world_name_selected(std::string &world_name,
+                                              bool *was_closed) {
   send_string(world_name, was_closed);
 }
 
@@ -72,11 +72,11 @@ void ClientProtocol::send_world_id(int world_id, bool *was_closed) {
   skt.sendall(&world_id, sizeof(world_id), was_closed);
 }
 
-void ClientProtocol::recv_world(WorldView& world, bool* was_closed) {
+void ClientProtocol::recv_world(WorldView &world, bool *was_closed) {
   std::string world_name = recv_string(was_closed);
   std::string background_name = recv_string(was_closed);
   world.set_background(background_name);
-  
+
   // Recibo cant de vigas y caracteristicas vigas
   uint16_t beams_number;
   skt.recvall(&beams_number, sizeof(beams_number), was_closed);
@@ -87,26 +87,21 @@ void ClientProtocol::recv_world(WorldView& world, bool* was_closed) {
   // Hace falta recibir spawn_points?
 }
 
-
-void ClientProtocol::recv_and_add_beam(WorldView& world, bool* was_closed) {
+void ClientProtocol::recv_and_add_beam(WorldView &world, bool *was_closed) {
   uint16_t beam_angle;
-  
+
   float pos_x = recv_float(was_closed);
   float pos_y = recv_float(was_closed);
   skt.recvall(&beam_angle, sizeof(beam_angle), was_closed);
-  
+
   uint16_t beam_angle_be = ntohs(beam_angle);
   int beam_angle_int = static_cast<int>(beam_angle_be);
-  
+
   float width = recv_float(was_closed);
 
-  if (width == 6) {
-    world.add_long_beam(pos_x, pos_y, beam_angle_int);
-  }
-  else if (width == 3) {
-    world.add_short_beam(pos_x, pos_y, beam_angle_int);
-  }
-  else {
+  if (width == 6 || width == 3) {
+    world.add_beam(pos_x, pos_y, width, 0.8583f, beam_angle_int);
+  } else {
     std::cout << "Error tamanio viga" << std::endl;
   }
 }
@@ -114,7 +109,6 @@ void ClientProtocol::recv_and_add_beam(WorldView& world, bool* was_closed) {
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-
 
 void ClientProtocol::close_socket() {
   skt.shutdown(2);

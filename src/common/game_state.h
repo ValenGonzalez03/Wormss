@@ -15,10 +15,12 @@
 #define UP 2
 #define DOWN 3
 
-struct Worm {
+struct WormData {
 private:
   uint8_t player_id;
-  Position pos;
+  float pos_x; // En metros
+  float pos_y; // En metros
+  //Position pos;
   uint8_t direction;
   uint8_t state; // Si está corriendo, disparando, saltando, etc
   float aim_angle;
@@ -26,13 +28,13 @@ private:
 
 public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
-  explicit Worm()
-      : player_id(-1), pos(0, 0), direction(RIGHT), state(0), aim_angle(0) {}
+  explicit WormData()
+      : player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(0), aim_angle(0) {}
 
-  explicit Worm(uint8_t id, Position pos, u_int8_t dir, uint8_t st, float angle)
-      : player_id(id), pos(pos), direction(dir), state(st), aim_angle(angle) {}
+  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, uint8_t st, float angle)
+      : player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st), aim_angle(angle) {}
 
-  explicit Worm(Socket &skt) : pos(0, 0) {
+  explicit WormData(Socket &skt) : pos_x(0), pos_y(0) {
     bool was_closed = false;
     deserialize(skt, &was_closed);
   }
@@ -50,8 +52,9 @@ public:
     float final_pos_y = ntohs(pos_y) / 100.0;
     // std::cout << "final_pos_x: " << final_pos_x << std::endl;
     // std::cout << "final_pos_y: " << final_pos_y << std::endl;
-    Position position(final_pos_x, final_pos_y);
-    this->pos = position;
+    //Position position(final_pos_x, final_pos_y);
+    this->pos_x = final_pos_x;
+    this->pos_y = final_pos_y;
     // Recibo la direccion
     skt.recvall(&(this->direction), sizeof(this->direction), was_closed);
     // Recibo el estado
@@ -68,8 +71,10 @@ public:
     // Hago send del player_id
     skt.sendall(&(this->player_id), sizeof(this->player_id), was_closed);
     // Hago send de la position
-    uint16_t pos_x = uint(pos.get_position_x() * 100);
-    uint16_t pos_y = uint(pos.get_position_y() * 100);
+    // std::cout << "final_pos_x: " << pos_x << std::endl;
+    // std::cout << "final_pos_y: " << pos_y << std::endl;
+    uint16_t pos_x = uint(this->pos_x * 100);
+    uint16_t pos_y = uint(this->pos_y * 100);
     uint16_t pos_x_be = htons(pos_x);
     uint16_t pos_y_be = htons(pos_y);
     skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
@@ -86,9 +91,9 @@ public:
 
   uint8_t get_player_id() { return player_id; }
 
-  float get_pos_x() { return pos.get_position_x(); }
+  float get_pos_x() { return pos_x; }
 
-  float get_pos_y() { return pos.get_position_y(); }
+  float get_pos_y() { return pos_y; }
 
   uint8_t get_direction() { return direction; }
 
@@ -97,17 +102,17 @@ public:
   float get_aim_angle() { return aim_angle; }
 
   // Devuelve la pos del gusano. Uso const para evitar que sea modificada
-  Position get_position() const { return pos; }
+  //Position get_position() const { return pos; }
 };
 
 struct GameState {
 private:
-  std::map<uint8_t, Worm> worms_list;
+  std::map<uint8_t, WormData> worms_list;
 
 public:
-  GameState() : worms_list(std::map<uint8_t, Worm>()) {}
+  GameState() : worms_list(std::map<uint8_t, WormData>()) {}
 
-  explicit GameState(const std::map<uint8_t, Worm> &list) : worms_list(list) {}
+  explicit GameState(const std::map<uint8_t, WormData> &list) : worms_list(list) {}
 
   // Constructor que funciona como una deserializacion, recibe la tira de bytes
   // y devuelve un game state
@@ -115,25 +120,27 @@ public:
     uint8_t worms_amount = 0;
     skt.recvall(&worms_amount, sizeof(worms_amount), was_closed);
     for (int i = 0; i < worms_amount; i++) {
-      Worm worm(skt);
-      worms_list.insert(std::pair<uint8_t, Worm>(worm.get_player_id(), worm));
+      WormData worm(skt);
+      worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
+      //std::cout << "worms_list_size: " << (int) worms_list.size() << std::endl;
     }
   }
 
   void serialize(Socket &skt, bool *was_closed) {
     uint8_t worms_amount = worms_list.size();
+    //std::cout << "Cantidad gusanos: " << worms_amount << std::endl;
     skt.sendall(&worms_amount, sizeof(worms_amount), was_closed);
     for (auto &worm : worms_list) {
       worm.second.serialize(skt, was_closed);
     }
   }
 
-  std::map<uint8_t, Worm> get_worms() { return worms_list; }
+  std::map<uint8_t, WormData> get_worms() { return worms_list; }
 
   void add_worm(uint8_t player_id, const float &pos_x, const float &pos_y,
                 uint8_t dir, uint8_t state, float angle) {
-    Worm worm(player_id, Position(pos_x, pos_y), dir, state, angle);
-    worms_list.insert(std::pair<uint8_t, Worm>(worm.get_player_id(), worm));
+    WormData worm(player_id, pos_x, pos_y, dir, state, angle);
+    worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
   }
 };
 

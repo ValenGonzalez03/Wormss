@@ -54,6 +54,8 @@ public:
   // Recibe una viga y la agrega al mundo
   void recv_and_add_beam(WorldView &world, bool *was_closed);
 
+  void recv_and_add_spawn_point(std::vector<std::vector<float>> spawn_points, bool *was_closed);
+
   // Envía el nombre del mundo elegido
   void send_world_name_selected(std::string &world_name, bool *was_closed);
 

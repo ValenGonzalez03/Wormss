@@ -1,7 +1,7 @@
 #include "client_worldview.h"
 
 WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
-    : resource_pool(res_pool), renderer(rend) {}
+    : resource_pool(res_pool), renderer(rend), worms() {}
 
 // void WorldView::add_short_beam(int pos_x, int pos_y, int angle) {
 //   PositionConverter converter;
@@ -36,20 +36,44 @@ void WorldView::add_beam(float pos_x, float pos_y, float width, float height,
   beams.push_back(beam);
 }
 
-void WorldView::render(int frame,
-                       client_state &worm_state) { // Gamestate game_state
-  auto walking_textures = resource_pool.get_worm_walking();
-  auto jumping_textures = resource_pool.get_worm_jumping();
-  auto aiming_textures = resource_pool.get_worm_aiming();
-  WormView worm_view(renderer, walking_textures, jumping_textures,
-                     aiming_textures); // Ver de hacer una sola instancia
+// void WorldView::add_worms(std::vector<std::vector<float>> spawn_points) {
+//   for (int i = 0; i < worms.size(); i++) {
+//       WormData data(-1, spawn_points[i][0], spawn_points[i][1], RIGHT, 0, 0);
+//       add_worm(data);
+//   }
+// }
+
+void WorldView::add_worm(WormData data) {
+  std::vector<std::vector<SDL2pp::Texture *>> worm_textures;
+  worm_textures.push_back(resource_pool.get_worm_walking());
+  worm_textures.push_back(resource_pool.get_worm_aiming());
+  //worm_textures.push_back(resource_pool.get_worm_jumping());
+
+  float width = 0.81f;
+  float heigth = 1.07f;
+
+  int pos_x_px = convert_meters_to_pixels_x(data.get_pos_x() - width / 2);
+  int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y() + heigth / 2);
+  int width_px = convert_meters_to_pixels_x(width);
+  int heigth_px = convert_meters_to_pixels_x(heigth);
+
+  
+  Worm worm(data.get_player_id(), pos_x_px, pos_y_px, width_px, heigth_px, data.get_aim_angle(), data.get_direction(), 
+  data.get_state(), std::move(worm_textures), renderer);
+  worms.insert({worm.get_id(), worm});
+}
+
+void WorldView::render(int frame, client_state &worm_state) { // Gamestate game_state
   // Renderizar fondo
   render_background();
+  // Renderizar vigas
   for (auto &beam : beams) {
     beam.render(frame);
   }
+
+  // Renderizar gusanos
   for (auto &worm : worms) {
-    worm_view.render(frame, worm.second, worm_state);
+    worm.second.render(frame, worm_state);
   }
   // Renderizar balas/cohetes
 
@@ -60,7 +84,10 @@ void WorldView::render(int frame,
 }
 
 void WorldView::update(GameState &game_state) {
-  this->worms = game_state.get_worms();
+  auto worms_data = game_state.get_worms();
+  for (auto &worm : worms) {
+    worm.second.update(worms_data[worm.second.get_id()]);
+  }
 }
 
 void WorldView::set_background(const std::string &path) {

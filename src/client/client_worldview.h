@@ -3,10 +3,9 @@
 
 #include "../common/game_state.h"
 #include "client_beam.h"
-#include "client_position_converter.h"
 #include "client_resource_pool.h"
 #include "client_state.h"
-#include "client_worm_view.h"
+#include "client_worm.h"
 #include <vector>
 
 class WorldView {
@@ -23,10 +22,9 @@ public:
   // y a un renderer
   WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend);
 
-  // Convierte la posicion pasada por parámetro de m a px,
-  // crea la short_beam y la agrega al WorldView
-  // void add_short_beam(int pos_x, int pos_y, int angle);
+  // void add_worms(std::vector<std::vector<float>> spawn_points);
 
+  void add_worm(WormData data);
   // Convierte la posicion pasada por parámetro de m a px,
   // crea la long_beam y la agrega al WorldView
   void add_beam(float pos_x, float pos_y, float width, float height, int angle);

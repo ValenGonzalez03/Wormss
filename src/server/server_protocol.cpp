@@ -109,19 +109,26 @@ void ServerProtocol::send_float(float n, bool *was_closed) {
 //////////////////////////////////////////////////////////////////////
 void ServerProtocol::send_world(World &world) {
   bool was_closed = false;
-  // Mando el nombre del mundo
+  // Envio el nombre del mundo
   send_string(world.get_name(), &was_closed);
 
-  // Mando el path del background del mundo
+  // Envio el path del background del mundo
   send_string(world.get_background(), &was_closed);
 
-  // Mando la cant de vigas y sus datos
+  // Envio la cantidad de vigas y sus posiciones
   uint16_t beams_number = world.get_beams().size();
   uint16_t beams_number_be = htons(beams_number);
   skt.sendall(&beams_number_be, sizeof(beams_number_be), &was_closed);
   for (auto &beam : world.get_beams()) {
     send_beam(*beam, &was_closed);
   }
+  // Envio la cantidad de spawn points y sus posiciones
+  // uint16_t spawn_points_number = world.get_spawn_points().size();
+  // uint16_t spawn_points_number_be = htons(spawn_points_number);
+  // skt.sendall(&spawn_points_number, sizeof(spawn_points_number), &was_closed);
+  // for (auto spawn_point : world.get_spawn_points()) {
+  //   send_spawn_points(spawn_point, &was_closed);
+  // }
 }
 
 void ServerProtocol::send_beam(BeamBody &beam, bool *was_closed) {
@@ -133,9 +140,9 @@ void ServerProtocol::send_beam(BeamBody &beam, bool *was_closed) {
   send_float(beam.get_width(), was_closed);
 }
 
-void ServerProtocol::send_spawn_point(WormBody &worm, bool *was_closed) {
-  send_float(worm.get_pos_x(), was_closed);
-  send_float(worm.get_pos_y(), was_closed);
+void ServerProtocol::send_spawn_points(std::vector<float> spawn_point, bool *was_closed) {
+  send_float(spawn_point[0], was_closed);
+  send_float(spawn_point[1], was_closed);
 }
 
 void ServerProtocol::send_worlds_names(

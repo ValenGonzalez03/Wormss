@@ -54,15 +54,28 @@ int Client::run() {
     // RECIBO EL MUNDO DEL SERVER
     bool was_closed = false;
     prot.recv_world(client_sdl.world_view, &was_closed);
+
     
     state.prev_ticks = SDL_GetTicks();
     
     start_threads();
-    
+  
+    int worms_amount = 0;
+    GameState first_game_state;
+    // Esto claramente es una mala solucion pero por ahora sirve
+    while (worms_amount == 0) {
+      first_game_state = receiver_queue.pop();
+      worms_amount = first_game_state.get_worms().size();
+    }
+    std::cout << "Cantidad worms: " << (int) first_game_state.get_worms().size() << std::endl;
+    for (auto worm_data : first_game_state.get_worms()) {
+      client_sdl.world_view.add_worm(worm_data.second);
+    }
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
 
+  // Ejecuta func_to_execute en cada iteracion
   loop(std::chrono::duration<float>((float)RATE));
 
   return 0;
@@ -87,7 +100,6 @@ bool Client::func_to_execute() {
   // TRY-POP DE LA RECEIVER QUEUE
   // ---------------------------------------------------------------------------
   GameState game_state = GameState();
-
 
   try {
     bool was_received = receiver_queue.pop_last_one(game_state);

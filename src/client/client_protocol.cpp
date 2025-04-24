@@ -85,6 +85,22 @@ void ClientProtocol::recv_world(WorldView &world, bool *was_closed) {
     recv_and_add_beam(world, was_closed);
   }
   // Hace falta recibir spawn_points?
+  // std::vector<std::vector<float>> spawn_points;
+  // uint16_t spawn_points_number;
+  // skt.recvall(&spawn_points_number, sizeof(spawn_points_number), was_closed);
+  // uint16_t spawn_points_number_be = ntohs(spawn_points_number);
+  // std::cout << "CANTIDAD SPAWN POINTS: " << spawn_points_number << std::endl;
+  // for (int i = 0; i < spawn_points_number_be; i++) {
+  //   recv_and_add_spawn_point(spawn_points, was_closed);
+  // }
+  // return spawn_points;
+}
+
+void ClientProtocol::recv_and_add_spawn_point(std::vector<std::vector<float>> spawn_points, bool *was_closed) {
+  float pos_x = recv_float(was_closed);
+  float pos_y = recv_float(was_closed);
+
+  spawn_points.push_back({pos_x, pos_y});
 }
 
 void ClientProtocol::recv_and_add_beam(WorldView &world, bool *was_closed) {

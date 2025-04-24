@@ -63,7 +63,7 @@ public:
   void send_beam(BeamBody &beam, bool *was_closed);
 
   // Envía las carac de un spawn_point del mundo
-  void send_spawn_point(WormBody &worm, bool *was_closed);
+  void send_spawn_points(std::vector<float> spawn_point, bool *was_closed);
 
   // Recibe una lista de punteros a mundos y envía la cantidad de
   // mundos y sus nombres por socket

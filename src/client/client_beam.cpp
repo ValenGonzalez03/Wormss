@@ -1,5 +1,4 @@
 #include "client_beam.h"
-#include "client_position_converter.h"
 
 Beam::Beam(int width, int height, int pos_x, int pos_y, int angle,
            std::vector<SDL2pp::Texture *> &beam_texture, SDL2pp::Renderer &rend)

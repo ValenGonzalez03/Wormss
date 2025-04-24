@@ -20,7 +20,7 @@ void Worm::update(WormData data) {
   aim_angle = data.get_aim_angle();
 }
 
-void Worm::render(int frame, client_state &worm_state) {
+void Worm::render(int frame) {
   /*
   std::cout << "Posx en m: " << worm.get_position().get_position_x()
             << std::endl;
@@ -30,11 +30,11 @@ void Worm::render(int frame, client_state &worm_state) {
   std::cout << "Posy en px: " << pos_y << std::endl;
   */
   if (this->worm_state == WORM_STATES::MOVING)
-    render_worm_running(frame, worm_state);
+    render_worm_running(frame);
   else if (this->worm_state == WORM_STATES::AIMING) {
     render_worm_aiming(frame);
   } else { // worm.get_state() == idle == 0
-    render_worm_idle(frame, worm_state);
+    render_worm_idle(frame);
   }
 
   if (std::getenv("DEBUG") != NULL) {
@@ -47,8 +47,7 @@ void Worm::render(int frame, client_state &worm_state) {
 
 }
 
-void Worm::render_worm_idle(int frame, client_state &worm_state) {
-  worm_state.run_phase = 0;
+void Worm::render_worm_idle(int frame) {
   SDL_RendererFlip flip = choose_flip_direction();
 
   auto walk_texture = textures[0];
@@ -64,7 +63,7 @@ void Worm::render_worm_idle(int frame, client_state &worm_state) {
   );
 }
 
-void Worm::render_worm_running(int frame, client_state &worm_state) {
+void Worm::render_worm_running(int frame) {
   SDL_RendererFlip flip = choose_flip_direction();
 
   auto walk_texture = textures[0];
@@ -78,7 +77,7 @@ void Worm::render_worm_running(int frame, client_state &worm_state) {
                 SDL2pp::NullOpt, flip);
 }
 
-void Worm::render_worm_jumping(int frame, client_state &worm_state) {}
+void Worm::render_worm_jumping(int frame) {}
 
 void Worm::render_worm_aiming(int frame) {
   SDL_RendererFlip flip = choose_flip_direction();

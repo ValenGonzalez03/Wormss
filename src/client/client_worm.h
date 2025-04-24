@@ -4,7 +4,6 @@
 #include "../common/game_state.h"
 #include "../common/worm_states.h"
 #include "client_resource_pool.h"
-#include "client_state.h"
 
 class Worm {
 private:
@@ -15,7 +14,6 @@ private:
   int height; // En pixeles
   float aim_angle;
   uint8_t direction;
-  client_state state; // Hay que ver que hago con esto
   uint8_t worm_state;
   std::vector<std::vector<SDL2pp::Texture *>> textures; // Vector de grillas de texturas
   SDL2pp::Renderer &renderer;
@@ -36,16 +34,16 @@ public:
 
   // Renderiza el worm pasado por parámetro según el estado del
   // mismo
-  void render(int frame, client_state &worm_state);
+  void render(int frame);
 
   // Renderiza el worm cuando este se encuentra en estado "idle"
-  void render_worm_idle(int frame, client_state &worm_state);
+  void render_worm_idle(int frame);
 
   // Renderiza el worm cuando este se encuentra en estado "running"
-  void render_worm_running(int frame, client_state &worm_state);
+  void render_worm_running(int frame);
 
   // Renderiza al worm saltando
-  void render_worm_jumping(int frame, client_state &worm_state);
+  void render_worm_jumping(int frame);
 
   // Renderiza el worm apuntando cuando este se encuentra en estado "aiming"
   void render_worm_aiming(int frame);

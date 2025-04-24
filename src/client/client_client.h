@@ -15,7 +15,6 @@
 #include "client_receiver_thread.h"
 #include "client_resource_pool.h"
 #include "client_sender_thread.h"
-#include "client_state.h"
 
 class Client : public ConstantRateLoop {
 private:
@@ -26,7 +25,7 @@ private:
   ClientReceiverThread receiver;
   ClientSenderThread sender;
 
-  client_state state;
+  GameState last_game_state;
 
   client_SDL client_sdl;
 

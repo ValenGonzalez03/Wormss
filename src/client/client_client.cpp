@@ -19,7 +19,7 @@ const float RATE = (float)(1.0 / 60.0);
 Client::Client(ClientProtocol &&prot, uint8_t player_id)
     : prot(std::move(prot)), receiver_queue(), sender_queue(),
       receiver(this->prot, receiver_queue), sender(this->prot, sender_queue),
-      state(), client_sdl(), player_id(player_id) {}
+      client_sdl(), player_id(player_id), last_game_state() {}
 
 void Client::start_threads() {
   sender.start();
@@ -54,21 +54,17 @@ int Client::run() {
     // RECIBO EL MUNDO DEL SERVER
     bool was_closed = false;
     prot.recv_world(client_sdl.world_view, &was_closed);
-
-    
-    state.prev_ticks = SDL_GetTicks();
     
     start_threads();
   
     int worms_amount = 0;
-    GameState first_game_state;
     // Esto claramente es una mala solucion pero por ahora sirve
     while (worms_amount == 0) {
-      first_game_state = receiver_queue.pop();
-      worms_amount = first_game_state.get_worms().size();
+      last_game_state = receiver_queue.pop();
+      worms_amount = last_game_state.get_worms().size();
     }
-    std::cout << "Cantidad worms: " << (int) first_game_state.get_worms().size() << std::endl;
-    for (auto worm_data : first_game_state.get_worms()) {
+    std::cout << "Cantidad worms: " << (int) last_game_state.get_worms().size() << std::endl;
+    for (auto worm_data : last_game_state.get_worms()) {
       client_sdl.world_view.add_worm(worm_data.second);
     }
 
@@ -107,9 +103,9 @@ bool Client::func_to_execute() {
     // Si no pudo recibir el game_state se queda con el ultimo game_state
     // popeado, en caso contrario utiliza el nuevo.
     if (!was_received) {
-      game_state = state.last_game_state;
+      game_state = last_game_state;
     } else {
-      state.last_game_state = game_state;
+      last_game_state = game_state;
     }
 
     } catch (const std::exception &e) {
@@ -138,18 +134,19 @@ bool Client::func_to_execute() {
   // RENDER DE TEXTURAS
   // ---------------------------------------------------------------------------
   client_sdl.renderer.Clear();
-  client_sdl.world_view.render(frame_ticks, state);
+  client_sdl.world_view.render(frame_ticks);
+  auto player_data = game_state.get_worms()[player_id];
   std::string text =
       "Pos x: " +
-      std::to_string(game_state.get_worms()[player_id].get_pos_x()) +
+      std::to_string(player_data.get_pos_x()) +
       ", Pos y: " +
-      std::to_string(game_state.get_worms()[player_id].get_pos_y()) +
+      std::to_string(player_data.get_pos_y()) +
       ", state: " +
-      (print_state(game_state.get_worms()[player_id].get_state())) +
+      (print_state(player_data.get_state())) +
       ", direction: " +
-      std::to_string(game_state.get_worms()[player_id].get_direction()) + 
+      std::to_string(player_data.get_direction()) + 
       ", player_id: " + 
-      std::to_string(game_state.get_worms()[player_id].get_player_id());
+      std::to_string(player_data.get_player_id());
 
 
   Font font(RESOURCES_PATH "/Vera.ttf", 12);
@@ -172,7 +169,7 @@ bool Client::func_to_execute() {
 
 
 bool Client::execute_event(SDL_Event &event) {
-  auto worm_client = state.last_game_state.get_worms()[player_id];
+  auto worm_client = last_game_state.get_worms()[player_id];
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) { // Cierra el juego
       handle_finish_game();
@@ -219,17 +216,15 @@ bool Client::execute_event(SDL_Event &event) {
       switch (event.key.keysym.sym) {
       case SDLK_RIGHT:
       case SDLK_LEFT:
-        if (worm_client.get_state() == WORM_STATES::MOVING)
-          handle_stop_moving();
+        handle_stop_moving(); 
         break;
       case SDLK_RETURN:
       case SDLK_BACKSPACE:
-        state.is_jumping = false;
+        //state.is_jumping = false;
         break;
       case SDLK_UP:
       case SDLK_DOWN:
-        if (worm_client.get_state() == WORM_STATES::AIMING)
-          handle_stop_aiming();
+        handle_stop_aiming();          
         break;
       }
     }

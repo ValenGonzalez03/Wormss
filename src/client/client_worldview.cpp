@@ -63,7 +63,7 @@ void WorldView::add_worm(WormData data) {
   worms.insert({worm.get_id(), worm});
 }
 
-void WorldView::render(int frame, client_state &worm_state) { // Gamestate game_state
+void WorldView::render(int frame) { // Gamestate game_state
   // Renderizar fondo
   render_background();
   // Renderizar vigas
@@ -73,7 +73,7 @@ void WorldView::render(int frame, client_state &worm_state) { // Gamestate game_
 
   // Renderizar gusanos
   for (auto &worm : worms) {
-    worm.second.render(frame, worm_state);
+    worm.second.render(frame);
   }
   // Renderizar balas/cohetes
 

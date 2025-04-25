@@ -11,19 +11,14 @@
 #include "game_constants.h"
 #include "lib/socket.h"
 
-#define LEFT 0
-#define RIGHT 1
-#define UP 2
-#define DOWN 3
 
 struct WormData {
 private:
   uint8_t player_id;
   float pos_x; // En metros
   float pos_y; // En metros
-  //Position pos;
   uint8_t direction;
-  WormState state; // Si está corriendo, disparando, saltando, etc
+  WormState state;
   float aim_angle;
   // uint16_t id;
 
@@ -44,6 +39,7 @@ public:
   void deserialize(Socket &skt, bool *was_closed) {
     // Recibo el player_id
     skt.recvall(&player_id, sizeof(player_id), was_closed);
+  
     // Recibo la position
     uint16_t pos_x;
     uint16_t pos_y;
@@ -53,13 +49,15 @@ public:
     float final_pos_y = ntohs(pos_y) / 100.0;
     // std::cout << "final_pos_x: " << final_pos_x << std::endl;
     // std::cout << "final_pos_y: " << final_pos_y << std::endl;
-    //Position position(final_pos_x, final_pos_y);
     this->pos_x = final_pos_x;
     this->pos_y = final_pos_y;
+  
     // Recibo la direccion
     skt.recvall(&(this->direction), sizeof(this->direction), was_closed);
+  
     // Recibo el estado
     skt.recvall(&(this->state), sizeof(this->state), was_closed);
+  
     // Recibo el angulo de apuntado
     int angle_int_net;
     skt.recvall(&angle_int_net, sizeof(angle_int_net), was_closed);
@@ -69,9 +67,10 @@ public:
 
   // Envia los datos del gusano (Lado servidor)
   void serialize(Socket &skt, bool *was_closed) {
-    // Hago send del player_id
+    // Envio el player_id
     skt.sendall(&(this->player_id), sizeof(this->player_id), was_closed);
-    // Hago send de la position
+  
+    // Envio la posicion
     // std::cout << "final_pos_x: " << pos_x << std::endl;
     // std::cout << "final_pos_y: " << pos_y << std::endl;
     uint16_t pos_x = uint(this->pos_x * 100);
@@ -80,11 +79,14 @@ public:
     uint16_t pos_y_be = htons(pos_y);
     skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
     skt.sendall(&pos_y_be, sizeof(pos_y_be), was_closed);
-    // Hago send de la direccion
+  
+    // Envio la direccion
     skt.sendall(&(this->direction), sizeof(this->direction), was_closed);
-    // Hago send del estado
+  
+    // Envio el estado
     skt.sendall(&(this->state), sizeof(this->state), was_closed);
-    // Hago send del angulo de apuntado
+  
+    // Envio el angulo de apuntado
     int angle_int = int(this->aim_angle * 100);
     int angle_int_net = htonl(angle_int);
     skt.sendall(&angle_int_net, sizeof(angle_int_net), was_closed);

@@ -97,11 +97,6 @@ void Worm::render_worm_aiming(int frame) {
 }
 
 SDL_RendererFlip Worm::choose_flip_direction() {
-  SDL_RendererFlip flip = SDL_FLIP_NONE; // Sin volteo por defecto
-  if (direction == LEFT) {    // worm.get_direction() == LEFT
-    // flip = SDL_FLIP_NONE;
-  } else if (direction == RIGHT) { // worm.get_direction() == RIGHT
-    flip = SDL_FLIP_HORIZONTAL;
-  }
-  return flip;
+  // Chequeo solo si la direccion es a la derecha ya que todos los sprites miran por defecto hacia la izquierda
+  return (direction == RIGHT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }

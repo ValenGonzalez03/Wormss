@@ -7,14 +7,6 @@
 #include <iostream>
 #include <stdio.h>
 
-//#define STOPPED 0
-//#define MOVING 1
-
-#define LEFT 0
-#define RIGHT 1
-#define UP 2
-#define DOWN 3
-
 class WormBody : public Body {
 private:
   uint8_t direction = RIGHT;

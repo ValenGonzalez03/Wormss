@@ -9,6 +9,11 @@
 
 #define BEAM_HEIGHT 0.8583f // En metros (Equivale aproximadamente a unos 20 pixeles)
 
+#define LEFT 0
+#define RIGHT 1
+#define UP 2
+#define DOWN 3
+
 enum WormState { IDLE, MOVING, JUMPING, AIMING, SHOOTING };
 
 #endif

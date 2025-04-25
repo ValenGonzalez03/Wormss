@@ -12,8 +12,7 @@ public:
             std::make_shared<CreateGame>(clt_id, skt, was_closed)) {}
 
   std::unique_ptr<LobbyResult>
-  run(GamesHandler &games_handler,
-      std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id) override {
+  run(GamesHandler &games_handler, std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id) override {
     uint8_t game_id;
     std::vector<std::string> world_names;
     Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue =

@@ -45,13 +45,14 @@ int Client::run() {
         throw std::runtime_error("SDL_mixer could not initialize!");
     }
     
-    
     // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS, MUSICA, ETC)
     client_sdl.resource_pool.initialize();
     client_sdl.resource_pool.play_music();
     
     
-    // RECIBO EL MUNDO DEL SERVER
+    // INICIALIZACION DEL MUNDO
+    // ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
     bool was_closed = false;
     prot.recv_world(client_sdl.world_view, &was_closed);
     
@@ -67,6 +68,10 @@ int Client::run() {
     for (auto worm_data : last_game_state.get_worms()) {
       client_sdl.world_view.add_worm(worm_data.second);
     }
+    // ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
+    // INICIALIZACION DEL MUNDO
+
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
@@ -87,13 +92,18 @@ bool Client::func_to_execute() {
 
   // EVENT LOOP
   // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   SDL_Event event;
 
   if (execute_event(event)) // Si execute_event devuelve true, se
     return true;            // quiere cerrar el juego
   // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // EVENT LOOP
+
 
   // TRY-POP DE LA RECEIVER QUEUE
+  // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   GameState game_state = GameState();
 
@@ -111,27 +121,22 @@ bool Client::func_to_execute() {
     } catch (const std::exception &e) {
       std::cerr << e.what();
   }
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // TRY-POP DE LA RECEIVER QUEUE
+
 
   // UPDATE ESTADO DEL JUEGO
   // ---------------------------------------------------------------------------
-  client_sdl.world_view.update(game_state);
-
-  /* Para revisar funcionamiento 
-  std::map<uint8_t, Worm> worms = game_state.get_worms();
-  int worm_n = 0;
-  for (auto &worm : worms) {
-    worm_n++;
-    std::cout << "worm_n: " << worm_n << std::endl;
-    std::cout << "posx: " << worm.second.get_pos_x() << std::endl;
-    std::cout << "posy: " << worm.second.get_pos_y() << std::endl;
-    std::cout << "dir: " << std::to_string(worm.second.get_direction()) << std::endl;
-    std::cout << "state: " << std::to_string(worm.second.get_state()) << std::endl;
-  }
-*/
-
   // ---------------------------------------------------------------------------
+  client_sdl.world_view.update(game_state);
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // UPDATE ESTADO DEL JUEGO
+
 
   // RENDER DE TEXTURAS
+  // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   client_sdl.renderer.Clear();
   client_sdl.world_view.render(frame_ticks);
@@ -144,7 +149,7 @@ bool Client::func_to_execute() {
       ", state: " +
       (print_state(player_data.get_state())) +
       ", direction: " +
-      std::to_string(player_data.get_direction()) + 
+      (player_data.get_direction() == LEFT ? "left" : "right") + 
       ", player_id: " + 
       std::to_string(player_data.get_player_id());
 
@@ -159,10 +164,14 @@ bool Client::func_to_execute() {
       text_sprite, NullOpt,
       Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
 
-  // ---------------------------------------------------------------------------
+
 
   // Show rendered frame
   client_sdl.renderer.Present();
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // RENDER DE TEXTURAS
+
 
   return false;
 }

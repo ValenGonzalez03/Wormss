@@ -6,10 +6,9 @@ find_package(yaml-cpp REQUIRED)
 
 # add compilation flags
 set(CMAKE_CXX_STANDARD 17)
-add_definitions(-DRESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")
+#add_definitions(-DRESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")
 
 include_directories(${SDL2PP_INCLUDE_DIRS})
-
 
 # Agregar un ejecutable llamado "client" y especificar los archivos fuente
 add_executable(client ./src/client/client_main.cpp
@@ -25,8 +24,7 @@ add_executable(client ./src/client/client_main.cpp
 ./src/common/lib/socket.cpp 
 ./src/common/lib/liberror.cpp 
 ./src/common/lib/resolver.cpp 
-./src/common/lib/resolvererror.cpp
-./src/common/worm_states)
+./src/common/lib/resolvererror.cpp)
 
 
 target_link_libraries(client PUBLIC pthread)
@@ -58,8 +56,7 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/common/lib/socket.cpp 
 					  ./src/common/lib/liberror.cpp 
 					  ./src/common/lib/resolver.cpp 
-					  ./src/common/lib/resolvererror.cpp
-					  ./src/common/worm_states.cpp)
+					  ./src/common/lib/resolvererror.cpp)
 
 target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)
@@ -76,3 +73,7 @@ add_executable(editor ./level_editor/main.cpp
 target_link_libraries(editor PUBLIC yaml-cpp)
 target_link_libraries(editor PUBLIC SDL2pp::SDL2pp)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+target_compile_definitions(client PUBLIC RESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")
+target_compile_definitions(server PUBLIC RESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")
+target_compile_definitions(editor PUBLIC RESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")

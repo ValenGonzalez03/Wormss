@@ -1,8 +1,8 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-#include "../queue.h"
-#include "../socket.h"
+#include "../lib/queue.h"
+#include "../lib/socket.h"
 #include <cstdint>
 
 class Command {

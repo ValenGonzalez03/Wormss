@@ -8,7 +8,8 @@
 #include <vector>
 
 #include "position.h"
-#include "socket.h"
+#include "game_constants.h"
+#include "lib/socket.h"
 
 #define LEFT 0
 #define RIGHT 1
@@ -22,16 +23,16 @@ private:
   float pos_y; // En metros
   //Position pos;
   uint8_t direction;
-  uint8_t state; // Si está corriendo, disparando, saltando, etc
+  WormState state; // Si está corriendo, disparando, saltando, etc
   float aim_angle;
   // uint16_t id;
 
 public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   explicit WormData()
-      : player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(0), aim_angle(0) {}
+      : player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE), aim_angle(0) {}
 
-  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, uint8_t st, float angle)
+  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st, float angle)
       : player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st), aim_angle(angle) {}
 
   explicit WormData(Socket &skt) : pos_x(0), pos_y(0) {
@@ -97,7 +98,7 @@ public:
 
   uint8_t get_direction() { return direction; }
 
-  uint8_t get_state() { return state; }
+  WormState get_state() { return state; }
 
   float get_aim_angle() { return aim_angle; }
 
@@ -138,7 +139,7 @@ public:
   std::map<uint8_t, WormData> get_worms() { return worms_list; }
 
   void add_worm(uint8_t player_id, const float &pos_x, const float &pos_y,
-                uint8_t dir, uint8_t state, float angle) {
+                uint8_t dir, WormState state, float angle) {
     WormData worm(player_id, pos_x, pos_y, dir, state, angle);
     worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
   }

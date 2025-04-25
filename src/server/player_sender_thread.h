@@ -2,9 +2,9 @@
 #define PLAYER_SENDER_THREAD_H
 
 #include "../common/game_state.h"
-#include "../common/queue.h"
-#include "../common/socket.h"
-#include "../common/thread.h"
+#include "../common/lib/queue.h"
+#include "../common/lib/socket.h"
+#include "../common/lib/thread.h"
 #include "server_protocol.h"
 
 class PlayerSender : public Thread {

@@ -5,8 +5,8 @@
 
 #include "../common/message.h"
 #include "client_protocol.h"
-#include "../common/queue.h"
-#include "../common/thread.h"
+#include "../common/lib/queue.h"
+#include "../common/lib/thread.h"
 
 class ClientReceiverThread : public Thread {
 private:

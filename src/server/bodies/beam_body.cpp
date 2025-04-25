@@ -1,30 +1,10 @@
 #include "box2d/box2d.h"
 #include "beam_body.h"
+#include "../../common/game_constants.h"
 #include <stdio.h>
 
-/*
-BeamBody::BeamBody(b2World* world, float pos_x, float pos_y) : Body(world, pos_x, pos_y, 0, 6, 0.8, 1, 0.5) {
-	b2BodyDef bodyDef;
-    bodyDef.type = b2_staticBody;
-    bodyDef.position.Set(pos_x, pos_y);
-    body = world->CreateBody(&bodyDef);
-    
-    b2PolygonShape polygonShape;
-    float angleInRadians = static_cast<float>(angle) * b2_pi / 180.0f;
-    polygonShape.SetAsBox(width, height, b2Vec2(0, 0), angleInRadians);
-  
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &polygonShape;
-    fixtureDef.density = density;
-    fixtureDef.friction = friction;
-    
-    body->CreateFixture(&fixtureDef);
-    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
-}
-*/
-
 BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width) : 
-                Body(world, pos_x, pos_y, angle, width, 20.0f / 23.3f, 1.0f, 0.5f) {
+                Body(world, pos_x, pos_y, angle, width, BEAM_HEIGHT, 1.0f, 0.5f) {
 	b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
     bodyDef.position.Set(pos_x, pos_y);

@@ -9,7 +9,7 @@
 #include "../common/commands/command.h"
 #include "../common/constant_rate_loop.h"
 #include "../common/game_state.h"
-#include "../common/queue.h"
+#include "../common/lib/queue.h"
 #include "client_SDL.h"
 #include "client_protocol.h"
 #include "client_receiver_thread.h"
@@ -69,7 +69,7 @@ private:
   int get_opposite_direction(uint8_t worm_dir);
 
   // Muestra el estado del gusano
-  std::string print_state(uint8_t state);
+  std::string print_state(WormState state);
 
 public:
   explicit Client(ClientProtocol &&prot, uint8_t player_id);

@@ -2,7 +2,7 @@
 #define CLIENT_WORM_H_
 
 #include "../common/game_state.h"
-#include "../common/worm_states.h"
+#include "../common/game_constants.h"
 #include "client_resource_pool.h"
 
 class Worm {
@@ -14,7 +14,7 @@ private:
   int height; // En pixeles
   float aim_angle;
   uint8_t direction;
-  uint8_t worm_state;
+  WormState worm_state;
   std::vector<std::vector<SDL2pp::Texture *>> textures; // Vector de grillas de texturas
   SDL2pp::Renderer &renderer;
   // SDL2pp::Texture &shooting_texture;
@@ -26,7 +26,7 @@ public:
   explicit Worm();
   // Crea un Worm con un renderer y las texturas correspondientes
   explicit Worm(int id, int pos_x, int pos_y, int width, int heigth, float aim_angle, uint8_t direction, 
-    uint8_t state, std::vector<std::vector<SDL2pp::Texture *>> &&textures, SDL2pp::Renderer &rend);
+    WormState worm_state, std::vector<std::vector<SDL2pp::Texture *>> &&textures, SDL2pp::Renderer &rend);
 
   int get_id();
 

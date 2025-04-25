@@ -7,7 +7,7 @@
 
 #include "../common/commands/command.h"
 #include "../common/game_state.h"
-#include "../common/queue.h"
+#include "../common/lib/queue.h"
 
 class Broadcaster {
 private:

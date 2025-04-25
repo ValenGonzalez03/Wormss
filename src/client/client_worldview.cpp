@@ -1,17 +1,8 @@
 #include "client_worldview.h"
+#include "../common/game_constants.h"
 
 WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
     : resource_pool(res_pool), renderer(rend), worms() {}
-
-// void WorldView::add_short_beam(int pos_x, int pos_y, int angle) {
-//   PositionConverter converter;
-//   Position pos_in_m(pos_x, pos_y);
-//   Position beam_pos = converter.convert_position_to_px(pos_in_m);
-//   std::vector<SDL2pp::Texture *> beam_texture =
-//       resource_pool.get_short_beam_texture();
-//   Beam beam(beam_pos, beam_texture, renderer, angle);
-//   beams.push_back(beam);
-// }
 
 void WorldView::add_beam(float pos_x, float pos_y, float width, float height,
                          int angle) {
@@ -49,8 +40,8 @@ void WorldView::add_worm(WormData data) {
   worm_textures.push_back(resource_pool.get_worm_aiming());
   //worm_textures.push_back(resource_pool.get_worm_jumping());
 
-  float width = 0.81f;
-  float heigth = 1.07f;
+  float width = WORM_WIDTH;
+  float heigth = WORM_HEIGHT;
 
   int pos_x_px = convert_meters_to_pixels_x(data.get_pos_x() - width / 2);
   int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y() + heigth / 2);

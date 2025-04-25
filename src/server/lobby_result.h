@@ -1,7 +1,7 @@
 #ifndef LOBBY_RESULT_H
 #define LOBBY_RESULT_H
 
-#include "../common/queue.h"
+#include "../common/lib/queue.h"
 #include "runnable_commands/command_runnable_game.h"
 
 class LobbyResult {

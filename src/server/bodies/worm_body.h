@@ -1,7 +1,7 @@
 #ifndef WORM_BODY_H
 #define WORM_BODY_H
 
-#include "../../common/worm_states.h"
+#include "../../common/game_constants.h"
 #include "body.h"
 #include "box2d/box2d.h"
 #include <iostream>
@@ -25,7 +25,7 @@ private:
   float jump_vel_forward = 3;
   uint8_t id;
 
-  uint8_t state = WORM_STATES::INACTIVE;
+  WormState state = IDLE;
 
   bool m_contacting = false;
   int num_foot_contacts = 0;
@@ -76,7 +76,7 @@ public:
 
   uint8_t get_direction();
 
-  uint8_t get_state();
+  WormState get_state();
 
   float get_aiming_angle();
 

@@ -1,8 +1,8 @@
 #ifndef CLIENT_HANDLER_THREAD_H
 #define CLIENT_HANDLER_THREAD_H
 
-#include "../common/socket.h"
-#include "../common/thread.h"
+#include "../common/lib/socket.h"
+#include "../common/lib/thread.h"
 #include "lobby_result.h"
 #include "player_sender_thread.h"
 #include "runnable_commands/command_runnable_game.h"

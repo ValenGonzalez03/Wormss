@@ -22,10 +22,10 @@ add_executable(client ./src/client/client_main.cpp
 ./src/client/client_beam.cpp
 ./src/client/client_lobby.cpp
 ./src/client/client_resource_pool.cpp
-./src/common/socket.cpp 
-./src/common/liberror.cpp 
-./src/common/resolver.cpp 
-./src/common/resolvererror.cpp
+./src/common/lib/socket.cpp 
+./src/common/lib/liberror.cpp 
+./src/common/lib/resolver.cpp 
+./src/common/lib/resolvererror.cpp
 ./src/common/worm_states)
 
 
@@ -55,10 +55,10 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/contact_listener.cpp
 					  ./src/server/query_callback.cpp
 					  ./src/server/explosion_manager.cpp
-					  ./src/common/socket.cpp 
-					  ./src/common/liberror.cpp 
-					  ./src/common/resolver.cpp 
-					  ./src/common/resolvererror.cpp
+					  ./src/common/lib/socket.cpp 
+					  ./src/common/lib/liberror.cpp 
+					  ./src/common/lib/resolver.cpp 
+					  ./src/common/lib/resolvererror.cpp
 					  ./src/common/worm_states.cpp)
 
 target_link_libraries (server PUBLIC box2d)

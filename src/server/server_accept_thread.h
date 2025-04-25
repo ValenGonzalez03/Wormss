@@ -1,8 +1,8 @@
 #ifndef SERVER_ACCEPT_THREAD_H
 #define SERVER_ACCEPT_THREAD_H
 
-#include "../common/socket.h"
-#include "../common/thread.h"
+#include "../common/lib/socket.h"
+#include "../common/lib/thread.h"
 #include "server_games_handler.h"
 #include "server_player.h"
 #include <list>

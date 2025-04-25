@@ -116,7 +116,7 @@ void ClientProtocol::recv_and_add_beam(WorldView &world, bool *was_closed) {
   float width = recv_float(was_closed);
 
   if (width == 6 || width == 3) {
-    world.add_beam(pos_x, pos_y, width, 0.8583f, beam_angle_int);
+    world.add_beam(pos_x, pos_y, width, BEAM_HEIGHT, beam_angle_int);
   } else {
     std::cout << "Error tamanio viga" << std::endl;
   }

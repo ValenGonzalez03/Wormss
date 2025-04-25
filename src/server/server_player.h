@@ -1,7 +1,7 @@
 #ifndef SERVER_PLAYER_H
 #define SERVER_PLAYER_H
 
-#include "../common/socket.h"
+#include "../common/lib/socket.h"
 #include <atomic>
 #include <vector>
 

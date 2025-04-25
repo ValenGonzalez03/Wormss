@@ -10,7 +10,7 @@
 #include "../common/commands/start_moving.h"
 #include "../common/commands/stop_aiming.h"
 #include "../common/commands/stop_moving.h"
-#include "../common/worm_states.h"
+#include "../common/game_constants.h"
 
 using namespace SDL2pp;
 
@@ -188,19 +188,19 @@ bool Client::execute_event(SDL_Event &event) {
         handle_start_moving(LEFT);
         break;
       case SDLK_RETURN:
-        if (worm_client.get_state() != WORM_STATES::JUMPING)
+        if (worm_client.get_state() != JUMPING)
           handle_jump_forward(worm_client.get_direction());
         break;
       case SDLK_BACKSPACE:
-        if (worm_client.get_state() != WORM_STATES::JUMPING)
+        if (worm_client.get_state() != JUMPING)
           handle_jump_backward(worm_client.get_direction());
         break;
       case SDLK_UP:
-        if (worm_client.get_state() != WORM_STATES::AIMING)
+        if (worm_client.get_state() != AIMING)
           handle_start_aiming(UP);
         break;
       case SDLK_DOWN:
-        if (worm_client.get_state() != WORM_STATES::AIMING)
+        if (worm_client.get_state() != AIMING)
           handle_start_aiming(DOWN);
         break;
       case SDLK_1:
@@ -287,21 +287,19 @@ void Client::handle_finish_game() {
 }
 
 
-std::string Client::print_state(uint8_t state) {
+std::string Client::print_state(WormState state) {
   switch (state) {
-  case 0:
-    return "stopped";
-  case 1:
-    return "running";
-  case 2:
-    return "jumping";
-  case 3:
-    return "aiming";
-  case 4:
-    return "shooting";
-  case 5:
+  case IDLE:
     return "idle";
+  case MOVING:
+    return "running";
+  case JUMPING:
+    return "jumping";
+  case AIMING:
+    return "aiming";
+  case SHOOTING:
+    return "shooting";
   default:
-    return " ";
+    return "unknown";
   }
 }

@@ -1,40 +1,12 @@
 #include "worm_body.h"
 #include "box2d/box2d.h"
+#include "../../common/game_constants.h"
 #include <stdio.h>
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-/*
-WormBody::WormBody(b2World *world, float pos_x, float pos_y, uint8_t id)
-    : Body(world, pos_x, pos_y, 0, 1, 1, 1, 0.1), id(id) {
-  b2BodyDef bodyDef;
-  bodyDef.type = b2_dynamicBody;
-  bodyDef.position.Set(pos_x, pos_y);
-  bodyDef.angle = angle;
-  body = world->CreateBody(&bodyDef);
-
-  b2PolygonShape polygonShape;
-  polygonShape.SetAsBox(width/2, height/2);
-
-  b2FixtureDef fixtureDef;
-  fixtureDef.shape = &polygonShape;
-  fixtureDef.density = density;
-  fixtureDef.friction = friction;
-
-  body->CreateFixture(&fixtureDef);
-  body->SetFixedRotation(true);
-  body->GetUserData().pointer = (uintptr_t)this;
-
-  // sensor
-  polygonShape.SetAsBox(width/2, 0.6, b2Vec2(pos_x, -0.2), 0);
-  fixtureDef.isSensor = true;
-  b2Fixture *footSensorFixture = body->CreateFixture(&fixtureDef);
-  footSensorFixture->GetUserData().pointer = (uintptr_t)3;
-}
-*/
-
 WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int health, uint8_t id)
-    : Body(world, pos_x, pos_y, 0, 19.0f / 23.3f, 25.0f / 23.3f, 1, 0.1), vel(vel), id(id), health(health) {
+    : Body(world, pos_x, pos_y, 0, WORM_WIDTH, WORM_HEIGHT, 1, 0.1), vel(vel), id(id), health(health) {
   b2BodyDef bodyDef;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x, pos_y);
@@ -79,12 +51,12 @@ void WormBody::apply_vertical_impulse(float jump_speed) {
 }
 
 void WormBody::start_moving(const uint8_t &dir) {
-  if (state == WORM_STATES::JUMPING) return;
-  state = WORM_STATES::MOVING;
+  if (state == JUMPING) return;
+  state = MOVING;
   direction = dir;
 }
 
-void WormBody::stop_moving() { state = WORM_STATES::STOPPED; }
+void WormBody::stop_moving() { state = IDLE; }
 
 void WormBody::jump_backward() {
   apply_vertical_impulse(jump_vel_backward); 
@@ -105,9 +77,9 @@ void WormBody::jump_forward() {
 }
 
 void WormBody::jump(const uint8_t &dir) {
-  if (state == WORM_STATES::JUMPING)
+  if (state == JUMPING)
     return;
-  state = WORM_STATES::JUMPING;
+  state = JUMPING;
   //direction = dir;
   if (dir == LEFT) {
     jump_backward();
@@ -117,7 +89,7 @@ void WormBody::jump(const uint8_t &dir) {
 }
 
 void WormBody::start_aiming(const uint8_t &dir) {
-  state = WORM_STATES::AIMING;
+  state = AIMING;
   aim_direction = dir;
 }
 
@@ -137,7 +109,7 @@ void WormBody::aim_down() {
   }
 }
 
-void WormBody::stop_aiming() { state = WORM_STATES::STOPPED; }
+void WormBody::stop_aiming() { state = IDLE; }
 
 void WormBody::teleport(float pos_x, float pos_y) {
   body->SetTransform( b2Vec2(pos_x, pos_y), 0);
@@ -154,19 +126,19 @@ float WormBody::get_pos_y() { return body->GetPosition().y; }
 
 uint8_t WormBody::get_direction() { return direction; }
 
-uint8_t WormBody::get_state() { return state; }
+WormState WormBody::get_state() { return state; }
 
 float WormBody::get_aiming_angle() { return aiming_angle; }
 
 void WormBody::update() {
   //std::cout << "worm update" << std::endl;
-  if (state == WORM_STATES::MOVING) {
+  if (state == MOVING) {
     if (direction == LEFT) {
       move_left();
     } else {
       move_right();
     }
-  } else if (state == WORM_STATES::AIMING) {
+  } else if (state == AIMING) {
     std::cout << aiming_angle << std::endl;
     if (aim_direction == UP) {
       aim_up();
@@ -180,9 +152,9 @@ bool WormBody::is_facing_left() { return (direction == LEFT); }
 
 bool WormBody::is_facing_right() { return (direction == RIGHT); }
 
-bool WormBody::is_stopped() { return (WORM_STATES::STOPPED); }
+bool WormBody::is_stopped() { return (IDLE); } // ??
 
-bool WormBody::is_inactive() { return (state == WORM_STATES::INACTIVE); }
+bool WormBody::is_inactive() { return (state == IDLE); } // ??
 
 void WormBody::start_contact_with(Body *another_body) {
   if (another_body->get_type() == WORM) {
@@ -225,14 +197,14 @@ void WormBody::end_contact_with(Body *another_body) {}
 void WormBody::hit_a_surface() { 
   num_foot_contacts++;
   if (not is_inactive()) {
-	  state = WORM_STATES::STOPPED;
+	  state = IDLE;
   } 
 }
 
 void WormBody::move_away_from_surface() {
   num_foot_contacts--;
   if (num_foot_contacts == 0) {
-	  state = WORM_STATES::JUMPING;
+	  state = JUMPING;
   }
 }
 

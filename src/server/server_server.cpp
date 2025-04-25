@@ -1,7 +1,7 @@
 #include "server_server.h"
 #include "server_accept_thread.h"
 #include <iostream>
-#include "../common/socket.h"
+#include "../common/lib/socket.h"
 
 Server::Server(const std::string &servname) : servname(servname) {}
 

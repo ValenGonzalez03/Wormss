@@ -1,18 +1,19 @@
 #ifndef CLIENT_POSITION_H_
 #define CLIENT_POSITION_H_
 
+#include "game_constants.h"
+
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <vector>
 
-static const float PIXEL_PER_METER = 23.33f; // 23,3 periodico
-static float WORLD_HEIGHT = 360.0f;
-
+// Recibe un numero en metros y devuelve el equivalente en pixeles
 static int convert_meters_to_pixels_x(float pos_x) {
   return pos_x * PIXEL_PER_METER;
 }
 
+// Recibe un numero en metros y devuelve el equivalente en pixeles (Exclusivamente para convertir posiciones en el eje Y)
 static int convert_meters_to_pixels_y(float pos_y) {
   return WORLD_HEIGHT - pos_y * PIXEL_PER_METER;
 }

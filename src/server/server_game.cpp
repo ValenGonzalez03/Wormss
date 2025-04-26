@@ -20,11 +20,15 @@ void Game::delete_player(const uint8_t &player_id) {
   game_manager.delete_player(player_id);
 }
 
+void Game::charge_world() {
+  game_manager.initialize_game(config);
+  push_game_state();
+}
+
 void Game::run() {
   try {
     std::cout << "GAME STARTED" << std::endl;
-    game_manager.initialize_game(config);
-	  started = true;
+	  
     bool was_closed = false;
     int it = 0;
     auto t1 = time_point_cast<milliseconds>(steady_clock::now());

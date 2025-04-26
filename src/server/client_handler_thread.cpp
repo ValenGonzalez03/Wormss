@@ -14,18 +14,23 @@ void ClientHandler::run() {
   try {
     while (keep_playing) {
       if (not in_game) { 
-        std::shared_ptr<RunnableCommandLobby> runnable_command =
-            protocol.process_command_lobby();
+        std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby();
 
-        lobby_result =
-            runnable_command->run(games_handler, sender_queue, player_id);
+        lobby_result = runnable_command->run(games_handler, sender_queue, player_id);
         if (lobby_result == nullptr) {
           continue;
         }
 
         if (lobby_result->get_game_started()) {
-          in_game = true;
           sender.start();
+          auto game_id = lobby_result->get_game_id();
+          auto game = games_handler.get_game(game_id);
+          game->charge_world();
+          while (not protocol.recv_client_ready(&was_closed)) {
+            /* ... */
+          }
+          in_game = true;
+          games_handler.start_game(game_id, player_id);
           continue;
         }
         
@@ -48,8 +53,7 @@ void ClientHandler::run() {
         }
       } else {
         //std::cout << "id_player: " + std::to_string(player_id) << std::endl;
-        std::shared_ptr<RunnableCommandGame> runnable_command =
-            protocol.process_command(player_id);
+        std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command(player_id);
         game_commands->try_push(runnable_command);
       }
     }

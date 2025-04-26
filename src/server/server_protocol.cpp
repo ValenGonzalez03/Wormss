@@ -73,6 +73,12 @@ void ServerProtocol::close_socket() {
   skt.close();
 }
 
+bool ServerProtocol::recv_client_ready(bool *was_closed) {
+  uint8_t code;
+  skt.recvall(&code, sizeof(code), was_closed);
+  return (code == CODE_PLAYER_COMM::CLIENT_READY);
+}
+
 int ServerProtocol::recv_world_id(bool* was_closed) {
   int id = 0;
   skt.recvall(&id, sizeof(id), was_closed);

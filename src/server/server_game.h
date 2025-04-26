@@ -39,6 +39,7 @@ private:
   uint8_t players_counter = 0;
   uint8_t current_turn_id = 0;
   bool keep_playing = true;
+  bool ready_to_begin = false;
   bool started = false;
   GameManager game_manager;
   std::chrono::duration<float> rate = std::chrono::duration<float>((float)RATE);
@@ -55,6 +56,8 @@ public:
   void delete_player(const uint8_t &player_id);
 
   void handle_command();
+
+  void charge_world();
 
   void run() override;
 

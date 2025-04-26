@@ -22,6 +22,12 @@ GameState ClientProtocol::process_game_state() {
   return GameState(skt, &was_closed);
 }
 
+void ClientProtocol::send_client_ready() {
+  bool was_closed = false;
+  uint8_t code = CODE_PLAYER_COMM::CLIENT_READY;
+  skt.sendall(&code, sizeof(code), &was_closed);
+}
+
 std::string ClientProtocol::recv_string(bool *was_closed) {
   uint16_t string_length;
   skt.recvall(&string_length, sizeof(string_length), was_closed);

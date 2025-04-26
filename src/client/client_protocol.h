@@ -34,6 +34,8 @@ public:
 
   GameState process_game_state();
 
+  void send_client_ready();
+
   // Recibe una cadena por socket y la devuelve
   std::string recv_string(bool *was_closed);
 

@@ -21,10 +21,10 @@ private:
   std::vector<std::string> world_names;
   GameConfig games_config = GameConfig(std::string(RESOURCES_PATH) + "/game_config.yml");
 
-  Game *get_game(const uint8_t &game_id);
-
-public:
+  public:
   GamesHandler();
+
+  Game *get_game(const uint8_t &game_id);
 
   void add_game(Game *game);
 

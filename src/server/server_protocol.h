@@ -38,6 +38,8 @@ public:
 
   void send_id(const uint8_t id);
 
+  bool recv_client_ready(bool *was_closed);
+
   int recv_world_id(bool* was_closed);
 
   std::string recv_string(bool* was_closed);

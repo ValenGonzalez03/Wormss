@@ -60,14 +60,12 @@ int Client::run() {
   
     int worms_amount = 0;
     // Esto claramente es una mala solucion pero por ahora sirve
-    while (worms_amount == 0) {
-      last_game_state = receiver_queue.pop();
-      worms_amount = last_game_state.get_worms().size();
-    }
+    last_game_state = receiver_queue.pop();
     std::cout << "Cantidad worms: " << (int) last_game_state.get_worms().size() << std::endl;
     for (auto worm_data : last_game_state.get_worms()) {
       client_sdl.world_view.add_worm(worm_data.second);
     }
+    prot.send_client_ready();
     // ---------------------------------------------------------------------------
     // ---------------------------------------------------------------------------
     // INICIALIZACION DEL MUNDO

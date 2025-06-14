@@ -131,7 +131,12 @@ WormState WormBody::get_state() { return state; }
 float WormBody::get_aiming_angle() { return aiming_angle; }
 
 void WormBody::update() {
-  //std::cout << "worm update" << std::endl;
+  if (has_exceeded_width_limit()) {
+    body->SetTransform(b2Vec2(15, 25), 0); // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
+  }
+  if (has_exceeded_height_limit()) {
+    body->SetTransform(b2Vec2(get_pos_x(), 25), 0); // Por ahora solo fuerzo a que reaparezca 25 metros mas arriba
+  }
   if (state == MOVING) {
     if (direction == LEFT) {
       move_left();
@@ -155,6 +160,10 @@ bool WormBody::is_facing_right() { return (direction == RIGHT); }
 bool WormBody::is_stopped() { return (IDLE); } // ??
 
 bool WormBody::is_inactive() { return (state == IDLE); } // ??
+
+bool WormBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
+
+bool WormBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
 void WormBody::start_contact_with(Body *another_body) {
   if (another_body->get_type() == WORM) {

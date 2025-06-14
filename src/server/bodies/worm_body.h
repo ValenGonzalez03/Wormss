@@ -82,6 +82,10 @@ public:
   
   bool is_inactive();
 
+  bool has_exceeded_width_limit();
+
+  bool has_exceeded_height_limit();
+
   // POR AHORA DE PRUEBA
   void start_contact();
   void end_contact();

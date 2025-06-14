@@ -17,9 +17,14 @@ enum BODY_TYPES {
     BASEBALL_BAT = 6,
 };
 
+struct UserData {
+  BODY_TYPES type;
+  void* pointer;
+};
+
 class Body {
 protected:
-    b2World* world;
+  b2World* world;
 	b2Body* body;
 	const float pos_x; 
 	const float pos_y;

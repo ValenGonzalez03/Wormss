@@ -111,6 +111,8 @@ public:
   void shoot_bazooka();
   
   int get_type() override;
+
+  ~WormBody();
   
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;

@@ -23,7 +23,9 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int heal
 
   body->CreateFixture(&fixtureDef);
   body->SetFixedRotation(true);
-  body->GetUserData().pointer = (uintptr_t)this;
+
+  UserData* data = new UserData {BODY_TYPES::WORM, this};
+  body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
 
   // // sensor
   // polygonShape.SetAsBox(0.3, 0.6, b2Vec2(pos_x, -0.5), 0);
@@ -165,18 +167,22 @@ bool WormBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool WormBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-void WormBody::start_contact_with(Body *another_body) {
-  if (another_body->get_type() == WORM) {
+void WormBody::start_contact_with(Body *other) {
+  if (other->get_type() == BEAM) {
+    state = IDLE;
+  }
+
+  if (other->get_type() == WORM) {
 		//std::cout << "GUSANO CHOCO CON UN GUSANO\n";
-		reinterpret_cast<WormBody*>(another_body)->start_contact_with(this);
+		reinterpret_cast<WormBody*>(other)->start_contact_with(this);
   }
   
-  if (another_body->get_type() == WATER) {
+  if (other->get_type() == WATER) {
 		std::cout << "GUSANO CHOCO CON AGUA\n";
 		die();
   }
   
-  if (another_body->get_type() == BAZOOKA) {
+  if (other->get_type() == BAZOOKA) {
 		std::cout << "GUSANO CHOCO CON MUNICION DE BAZOOKA\n";
 		//take_damage(another_body->get_damage());
   }
@@ -236,3 +242,7 @@ void WormBody::end_contact() { m_contacting = false; }
 
 int WormBody::get_type() {
 	return WORM;}
+
+WormBody::~WormBody() {
+  free(reinterpret_cast<UserData*>(body->GetUserData().pointer));
+}

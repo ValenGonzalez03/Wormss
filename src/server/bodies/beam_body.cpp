@@ -20,7 +20,9 @@ BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float wi
     fixtureDef.friction = friction;
     
     body->CreateFixture(&fixtureDef);
-    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
+
+    UserData* data = new UserData {BODY_TYPES::BEAM, this};
+    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
 
     /*polygonShape.SetAsBox(width, width, b2Vec2(0, 0), angleInRadians);
     fixtureDef.isSensor = true;

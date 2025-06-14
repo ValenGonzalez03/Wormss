@@ -46,23 +46,24 @@ public:
   // lo devuelve
   float recv_float(bool *was_closed);
 
-  // Recibe la cantidad de nombres; los nombres de los mundos y los devuelve
+/////////////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
+
+  // Recibe la cantidad y los nombres de los mundos y los retorna.
   std::vector<std::string> recv_worlds_names(bool *was_closed);
 
-  // Recibe el mundo y lo carga
-  // nombre, background, vigas
-  void recv_world(WorldView &world, bool *was_closed);
-
-  // Recibe una viga y la agrega al mundo
-  void recv_and_add_beam(WorldView &world, bool *was_closed);
-
-  void recv_and_add_spawn_point(std::vector<std::vector<float>> spawn_points, bool *was_closed);
-
-  // Envía el nombre del mundo elegido
+  // Envía el nombre 'world_name' del mundo elegido.
   void send_world_name_selected(std::string &world_name, bool *was_closed);
 
-  // Envía el world_id
+  // Envía el 'world_id'.
   void send_world_id(int world_id, bool *was_closed);
+
+  // Recibe el numero de vigas en el mundo y las retorna.
+  int recv_beams_number(bool *was_closed);
+
+  // Recibe los datos de una viga y los retorna.
+  BeamData recv_beam(bool *was_closed);
+
+/////////////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
 
   void close_socket();
 };

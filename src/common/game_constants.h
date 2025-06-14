@@ -2,7 +2,7 @@
 #define GAME_CONSTANTS_H_
 
 #define PIXEL_PER_METER 23.33f // 23,3 periodico (1 metro equivale a 23,33 pixeles)
-#define WORLD_HEIGHT 360
+#define WORLD_HEIGHT 360 // En pixeles
 
 #define WORM_WIDTH 0.8154f // En metros (Equivale aproximadamente a unos 19 pixeles)
 #define WORM_HEIGHT 1.0729f // En metros (Equivale aproximadamente a unos 25 pixeles)
@@ -15,5 +15,12 @@
 #define DOWN 3
 
 enum WormState { IDLE, MOVING, JUMPING, AIMING, SHOOTING };
+
+struct BeamData {
+    float pos_x;
+    float pos_y;
+    int angle;
+    float width;
+};
 
 #endif

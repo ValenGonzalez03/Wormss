@@ -78,38 +78,14 @@ void ClientProtocol::send_world_id(int world_id, bool *was_closed) {
   skt.sendall(&world_id, sizeof(world_id), was_closed);
 }
 
-void ClientProtocol::recv_world(WorldView &world, bool *was_closed) {
-  std::string world_name = recv_string(was_closed);
-  std::string background_name = recv_string(was_closed);
-  world.set_background(background_name);
-
-  // Recibo cant de vigas y caracteristicas vigas
+int ClientProtocol::recv_beams_number(bool *was_closed) {
   uint16_t beams_number;
   skt.recvall(&beams_number, sizeof(beams_number), was_closed);
   uint16_t beams_number_be = ntohs(beams_number);
-  for (int i = 0; i < beams_number_be; i++) {
-    recv_and_add_beam(world, was_closed);
-  }
-  // Hace falta recibir spawn_points?
-  // std::vector<std::vector<float>> spawn_points;
-  // uint16_t spawn_points_number;
-  // skt.recvall(&spawn_points_number, sizeof(spawn_points_number), was_closed);
-  // uint16_t spawn_points_number_be = ntohs(spawn_points_number);
-  // std::cout << "CANTIDAD SPAWN POINTS: " << spawn_points_number << std::endl;
-  // for (int i = 0; i < spawn_points_number_be; i++) {
-  //   recv_and_add_spawn_point(spawn_points, was_closed);
-  // }
-  // return spawn_points;
+  return beams_number_be;
 }
 
-void ClientProtocol::recv_and_add_spawn_point(std::vector<std::vector<float>> spawn_points, bool *was_closed) {
-  float pos_x = recv_float(was_closed);
-  float pos_y = recv_float(was_closed);
-
-  spawn_points.push_back({pos_x, pos_y});
-}
-
-void ClientProtocol::recv_and_add_beam(WorldView &world, bool *was_closed) {
+BeamData ClientProtocol::recv_beam(bool *was_closed) {
   uint16_t beam_angle;
 
   float pos_x = recv_float(was_closed);
@@ -121,11 +97,8 @@ void ClientProtocol::recv_and_add_beam(WorldView &world, bool *was_closed) {
 
   float width = recv_float(was_closed);
 
-  if (width == 6 || width == 3) {
-    world.add_beam(pos_x, pos_y, width, BEAM_HEIGHT, beam_angle_int);
-  } else {
-    std::cout << "Error tamanio viga" << std::endl;
-  }
+  BeamData data {pos_x, pos_y, beam_angle_int, width};
+  return data;
 }
 
 /////////////////////////////////////////////////////////////////////////

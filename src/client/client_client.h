@@ -31,6 +31,8 @@ private:
 
   uint8_t player_id;
 
+  void recv_world();
+
   // Ejecuta un evento y devuelve true si se quiere cerrar el juego
   // o false en caso contrario
   bool execute_event(SDL_Event &event);

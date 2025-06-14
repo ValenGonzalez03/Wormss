@@ -53,8 +53,7 @@ int Client::run() {
     // INICIALIZACION DEL MUNDO
     // ---------------------------------------------------------------------------
     // ---------------------------------------------------------------------------
-    bool was_closed = false;
-    prot.recv_world(client_sdl.world_view, &was_closed);
+    recv_world();
     
     start_threads();
   
@@ -78,6 +77,25 @@ int Client::run() {
   loop(std::chrono::duration<float>((float)RATE));
 
   return 0;
+}
+
+void Client::recv_world() {
+  bool was_closed = false;
+
+  std::string world_name = prot.recv_string(&was_closed); // Por ahora no se hace nada con el nombre
+  std::string background_name = prot.recv_string(&was_closed);
+  client_sdl.world_view.set_background(background_name);
+
+  int beams_number = prot.recv_beams_number(&was_closed);
+  for (int i = 0; i < beams_number; i ++) {
+    BeamData data = prot.recv_beam(&was_closed);
+
+    if (data.width == 6 || data.width == 3) {
+      client_sdl.world_view.add_beam(data.pos_x, data.pos_y, data.width, BEAM_HEIGHT, data.angle);
+    } else {
+      std::cout << "Error tamanio viga" << std::endl;
+    }
+  }
 }
 
 

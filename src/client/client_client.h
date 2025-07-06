@@ -33,6 +33,7 @@ private:
   uint8_t player_id;
 
   std::set<int> mov_keys_pressed;
+  std::set<int> aim_keys_pressed;
 
   void recv_world();
 

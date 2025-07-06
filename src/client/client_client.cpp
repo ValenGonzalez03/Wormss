@@ -201,7 +201,8 @@ bool Client::execute_event(SDL_Event &event) {
       return true;
 
     } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
-      int key_dir;
+      int key_mov_dir;
+      int key_aim_dir;
       switch (event.key.keysym.sym) {
       case SDLK_ESCAPE:
       case SDLK_q:
@@ -213,8 +214,8 @@ bool Client::execute_event(SDL_Event &event) {
         if (mov_keys_pressed.count(event.key.keysym.sym) == 0) {
           mov_keys_pressed.insert(event.key.keysym.sym);
         }
-        key_dir = (event.key.keysym.sym == SDLK_RIGHT ? RIGHT : LEFT);
-        handle_start_moving(key_dir);
+        key_mov_dir = (event.key.keysym.sym == SDLK_RIGHT ? RIGHT : LEFT);
+        handle_start_moving(key_mov_dir);
         break;
       case SDLK_RETURN:
         if (worm_client.get_state() != JUMPING)
@@ -225,12 +226,12 @@ bool Client::execute_event(SDL_Event &event) {
           handle_jump_backward(worm_client.get_direction(), JUMP_BACKWARD);
         break;
       case SDLK_UP:
-        if (worm_client.get_state() != AIMING)
-          handle_start_aiming(UP);
-        break;
       case SDLK_DOWN:
-        if (worm_client.get_state() != AIMING)
-          handle_start_aiming(DOWN);
+        if (aim_keys_pressed.count(event.key.keysym.sym) == 0) {
+          aim_keys_pressed.insert(event.key.keysym.sym);
+        }
+        key_aim_dir = (event.key.keysym.sym == SDLK_UP ? UP : DOWN);
+        handle_start_aiming(key_aim_dir);
         break;
       case SDLK_1:
         break;
@@ -257,7 +258,10 @@ bool Client::execute_event(SDL_Event &event) {
         break;
       case SDLK_UP:
       case SDLK_DOWN:
-        handle_stop_aiming();          
+        aim_keys_pressed.erase(event.key.keysym.sym);
+        if (aim_keys_pressed.empty()) {
+            handle_stop_aiming();          
+        }
         break;
       }
     }

@@ -11,8 +11,7 @@ public:
       : RunnableCommandGame(std::make_shared<Jump>(clt_id, skt, was_closed)) {}
 
   void run(GameManager &game_manager) override {
-    game_manager.jump(command->get_client_id(),
-                      ((Jump *)command.get())->get_direction());
+    game_manager.jump(command->get_client_id(), ((Jump *)command.get())->get_direction(), ((Jump *) command.get())->get_jump_type());
   }
 };
 

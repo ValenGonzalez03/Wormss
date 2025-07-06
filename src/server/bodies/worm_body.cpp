@@ -78,12 +78,12 @@ void WormBody::jump_forward() {
   }
 }
 
-void WormBody::jump(const uint8_t &dir) {
+void WormBody::jump(const uint8_t &dir, const uint8_t &jump_type) {
   if (state == JUMPING)
     return;
   state = JUMPING;
   //direction = dir;
-  if (dir == LEFT) {
+  if (jump_type == JUMP_BACKWARD) {
     jump_backward();
   } else {
     jump_forward();
@@ -172,6 +172,7 @@ void WormBody::start_contact_with(Body *other) {
     state = IDLE;
   }
 
+  /*
   if (other->get_type() == WORM) {
 		//std::cout << "GUSANO CHOCO CON UN GUSANO\n";
 		reinterpret_cast<WormBody*>(other)->start_contact_with(this);
@@ -186,6 +187,7 @@ void WormBody::start_contact_with(Body *other) {
 		std::cout << "GUSANO CHOCO CON MUNICION DE BAZOOKA\n";
 		//take_damage(another_body->get_damage());
   }
+  */
   
 }
 

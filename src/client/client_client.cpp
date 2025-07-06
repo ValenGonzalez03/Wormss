@@ -214,11 +214,11 @@ bool Client::execute_event(SDL_Event &event) {
         break;
       case SDLK_RETURN:
         if (worm_client.get_state() != JUMPING)
-          handle_jump_forward(worm_client.get_direction());
+          handle_jump_forward(worm_client.get_direction(), JUMP_FORWARD);
         break;
       case SDLK_BACKSPACE:
         if (worm_client.get_state() != JUMPING)
-          handle_jump_backward(worm_client.get_direction());
+          handle_jump_backward(worm_client.get_direction(), JUMP_BACKWARD);
         break;
       case SDLK_UP:
         if (worm_client.get_state() != AIMING)
@@ -273,16 +273,16 @@ void Client::handle_stop_moving() {
 }
 
 
-void Client::handle_jump_forward(uint8_t worm_dir) {
-  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(worm_dir);
+void Client::handle_jump_forward(uint8_t worm_dir, uint8_t jump_type) {
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(worm_dir, jump_type);
   sender_queue.try_push(cmd);
   // state.is_running = false;
 }
 
 
-void Client::handle_jump_backward(uint8_t worm_dir) {
-  int jump_direction = get_opposite_direction(worm_dir);
-  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(jump_direction);
+void Client::handle_jump_backward(uint8_t worm_dir, uint8_t jump_type) {
+  int jump_direction = (worm_dir == LEFT ? RIGHT : LEFT); // Calculo la direccion opuesta
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(jump_direction, jump_type);
   sender_queue.try_push(cmd);
   // state.is_running = false;
 }
@@ -298,12 +298,6 @@ void Client::handle_stop_aiming() {
   std::shared_ptr<StopAiming> cmd = std::make_shared<StopAiming>();
   sender_queue.try_push(cmd);
 }
-
-
-int Client::get_opposite_direction(uint8_t worm_dir) {
-  return (worm_dir == LEFT ? RIGHT : LEFT);
-}
-
 
 void Client::handle_finish_game() {
   prot.close_socket();

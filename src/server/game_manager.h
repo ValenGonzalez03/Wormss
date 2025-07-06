@@ -47,7 +47,7 @@ public:
 
   void stop_moving(const uint8_t &player_id);
 
-  void jump(const uint8_t &player_id, const uint8_t &direction);
+  void jump(const uint8_t &player_id, const uint8_t &direction, const uint8_t &jump_type);
 
   void aim(const uint8_t &player_id, const uint8_t &direction);
 

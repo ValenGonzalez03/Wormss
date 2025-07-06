@@ -75,13 +75,13 @@ void GameManager::stop_moving(const uint8_t &player_id) {
   worm->stop_moving();
 }
 
-void GameManager::jump(const uint8_t &player_id, const uint8_t &direction) {
+void GameManager::jump(const uint8_t &player_id, const uint8_t &direction, const uint8_t &jump_type) {
   if (player_id != current_turn_id) {
     return;
   }
 
   WormBody *worm = get_worm(player_id);
-  worm->jump(direction);
+  worm->jump(direction, jump_type);
 }
 
 void GameManager::aim(const uint8_t &player_id, const uint8_t &direction) {

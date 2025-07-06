@@ -14,6 +14,9 @@
 #define UP 2
 #define DOWN 3
 
+#define JUMP_FORWARD 0
+#define JUMP_BACKWARD 1
+
 enum WormState { IDLE, MOVING, JUMPING, AIMING, SHOOTING };
 
 struct BeamData {

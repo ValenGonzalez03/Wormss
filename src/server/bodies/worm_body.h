@@ -14,7 +14,7 @@ private:
   float aiming_angle = 0;
   float vel;
   float jump_vel_backward = 5;
-  float jump_vel_forward = 3;
+  float jump_vel_forward = 5;
   uint8_t id;
 
   WormState state = IDLE;
@@ -46,7 +46,7 @@ public:
 
   void jump_forward();
 
-  void jump(const uint8_t &dir);
+  void jump(const uint8_t &dir, const uint8_t &jump_type);
 
   void start_aiming(const uint8_t &dir);
 

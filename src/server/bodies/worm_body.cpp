@@ -58,7 +58,9 @@ void WormBody::start_moving(const uint8_t &dir) {
   direction = dir;
 }
 
-void WormBody::stop_moving() { state = IDLE; }
+void WormBody::stop_moving() {
+  state = IDLE; 
+}
 
 void WormBody::jump_backward() {
   apply_vertical_impulse(jump_vel_backward); 

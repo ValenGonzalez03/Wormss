@@ -201,16 +201,20 @@ bool Client::execute_event(SDL_Event &event) {
       return true;
 
     } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
+      int key_dir;
       switch (event.key.keysym.sym) {
       case SDLK_ESCAPE:
       case SDLK_q:
         handle_finish_game();
         return true;
-      case SDLK_RIGHT:
-        handle_start_moving(RIGHT);
         break;
+      case SDLK_RIGHT:
       case SDLK_LEFT:
-        handle_start_moving(LEFT);
+        if (mov_keys_pressed.count(event.key.keysym.sym) == 0) {
+          mov_keys_pressed.insert(event.key.keysym.sym);
+        }
+        key_dir = (event.key.keysym.sym == SDLK_RIGHT ? RIGHT : LEFT);
+        handle_start_moving(key_dir);
         break;
       case SDLK_RETURN:
         if (worm_client.get_state() != JUMPING)
@@ -231,17 +235,21 @@ bool Client::execute_event(SDL_Event &event) {
       case SDLK_1:
         break;
       case SDLK_i:
-          client_sdl.resource_pool.turn_music_volume_down();
+        client_sdl.resource_pool.turn_music_volume_down();
         break;
       case SDLK_o:
-          client_sdl.resource_pool.turn_music_volume_up();
+        client_sdl.resource_pool.turn_music_volume_up();
+        break;
       }
 
     } else if (event.type == SDL_KEYUP) { // Suelta una tecla
       switch (event.key.keysym.sym) {
       case SDLK_RIGHT:
       case SDLK_LEFT:
-        handle_stop_moving(); 
+        mov_keys_pressed.erase(event.key.keysym.sym);
+        if (mov_keys_pressed.empty()) {
+            handle_stop_moving(); 
+        }
         break;
       case SDLK_RETURN:
       case SDLK_BACKSPACE:

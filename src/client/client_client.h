@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 #include <utility>
+#include <set>
 
 #include "../common/commands/command.h"
 #include "../common/constant_rate_loop.h"
@@ -30,6 +31,8 @@ private:
   client_SDL client_sdl;
 
   uint8_t player_id;
+
+  std::set<int> mov_keys_pressed;
 
   void recv_world();
 

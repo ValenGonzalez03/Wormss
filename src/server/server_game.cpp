@@ -106,7 +106,7 @@ World& Game::get_world(){
 }
 
 void Game::push_game_state() {
-  GameState game_state = game_manager.get_state();
+  GameState game_state = game_manager.create_state();
   broadcaster.broadcast(game_state);
 }
 

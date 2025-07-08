@@ -4,8 +4,7 @@
 WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
     : resource_pool(res_pool), renderer(rend), worms() {}
 
-void WorldView::add_beam(float pos_x, float pos_y, float width, float height,
-                         int angle) {
+void WorldView::add_beam(float pos_x, float pos_y, float width, float height, int angle) {
   int pos_x_px = convert_meters_to_pixels_x(pos_x - width / 2);
   int pos_y_px = convert_meters_to_pixels_y(pos_y + height / 2);
   int width_px = convert_meters_to_pixels_x(width);
@@ -54,6 +53,23 @@ void WorldView::add_worm(WormData data) {
   worms.insert({worm.get_id(), worm});
 }
 
+Missile WorldView::add_missile(MissileData data) {
+  std::vector<SDL2pp::Texture *> missile_texture = resource_pool.get_missile_texture();
+
+  float width = MISSILE_WIDTH;
+  float heigth = MISSILE_HEIGHT;
+
+  int pos_x_px = convert_meters_to_pixels_x(data.get_pos_x() - width / 2);
+  int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y() + heigth / 2);
+  int width_px = convert_meters_to_pixels_x(width);
+  int heigth_px = convert_meters_to_pixels_x(heigth);
+
+
+  Missile missile(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(), data.get_id(),
+                  std::move(missile_texture), renderer);
+  return missile;
+}
+
 void WorldView::render(int frame) {
   // Renderizar fondo
   render_background();
@@ -68,7 +84,11 @@ void WorldView::render(int frame) {
     worm.second.render(frame);
   }
 
-  // Renderizar balas/cohetes
+  // Renderizar misiles
+  for (auto &missile : missiles) {
+    missile.second.render(frame);
+  }
+
 
   // render_text("Position: " + std::to_string((int)state.position)
   //       + ", running: " + (state.is_running ? "true" : "false")
@@ -80,6 +100,18 @@ void WorldView::update(GameState &game_state) {
   auto worms_data = game_state.get_worms();
   for (auto &worm : worms) {
     worm.second.update(worms_data[worm.second.get_id()]);
+  }
+
+  auto missiles_data = game_state.get_missiles();
+  for (auto data : missiles_data) {
+    if (missiles.find(data.first) == missiles.end()) {
+      // Si el misil no existe, lo creo
+      auto missile = add_missile(data.second);
+      missiles.insert({data.first, missile});
+    }
+  }
+  for (auto &missile : missiles) {
+    missile.second.update(missiles_data[missile.second.get_id()]);
   }
 }
 

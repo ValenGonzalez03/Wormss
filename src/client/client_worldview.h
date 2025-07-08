@@ -5,6 +5,7 @@
 #include "client_beam.h"
 #include "client_resource_pool.h"
 #include "client_worm.h"
+#include "client_missile.h"
 #include <vector>
 
 class WorldView {
@@ -13,6 +14,7 @@ private:
   SDL2pp::Renderer &renderer;
   std::vector<Beam> beams;
   std::map<uint8_t, Worm> worms;
+  std::map<uint8_t, Missile> missiles;
 
   void render_background();
 
@@ -24,9 +26,12 @@ public:
   // void add_worms(std::vector<std::vector<float>> spawn_points);
 
   void add_worm(WormData data);
+
   // Convierte la posicion pasada por parámetro de m a px,
   // crea la long_beam y la agrega al WorldView
   void add_beam(float pos_x, float pos_y, float width, float height, int angle);
+
+  Missile add_missile(MissileData data);
 
   // Recibe el estado de juego y actualiza la world_view
   // con los nuevos datos

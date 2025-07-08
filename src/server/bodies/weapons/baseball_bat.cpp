@@ -33,4 +33,4 @@ void BaseballBat::start_contact_with(Body* another_body) {
 void BaseballBat::end_contact_with(Body* another_body) {}
 
 int BaseballBat::get_type() {
-	return BASEBALL_BAT;}
+	return MISSILE;}

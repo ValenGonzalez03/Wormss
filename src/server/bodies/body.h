@@ -11,10 +11,7 @@ enum BODY_TYPES {
     WORM = 0,
     WATER = 1,
     BEAM = 2,
-    BAZOOKA = 3,
-    DYNAMITE = 4,
-    BANANA = 5,    
-    BASEBALL_BAT = 6,
+    MISSILE = 3
 };
 
 struct UserData {
@@ -28,7 +25,7 @@ protected:
 	b2Body* body;
 	const float pos_x; 
 	const float pos_y;
-	int angle;
+	float angle;
 	const float width;
 	const float height;
 	float density;

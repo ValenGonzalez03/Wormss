@@ -4,6 +4,7 @@
 #include "bodies/beam_body.h"
 #include "box2d/box2d.h"
 #include "bodies/worm_body.h"
+#include "bodies/missile_body.h"
 #include "bodies/water_body.h"
 #include "bodies/weapons/bazooka.h"
 #include "bodies/weapons/banana.h"
@@ -20,6 +21,7 @@ private:
   std::shared_ptr<b2World> world;
   std::list<WormBody*> worms;
   std::list<BeamBody*> beams;
+  std::list<MissileBody*> missiles;
   std::list<Body*> bodies;
   std::string name = "";
   std::string background = "";

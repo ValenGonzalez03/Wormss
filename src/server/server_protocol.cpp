@@ -10,6 +10,7 @@
 #include "runnable_commands/start_moving_runnable.h"
 #include "runnable_commands/stop_aiming_runnable.h"
 #include "runnable_commands/stop_moving_runnable.h"
+#include "runnable_commands/start_shooting_runnable.h"
 
 ServerProtocol::ServerProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
@@ -33,6 +34,8 @@ ServerProtocol::process_command(const uint8_t &client_id) {
     return std::make_shared<RunnableStartAiming>(client_id, skt, &was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_AIMING) {
     return std::make_shared<RunnableStopAiming>(client_id, skt, &was_closed);
+  } else if (code == CODE_PLAYER_COMM::START_SHOOTING) {
+    return std::make_shared<RunnableStartShooting>(client_id, skt, &was_closed);
   } else {
     throw std::runtime_error("Error de comando de juego");
   }

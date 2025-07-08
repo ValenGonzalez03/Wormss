@@ -45,4 +45,4 @@ void Bazooka::start_contact_with(Body* another_body) {
 void Bazooka::end_contact_with(Body* another_body) {}
 
 int Bazooka::get_type() {
-	return BAZOOKA;}
+	return MISSILE;}

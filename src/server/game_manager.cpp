@@ -102,7 +102,19 @@ void GameManager::stop_aiming(const uint8_t &player_id) {
   worm->stop_aiming();
 }
 
-GameState GameManager::get_state() {
+void GameManager::shoot(const uint8_t &player_id, float initial_force) {
+  if (player_id != current_turn_id) {
+    return;
+  }
+  WormBody *worm = get_worm(player_id);
+
+  auto missile = worm->shoot(initial_force, missiles_id_counter);
+  missiles_id_counter++;
+  missiles_list.push_back(missile);
+  missile->apply_initial_impulse(worm->get_aiming_angle());
+}
+
+GameState GameManager::create_state() {
   GameState game_state;
   for (auto &current_worm : worms_list) {
     game_state.add_worm(current_worm->get_id(), current_worm->get_pos_x(),
@@ -110,6 +122,12 @@ GameState GameManager::get_state() {
                         current_worm->get_direction(),
                         current_worm->get_state(),
                         current_worm->get_aiming_angle());
+  }
+  for (auto &current_missile : missiles_list) {
+    game_state.add_missile(current_missile->get_pos_x(),
+                           current_missile->get_pos_y(),
+                           current_missile->get_angle(),
+                          current_missile->get_id());
   }
 
   return game_state;

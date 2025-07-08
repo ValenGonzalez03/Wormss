@@ -23,6 +23,9 @@
 #define WORM_AIMING "worm_aiming"
 #define WORM_AIMING_PATH "/Images/Worms/wbaz.png"
 
+#define MISSILE "missile"
+#define MISSILE_PATH "/Images/Weapons/missile.png"
+
 class ResourcePool {
 private:
   SDL2pp::Renderer &renderer;
@@ -35,7 +38,9 @@ private:
 
   void add_texture(const std::string &texture_name,
                    const std::string &image_path, int width, int height,
-                   int amount_frames);
+                   int amount_frames, int offset_x = 0, int offset_y = 0, 
+                   int offset_width = 0, int offset_height = 0, 
+                   bool textures_not_centered = false);
   
   void add_texture_walking(const std::string &texture_name,
                     const std::string &image_path, int width, int height,
@@ -61,7 +66,10 @@ private:
   // Agrega la textura del gusano saltando al map de texturas
   void add_worm_jumping();
 
+  // Agrega la textura del gusano apuntando al map de texturas
   void add_worm_aiming();
+
+  void add_missile_texture();
 
 public:
   // Crea la Resource pool y le carga las texturas
@@ -82,6 +90,8 @@ public:
   std::vector<SDL2pp::Texture *> get_worm_jumping();
 
   std::vector<SDL2pp::Texture *> get_worm_aiming();
+
+  std::vector<SDL2pp::Texture *> get_missile_texture();
   /*
     void add_sound(const std::string sound_name, const std::string &sound_path)
     { Mix_Chunk *

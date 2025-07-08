@@ -33,4 +33,4 @@ void Banana::start_contact_with(Body* another_body) {
 void Banana::end_contact_with(Body* another_body) {}
 
 int Banana::get_type() {
-	return BANANA;}
+	return MISSILE;}

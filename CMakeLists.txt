@@ -17,6 +17,7 @@ add_executable(client ./src/client/client_main.cpp
 ./src/client/client_sender_thread.cpp
 ./src/client/client_worldview.cpp
 ./src/client/client_worm.cpp
+./src/client/client_missile.cpp
 ./src/client/client_protocol.cpp
 ./src/client/client_beam.cpp
 ./src/client/client_lobby.cpp
@@ -44,6 +45,7 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/world.cpp
 					  ./src/server/bodies/body.cpp
 					  ./src/server/bodies/worm_body.cpp
+					  ./src/server/bodies/missile_body.cpp
 					  ./src/server/bodies/beam_body.cpp
 					  ./src/server/bodies/water_body.cpp
 					  ./src/server/bodies/weapons/bazooka.cpp

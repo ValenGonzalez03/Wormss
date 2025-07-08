@@ -2,6 +2,7 @@
 #define WORM_BODY_H
 
 #include "../../common/game_constants.h"
+#include "missile_body.h"
 #include "body.h"
 #include "box2d/box2d.h"
 #include <iostream>
@@ -55,6 +56,9 @@ public:
   void aim_down();
 
   void stop_aiming();
+
+  // Por ahora un shoot generico que solo va a ser usado para la bazooka
+  MissileBody* shoot(float initial_force, int missile_id);
   
   void teleport(float pos_x, float pos_y);
 

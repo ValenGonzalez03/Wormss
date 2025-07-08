@@ -20,7 +20,6 @@ private:
   uint8_t direction;
   WormState state;
   float aim_angle;
-  // uint16_t id;
 
 public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
@@ -108,9 +107,80 @@ public:
   //Position get_position() const { return pos; }
 };
 
+struct MissileData {
+private:
+  float pos_x; // En metros
+  float pos_y; // En metros
+  float angle; // En radianes
+  uint8_t missile_id;
+
+public:
+
+  // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
+  explicit MissileData() : pos_x(0), pos_y(0), angle(0), missile_id(0) {}
+
+  explicit MissileData(float pos_x, float pos_y, float angle, uint8_t id)
+      : pos_x(pos_x), pos_y(pos_y), angle(angle), missile_id(id) {}
+
+  explicit MissileData(Socket &skt) : pos_x(0), pos_y(0), angle(0), missile_id(0) {
+    bool was_closed = false;
+    deserialize(skt, &was_closed);
+  }
+
+  void deserialize(Socket &skt, bool *was_closed) {
+    // Recibo el id del misil
+    skt.recvall(&missile_id, sizeof(missile_id), was_closed);
+
+    // Recibo la position
+    uint16_t pos_x;
+    uint16_t pos_y;
+    skt.recvall(&pos_x, sizeof(pos_x), was_closed);
+    skt.recvall(&pos_y, sizeof(pos_y), was_closed);
+    float final_pos_x = ntohs(pos_x) / 100.0;
+    float final_pos_y = ntohs(pos_y) / 100.0;
+    // std::cout << "final_pos_x: " << final_pos_x << std::endl;
+    // std::cout << "final_pos_y: " << final_pos_y << std::endl;
+    this->pos_x = final_pos_x;
+    this->pos_y = final_pos_y;
+  
+    // Recibo el angulo del misil
+    int angle_int_net;
+    skt.recvall(&angle_int_net, sizeof(angle_int_net), was_closed);
+    int angle_int = ntohl(angle_int_net);
+    this->angle = float(angle_int) / float(100.0);
+  }
+
+  void serialize(Socket &skt, bool *was_closed) {
+    // Envio el id del misil
+    skt.sendall(&(missile_id), sizeof(missile_id), was_closed);
+
+    // Envio la posicion
+    uint16_t pos_x = uint(this->pos_x * 100);
+    uint16_t pos_y = uint(this->pos_y * 100);
+    uint16_t pos_x_be = htons(pos_x);
+    uint16_t pos_y_be = htons(pos_y);
+    skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
+    skt.sendall(&pos_y_be, sizeof(pos_y_be), was_closed);
+
+    // Envio el angulo del misil
+    int angle_int = int(this->angle * 100);
+    int angle_int_net = htonl(angle_int);
+    skt.sendall(&angle_int_net, sizeof(angle_int_net), was_closed);
+  }
+
+  float get_pos_x() { return pos_x; }
+
+  float get_pos_y() { return pos_y; }
+
+  float get_angle() { return angle; }
+
+  uint8_t get_id() { return missile_id; }
+};
+
 struct GameState {
 private:
   std::map<uint8_t, WormData> worms_list;
+  std::map<uint8_t, MissileData> missiles_list;
 
 public:
   GameState() : worms_list(std::map<uint8_t, WormData>()) {}
@@ -121,20 +191,30 @@ public:
   // y devuelve un game state
   GameState(Socket &skt, bool *was_closed) : worms_list() {
     uint8_t worms_amount = 0;
+    uint8_t missiles_amount = 0;
     skt.recvall(&worms_amount, sizeof(worms_amount), was_closed);
+    skt.recvall(&missiles_amount, sizeof(missiles_amount), was_closed);
     for (int i = 0; i < worms_amount; i++) {
       WormData worm(skt);
       worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
       //std::cout << "worms_list_size: " << (int) worms_list.size() << std::endl;
     }
+    for (int i = 0; i < missiles_amount; i++) {
+      MissileData missile(skt);
+      missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
+    }
   }
 
   void serialize(Socket &skt, bool *was_closed) {
     uint8_t worms_amount = worms_list.size();
-    //std::cout << "Cantidad gusanos: " << worms_amount << std::endl;
+    uint8_t missiles_amount = missiles_list.size();
     skt.sendall(&worms_amount, sizeof(worms_amount), was_closed);
+    skt.sendall(&missiles_amount, sizeof(missiles_amount), was_closed);
     for (auto &worm : worms_list) {
       worm.second.serialize(skt, was_closed);
+    }
+    for (auto &missile : missiles_list) {
+      missile.second.serialize(skt, was_closed);
     }
   }
 
@@ -144,6 +224,13 @@ public:
                 uint8_t dir, WormState state, float angle) {
     WormData worm(player_id, pos_x, pos_y, dir, state, angle);
     worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
+  }
+
+  std::map<uint8_t, MissileData> get_missiles() { return missiles_list; }
+
+  void add_missile(float pos_x, float pos_y, float angle, uint8_t id) {
+    MissileData missile(pos_x, pos_y, angle, id);
+    missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
   }
 };
 

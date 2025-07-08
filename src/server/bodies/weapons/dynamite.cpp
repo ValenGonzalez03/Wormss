@@ -33,4 +33,4 @@ void Dynamite::start_contact_with(Body* another_body) {
 void Dynamite::end_contact_with(Body* another_body) {}
 
 int Dynamite::get_type() {
-	return DYNAMITE;}
+	return MISSILE;}

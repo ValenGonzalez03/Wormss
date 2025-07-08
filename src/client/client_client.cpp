@@ -10,6 +10,7 @@
 #include "../common/commands/start_moving.h"
 #include "../common/commands/stop_aiming.h"
 #include "../common/commands/stop_moving.h"
+#include "../common/commands/start_shooting.h"
 #include "../common/game_constants.h"
 
 using namespace SDL2pp;
@@ -233,6 +234,9 @@ bool Client::execute_event(SDL_Event &event) {
         key_aim_dir = (event.key.keysym.sym == SDLK_UP ? UP : DOWN);
         handle_start_aiming(key_aim_dir);
         break;
+      case SDLK_SPACE:
+        handle_start_shooting();
+        break;
       case SDLK_1:
         break;
       case SDLK_i:
@@ -308,6 +312,11 @@ void Client::handle_start_aiming(int direction) {
 
 void Client::handle_stop_aiming() {
   std::shared_ptr<StopAiming> cmd = std::make_shared<StopAiming>();
+  sender_queue.try_push(cmd);
+}
+
+void Client::handle_start_shooting() {
+  std::shared_ptr<StartShooting> cmd = std::make_shared<StartShooting>(5);
   sender_queue.try_push(cmd);
 }
 

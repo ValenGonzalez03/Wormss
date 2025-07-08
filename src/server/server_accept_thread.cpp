@@ -11,10 +11,8 @@ Accept::Accept(Socket &skt) : skt(std::move(skt)) {}
 void Accept::run() {
   try {
     while (is_alive) {
-      std::shared_ptr<Queue<GameState>> sender_queue =
-          std::make_shared<Queue<GameState>>(10);
-      std::shared_ptr<Player> player = std::make_shared<Player>(
-          std::move(skt.accept()), games_handler, sender_queue, id_counter);
+      std::shared_ptr<Queue<GameState>> sender_queue = std::make_shared<Queue<GameState>>(10);
+      std::shared_ptr<Player> player = std::make_shared<Player>(std::move(skt.accept()), games_handler, sender_queue, id_counter);
       player->start();
       id_counter++;
 

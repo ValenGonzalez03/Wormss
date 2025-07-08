@@ -15,8 +15,10 @@ private:
   int current_player_id;
   int current_worm_id;
   uint8_t current_turn_id = 0;
+  int missiles_id_counter = 0;
   std::list<uint8_t> players;
   std::list<WormBody *> worms_list;
+  std::list<MissileBody *> missiles_list;
 
   float timeStep = 1.0f / 60.0f;
   int32 velocityIterations = 6;
@@ -53,7 +55,9 @@ public:
 
   void stop_aiming(const uint8_t &player_id);
 
-  GameState get_state();
+  void shoot(const uint8_t &player_id, float initial_force);
+
+  GameState create_state();
 
   ~GameManager();
 

@@ -66,5 +66,8 @@ World::~World() {
   for (auto &current_beam : beams) {
     delete current_beam;
   }
+  for (auto &current_missile : missiles) {
+    delete current_missile;
+  }
 }
 

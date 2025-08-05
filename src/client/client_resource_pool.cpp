@@ -84,7 +84,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() {
 }
 
 void ResourcePool::add_worm_aiming() {
-  add_texture(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32, 17, 14, -31, -31, false);
+  add_texture(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32, 18, 14, -31, -31, false);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming() {
@@ -92,7 +92,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming() {
 }
 
 void ResourcePool::add_missile_texture() {
-  add_texture(MISSILE, MISSILE_PATH, 60, 60, 32, 18, 17, -38, -36, false);
+  add_texture(MISSILE, MISSILE_PATH, 60, 60, 32, 17, 23, -35, -46, false);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_missile_texture() {

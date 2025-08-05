@@ -6,12 +6,12 @@
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
 MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial_force, float angle, int id)
-    : Body(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, 0.8, 0.1), initial_force(inicial_force), id(id) {
+    : Body(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, 0.8, 0.3f), initial_force(inicial_force), id(id) {
   b2BodyDef bodyDef;
   bodyDef.bullet = true;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x, pos_y);
-  bodyDef.angle = angle;
+  bodyDef.angle = 0; // Por ahora dejo el angulo en 0 por defecto
   body = world->CreateBody(&bodyDef);
 
   b2PolygonShape polygonShape;

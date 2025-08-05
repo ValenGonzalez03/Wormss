@@ -6,7 +6,7 @@
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
 WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int health, uint8_t id)
-    : Body(world, pos_x, pos_y, 0, WORM_WIDTH, WORM_HEIGHT, 1, 0.1), vel(vel), id(id), health(health) {
+    : Body(world, pos_x, pos_y, 0, WORM_WIDTH, WORM_HEIGHT, 1, 0.2), vel(vel), id(id), health(health) {
   b2BodyDef bodyDef;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x, pos_y);

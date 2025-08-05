@@ -46,6 +46,9 @@ void GameManager::update() {
   for (WormBody *worm : worms_list) {
     worm->update();
   }
+  for (MissileBody *missile : missiles_list) {
+    missile->update();
+  }
 }
 
 WormBody *GameManager::get_worm(const uint8_t &player_id) {
@@ -128,9 +131,18 @@ GameState GameManager::create_state() {
                            current_missile->get_pos_y(),
                            current_missile->get_angle(),
                           current_missile->get_id());
+    //std::cout << "final_pos_x (missile): " << current_missile->get_pos_x() << std::endl;
+    //std::cout << "final_pos_y (missile): " << current_missile->get_pos_y() - MISSILE_HEIGHT << std::endl;
   }
 
   return game_state;
 }
 
-GameManager::~GameManager() {}
+GameManager::~GameManager() {
+  for (auto &current_worm : worms_list) {
+    delete current_worm;
+  }
+  for (auto &current_missile : missiles_list) {
+    delete current_missile;
+  }
+}

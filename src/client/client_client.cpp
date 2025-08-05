@@ -157,12 +157,13 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   client_sdl.renderer.Clear();
   client_sdl.world_view.render(frame_ticks);
+  
   auto player_data = game_state.get_worms()[player_id];
   std::string text =
       "Pos x: " +
       std::to_string(player_data.get_pos_x()) +
       ", Pos y: " +
-      std::to_string(player_data.get_pos_y()) +
+      std::to_string(player_data.get_pos_y() - WORM_HEIGHT) +
       ", state: " +
       (print_state(player_data.get_state())) +
       ", direction: " +

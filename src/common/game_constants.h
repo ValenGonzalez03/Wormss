@@ -9,8 +9,8 @@
 
 #define BEAM_HEIGHT 0.8583f // En metros (Equivale aproximadamente a unos 20 pixeles)
 
-#define MISSILE_WIDTH 1.0f // En metros (Equivale aproximadamente a unos 5 pixeles)
-#define MISSILE_HEIGHT 0.8f // En metros (Equivale aproximadamente a unos 5 pixeles)
+#define MISSILE_WIDTH 1.0f // En metros (Equivale aproximadamente a unos 23,33 pixeles)
+#define MISSILE_HEIGHT 0.8f // En metros (Equivale aproximadamente a unos 18,66 pixeles)
 
 #define LEFT 0
 #define RIGHT 1

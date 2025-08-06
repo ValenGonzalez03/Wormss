@@ -1,6 +1,7 @@
 #include "client_missile.h"
 
 #include <cmath>
+#include <box2d/b2_common.h>
 
 Missile::Missile(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t id,
   std::vector<SDL2pp::Texture *> &&textures, SDL2pp::Renderer &rend) 
@@ -18,9 +19,10 @@ void Missile::update(MissileData data) {
 void Missile::render(int frame) {
 
   texture[8]->SetAlphaMod(255);
-
+  float angle_deg =  angle * (180.0f / b2_pi);
+  std::cout << "Angle (degrees): " << angle_deg << std::endl;
   renderer.Copy(*(texture[8]), SDL2pp::NullOpt, // Size
-    SDL2pp::Rect(pos_x, pos_y, width, height), -angle,
+    SDL2pp::Rect(pos_x, pos_y, width, height), -angle_deg,
     SDL2pp::NullOpt, // rotation center - not needed
     SDL_FLIP_NONE);
 
@@ -29,9 +31,45 @@ void Missile::render(int frame) {
   
     SDL2pp::Color c(0, 255, 0);
     renderer.SetDrawColor(c);
-    renderer.DrawRect(box);
+
+    DrawRotatedRect(renderer, width, height, pos_x, pos_y, -angle);
+    //renderer.DrawRect(box);
   }
 
+}
+
+void Missile::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height, int pos_x, int pos_y, float angle) {
+  int hw = (width * 0.5f);
+  int hh = (height * 0.5f);
+
+  float center_x = pos_x + hw;
+  float center_y = pos_y + hh;
+
+  float cos_A = std::cos(angle);
+  float sin_A = std::sin(angle);
+
+  // Coordenadas locales de los 4 vértices (sentido antihorario)
+  SDL2pp::Point verts[4] = {
+      {-hw, -hh},
+      { hw, -hh},
+      { hw,  hh},
+      {-hw,  hh}
+  };
+
+  SDL2pp::Point worldVerts[4];
+    for (int i = 0; i < 4; ++i) {
+        worldVerts[i].x = center_x + verts[i].x * cos_A - verts[i].y * sin_A;
+        worldVerts[i].y = center_y + verts[i].x * sin_A + verts[i].y * cos_A;
+    }
+
+    for (int i = 0; i < 4; ++i) {
+      int j = (i + 1) % 4;
+      renderer.DrawLine(
+          static_cast<int>(worldVerts[i].x),
+          static_cast<int>(worldVerts[i].y),
+          static_cast<int>(worldVerts[j].x),
+          static_cast<int>(worldVerts[j].y));
+  }
 }
 
 uint8_t Missile::get_id() {

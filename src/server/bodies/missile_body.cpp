@@ -6,12 +6,12 @@
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
 MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial_force, float angle, int id)
-    : Body(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, 0.8, 0.3f), initial_force(inicial_force), id(id) {
+    : Body(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, 1.0f, 0.3f), initial_force(inicial_force), id(id) {
   b2BodyDef bodyDef;
   bodyDef.bullet = true;
   bodyDef.type = b2_dynamicBody;
-  bodyDef.position.Set(pos_x, pos_y);
-  bodyDef.angle = 0; // Por ahora dejo el angulo en 0 por defecto
+  bodyDef.position.Set(pos_x + (WORM_WIDTH / 2) + 0.3f * cos(angle), pos_y + 1.0f * sin(angle)); // Ajusto la distancia inicial un poco mas adelante para que no choque con el gusano.
+  bodyDef.angle = angle; // Por ahora dejo el angulo en 0 por defecto
   body = world->CreateBody(&bodyDef);
 
   b2PolygonShape polygonShape;
@@ -23,7 +23,7 @@ MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial
   fixtureDef.friction = friction;
 
   body->CreateFixture(&fixtureDef);
-  body->SetFixedRotation(true);
+ //body->SetFixedRotation(true);
 
   UserData* data = new UserData {MISSILE, this};
   body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);

@@ -133,6 +133,7 @@ GameState GameManager::create_state() {
                           current_missile->get_id());
     //std::cout << "final_pos_x (missile): " << current_missile->get_pos_x() << std::endl;
     //std::cout << "final_pos_y (missile): " << current_missile->get_pos_y() - MISSILE_HEIGHT << std::endl;
+    std::cout << "angle (missile): " << current_missile->get_angle() << std::endl;
   }
 
   return game_state;

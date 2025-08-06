@@ -16,6 +16,8 @@ private:
   std::vector<SDL2pp::Texture *> texture; // Vector de texturas
   SDL2pp::Renderer &renderer;
 
+  void DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height, int pos_x, int pos_y, float angle);
+
 public:
 
   explicit Missile();

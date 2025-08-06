@@ -317,7 +317,7 @@ void Client::handle_stop_aiming() {
 }
 
 void Client::handle_start_shooting() {
-  std::shared_ptr<StartShooting> cmd = std::make_shared<StartShooting>(5);
+  std::shared_ptr<StartShooting> cmd = std::make_shared<StartShooting>(8);
   sender_queue.try_push(cmd);
 }
 

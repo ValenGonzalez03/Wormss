@@ -11,7 +11,7 @@ MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial
   bodyDef.bullet = true;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(pos_x + (WORM_WIDTH / 2) + 0.3f * cos(angle), pos_y + 1.0f * sin(angle)); // Ajusto la distancia inicial un poco mas adelante para que no choque con el gusano.
-  bodyDef.angle = angle; // Por ahora dejo el angulo en 0 por defecto
+  bodyDef.angle = angle;
   body = world->CreateBody(&bodyDef);
 
   b2PolygonShape polygonShape;
@@ -23,7 +23,6 @@ MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial
   fixtureDef.friction = friction;
 
   body->CreateFixture(&fixtureDef);
- //body->SetFixedRotation(true);
 
   UserData* data = new UserData {MISSILE, this};
   body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);

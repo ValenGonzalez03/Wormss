@@ -38,7 +38,7 @@ void Worm::render(int frame) {
   }
 
   if (std::getenv("DEBUG") != NULL) {
-    SDL2pp::Rect box(pos_x, pos_y + 3, width, height);
+    SDL2pp::Rect box(pos_x, pos_y, width, height);
   
     SDL2pp::Color c(255, 0, 0);
     renderer.SetDrawColor(c);
@@ -56,7 +56,7 @@ void Worm::render_worm_idle(int frame) {
   walk_texture.front()->SetBlendMode(SDL_BLENDMODE_BLEND);
 
   renderer.Copy(*walk_texture.front(), SDL2pp::NullOpt, // Size
-                SDL2pp::Rect(pos_x, pos_y, width + 2, height + 3),        // Destination
+                SDL2pp::Rect(pos_x, pos_y - 2, width + 2, height + 2),        // Destination
                 0.0,                                       // don't rotate
                 SDL2pp::NullOpt, // rotation center - not needed
                 flip             // horizontal flip
@@ -73,7 +73,7 @@ void Worm::render_worm_running(int frame) {
   walk_texture[frame_position]->SetAlphaMod(255); // sprite is fully opaque
 
   renderer.Copy(*walk_texture[frame_position],
-                SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y, width + 2, height + 3), 0.0,
+                SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y - 2, width + 2, height + 2), 0.0,
                 SDL2pp::NullOpt, flip);
 }
 
@@ -92,7 +92,7 @@ void Worm::render_worm_aiming(int frame) {
   //std::cout << "Normalized angle: " << normalized_angle << std::endl;
 
   renderer.Copy(*aim_texture[frame_position], SDL2pp::NullOpt,
-                SDL2pp::Rect((int)pos_x, pos_y, width + 2, height + 3), 0.0, SDL2pp::NullOpt,
+                SDL2pp::Rect((int)pos_x - 4, pos_y - 2, width + 8, height + 2), 0.0, SDL2pp::NullOpt,
                 flip);
 }
 

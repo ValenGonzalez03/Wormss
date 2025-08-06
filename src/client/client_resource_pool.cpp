@@ -68,7 +68,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() {
 }
 
 void ResourcePool::add_worm_walking() {
-  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, 19, 14, -38, -31, true);
+  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, 19, 15, -38, -33, true);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() {
@@ -84,7 +84,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() {
 }
 
 void ResourcePool::add_worm_aiming() {
-  add_texture(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32, 18, 14, -31, -31, false);
+  add_texture(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32, 16, 14, -29, -31, false);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming() {

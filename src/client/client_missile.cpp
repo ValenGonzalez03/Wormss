@@ -21,9 +21,7 @@ void Missile::render(int frame) {
   texture[8]->SetAlphaMod(255);
   float angle_deg =  angle * (180.0f / b2_pi);
   std::cout << "Angle (degrees): " << angle_deg << std::endl;
-  renderer.Copy(*(texture[8]), SDL2pp::NullOpt, // Size
-    SDL2pp::Rect(pos_x, pos_y, width, height), -angle_deg,
-    SDL2pp::NullOpt, // rotation center - not needed
+  renderer.Copy(*(texture[8]), SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y, width, height), -angle_deg, SDL2pp::NullOpt,
     SDL_FLIP_NONE);
 
   if (std::getenv("DEBUG") != NULL) {

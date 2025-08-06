@@ -9,10 +9,7 @@ void WorldView::add_beam(float pos_x, float pos_y, float width, float height, in
   int pos_y_px = convert_meters_to_pixels_y(pos_y + height / 2);
   int width_px = convert_meters_to_pixels_x(width);
   int height_px = convert_meters_to_pixels_x(height);
-  // std::cout << "Largo: " << width << std::endl;
-  // std::cout << "Alto: " << height << std::endl;
-  // std::cout << "Pos x (px): " << pos_x_px << std::endl;
-  // std::cout << "Pos y (px): " << pos_y_px << std::endl;
+
   std::vector<SDL2pp::Texture *> beam_texture =
       resource_pool.get_long_beam_texture();
   if (width == 6) {

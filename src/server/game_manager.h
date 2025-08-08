@@ -11,6 +11,7 @@
 class GameManager {
 private:
   World world;
+  bool game_finished = false;
   int current_players = 0;
   int current_player_id;
   int current_worm_id;
@@ -58,6 +59,10 @@ public:
   void shoot(const uint8_t &player_id, float initial_force);
 
   GameState create_state();
+
+  void set_game_finished(const bool is_finished);
+
+  bool is_game_finished() const;
 
   ~GameManager();
 

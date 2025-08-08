@@ -32,4 +32,6 @@ void PlayerSender::send_world(World& world) {
   protocol.send_world(world);
 }
 
-PlayerSender::~PlayerSender() { keep_playing = false; }
+PlayerSender::~PlayerSender() {
+  std::cout << "Sender se destruyo" << std::endl; 
+  keep_playing = false; }

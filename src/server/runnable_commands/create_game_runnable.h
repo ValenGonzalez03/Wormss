@@ -8,8 +8,7 @@ class RunnableCreateGame : public RunnableCommandLobby {
 
 public:
   RunnableCreateGame(int clt_id, Socket &skt, bool *was_closed)
-      : RunnableCommandLobby(
-            std::make_shared<CreateGame>(clt_id, skt, was_closed)) {}
+      : RunnableCommandLobby(std::make_shared<CreateGame>(clt_id, skt, was_closed)) {}
 
   std::unique_ptr<LobbyResult>
   run(GamesHandler &games_handler, std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id) override {

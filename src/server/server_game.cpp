@@ -52,8 +52,9 @@ void Game::run() {
       update(it);
       game_manager.update();
       game_manager.step();
-
       push_game_state();
+
+      check_game_finished();
 
       auto t2 = time_point_cast<milliseconds>(steady_clock::now());
 
@@ -108,6 +109,13 @@ World& Game::get_world(){
 void Game::push_game_state() {
   GameState game_state = game_manager.create_state();
   broadcaster.broadcast(game_state);
+}
+
+void Game::check_game_finished() {
+  if (game_manager.is_game_finished()) {
+    stop();
+    std::cout << "GAME FINISHED" << std::endl;
+  }
 }
 
 bool Game::is_started() { return started; }

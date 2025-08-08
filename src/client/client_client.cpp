@@ -11,6 +11,7 @@
 #include "../common/commands/stop_aiming.h"
 #include "../common/commands/stop_moving.h"
 #include "../common/commands/start_shooting.h"
+#include "../common/commands/stop_game.h"
 #include "../common/game_constants.h"
 
 using namespace SDL2pp;
@@ -138,6 +139,13 @@ bool Client::func_to_execute() {
     } catch (const std::exception &e) {
       std::cerr << e.what();
   }
+
+  if (game_state.is_game_finished()) {
+    std::cout << "El juego ha terminado" << std::endl;
+    prot.close_socket();
+    sender_queue.close();
+    return true; // Se cierra el juego
+  }
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // TRY-POP DE LA RECEIVER QUEUE
@@ -199,7 +207,7 @@ bool Client::execute_event(SDL_Event &event) {
   auto worm_client = last_game_state.get_worms()[player_id];
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) { // Cierra el juego
-      handle_finish_game();
+      handle_quit_game();
       return true;
 
     } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
@@ -207,8 +215,10 @@ bool Client::execute_event(SDL_Event &event) {
       int key_aim_dir;
       switch (event.key.keysym.sym) {
       case SDLK_ESCAPE:
+        handle_stop_game();
+        break;
       case SDLK_q:
-        handle_finish_game();
+        handle_quit_game();
         return true;
         break;
       case SDLK_RIGHT:
@@ -321,7 +331,12 @@ void Client::handle_start_shooting() {
   sender_queue.try_push(cmd);
 }
 
-void Client::handle_finish_game() {
+void Client::handle_stop_game() {
+  std::shared_ptr<StopGame> cmd = std::make_shared<StopGame>();
+  sender_queue.try_push(cmd);
+}
+
+void Client::handle_quit_game() {
   prot.close_socket();
   sender_queue.close();
   // receiver_queue.close();

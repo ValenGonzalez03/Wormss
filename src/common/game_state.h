@@ -179,6 +179,7 @@ public:
 
 struct GameState {
 private:
+  bool game_finished = false;
   std::map<uint8_t, WormData> worms_list;
   std::map<uint8_t, MissileData> missiles_list;
 
@@ -203,6 +204,9 @@ public:
       MissileData missile(skt);
       missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
     }
+    bool game_finished;
+    skt.recvall(&game_finished, sizeof(game_finished), was_closed);
+    this->game_finished = game_finished;
   }
 
   void serialize(Socket &skt, bool *was_closed) {
@@ -216,6 +220,7 @@ public:
     for (auto &missile : missiles_list) {
       missile.second.serialize(skt, was_closed);
     }
+    skt.sendall(&game_finished, sizeof(game_finished), was_closed);
   }
 
   std::map<uint8_t, WormData> get_worms() { return worms_list; }
@@ -231,6 +236,12 @@ public:
   void add_missile(float pos_x, float pos_y, float angle, uint8_t id) {
     MissileData missile(pos_x, pos_y, angle, id);
     missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
+  }
+
+  bool is_game_finished() const { return game_finished; }
+
+  void set_game_finished() { 
+    game_finished = true; 
   }
 };
 

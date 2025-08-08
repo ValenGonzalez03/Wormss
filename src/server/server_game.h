@@ -73,6 +73,8 @@ public:
 
   void push_game_state();
 
+  void check_game_finished();
+
   bool is_started();
 
   bool is_dead();

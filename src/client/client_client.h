@@ -37,21 +37,20 @@ private:
 
   void recv_world();
 
-  // Ejecuta un evento y devuelve true si se quiere cerrar el juego
-  // o false en caso contrario
+  // Ejecuta un evento y devuelve true si se quiere cerrar el juego o false en caso contrario
   bool execute_event(SDL_Event &event);
 
-  // Maneja el evento de comenzar a moverse al apretar
-  // alguna tecla de movimiento
+  // Maneja el evento de comenzar a moverse al apretar alguna tecla de movimiento
   void handle_start_moving(int direction);
 
-  // Maneja el evento de dejar de moverse al soltar la tecla
-  // de movimiento
+  // Maneja el evento de dejar de moverse al soltar la tecla de movimiento
   void handle_stop_moving();
 
-  // Maneja el cierre del juego cuando se aprieta la 'q' o
-  // la x para cerrar
-  void handle_finish_game();
+  // Maneja la finalizacion del juego cuando se aprieta ESCAPE.
+  void handle_stop_game();
+
+  // Maneja el cierre del juego (Unicamente por parte del cliente en cuestión) cuando se aprieta la 'q' o la x para cerrar
+  void handle_quit_game();
 
   // Maneja el evento de saltar hacia adelante
   void handle_jump_forward(uint8_t worm_dir, uint8_t jump_type);
@@ -83,8 +82,7 @@ public:
 
   int run();
 
-  // Devuelve false si el cliente no cerro el programa, devuelve true en caso
-  // contrario.
+  // Devuelve false si el cliente no cerro el programa, devuelve true en caso contrario.
   bool func_to_execute() override;
 };
 

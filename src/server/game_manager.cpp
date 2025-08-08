@@ -119,6 +119,9 @@ void GameManager::shoot(const uint8_t &player_id, float initial_force) {
 
 GameState GameManager::create_state() {
   GameState game_state;
+  if (game_finished) {
+    game_state.set_game_finished();
+  }
   for (auto &current_worm : worms_list) {
     game_state.add_worm(current_worm->get_id(), current_worm->get_pos_x(),
                         current_worm->get_pos_y(),
@@ -137,6 +140,14 @@ GameState GameManager::create_state() {
   }
 
   return game_state;
+}
+
+void GameManager::set_game_finished(const bool is_finished) {
+  game_finished = is_finished;
+}
+
+bool GameManager::is_game_finished() const {
+  return game_finished;
 }
 
 GameManager::~GameManager() {

@@ -25,6 +25,7 @@ private:
   Queue<std::shared_ptr<Command>> sender_queue;
   ClientReceiverThread receiver;
   ClientSenderThread sender;
+  bool keep_playing = true;
 
   GameState last_game_state;
 

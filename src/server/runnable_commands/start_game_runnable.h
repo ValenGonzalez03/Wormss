@@ -12,14 +12,9 @@ public:
       : RunnableCommandLobby(
             std::make_shared<StartGame>(clt_id, skt, was_closed)) {}
 
-  std::unique_ptr<LobbyResult>
-  run(GamesHandler &games_handler, std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id) override {
-    std::vector<std::string> world_names;
-    std::unique_ptr<LobbyResult> lobby_result = std::make_unique<LobbyResult>(
-        player_id, command->get_game_id(),
-        new Queue<std::shared_ptr<RunnableCommandGame>>(10), world_names);
-    lobby_result->game_started();
-    return lobby_result;
+  void
+  run(std::shared_ptr<Player> player) override {
+    player->manage_start_game();
   }
 };
 

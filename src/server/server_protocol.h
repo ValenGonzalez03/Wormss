@@ -13,7 +13,9 @@
 #include "../common/lib/socket.h"
 
 #include "runnable_commands/command_runnable_game.h"
-#include "runnable_commands/command_runnable_lobby.h"
+//#include "runnable_commands/command_runnable_lobby.h"
+
+class RunnableCommandLobby;
 
 class ServerProtocol {
 private:

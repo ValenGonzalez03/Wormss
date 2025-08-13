@@ -13,6 +13,8 @@
 #include "runnable_commands/start_shooting_runnable.h"
 #include "runnable_commands/stop_game_runnable.h"
 
+class RunnableCommandLobby;
+
 ServerProtocol::ServerProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
 std::shared_ptr<RunnableCommandGame>
@@ -49,6 +51,7 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
   uint8_t code;
   uint8_t client_id = 0;
   skt.recvall(&code, sizeof(code), &was_closed);
+  //std::cout << "Codigo leido: " << (int)code << std::endl;
   if (was_closed) {
     throw LibError(errno, "Socket is closed.");
   }

@@ -5,31 +5,36 @@
 #include <atomic>
 #include <vector>
 
-#include "client_handler_thread.h"
+#include "server_receiver_thread.h"
 #include "player_sender_thread.h"
 #include "../common/game_state.h"
 #include "server_games_handler.h"
 
 class Player {
 private:
-  Socket skt;
-  std::shared_ptr<Queue<GameState>> sender_queue;
-  GamesHandler &games_handler;
-  std::atomic<bool> keep_playing{true};
-  std::atomic<bool> in_game{false};
-  ServerProtocol protocol;
-  PlayerSender sender;
   uint8_t player_id;
-  ClientHandler client_handler;
+  Game* game;
+  GamesHandler& games_handler;
+  PlayerSender& sender;
+  std::shared_ptr<Queue<GameState>> sender_queue;
+  ServerProtocol& protocol;
+  bool has_game_assigned = false;
 
 public:
+  
+  //explicit Player();
   /*
    * Constructor de la clase.
    * */
-  explicit Player(Socket &&peer, GamesHandler &games_handler,
-                  std::shared_ptr<Queue<GameState>> sender_queue,
-                  uint8_t player_id);
+  explicit Player(uint8_t player_id, Game* game, GamesHandler& games_handler, PlayerSender& sender, std::shared_ptr<Queue<GameState>> sender_queue, ServerProtocol& protocol);
 
+  void initialize_game();
+
+  uint8_t get_game_id() const;
+
+  bool has_game_started();
+
+  bool has_game_finished();
   /*
    * Ejecuta los hilos.
    * */
@@ -50,8 +55,15 @@ public:
    * */
   bool is_dead();
 
+  Queue<std::shared_ptr<RunnableCommandGame>>& get_commands_queue_game();
+
+  void manage_create_game();
+
+  void manage_join_game(uint8_t game_id);
+
+  void manage_start_game();
+
   Player(const Player &) = delete;
-  Player &operator=(const Player &) = delete;
 };
 
 #endif

@@ -4,14 +4,14 @@
 #include "../common/lib/socket.h"
 #include "../common/lib/thread.h"
 #include "server_games_handler.h"
-#include "server_player.h"
+#include "server_client_handler.h"
 #include <list>
 
 class Accept : public Thread {
 private:
   Socket skt;
   std::atomic<bool> is_alive{true};
-  std::list<std::shared_ptr<Player>> players;
+  std::list<std::shared_ptr<ClientHandler>> clients;
   GamesHandler games_handler;
   uint8_t id_counter = 0;
 

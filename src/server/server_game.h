@@ -47,9 +47,9 @@ private:
   GameConfig &config;
 
 public:
-  explicit Game(uint8_t &game_id, GameConfig &game_config);
+  explicit Game(uint8_t game_id, GameConfig &game_config, std::shared_ptr<World> world);
 
-  Queue<std::shared_ptr<RunnableCommandGame>> *
+  void
   add_player(std::shared_ptr<Queue<GameState>> sender_queue,
              uint8_t &player_id);
 
@@ -75,11 +75,17 @@ public:
 
   void check_game_finished();
 
+  void turn_to_started();
+
   bool is_started();
 
   bool is_dead();
 
   uint8_t get_game_id();
+
+  Queue<std::shared_ptr<RunnableCommandGame>> &get_commands_queue();
+
+  GameManager &get_game_manager();
 
   Game(const Game &) = delete;
   Game &operator=(const Game &) = delete;

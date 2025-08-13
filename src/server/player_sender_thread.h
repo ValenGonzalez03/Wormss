@@ -11,7 +11,7 @@ class PlayerSender : public Thread {
 private:
   ServerProtocol &protocol;
   std::shared_ptr<Queue<GameState>> sender_queue;
-  std::atomic<bool> &keep_playing;
+  bool &keep_playing;
 
 public:
   /*
@@ -19,13 +19,15 @@ public:
    * */
   explicit PlayerSender(ServerProtocol &protocol,
                         std::shared_ptr<Queue<GameState>> sender_queue,
-                        std::atomic<bool> &keep_playing);
+                        bool &keep_playing);
 
   void send_id(const uint8_t id);
 
   void send_worlds_names(const std::vector<std::string>& world_names);
 
   void send_world(World& world);
+
+  bool has_started();
 
   /*
    * Ejecuta el loop del hilo Sender.

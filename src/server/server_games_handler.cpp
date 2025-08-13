@@ -2,10 +2,14 @@
 
 GamesHandler::GamesHandler() {
   WorldsReader worlds_reader;
-  worlds = worlds_reader.read_yaml_files(std::filesystem::path(RESOURCES_PATH) / "Worlds");
-  for (const auto& world : worlds) {
+  std::vector<std::shared_ptr<World>> worlds_aux;
+  worlds_aux = worlds_reader.read_yaml_files(std::filesystem::path(RESOURCES_PATH) / "Worlds");
+  int i = 0;
+  for (const auto& world : worlds_aux) {
     std::string world_stage = world->get_name();
     world_names.push_back(world_stage);
+    worlds[i] = world;
+    i++;
   }
 }
 
@@ -26,51 +30,47 @@ void GamesHandler::delete_game(const uint8_t &game_id) {
   games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Queue<std::shared_ptr<RunnableCommandGame>> *
-GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue,
-                          uint8_t& game_id, uint8_t &player_id, std::vector<std::string>& names) {
+Game *
+GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue,uint8_t &player_id, uint8_t &world_id) {
   std::lock_guard<std::mutex> lck(m);
-  game_id = games_counter;
-  Game *game = new Game(game_id, games_config);
+  auto world = worlds[world_id];
+  Game *game = new Game(games_counter, games_config, world);
   games_counter++;
   add_game(game);
-  names = world_names;
-  Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue =
-      game->add_player(sender_queue, player_id);
-  return commands_queue;
+  game->add_player(sender_queue, player_id);
+  return game;
 }
 
-Queue<std::shared_ptr<RunnableCommandGame>> *
-GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue,
-                        const uint8_t &game_id, uint8_t &player_id) {
+Game *
+GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &game_id, uint8_t &player_id) {
   std::lock_guard<std::mutex> lck(m);
-  Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue = nullptr;
   Game *game = get_game(game_id);
   if (game == nullptr) {
-    return nullptr;
+    return nullptr; // Habria que tirar una excepcion.
   }
 
   if (!game->is_started()) {
-    commands_queue = game->add_player(sender_queue, player_id);
+    game->add_player(sender_queue, player_id);
+    // Nuevamente, si la partida ya esta empezada habria que tirar una excepcion o avisar de alguna manera.
   }
 
-  return commands_queue;
+  return game;
 }
 
-World GamesHandler::select_world(int world_id, const uint8_t& game_id) {
-  std::string selected_world_name = world_names[world_id];
-  World selected_world;
-  for (const auto& world : worlds) {
-    std::string world_name = world->get_name();
-    if (world_name == selected_world_name) {
-      get_game(game_id)->set_world(*world);
-      return *world;
-    }
-  }
-  return selected_world;
-}
+// World GamesHandler::select_world(int world_id, const uint8_t& game_id) {
+//   std::string selected_world_name = world_names[world_id];
+//   World selected_world;
+//   for (const auto& world : worlds) {
+//     std::string world_name = world->get_name();
+//     if (world_name == selected_world_name) {
+//       get_game(game_id)->set_world(*world);
+//       return *world;
+//     }
+//   }
+//   return selected_world;
+// }
 
-World& GamesHandler::select_world(const uint8_t& game_id) {
+World& GamesHandler::get_game_world(const uint8_t& game_id) {
   for (const auto& game : games) {
     if (game_id == game->get_game_id()){
       return game->get_world();
@@ -79,8 +79,7 @@ World& GamesHandler::select_world(const uint8_t& game_id) {
   throw std::runtime_error("World not found");
 }
 
-void GamesHandler::start_game(const uint8_t &game_id,
-                              const uint8_t &player_id) {
+void GamesHandler::start_game(const uint8_t &game_id, const uint8_t &player_id) {
   if (player_id != 0)
     return;
   std::lock_guard<std::mutex> lck(m);
@@ -90,6 +89,7 @@ void GamesHandler::start_game(const uint8_t &game_id,
   }
 
   if (!game->is_started()) {
+    game->turn_to_started();
     game->start();
   }
 }
@@ -134,6 +134,10 @@ std::list<uint8_t> *GamesHandler::obtain_all_games_id() {
     games_id->push_back(current_game->get_game_id());
   }
   return games_id;
+}
+
+std::vector<std::string> GamesHandler::get_world_names() const {
+  return world_names;
 }
 
 GamesHandler::~GamesHandler() {

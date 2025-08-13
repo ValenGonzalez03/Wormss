@@ -30,15 +30,15 @@ void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_clos
   player_id = prot.receive_id();
   std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 
-  int game_id = prot.receive_id();
-  std::cout << "GAME ID: " << game_id << std::endl;
-
   std::vector<std::string> world_names = prot.recv_worlds_names(was_closed);
   show_worlds(world_names);
-
+  
   int world_id = get_world_id(world_names);
-
+  
   prot.send_world_id(world_id, was_closed);
+
+  int game_id = prot.receive_id();
+  std::cout << "GAME ID: " << game_id << std::endl;
 
   wait_start_command(prot, game_id);
 }

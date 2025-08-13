@@ -9,7 +9,7 @@ World::World() : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f)))  {
 BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) {
   BeamBody* beam = new BeamBody(world.get(), pos_x, pos_y, angle, length);
   beams.push_back(beam);
-  beam->print_beam();
+  //beam->print_beam();
   return beam;
 }
 

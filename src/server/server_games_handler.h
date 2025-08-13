@@ -17,7 +17,7 @@ private:
   std::mutex m;
   std::list<Game *> games;
   int games_counter = 0;
-  std::vector<std::shared_ptr<World>> worlds;
+  std::map<int, std::shared_ptr<World>> worlds;
   std::vector<std::string> world_names;
   GameConfig games_config = GameConfig(std::string(RESOURCES_PATH) + "/game_config.yml");
 
@@ -30,25 +30,25 @@ private:
 
   void delete_game(const uint8_t &game_id);
 
-  Queue<std::shared_ptr<RunnableCommandGame>> *
-  create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t& game_id,
-              uint8_t &player_id, std::vector<std::string>& names);
+  Game *
+  create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id, uint8_t &world_id);
 
-  Queue<std::shared_ptr<RunnableCommandGame>> *
-  join_game(std::shared_ptr<Queue<GameState>> sender_queue,
-            const uint8_t &game_id, uint8_t &player_id);
+  Game *
+  join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &game_id, uint8_t &player_id);
 
   void start_game(const uint8_t &game_id, const uint8_t &player_id);
 
-  World select_world(int world_id, const uint8_t& game_id);
+  //World select_world(int world_id, const uint8_t& game_id);
 
-  World& select_world(const uint8_t& game_id);
+  World& get_game_world(const uint8_t& game_id);
 
   bool game_exist(uint8_t game_id);
 
   void reap_dead();
 
   std::list<uint8_t> *obtain_all_games_id();
+
+  std::vector<std::string> get_world_names() const;
 
   ~GamesHandler();
 

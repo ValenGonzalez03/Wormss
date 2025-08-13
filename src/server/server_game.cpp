@@ -2,17 +2,18 @@
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(uint8_t &game_id, GameConfig &game_config) : 
-game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config) {}
+Game::Game(uint8_t game_id, GameConfig &game_config, std::shared_ptr<World> world) : 
+game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config) {
+  game_manager.set_world(*world);
+}
 
-Queue<std::shared_ptr<RunnableCommandGame>> *
+void
 Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
                 uint8_t &player_id) {
   player_id = players_counter;
   players_counter++;
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
-  return &commands;
 }
 
 void Game::delete_player(const uint8_t &player_id) {
@@ -118,8 +119,20 @@ void Game::check_game_finished() {
   }
 }
 
+void Game::turn_to_started() {
+  started = true;
+}
+
 bool Game::is_started() { return started; }
 
 bool Game::is_dead() { return not keep_playing; }
 
 uint8_t Game::get_game_id() { return game_id; }
+
+Queue<std::shared_ptr<RunnableCommandGame>>& Game::get_commands_queue() {
+  return commands;
+}
+
+GameManager &Game::get_game_manager() {
+  return game_manager;
+}

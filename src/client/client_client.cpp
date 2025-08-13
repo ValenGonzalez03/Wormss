@@ -20,7 +20,7 @@ const float RATE = (float)(1.0 / 60.0);
 
 Client::Client(ClientProtocol &&prot, uint8_t player_id)
     : prot(std::move(prot)), receiver_queue(), sender_queue(),
-      receiver(this->prot, receiver_queue), sender(this->prot, sender_queue),
+      receiver(this->prot, receiver_queue, keep_playing), sender(this->prot, sender_queue, keep_playing),
       client_sdl(), player_id(player_id), last_game_state() {}
 
 void Client::start_threads() {
@@ -58,7 +58,8 @@ int Client::run() {
     recv_world();
     
     start_threads();
-  
+
+    
     int worms_amount = 0;
     // Esto claramente es una mala solucion pero por ahora sirve
     last_game_state = receiver_queue.pop();
@@ -89,6 +90,8 @@ void Client::recv_world() {
   client_sdl.world_view.set_background(background_name);
 
   int beams_number = prot.recv_beams_number(&was_closed);
+
+  std::cout << "Nombre mundo: " << world_name <<  ", Cantidad vigas: " << (int) beams_number << std::endl;
   for (int i = 0; i < beams_number; i ++) {
     BeamData data = prot.recv_beam(&was_closed);
 
@@ -337,9 +340,10 @@ void Client::handle_stop_game() {
 }
 
 void Client::handle_quit_game() {
-  prot.close_socket();
+  keep_playing = false;
   sender_queue.close();
-  // receiver_queue.close();
+  receiver_queue.close();
+  prot.close_socket();
 }
 
 

@@ -11,20 +11,20 @@ Accept::Accept(Socket &skt) : skt(std::move(skt)) {}
 void Accept::run() {
   try {
     while (is_alive) {
-      std::shared_ptr<Queue<GameState>> sender_queue = std::make_shared<Queue<GameState>>(10);
-      std::shared_ptr<Player> player = std::make_shared<Player>(std::move(skt.accept()), games_handler, sender_queue, id_counter);
-      player->start();
+      std::shared_ptr<ClientHandler> client = std::make_shared<ClientHandler>(std::move(skt.accept()), games_handler, id_counter);
+      std::cout << "Cliente aceptado." << std::endl;
+      client->start();
       id_counter++;
+
 
       reap_dead();
       games_handler.reap_dead();
-      players.push_back(player);
+      clients.push_back(client);
     }
 
   } catch (const std::exception &err) {
     if (is_alive) {
-      std::cerr << "Something went wrong and an exception was caught: "
-                << err.what() << "\n";
+      std::cerr << "Something went wrong and an exception was caught: " << err.what() << "\n";
     }
     is_alive = false;
     kill_all();
@@ -32,24 +32,26 @@ void Accept::run() {
 }
 
 void Accept::reap_dead() {
-  auto dead = [](std::shared_ptr<Player> player) {
-    if (player->is_dead()) {
-      player->join();
+  auto dead = [](std::shared_ptr<ClientHandler> client) {
+    if (client->is_dead()) {
+      client->finish();
       return true;
     }
     return false;
   };
 
-  players.erase(std::remove_if(players.begin(), players.end(), dead),
-                players.end());
+  std::cout << "Paso por aca" << std::endl;
+
+  clients.erase(std::remove_if(clients.begin(), clients.end(), dead),
+  clients.end());
 }
 
 void Accept::kill_all() {
-  for (auto &player : players) {
-    player->kill();
-    player->join();
+  for (auto &client : clients) {
+    client->kill();
+    client->finish();
   }
-  players.clear();
+  clients.clear();
 }
 
 void Accept::kill() {

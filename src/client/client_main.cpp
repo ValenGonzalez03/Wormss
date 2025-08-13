@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
     // client.start_threads();
     int result = client.run(); // Como manejo los errores? return result?
     client.join_threads();
+    std::cout << "Cliente se desconectó exitosamente" << std::endl;
 
     return SUCCESS;
 

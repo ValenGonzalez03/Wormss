@@ -10,8 +10,8 @@ game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config) {
 void
 Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
                 uint8_t &player_id) {
-  player_id = players_counter;
-  players_counter++;
+  //player_id = players_counter;
+  //players_counter++;
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
 }
@@ -28,7 +28,7 @@ void Game::charge_world() {
 
 void Game::run() {
   try {
-    std::cout << "GAME STARTED" << std::endl;
+    std::cout << "Game of id: " << (int) game_id << " started." << std::endl;
 	  
     bool was_closed = false;
     int it = 0;
@@ -36,19 +36,19 @@ void Game::run() {
     auto start_turn_time = std::chrono::steady_clock::now();
 
     while (keep_playing) {
-      auto current_time = std::chrono::steady_clock::now();
-      auto elapsed_turn_time = std::chrono::duration_cast<std::chrono::seconds>(
-                                   current_time - start_turn_time)
-                                   .count();
-      if (elapsed_turn_time >= 60) {
-        if (current_turn_id == players_counter - 1) {
-          current_turn_id = 0;
-        } else {
-          current_turn_id++;
-        }
-        game_manager.set_current_turn_id(current_turn_id);
-        start_turn_time = std::chrono::steady_clock::now();
-      }
+      // auto current_time = std::chrono::steady_clock::now();
+      // auto elapsed_turn_time = std::chrono::duration_cast<std::chrono::seconds>(
+      //                              current_time - start_turn_time)
+      //                              .count();
+      // if (elapsed_turn_time >= 60) {
+      //   if (current_turn_id == players_counter - 1) {
+      //     current_turn_id = 0;
+      //   } else {
+      //     current_turn_id++;
+      //   }
+      //   game_manager.set_current_turn_id(current_turn_id);
+      //   start_turn_time = std::chrono::steady_clock::now();
+      // }
 
       update(it);
       game_manager.update();
@@ -81,6 +81,7 @@ void Game::run() {
       t1 += rate_ms;
       it += 1;
     }
+    std::cout << "Game of id: " << (int) game_id << " ended." << std::endl;
   } catch (const std::exception &err) {
   }
 }
@@ -93,7 +94,7 @@ void Game::update(int &it) {
   }
 }
 
-void Game::stop() { keep_playing = false; }
+void Game::stop_playing() { keep_playing = false; }
 
 bool Game::compare_id(const uint8_t &another_game_id) {
   return (game_id == another_game_id);
@@ -114,8 +115,7 @@ void Game::push_game_state() {
 
 void Game::check_game_finished() {
   if (game_manager.is_game_finished()) {
-    stop();
-    std::cout << "GAME FINISHED" << std::endl;
+    stop_playing();
   }
 }
 

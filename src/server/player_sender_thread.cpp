@@ -10,8 +10,6 @@ PlayerSender::PlayerSender(ServerProtocol &protocol,
 void PlayerSender::run() {
   bool was_closed = false;
   try {
-    std::string msg = "Sender Aca" + '\n';
-    std::cout << msg;
     while (keep_playing) {
       GameState game_state;
       if (sender_queue->try_pop(game_state)) {
@@ -20,8 +18,7 @@ void PlayerSender::run() {
     }
   } catch (const std::exception &err) {
   }
-  std::string final_msg = "Sender llegó a su fin. Keep playing = " + keep_playing + '\n';
-  std::cout << final_msg;
+  std::cout << "SENDER TERMINO ";
 }
 
 void PlayerSender::send_id(const uint8_t id) {
@@ -43,6 +40,5 @@ bool PlayerSender::has_started() {
 }
 
 PlayerSender::~PlayerSender() {
-  std::cout << "Sender se destruyo" << std::endl; 
   keep_playing = false;
 }

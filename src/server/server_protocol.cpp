@@ -18,9 +18,11 @@ class RunnableCommandLobby;
 ServerProtocol::ServerProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
 std::shared_ptr<RunnableCommandGame>
-ServerProtocol::process_command(const uint8_t &client_id) {
+ServerProtocol::process_command() {
   bool was_closed = false;
   uint8_t code;
+  uint8_t client_id = 0;
+  skt.recvall(&client_id, sizeof(client_id), &was_closed);
   skt.recvall(&code, sizeof(code), &was_closed);
 
   if (was_closed) {

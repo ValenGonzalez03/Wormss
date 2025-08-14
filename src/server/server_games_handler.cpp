@@ -31,7 +31,7 @@ void GamesHandler::delete_game(const uint8_t &game_id) {
 }
 
 Game *
-GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue,uint8_t &player_id, uint8_t &world_id) {
+GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id, uint8_t &world_id) {
   std::lock_guard<std::mutex> lck(m);
   auto world = worlds[world_id];
   Game *game = new Game(games_counter, games_config, world);
@@ -80,8 +80,6 @@ World& GamesHandler::get_game_world(const uint8_t& game_id) {
 }
 
 void GamesHandler::start_game(const uint8_t &game_id, const uint8_t &player_id) {
-  if (player_id != 0)
-    return;
   std::lock_guard<std::mutex> lck(m);
   Game *game = get_game(game_id);
   if (game == nullptr) {

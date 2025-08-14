@@ -2,16 +2,15 @@
 #define SERVER_ACCEPT_THREAD_H
 
 #include "../common/lib/socket.h"
-#include "../common/lib/thread.h"
 #include "server_games_handler.h"
-#include "server_client_handler.h"
+#include "client_manager_thread.h"
 #include <list>
 
 class Accept : public Thread {
 private:
   Socket skt;
   std::atomic<bool> is_alive{true};
-  std::list<std::shared_ptr<ClientHandler>> clients;
+  std::list<std::shared_ptr<ClientManager>> clients;
   GamesHandler games_handler;
   uint8_t id_counter = 0;
 

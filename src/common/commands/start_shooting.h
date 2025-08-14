@@ -17,8 +17,8 @@ private:
 
 public:
   // Constructor from client side with direction passed by parameter
-  explicit StartShooting(float initial_force)
-      : Command(CODE_PLAYER_COMM::START_SHOOTING, 0), initial_force(initial_force) {}
+  explicit StartShooting(uint8_t client_id, float initial_force)
+      : Command(CODE_PLAYER_COMM::START_SHOOTING, client_id), initial_force(initial_force) {}
 
   // Constructor from server side with direction received by socket
   explicit StartShooting(uint8_t clt_id, Socket &skt, bool *was_closed)
@@ -30,6 +30,7 @@ public:
   }
 
   void send(Socket &skt, bool *was_closed) override {
+    skt.sendall(&client_id, sizeof(client_id), was_closed);
     skt.sendall(&code, sizeof(code), was_closed);
     int initial_force_int = int(initial_force * 100);
     int initial_force_int_net = htonl(initial_force_int);

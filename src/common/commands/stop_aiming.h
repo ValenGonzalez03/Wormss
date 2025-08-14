@@ -14,7 +14,7 @@ class StopAiming : public Command {
 private:
 public:
   // Constructor from client side with direction passed by parameter
-  explicit StopAiming() : Command(CODE_PLAYER_COMM::STOP_AIMING, 0) {}
+  explicit StopAiming(uint8_t client_id) : Command(CODE_PLAYER_COMM::STOP_AIMING, client_id) {}
 
   // Constructor from server side with direction received by socket
   explicit StopAiming(uint8_t clt_id, Socket &skt, bool *was_closed)
@@ -23,6 +23,7 @@ public:
   }
 
   void send(Socket &skt, bool *was_closed) override {
+    skt.sendall(&client_id, sizeof(client_id), was_closed);
     skt.sendall(&code, sizeof(code), was_closed);
     // skt.sendall(&angle, sizeof(angle), was_closed);
   }

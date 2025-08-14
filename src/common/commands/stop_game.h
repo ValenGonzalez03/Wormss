@@ -13,7 +13,7 @@ extern uint8_t STOP_GAME;
 class StopGame : public Command {
 public:
   // Constructor from client side
-  explicit StopGame() : Command(CODE_PLAYER_COMM::STOP_GAME, 0) {}
+  explicit StopGame(uint8_t client_id) : Command(CODE_PLAYER_COMM::STOP_GAME, client_id) {}
 
   // Constructor from server side for code consistency but doesn't do anything
   // different from the other
@@ -22,6 +22,7 @@ public:
   }
 
   void send(Socket &skt, bool *was_closed) override {
+    skt.sendall(&client_id, sizeof(client_id), was_closed);
     skt.sendall(&code, sizeof(code), was_closed);
   }
 

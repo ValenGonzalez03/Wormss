@@ -289,7 +289,7 @@ bool Client::execute_event(SDL_Event &event) {
 
 
 void Client::handle_start_moving(int direction) {
-  std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(direction);
+  std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(player_id, direction);
   sender_queue.try_push(cmd);
   // is_running = true;
   // state.direction = direction;
@@ -297,14 +297,14 @@ void Client::handle_start_moving(int direction) {
 
 
 void Client::handle_stop_moving() {
-  std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>();
+  std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>(player_id);
   sender_queue.try_push(cmd);
   // is_running = false;
 }
 
 
 void Client::handle_jump_forward(uint8_t worm_dir, uint8_t jump_type) {
-  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(worm_dir, jump_type);
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(player_id, worm_dir, jump_type);
   sender_queue.try_push(cmd);
   // state.is_running = false;
 }
@@ -312,30 +312,30 @@ void Client::handle_jump_forward(uint8_t worm_dir, uint8_t jump_type) {
 
 void Client::handle_jump_backward(uint8_t worm_dir, uint8_t jump_type) {
   int jump_direction = (worm_dir == LEFT ? RIGHT : LEFT); // Calculo la direccion opuesta
-  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(jump_direction, jump_type);
+  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(player_id, jump_direction, jump_type);
   sender_queue.try_push(cmd);
   // state.is_running = false;
 }
 
 
 void Client::handle_start_aiming(int direction) {
-  std::shared_ptr<StartAiming> cmd = std::make_shared<StartAiming>(direction);
+  std::shared_ptr<StartAiming> cmd = std::make_shared<StartAiming>(player_id, direction);
   sender_queue.try_push(cmd);
 }
 
 
 void Client::handle_stop_aiming() {
-  std::shared_ptr<StopAiming> cmd = std::make_shared<StopAiming>();
+  std::shared_ptr<StopAiming> cmd = std::make_shared<StopAiming>(player_id);
   sender_queue.try_push(cmd);
 }
 
 void Client::handle_start_shooting() {
-  std::shared_ptr<StartShooting> cmd = std::make_shared<StartShooting>(8);
+  std::shared_ptr<StartShooting> cmd = std::make_shared<StartShooting>(player_id, 8);
   sender_queue.try_push(cmd);
 }
 
 void Client::handle_stop_game() {
-  std::shared_ptr<StopGame> cmd = std::make_shared<StopGame>();
+  std::shared_ptr<StopGame> cmd = std::make_shared<StopGame>(player_id);
   sender_queue.try_push(cmd);
 }
 

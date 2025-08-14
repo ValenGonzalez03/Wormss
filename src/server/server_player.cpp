@@ -61,22 +61,22 @@ void Player::manage_create_game() {
 
     sender.send_id(game->get_game_id()); // Ahora mando el game_id despues (Para tener en cuenta en el cliente)
     sender.send_world(game->get_world());
-    std::cout << "Created game id: " << int(game->get_game_id()) << std::endl;
+    std::cout << "Client of id: "<< (int) player_id << " created game id: " << int(game->get_game_id()) << std::endl;
 }
 
 void Player::manage_join_game(uint8_t game_id) {
     protocol.send_id(player_id);
   
     Game *game = games_handler.join_game(sender_queue, game_id, player_id);
-    std::cout << "Join game id: " << int(game_id) << std::endl;
+    std::cout << "Client of id: "<< (int) player_id << " joined game id: " << int(game_id) << std::endl;
     sender.send_world(game->get_world());
   
     this->game = game;
     //in_game = true;
     //sender.start();
-  }
+}
   
-  void Player::manage_start_game() {
+void Player::manage_start_game() {
     bool was_closed = false;
     initialize_game();
     sender.start();
@@ -84,4 +84,5 @@ void Player::manage_join_game(uint8_t game_id) {
         ;
     }
     games_handler.start_game(get_game_id(), player_id);
-  }
+    std::cout << "Client of id: "<< (int) player_id << " started game of id: " << (int) get_game_id() << std::endl;
+}

@@ -1,5 +1,5 @@
-#ifndef SERVER_CLIENT_HANDLER_H
-#define SERVER_CLIENT_HANDLER_H
+#ifndef CLIENT_MANAGER_THREAD_H
+#define CLIENT_MANAGER_THREAD_H
 
 #include "../common/lib/socket.h"
 #include <atomic>
@@ -14,7 +14,10 @@
 class ServerReceiver;
 class Player;
 
-class ClientHandler {
+void start();
+void join();
+
+class ClientManager : public Thread {
 private:
   Socket skt;
   uint8_t client_id;
@@ -30,13 +33,16 @@ private:
   std::unique_ptr<ServerReceiver> receiver;
   std::shared_ptr<Player> player;
 
+  bool threads_have_finished();
+
+  bool has_ended();
 public:
 
   // Constructor de la clase.
-  explicit ClientHandler(Socket &&peer, GamesHandler &games_handler, uint8_t client_id);
+  explicit ClientManager(Socket &&peer, GamesHandler &games_handler, uint8_t client_id);
 
   // Ejecuta los hilos.
-  void start();
+  virtual void run() override;
 
   // Si siguen vivos, cierra los hilos.
   void kill();
@@ -49,14 +55,9 @@ public:
 
   void set_commands_queue_to_receiver(Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue);
 
-  void manage_create_game();
+  ClientManager(const ClientManager &) = delete;
+  ClientManager &operator=(const ClientManager &) = delete;
 
-  void manage_join_game(uint8_t game_id);
-
-  void manage_start_game();
-
-  ClientHandler(const ClientHandler &) = delete;
-  ClientHandler &operator=(const ClientHandler &) = delete;
 };
 
 #endif

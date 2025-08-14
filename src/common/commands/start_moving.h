@@ -16,8 +16,8 @@ private:
 
 public:
   // Constructor from client side with direction passed by parameter
-  explicit StartMoving(uint8_t dir)
-      : Command(CODE_PLAYER_COMM::START_MOVING, 0), direction(dir) {}
+  explicit StartMoving(uint8_t client_id, uint8_t dir)
+      : Command(CODE_PLAYER_COMM::START_MOVING, client_id), direction(dir) {}
 
   // Constructor from server side with direction received by socket
   explicit StartMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
@@ -26,6 +26,7 @@ public:
   }
 
   void send(Socket &skt, bool *was_closed) override {
+    skt.sendall(&client_id, sizeof(client_id), was_closed);
     skt.sendall(&code, sizeof(code), was_closed);
     skt.sendall(&direction, sizeof(direction), was_closed);
   }

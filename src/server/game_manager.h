@@ -64,8 +64,6 @@ public:
 
   bool is_game_finished() const;
 
-  ~GameManager();
-
   GameManager(const GameManager &) = delete;
   GameManager &operator=(const GameManager &) = delete;
 };

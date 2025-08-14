@@ -35,7 +35,7 @@ target_link_libraries(client PUBLIC SDL2pp::SDL2pp)
 add_executable(server ./src/server/server_main.cpp 
 					  ./src/server/server_server.cpp 
 					  ./src/server/server_accept_thread.cpp
-					  ./src/server/server_client_handler.cpp
+					  ./src/server/client_manager_thread.cpp
 					  ./src/server/server_player.cpp
 					  ./src/server/player_sender_thread.cpp
 					  ./src/server/server_receiver_thread.cpp

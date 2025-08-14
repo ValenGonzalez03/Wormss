@@ -19,19 +19,17 @@ void ServerReceiver::run() {
         std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby();
         lobby_commands.try_push(runnable_command);
       } else {
-        std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command(client_id);
+        std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command();
         game_commands->try_push(runnable_command);
       }
     }
     
   } catch (const LibError &libError) { // Si se cierra el skt
-    std::cout << "LIBERROR ";
     keep_playing = false;
   } catch (const std::runtime_error &runtimeError) { // Si se procesa mal un cmd
     keep_playing = false;
     std::cerr << "RuntimeError: " << runtimeError.what() << std::endl;
   }
-  
   std::cout << "RECEIVER TERMINO ";
 }
 

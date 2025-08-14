@@ -3,7 +3,7 @@
 
 #include "command_runnable.h"
 #include "../server_player.h"
-#include "../server_client_handler.h"
+#include "../client_manager_thread.h"
 
 class ClientHandler;
 class GamesHandler;

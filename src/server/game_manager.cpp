@@ -61,54 +61,54 @@ WormBody *GameManager::get_worm(const uint8_t &player_id) {
 }
 
 void GameManager::move(const uint8_t &player_id, const uint8_t &direction) {
-  if (player_id != current_turn_id) {
-    return;
-  }
+  // if (player_id != current_turn_id) {
+  //   return;
+  // }
 
   WormBody *worm = get_worm(player_id);
   worm->start_moving(direction);
 }
 
 void GameManager::stop_moving(const uint8_t &player_id) {
-  if (player_id != current_turn_id) {
-    return;
-  }
+  // if (player_id != current_turn_id) {
+  //   return;
+  // }
 
   WormBody *worm = get_worm(player_id);
   worm->stop_moving();
 }
 
 void GameManager::jump(const uint8_t &player_id, const uint8_t &direction, const uint8_t &jump_type) {
-  if (player_id != current_turn_id) {
-    return;
-  }
+  // if (player_id != current_turn_id) {
+  //   return;
+  // }
 
   WormBody *worm = get_worm(player_id);
   worm->jump(direction, jump_type);
 }
 
 void GameManager::aim(const uint8_t &player_id, const uint8_t &direction) {
-  if (player_id != current_turn_id) {
-    return;
-  }
+  // if (player_id != current_turn_id) {
+  //   return;
+  // }
 
   WormBody *worm = get_worm(player_id);
   worm->start_aiming(direction);
 }
 
 void GameManager::stop_aiming(const uint8_t &player_id) {
-  if (player_id != current_turn_id) {
-    return;
-  }
+  // if (player_id != current_turn_id) {
+  //   return;
+  // }
 
   WormBody *worm = get_worm(player_id);
   worm->stop_aiming();
 }
 
 void GameManager::shoot(const uint8_t &player_id, float initial_force) {
-  if (player_id != current_turn_id) {
-    return;
-  }
+  // if (player_id != current_turn_id) {
+  //   return;
+  // }
   WormBody *worm = get_worm(player_id);
 
   auto missile = worm->shoot(initial_force, missiles_id_counter);
@@ -148,13 +148,4 @@ void GameManager::set_game_finished(const bool is_finished) {
 
 bool GameManager::is_game_finished() const {
   return game_finished;
-}
-
-GameManager::~GameManager() {
-  for (auto &current_worm : worms_list) {
-    delete current_worm;
-  }
-  for (auto &current_missile : missiles_list) {
-    delete current_missile;
-  }
 }

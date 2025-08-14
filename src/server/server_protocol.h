@@ -32,7 +32,7 @@ public:
   ServerProtocol(ServerProtocol &&) = default;
   ServerProtocol &operator=(ServerProtocol &&) = default;
 
-  std::shared_ptr<RunnableCommandGame> process_command(const uint8_t& client_id);
+  std::shared_ptr<RunnableCommandGame> process_command();
 
   std::shared_ptr<RunnableCommandLobby> process_command_lobby();
 

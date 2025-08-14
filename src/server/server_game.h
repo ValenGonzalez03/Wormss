@@ -39,7 +39,6 @@ private:
   uint8_t players_counter = 0;
   uint8_t current_turn_id = 0;
   bool keep_playing = true;
-  bool ready_to_begin = false;
   bool started = false;
   GameManager game_manager;
   std::chrono::duration<float> rate = std::chrono::duration<float>((float)RATE);
@@ -63,7 +62,7 @@ public:
 
   void update(int &it);
 
-  void stop() override;
+  void stop_playing();
 
   bool compare_id(const uint8_t &another_game_id);
 

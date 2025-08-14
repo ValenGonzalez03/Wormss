@@ -27,7 +27,7 @@ public:
   explicit ServerReceiver(Socket &skt, ServerProtocol &protocol, Queue<std::shared_ptr<RunnableCommandLobby>> &lobby_commands,
                           bool &keep_playing, bool &in_game, std::mutex& m, std::condition_variable& is_empty, 
                           uint8_t client_id);
-
+  
   /*
    * Ejecuta el loop del ClientHandler.
    * */

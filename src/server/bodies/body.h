@@ -47,6 +47,7 @@ public:
   virtual void stop_touching_beam(BeamBody* beam) = 0;
   virtual void stop_touching_missile(MissileBody* missile) = 0;
 
+  b2Body* get_body();
   virtual int get_type() = 0;
   //virtual void start_contact_with(Weapon* weamon) = 0;
 	

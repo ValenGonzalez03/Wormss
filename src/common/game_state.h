@@ -225,16 +225,15 @@ public:
 
   std::map<uint8_t, WormData> get_worms() { return worms_list; }
 
-  void add_worm(uint8_t player_id, const float &pos_x, const float &pos_y,
-                uint8_t dir, WormState state, float angle) {
-    WormData worm(player_id, pos_x, pos_y, dir, state, angle);
+  void add_worm(WormAttr& attr) {
+    WormData worm(attr.player_id, attr.pos_x, attr.pos_y, attr.direction, attr.state, attr.aim_angle);
     worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
   }
 
   std::map<uint8_t, MissileData> get_missiles() { return missiles_list; }
 
-  void add_missile(float pos_x, float pos_y, float angle, uint8_t id) {
-    MissileData missile(pos_x, pos_y, angle, id);
+  void add_missile(MissileAttr& attr) {
+    MissileData missile(attr.pos_x, attr.pos_y, attr.angle, attr.missile_id);
     missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
   }
 

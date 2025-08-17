@@ -5,7 +5,7 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial_force, float angle, int id)
+MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial_force, float angle, uint8_t id)
     : Body(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, 1.0f, 0.3f), initial_force(inicial_force), id(id) {
   b2BodyDef bodyDef;
   bodyDef.bullet = true;
@@ -26,7 +26,6 @@ MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial
 
   UserData* data = new UserData {MISSILE, this};
   body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
-
 }
 
 void MissileBody::apply_initial_impulse(float aim_angle) {
@@ -43,7 +42,7 @@ float MissileBody::get_pos_y() { return body->GetPosition().y; }
 
 float MissileBody::get_angle() { return body->GetAngle(); }
 
-int MissileBody::get_id() { return id; }
+uint8_t MissileBody::get_id() { return id; }
 
 void MissileBody::update() {
   if (has_exceeded_width_limit()) {
@@ -96,10 +95,6 @@ bool MissileBody::has_exploded() {
 // void MissileBody::end_contact_with(Body *another_body) {}
 
 int MissileBody::get_type() {return MISSILE;}
-
-b2Body* MissileBody::get_body() {
-  return body;
-}
 
 MissileBody::~MissileBody() {
   free(reinterpret_cast<UserData*>(body->GetUserData().pointer));

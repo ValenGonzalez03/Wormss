@@ -58,7 +58,7 @@ public:
   void stop_aiming();
 
   // Por ahora un shoot generico que solo va a ser usado para la bazooka
-  MissileBody* shoot(float initial_force, int missile_id);
+  MissileBody* shoot(float initial_force, uint8_t missile_id);
   
   void teleport(float pos_x, float pos_y);
 

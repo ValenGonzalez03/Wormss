@@ -13,65 +13,108 @@ BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) 
   return beam;
 }
 
-WormBody* World::create_worm(float pos_x, float pos_y, float vel, int health, const uint8_t& player_id) {
-  WormBody* worm = new WormBody(world.get(), pos_x, pos_y, vel, health, player_id);
+WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn_y, GameConfig& config) {
+  WormBody* worm = new WormBody(world.get(), spawn_x, spawn_y, config.get_worm_speed(), config.get_worm_life(), player_id);
   worms.push_back(worm);
   return worm;
 }
 
-// void World::create_water(float pos_x, float pos_y, float width, int height) {
-//   WaterBody* water = new WaterBody(world.get(), pos_x, pos_y, width, height);
-//   bodies.push_back(water);
-// }
-
-// void World::create_bazooka_missile(float pos_x, float pos_y) {
-// 	Bazooka* bazooka = new Bazooka(world.get(), pos_x, pos_y);
-// 	bodies.push_back(bazooka);
-// }
-
-// void World::create_banana(float pos_x, float pos_y) {
-// 	Banana* banana = new Banana(world.get(), pos_x, pos_y);
-// 	bodies.push_back(banana);
-// }
-
-// void World::create_dynamite(float pos_x, float pos_y) {
-// 	Dynamite* dynamite = new Dynamite(world.get(), pos_x, pos_y);
-// 	bodies.push_back(dynamite);
-// }
-
-void World::destroy_missile(MissileBody* missile) {
-  world->DestroyBody(missile->get_body());
-  delete missile;
+MissileBody* World::create_missile(MissileBody* missile, float aim_angle) {
+  missiles.push_back(missile);
+  missile->apply_initial_impulse(aim_angle);
+  return missile;
 }
 
-void World::step(float timeStep, int32 velocityIterations, 
-				 int32 positionIterations) {
+void World::destroy_body(Body* body) {
+  world->DestroyBody(body->get_body());
+  delete body;
+}
+
+void World::step(float timeStep, int32 velocityIterations, int32 positionIterations) {
   world->Step(timeStep, velocityIterations, positionIterations);
+}
+
+WormBody* World::get_worm(const uint8_t &player_id) {
+  for (auto it = worms.begin(); it != worms.end(); ++it) {
+    if ((*it)->get_id() == player_id) {
+      return (*it);
+    }
+  }
+  return nullptr;
+}
+
+void World::update_worms() {
+  for (WormBody *worm : worms) {
+    worm->update();
+  }
+}
+
+void World::update_missiles() {
+  for (std::list<MissileBody*>::iterator it = missiles.begin(); it != missiles.end();)
+    {
+      if ((*it)->has_exploded()) {
+        destroy_body(*it);
+        it = missiles.erase(it);
+        std::cout << "KABOOM" << std::endl;
+      } else {
+        (*it)->update();
+        it++;
+      }
+    }
+}
+
+int World::get_worms_number() {
+  return worms.size();
+}
+
+int World::get_missiles_number() {
+  return missiles.size();
+}
+
+std::list<WormAttr> World::get_worms_attr() {
+  std::list<WormAttr> worms_attr;
+  for (auto worm : worms) {
+    WormAttr attr ({worm->get_id(), worm->get_pos_x(), worm->get_pos_y(), worm->get_direction(), worm->get_state(), worm->get_aiming_angle()});
+    worms_attr.emplace_back(attr);
+  }
+  return worms_attr;
+}
+
+std::list<MissileAttr> World::get_missiles_attr() {
+  std::list<MissileAttr> missiles_attr;
+  for (auto missile : missiles) {
+    MissileAttr attr ({missile->get_id(), missile->get_pos_x(), missile->get_pos_y(), missile->get_angle()});
+    missiles_attr.emplace_back(attr);
+  }
+  return missiles_attr;
 }
 
 void World::delete_worms() {
   for (auto &worm : worms) {
-	delete worm;
+	  destroy_body(worm);
   }
   worms.clear();
 }
 
 void World::delete_beams() {
   for (auto &beam : beams) {
-    delete beam;
+    destroy_body(beam);
   }
   beams.clear();
 }
 
+void World::delete_missiles() {
+  for (auto &missile : missiles) {
+    destroy_body(missile);
+  }
+  missiles.clear();
+}
+
 World::~World() {
-  for (auto &current_worm : worms) {
-    delete current_worm;
-  }
-  for (auto &current_beam : beams) {
-    delete current_beam;
-  }
-  for (auto &current_missile : missiles) {
-    delete current_missile;
-  }
+  delete_worms();
+
+  delete_beams();
+
+  delete_missiles();
 }
 

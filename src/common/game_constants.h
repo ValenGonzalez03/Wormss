@@ -1,6 +1,8 @@
 #ifndef GAME_CONSTANTS_H_
 #define GAME_CONSTANTS_H_
 
+#include <cstdint>
+
 #define PIXEL_PER_METER 23.33f // 23,3 periodico (1 metro equivale a 23,33 pixeles)
 #define WORLD_HEIGHT 360 // En pixeles
 
@@ -22,11 +24,27 @@
 
 enum WormState { IDLE, MOVING, JUMPING, AIMING, SHOOTING };
 
-struct BeamData {
-    float pos_x;
-    float pos_y;
-    int angle;
-    float width;
+struct WormAttr {
+    uint8_t player_id;
+    float pos_x; // En metros
+    float pos_y; // En metros
+    uint8_t direction;
+    WormState state;
+    float aim_angle; // En radianes
+};
+
+struct BeamAttr {
+    float pos_x; // En metros
+    float pos_y; // En metros
+    int angle; // En grados
+    float width; // En metros
+};
+
+struct MissileAttr {
+    uint8_t missile_id;
+    float pos_x; // En metros
+    float pos_y; // En metros
+    float angle; // En radianes
 };
 
 #endif

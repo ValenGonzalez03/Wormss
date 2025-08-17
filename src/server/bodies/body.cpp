@@ -60,3 +60,7 @@ void Body::stop_touching(Body *other) {
     break;
   }
 }
+
+b2Body* Body::get_body() {
+  return body;
+}

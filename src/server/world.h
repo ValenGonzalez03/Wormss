@@ -1,15 +1,12 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "bodies/beam_body.h"
 #include "box2d/box2d.h"
-#include "bodies/worm_body.h"
-#include "bodies/missile_body.h"
-#include "bodies/water_body.h"
-#include "bodies/weapons/bazooka.h"
-#include "bodies/weapons/banana.h"
-#include "bodies/weapons/dynamite.h"
+#include "game_config.h"
 #include "contact_listener.h"
+#include "bodies/worm_body.h"
+#include "bodies/beam_body.h"
+#include "bodies/missile_body.h"
 #include <list>
 #include <vector>
 #include <stdio.h>
@@ -28,28 +25,34 @@ private:
   std::vector<std::vector<float>> spawn_points;
   ContactListener contact_listener;
 
+  void destroy_body(Body* body);
+
+  void delete_worms();
+  
+  void delete_beams();
+  
+  void delete_missiles();
+
 public:
   explicit World();
 	
-  BeamBody *create_beam(float pos_x, float pos_y, int angle, float length);
+  WormBody* create_worm(const uint8_t player_id, const float spawn_x, const float spawn_y, GameConfig& config);
 
-  WormBody* create_worm(float pos_x, float pos_y, float vel, int health, const uint8_t& player_id);
-  
-  // void create_water(float pos_x, float pos_y, float width, int height);
-  
-  // void create_bazooka_missile(float pos_x, float pos_y);
-  
-  // void create_banana(float pos_x, float pos_y);
-  
-  // void create_dynamite(float pos_x, float pos_y);
+  BeamBody* create_beam(float pos_x, float pos_y, int angle, float length);
 
-  void destroy_missile(MissileBody* missile);
-	
+  MissileBody* create_missile(MissileBody* missile, float aim_angle);
+
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
-	
-  void delete_worms();
-	
-  void delete_beams();
+
+  WormBody* get_worm(const uint8_t &player_id);
+
+  void update_worms();
+
+  void update_missiles();
+
+  int get_worms_number();
+
+  int get_missiles_number();
 	
   ~World();
 
@@ -61,9 +64,9 @@ public:
     return this->background;
   }
 
-  std::list<WormBody*> get_worms() {
-    return this->worms;
-  }
+  std::list<WormAttr> get_worms_attr();
+
+  std::list<MissileAttr> get_missiles_attr();
 
   std::list<BeamBody*> get_beams() {
     return this->beams;

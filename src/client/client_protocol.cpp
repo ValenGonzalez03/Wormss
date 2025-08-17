@@ -85,7 +85,7 @@ int ClientProtocol::recv_beams_number(bool *was_closed) {
   return beams_number_be;
 }
 
-BeamData ClientProtocol::recv_beam(bool *was_closed) {
+BeamAttr ClientProtocol::recv_beam(bool *was_closed) {
   uint16_t beam_angle;
 
   float pos_x = recv_float(was_closed);
@@ -97,7 +97,7 @@ BeamData ClientProtocol::recv_beam(bool *was_closed) {
 
   float width = recv_float(was_closed);
 
-  BeamData data {pos_x, pos_y, beam_angle_int, width};
+  BeamAttr data {pos_x, pos_y, beam_angle_int, width};
   return data;
 }
 

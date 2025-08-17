@@ -61,7 +61,7 @@ public:
   int recv_beams_number(bool *was_closed);
 
   // Recibe los datos de una viga y los retorna.
-  BeamData recv_beam(bool *was_closed);
+  BeamAttr recv_beam(bool *was_closed);
 
 /////////////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
 

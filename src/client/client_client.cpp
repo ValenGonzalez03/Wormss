@@ -93,10 +93,10 @@ void Client::recv_world() {
 
   std::cout << "Nombre mundo: " << world_name <<  ", Cantidad vigas: " << (int) beams_number << std::endl;
   for (int i = 0; i < beams_number; i ++) {
-    BeamData data = prot.recv_beam(&was_closed);
+    BeamAttr beam_attr = prot.recv_beam(&was_closed);
 
-    if (data.width == 6 || data.width == 3) {
-      client_sdl.world_view.add_beam(data.pos_x, data.pos_y, data.width, BEAM_HEIGHT, data.angle);
+    if (beam_attr.width == 6 || beam_attr.width == 3) {
+      client_sdl.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width, BEAM_HEIGHT, beam_attr.angle);
     } else {
       std::cout << "Error tamanio viga" << std::endl;
     }

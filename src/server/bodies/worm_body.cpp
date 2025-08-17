@@ -115,7 +115,7 @@ void WormBody::aim_down() {
 
 void WormBody::stop_aiming() { state = IDLE; }
 
-MissileBody* WormBody::shoot(float initial_force, int missile_id) {
+MissileBody* WormBody::shoot(float initial_force, uint8_t missile_id) {
   b2Vec2 pos = body->GetPosition();
   MissileBody *missile = new MissileBody(world, pos.x, pos.y, initial_force, aiming_angle, missile_id);
   return missile;

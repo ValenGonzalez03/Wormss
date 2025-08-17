@@ -175,55 +175,58 @@ bool WormBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool WormBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-void WormBody::start_contact_with(Body *other) {
-  if (other->get_type() == BEAM) {
-    state = IDLE;
-  }
+// void WormBody::start_contact_with(Body *other) {
+//   if (other->get_type() == BEAM) {
+//     state = IDLE;
+//   }
 
-  /*
-  if (other->get_type() == WORM) {
-		//std::cout << "GUSANO CHOCO CON UN GUSANO\n";
-		reinterpret_cast<WormBody*>(other)->start_contact_with(this);
-  }
+//   /*
+//   if (other->get_type() == WORM) {
+// 		//std::cout << "GUSANO CHOCO CON UN GUSANO\n";
+// 		reinterpret_cast<WormBody*>(other)->start_contact_with(this);
+//   }
   
-  if (other->get_type() == WATER) {
-		std::cout << "GUSANO CHOCO CON AGUA\n";
-		die();
-  }
+//   if (other->get_type() == WATER) {
+// 		std::cout << "GUSANO CHOCO CON AGUA\n";
+// 		die();
+//   }
   
-  if (other->get_type() == BAZOOKA) {
-		std::cout << "GUSANO CHOCO CON MUNICION DE BAZOOKA\n";
-		//take_damage(another_body->get_damage());
-  }
-  */
+//   if (other->get_type() == BAZOOKA) {
+// 		std::cout << "GUSANO CHOCO CON MUNICION DE BAZOOKA\n";
+// 		//take_damage(another_body->get_damage());
+//   }
+//   */
   
+// }
+
+void WormBody::touch_beam(BeamBody* beam) {
+  /* NADA */
 }
 
-void WormBody::start_contact_with(WormBody *another_worm) {
-  if (is_inactive()) {
-    if (another_worm->is_inactive())
-      return;
-    another_worm->start_contact_with(this);
-  } else {
-    if (is_facing_left()) {
-      apply_horizontal_impulse(vel);
-    } else {
-      apply_horizontal_impulse(-vel);
-    }
-  }
+void WormBody::touch_worm(WormBody* worm) {
+  /* NADA */
 }
 
-void WormBody::start_contact_with(WaterBody *water) {
-	//die();
+void WormBody::touch_missile(MissileBody* missile) {
+  /* MISIL DEBE EXPLOTAR */
 }
 
-void WormBody::end_contact_with(Body *another_body) {}
+void WormBody::stop_touching_worm(WormBody* worm) {
+  /* NADA */
+}
+
+void WormBody::stop_touching_beam(BeamBody* beam) {
+  /* NADA */
+}
+
+void WormBody::stop_touching_missile(MissileBody* missile) {
+  /* NADA */
+}
+
+// void WormBody::end_contact_with(Body *another_body) {}
 
 void WormBody::hit_a_surface() { 
-  num_foot_contacts++;
-  if (not is_inactive()) {
-	  state = IDLE;
-  } 
+  state = IDLE;
 }
 
 void WormBody::move_away_from_surface() {

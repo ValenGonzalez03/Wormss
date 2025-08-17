@@ -19,24 +19,29 @@ WormBody* World::create_worm(float pos_x, float pos_y, float vel, int health, co
   return worm;
 }
 
-void World::create_water(float pos_x, float pos_y, float width, int height) {
-  WaterBody* water = new WaterBody(world.get(), pos_x, pos_y, width, height);
-  bodies.push_back(water);
-}
+// void World::create_water(float pos_x, float pos_y, float width, int height) {
+//   WaterBody* water = new WaterBody(world.get(), pos_x, pos_y, width, height);
+//   bodies.push_back(water);
+// }
 
-void World::create_bazooka_missile(float pos_x, float pos_y) {
-	Bazooka* bazooka = new Bazooka(world.get(), pos_x, pos_y);
-	bodies.push_back(bazooka);
-}
+// void World::create_bazooka_missile(float pos_x, float pos_y) {
+// 	Bazooka* bazooka = new Bazooka(world.get(), pos_x, pos_y);
+// 	bodies.push_back(bazooka);
+// }
 
-void World::create_banana(float pos_x, float pos_y) {
-	Banana* banana = new Banana(world.get(), pos_x, pos_y);
-	bodies.push_back(banana);
-}
+// void World::create_banana(float pos_x, float pos_y) {
+// 	Banana* banana = new Banana(world.get(), pos_x, pos_y);
+// 	bodies.push_back(banana);
+// }
 
-void World::create_dynamite(float pos_x, float pos_y) {
-	Dynamite* dynamite = new Dynamite(world.get(), pos_x, pos_y);
-	bodies.push_back(dynamite);
+// void World::create_dynamite(float pos_x, float pos_y) {
+// 	Dynamite* dynamite = new Dynamite(world.get(), pos_x, pos_y);
+// 	bodies.push_back(dynamite);
+// }
+
+void World::destroy_missile(MissileBody* missile) {
+  world->DestroyBody(missile->get_body());
+  delete missile;
 }
 
 void World::step(float timeStep, int32 velocityIterations, 

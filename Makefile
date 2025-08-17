@@ -395,29 +395,29 @@ src/client/client_main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_main.cpp.s
 .PHONY : src/client/client_main.cpp.s
 
-src/client/client_position_converter.o: src/client/client_position_converter.cpp.o
-.PHONY : src/client/client_position_converter.o
+src/client/client_missile.o: src/client/client_missile.cpp.o
+.PHONY : src/client/client_missile.o
 
 # target to build an object file
-src/client/client_position_converter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_position_converter.cpp.o
-.PHONY : src/client/client_position_converter.cpp.o
+src/client/client_missile.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_missile.cpp.o
+.PHONY : src/client/client_missile.cpp.o
 
-src/client/client_position_converter.i: src/client/client_position_converter.cpp.i
-.PHONY : src/client/client_position_converter.i
+src/client/client_missile.i: src/client/client_missile.cpp.i
+.PHONY : src/client/client_missile.i
 
 # target to preprocess a source file
-src/client/client_position_converter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_position_converter.cpp.i
-.PHONY : src/client/client_position_converter.cpp.i
+src/client/client_missile.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_missile.cpp.i
+.PHONY : src/client/client_missile.cpp.i
 
-src/client/client_position_converter.s: src/client/client_position_converter.cpp.s
-.PHONY : src/client/client_position_converter.s
+src/client/client_missile.s: src/client/client_missile.cpp.s
+.PHONY : src/client/client_missile.s
 
 # target to generate assembly for a file
-src/client/client_position_converter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_position_converter.cpp.s
-.PHONY : src/client/client_position_converter.cpp.s
+src/client/client_missile.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_missile.cpp.s
+.PHONY : src/client/client_missile.cpp.s
 
 src/client/client_protocol.o: src/client/client_protocol.cpp.o
 .PHONY : src/client/client_protocol.o
@@ -539,164 +539,137 @@ src/client/client_worldview.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_worldview.cpp.s
 .PHONY : src/client/client_worldview.cpp.s
 
-src/client/client_worm_view.o: src/client/client_worm_view.cpp.o
-.PHONY : src/client/client_worm_view.o
+src/client/client_worm.o: src/client/client_worm.cpp.o
+.PHONY : src/client/client_worm.o
 
 # target to build an object file
-src/client/client_worm_view.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_worm_view.cpp.o
-.PHONY : src/client/client_worm_view.cpp.o
+src/client/client_worm.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_worm.cpp.o
+.PHONY : src/client/client_worm.cpp.o
 
-src/client/client_worm_view.i: src/client/client_worm_view.cpp.i
-.PHONY : src/client/client_worm_view.i
+src/client/client_worm.i: src/client/client_worm.cpp.i
+.PHONY : src/client/client_worm.i
 
 # target to preprocess a source file
-src/client/client_worm_view.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_worm_view.cpp.i
-.PHONY : src/client/client_worm_view.cpp.i
+src/client/client_worm.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_worm.cpp.i
+.PHONY : src/client/client_worm.cpp.i
 
-src/client/client_worm_view.s: src/client/client_worm_view.cpp.s
-.PHONY : src/client/client_worm_view.s
+src/client/client_worm.s: src/client/client_worm.cpp.s
+.PHONY : src/client/client_worm.s
 
 # target to generate assembly for a file
-src/client/client_worm_view.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_worm_view.cpp.s
-.PHONY : src/client/client_worm_view.cpp.s
+src/client/client_worm.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_worm.cpp.s
+.PHONY : src/client/client_worm.cpp.s
 
-src/common/liberror.o: src/common/liberror.cpp.o
-.PHONY : src/common/liberror.o
+src/common/lib/liberror.o: src/common/lib/liberror.cpp.o
+.PHONY : src/common/lib/liberror.o
 
 # target to build an object file
-src/common/liberror.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/liberror.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/liberror.cpp.o
-.PHONY : src/common/liberror.cpp.o
+src/common/lib/liberror.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/liberror.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/liberror.cpp.o
+.PHONY : src/common/lib/liberror.cpp.o
 
-src/common/liberror.i: src/common/liberror.cpp.i
-.PHONY : src/common/liberror.i
+src/common/lib/liberror.i: src/common/lib/liberror.cpp.i
+.PHONY : src/common/lib/liberror.i
 
 # target to preprocess a source file
-src/common/liberror.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/liberror.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/liberror.cpp.i
-.PHONY : src/common/liberror.cpp.i
+src/common/lib/liberror.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/liberror.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/liberror.cpp.i
+.PHONY : src/common/lib/liberror.cpp.i
 
-src/common/liberror.s: src/common/liberror.cpp.s
-.PHONY : src/common/liberror.s
+src/common/lib/liberror.s: src/common/lib/liberror.cpp.s
+.PHONY : src/common/lib/liberror.s
 
 # target to generate assembly for a file
-src/common/liberror.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/liberror.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/liberror.cpp.s
-.PHONY : src/common/liberror.cpp.s
+src/common/lib/liberror.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/liberror.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/liberror.cpp.s
+.PHONY : src/common/lib/liberror.cpp.s
 
-src/common/resolver.o: src/common/resolver.cpp.o
-.PHONY : src/common/resolver.o
+src/common/lib/resolver.o: src/common/lib/resolver.cpp.o
+.PHONY : src/common/lib/resolver.o
 
 # target to build an object file
-src/common/resolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/resolver.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/resolver.cpp.o
-.PHONY : src/common/resolver.cpp.o
+src/common/lib/resolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/resolver.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/resolver.cpp.o
+.PHONY : src/common/lib/resolver.cpp.o
 
-src/common/resolver.i: src/common/resolver.cpp.i
-.PHONY : src/common/resolver.i
+src/common/lib/resolver.i: src/common/lib/resolver.cpp.i
+.PHONY : src/common/lib/resolver.i
 
 # target to preprocess a source file
-src/common/resolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/resolver.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/resolver.cpp.i
-.PHONY : src/common/resolver.cpp.i
+src/common/lib/resolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/resolver.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/resolver.cpp.i
+.PHONY : src/common/lib/resolver.cpp.i
 
-src/common/resolver.s: src/common/resolver.cpp.s
-.PHONY : src/common/resolver.s
+src/common/lib/resolver.s: src/common/lib/resolver.cpp.s
+.PHONY : src/common/lib/resolver.s
 
 # target to generate assembly for a file
-src/common/resolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/resolver.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/resolver.cpp.s
-.PHONY : src/common/resolver.cpp.s
+src/common/lib/resolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/resolver.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/resolver.cpp.s
+.PHONY : src/common/lib/resolver.cpp.s
 
-src/common/resolvererror.o: src/common/resolvererror.cpp.o
-.PHONY : src/common/resolvererror.o
+src/common/lib/resolvererror.o: src/common/lib/resolvererror.cpp.o
+.PHONY : src/common/lib/resolvererror.o
 
 # target to build an object file
-src/common/resolvererror.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/resolvererror.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/resolvererror.cpp.o
-.PHONY : src/common/resolvererror.cpp.o
+src/common/lib/resolvererror.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/resolvererror.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/resolvererror.cpp.o
+.PHONY : src/common/lib/resolvererror.cpp.o
 
-src/common/resolvererror.i: src/common/resolvererror.cpp.i
-.PHONY : src/common/resolvererror.i
+src/common/lib/resolvererror.i: src/common/lib/resolvererror.cpp.i
+.PHONY : src/common/lib/resolvererror.i
 
 # target to preprocess a source file
-src/common/resolvererror.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/resolvererror.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/resolvererror.cpp.i
-.PHONY : src/common/resolvererror.cpp.i
+src/common/lib/resolvererror.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/resolvererror.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/resolvererror.cpp.i
+.PHONY : src/common/lib/resolvererror.cpp.i
 
-src/common/resolvererror.s: src/common/resolvererror.cpp.s
-.PHONY : src/common/resolvererror.s
+src/common/lib/resolvererror.s: src/common/lib/resolvererror.cpp.s
+.PHONY : src/common/lib/resolvererror.s
 
 # target to generate assembly for a file
-src/common/resolvererror.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/resolvererror.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/resolvererror.cpp.s
-.PHONY : src/common/resolvererror.cpp.s
+src/common/lib/resolvererror.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/resolvererror.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/resolvererror.cpp.s
+.PHONY : src/common/lib/resolvererror.cpp.s
 
-src/common/socket.o: src/common/socket.cpp.o
-.PHONY : src/common/socket.o
+src/common/lib/socket.o: src/common/lib/socket.cpp.o
+.PHONY : src/common/lib/socket.o
 
 # target to build an object file
-src/common/socket.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/socket.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/socket.cpp.o
-.PHONY : src/common/socket.cpp.o
+src/common/lib/socket.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/socket.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/socket.cpp.o
+.PHONY : src/common/lib/socket.cpp.o
 
-src/common/socket.i: src/common/socket.cpp.i
-.PHONY : src/common/socket.i
-
-# target to preprocess a source file
-src/common/socket.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/socket.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/socket.cpp.i
-.PHONY : src/common/socket.cpp.i
-
-src/common/socket.s: src/common/socket.cpp.s
-.PHONY : src/common/socket.s
-
-# target to generate assembly for a file
-src/common/socket.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/socket.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/socket.cpp.s
-.PHONY : src/common/socket.cpp.s
-
-src/common/worm_states.o: src/common/worm_states.cpp.o
-.PHONY : src/common/worm_states.o
-
-# target to build an object file
-src/common/worm_states.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/worm_states.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/worm_states.cpp.o
-.PHONY : src/common/worm_states.cpp.o
-
-src/common/worm_states.i: src/common/worm_states.cpp.i
-.PHONY : src/common/worm_states.i
+src/common/lib/socket.i: src/common/lib/socket.cpp.i
+.PHONY : src/common/lib/socket.i
 
 # target to preprocess a source file
-src/common/worm_states.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/worm_states.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/worm_states.cpp.i
-.PHONY : src/common/worm_states.cpp.i
+src/common/lib/socket.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/socket.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/socket.cpp.i
+.PHONY : src/common/lib/socket.cpp.i
 
-src/common/worm_states.s: src/common/worm_states.cpp.s
-.PHONY : src/common/worm_states.s
+src/common/lib/socket.s: src/common/lib/socket.cpp.s
+.PHONY : src/common/lib/socket.s
 
 # target to generate assembly for a file
-src/common/worm_states.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/worm_states.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/worm_states.cpp.s
-.PHONY : src/common/worm_states.cpp.s
+src/common/lib/socket.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/common/lib/socket.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/socket.cpp.s
+.PHONY : src/common/lib/socket.cpp.s
 
 src/server/bodies/beam_body.o: src/server/bodies/beam_body.cpp.o
 .PHONY : src/server/bodies/beam_body.o
@@ -745,6 +718,30 @@ src/server/bodies/body.s: src/server/bodies/body.cpp.s
 src/server/bodies/body.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/body.cpp.s
 .PHONY : src/server/bodies/body.cpp.s
+
+src/server/bodies/missile_body.o: src/server/bodies/missile_body.cpp.o
+.PHONY : src/server/bodies/missile_body.o
+
+# target to build an object file
+src/server/bodies/missile_body.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/missile_body.cpp.o
+.PHONY : src/server/bodies/missile_body.cpp.o
+
+src/server/bodies/missile_body.i: src/server/bodies/missile_body.cpp.i
+.PHONY : src/server/bodies/missile_body.i
+
+# target to preprocess a source file
+src/server/bodies/missile_body.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/missile_body.cpp.i
+.PHONY : src/server/bodies/missile_body.cpp.i
+
+src/server/bodies/missile_body.s: src/server/bodies/missile_body.cpp.s
+.PHONY : src/server/bodies/missile_body.s
+
+# target to generate assembly for a file
+src/server/bodies/missile_body.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/missile_body.cpp.s
+.PHONY : src/server/bodies/missile_body.cpp.s
 
 src/server/bodies/water_body.o: src/server/bodies/water_body.cpp.o
 .PHONY : src/server/bodies/water_body.o
@@ -890,29 +887,29 @@ src/server/broadcaster.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/broadcaster.cpp.s
 .PHONY : src/server/broadcaster.cpp.s
 
-src/server/client_handler_thread.o: src/server/client_handler_thread.cpp.o
-.PHONY : src/server/client_handler_thread.o
+src/server/client_manager_thread.o: src/server/client_manager_thread.cpp.o
+.PHONY : src/server/client_manager_thread.o
 
 # target to build an object file
-src/server/client_handler_thread.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/client_handler_thread.cpp.o
-.PHONY : src/server/client_handler_thread.cpp.o
+src/server/client_manager_thread.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/client_manager_thread.cpp.o
+.PHONY : src/server/client_manager_thread.cpp.o
 
-src/server/client_handler_thread.i: src/server/client_handler_thread.cpp.i
-.PHONY : src/server/client_handler_thread.i
+src/server/client_manager_thread.i: src/server/client_manager_thread.cpp.i
+.PHONY : src/server/client_manager_thread.i
 
 # target to preprocess a source file
-src/server/client_handler_thread.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/client_handler_thread.cpp.i
-.PHONY : src/server/client_handler_thread.cpp.i
+src/server/client_manager_thread.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/client_manager_thread.cpp.i
+.PHONY : src/server/client_manager_thread.cpp.i
 
-src/server/client_handler_thread.s: src/server/client_handler_thread.cpp.s
-.PHONY : src/server/client_handler_thread.s
+src/server/client_manager_thread.s: src/server/client_manager_thread.cpp.s
+.PHONY : src/server/client_manager_thread.s
 
 # target to generate assembly for a file
-src/server/client_handler_thread.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/client_handler_thread.cpp.s
-.PHONY : src/server/client_handler_thread.cpp.s
+src/server/client_manager_thread.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/client_manager_thread.cpp.s
+.PHONY : src/server/client_manager_thread.cpp.s
 
 src/server/contact_listener.o: src/server/contact_listener.cpp.o
 .PHONY : src/server/contact_listener.o
@@ -1178,6 +1175,30 @@ src/server/server_protocol.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_protocol.cpp.s
 .PHONY : src/server/server_protocol.cpp.s
 
+src/server/server_receiver_thread.o: src/server/server_receiver_thread.cpp.o
+.PHONY : src/server/server_receiver_thread.o
+
+# target to build an object file
+src/server/server_receiver_thread.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_receiver_thread.cpp.o
+.PHONY : src/server/server_receiver_thread.cpp.o
+
+src/server/server_receiver_thread.i: src/server/server_receiver_thread.cpp.i
+.PHONY : src/server/server_receiver_thread.i
+
+# target to preprocess a source file
+src/server/server_receiver_thread.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_receiver_thread.cpp.i
+.PHONY : src/server/server_receiver_thread.cpp.i
+
+src/server/server_receiver_thread.s: src/server/server_receiver_thread.cpp.s
+.PHONY : src/server/server_receiver_thread.s
+
+# target to generate assembly for a file
+src/server/server_receiver_thread.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_receiver_thread.cpp.s
+.PHONY : src/server/server_receiver_thread.cpp.s
+
 src/server/server_server.o: src/server/server_server.cpp.o
 .PHONY : src/server/server_server.o
 
@@ -1267,9 +1288,9 @@ help:
 	@echo "... src/client/client_main.o"
 	@echo "... src/client/client_main.i"
 	@echo "... src/client/client_main.s"
-	@echo "... src/client/client_position_converter.o"
-	@echo "... src/client/client_position_converter.i"
-	@echo "... src/client/client_position_converter.s"
+	@echo "... src/client/client_missile.o"
+	@echo "... src/client/client_missile.i"
+	@echo "... src/client/client_missile.s"
 	@echo "... src/client/client_protocol.o"
 	@echo "... src/client/client_protocol.i"
 	@echo "... src/client/client_protocol.s"
@@ -1285,30 +1306,30 @@ help:
 	@echo "... src/client/client_worldview.o"
 	@echo "... src/client/client_worldview.i"
 	@echo "... src/client/client_worldview.s"
-	@echo "... src/client/client_worm_view.o"
-	@echo "... src/client/client_worm_view.i"
-	@echo "... src/client/client_worm_view.s"
-	@echo "... src/common/liberror.o"
-	@echo "... src/common/liberror.i"
-	@echo "... src/common/liberror.s"
-	@echo "... src/common/resolver.o"
-	@echo "... src/common/resolver.i"
-	@echo "... src/common/resolver.s"
-	@echo "... src/common/resolvererror.o"
-	@echo "... src/common/resolvererror.i"
-	@echo "... src/common/resolvererror.s"
-	@echo "... src/common/socket.o"
-	@echo "... src/common/socket.i"
-	@echo "... src/common/socket.s"
-	@echo "... src/common/worm_states.o"
-	@echo "... src/common/worm_states.i"
-	@echo "... src/common/worm_states.s"
+	@echo "... src/client/client_worm.o"
+	@echo "... src/client/client_worm.i"
+	@echo "... src/client/client_worm.s"
+	@echo "... src/common/lib/liberror.o"
+	@echo "... src/common/lib/liberror.i"
+	@echo "... src/common/lib/liberror.s"
+	@echo "... src/common/lib/resolver.o"
+	@echo "... src/common/lib/resolver.i"
+	@echo "... src/common/lib/resolver.s"
+	@echo "... src/common/lib/resolvererror.o"
+	@echo "... src/common/lib/resolvererror.i"
+	@echo "... src/common/lib/resolvererror.s"
+	@echo "... src/common/lib/socket.o"
+	@echo "... src/common/lib/socket.i"
+	@echo "... src/common/lib/socket.s"
 	@echo "... src/server/bodies/beam_body.o"
 	@echo "... src/server/bodies/beam_body.i"
 	@echo "... src/server/bodies/beam_body.s"
 	@echo "... src/server/bodies/body.o"
 	@echo "... src/server/bodies/body.i"
 	@echo "... src/server/bodies/body.s"
+	@echo "... src/server/bodies/missile_body.o"
+	@echo "... src/server/bodies/missile_body.i"
+	@echo "... src/server/bodies/missile_body.s"
 	@echo "... src/server/bodies/water_body.o"
 	@echo "... src/server/bodies/water_body.i"
 	@echo "... src/server/bodies/water_body.s"
@@ -1327,9 +1348,9 @@ help:
 	@echo "... src/server/broadcaster.o"
 	@echo "... src/server/broadcaster.i"
 	@echo "... src/server/broadcaster.s"
-	@echo "... src/server/client_handler_thread.o"
-	@echo "... src/server/client_handler_thread.i"
-	@echo "... src/server/client_handler_thread.s"
+	@echo "... src/server/client_manager_thread.o"
+	@echo "... src/server/client_manager_thread.i"
+	@echo "... src/server/client_manager_thread.s"
 	@echo "... src/server/contact_listener.o"
 	@echo "... src/server/contact_listener.i"
 	@echo "... src/server/contact_listener.s"
@@ -1363,6 +1384,9 @@ help:
 	@echo "... src/server/server_protocol.o"
 	@echo "... src/server/server_protocol.i"
 	@echo "... src/server/server_protocol.s"
+	@echo "... src/server/server_receiver_thread.o"
+	@echo "... src/server/server_receiver_thread.i"
+	@echo "... src/server/server_receiver_thread.s"
 	@echo "... src/server/server_server.o"
 	@echo "... src/server/server_server.i"
 	@echo "... src/server/server_server.s"

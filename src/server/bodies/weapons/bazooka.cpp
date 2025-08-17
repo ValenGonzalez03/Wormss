@@ -34,15 +34,15 @@ void Bazooka::explode() {
 	explosion_manager.simulate_explosion(body->GetPosition(), radius, damage);
 }
 
-void Bazooka::start_contact_with(Body* another_body) {
-	if (another_body->get_type() == WORM) {
-		explode();
-		reinterpret_cast<WormBody*>(another_body)->take_damage(damage);
-		//std::cout << "BAZOOKA CHOCO CON UN GUSANO\n";
-	}
-};
+// void Bazooka::start_contact_with(Body* another_body) {
+// 	if (another_body->get_type() == WORM) {
+// 		explode();
+// 		reinterpret_cast<WormBody*>(another_body)->take_damage(damage);
+// 		//std::cout << "BAZOOKA CHOCO CON UN GUSANO\n";
+// 	}
+// };
 	
-void Bazooka::end_contact_with(Body* another_body) {}
+// void Bazooka::end_contact_with(Body* another_body) {}
 
 int Bazooka::get_type() {
 	return MISSILE;}

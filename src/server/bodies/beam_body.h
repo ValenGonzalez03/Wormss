@@ -16,13 +16,21 @@ class BeamBody : public Body {
 
 	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width);
 	
-	void start_contact_with(Body* another_body) override;
+	//void start_contact_with(Body* another_body) override;
+
+	void touch_worm(WormBody* worm) override;
+
+	void touch_beam(BeamBody* beam) override;
+  
+	void touch_missile(MissileBody* missile) override;
 	
-	void start_contact_with(WormBody* worm) ;
-	
-	void start_contact_with(WaterBody *water) ;
-	
-    void end_contact_with(Body* another_body) override;
+    // void end_contact_with(Body* another_body) override;
+
+	void stop_touching_worm(WormBody* worm) override;
+
+  	void stop_touching_beam(BeamBody* beam) override;
+
+  	void stop_touching_missile(MissileBody* missile) override;
 	
 	BeamBody(const BeamBody&) = delete;
 	BeamBody& operator=(const BeamBody&) = delete;

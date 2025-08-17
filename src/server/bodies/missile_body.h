@@ -12,6 +12,7 @@ private:
   int id;
   float initial_force;
   bool m_contacting = false;
+  bool exploded = false;
 
 public:
 
@@ -35,15 +36,29 @@ public:
 
   bool has_exceeded_height_limit();
 
-  void start_contact_with(Body *another_body) override;
+  void touch_worm(WormBody* worm) override;
 
-  void end_contact_with(Body *another_body) override;
+  void touch_beam(BeamBody* beam) override;
 
-  void hit_a_surface();
+  void touch_missile(MissileBody* missile) override;
 
-  void move_away_from_surface();
+  //void start_contact_with(Body *another_body) override;
+
+  //void end_contact_with(Body *another_body) override;
+
+  void stop_touching_worm(WormBody* worm) override;
+
+  void stop_touching_beam(BeamBody* beam) override;
+	
+  void stop_touching_missile(MissileBody* missile) override;
+
+  void explode();
+
+  bool has_exploded();
   
   int get_type() override;
+
+  b2Body* get_body();
 
   ~MissileBody();
   

@@ -50,7 +50,7 @@ void Game::run() {
       //   start_turn_time = std::chrono::steady_clock::now();
       // }
 
-      update(it);
+      update();
       game_manager.update();
       game_manager.step();
       push_game_state();
@@ -86,7 +86,7 @@ void Game::run() {
   }
 }
 
-void Game::update(int &it) {
+void Game::update() {
   std::shared_ptr<RunnableCommandGame> runnable_command;
   while (commands.try_pop(runnable_command)) {
     runnable_command->run(game_manager);

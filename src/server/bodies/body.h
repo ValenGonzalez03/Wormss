@@ -4,8 +4,9 @@
 #include "box2d/box2d.h"
 
 class WormBody;
-class WaterBody;
-class Weapon;
+class BeamBody;
+class MissileBody;
+
 
 enum BODY_TYPES {
     WORM = 0,
@@ -34,13 +35,20 @@ protected:
 public:
   Body(b2World* world, const float pos_x, const float pos_y, int angle, const float width, const float height, float density, float friction);
 
-  virtual void start_contact_with(Body* another_body) = 0;
-  //virtual void start_contact_with(WormBody* worm) = 0;
-  //virtual void start_contact_with(WaterBody* worm) = 0;
-  //virtual void start_contact_with(BeamBody* beam) = 0;
-  //virtual void start_contact_with(Weapon* weamon) = 0;
-  virtual void end_contact_with(Body* another_body) = 0;
+  void start_contact_with(Body* another_body);
+  void touch(Body *other);
+  virtual void touch_worm(WormBody* worm) = 0;
+  virtual void touch_beam(BeamBody* beam) = 0;
+  virtual void touch_missile(MissileBody* missile) = 0;
+
+  void end_contact_with(Body* another_body);
+  void stop_touching(Body *other);
+  virtual void stop_touching_worm(WormBody* worm) = 0;
+  virtual void stop_touching_beam(BeamBody* beam) = 0;
+  virtual void stop_touching_missile(MissileBody* missile) = 0;
+
   virtual int get_type() = 0;
+  //virtual void start_contact_with(Weapon* weamon) = 0;
 	
   Body(const Body &) = delete;
   Body &operator=(const Body &) = delete;

@@ -99,13 +99,12 @@ void WorldView::update(GameState &game_state) {
     worm.second.update(worms_data[worm.second.get_id()]);
   }
 
+  missiles.clear();
   auto missiles_data = game_state.get_missiles();
   for (auto data : missiles_data) {
-    if (missiles.find(data.first) == missiles.end()) {
-      // Si el misil no existe, lo creo
-      auto missile = add_missile(data.second);
-      missiles.insert({data.first, missile});
-    }
+    // Si el misil no existe, lo creo
+    auto missile = add_missile(data.second);
+    missiles.insert({data.first, missile});
   }
   for (auto &missile : missiles) {
     missile.second.update(missiles_data[missile.second.get_id()]);

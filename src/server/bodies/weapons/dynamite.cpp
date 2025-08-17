@@ -25,12 +25,12 @@ Dynamite::Dynamite(b2World *world, float pos_x, float pos_y)
   body->GetUserData().pointer = (uintptr_t)this;
 }
 
-void Dynamite::start_contact_with(Body* another_body) {
-	if (another_body->get_type() == WORM) {
-	}
-};
+// void Dynamite::start_contact_with(Body* another_body) {
+// 	if (another_body->get_type() == WORM) {
+// 	}
+// };
 	
-void Dynamite::end_contact_with(Body* another_body) {}
+// void Dynamite::end_contact_with(Body* another_body) {}
 
 int Dynamite::get_type() {
 	return MISSILE;}

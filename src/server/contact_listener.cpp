@@ -12,12 +12,20 @@ void ContactListener::BeginContact(b2Contact* contact) {
 	auto* data_A = reinterpret_cast<UserData*>(contact->GetFixtureA()->GetBody()->GetUserData().pointer);
     auto* data_B = reinterpret_cast<UserData*>(contact->GetFixtureB()->GetBody()->GetUserData().pointer);
 
-	if (data_A->type == WORM || data_B->type == WORM) {
+	if (data_A && data_B) {
 		auto* pointer_A = reinterpret_cast<Body*>(data_A->pointer);
 		auto* pointer_B = reinterpret_cast<Body*>(data_B->pointer);
 		pointer_A->start_contact_with(pointer_B);
 		pointer_B->start_contact_with(pointer_A);
+
 	}
+	// if (data_A->type == WORM || data_B->type == WORM) {
+	// } else if (data_A->type == MISSILE || data_B->type == MISSILE) {
+	// 	auto* pointer_A = reinterpret_cast<Body*>(data_A->pointer);
+	// 	auto* pointer_B = reinterpret_cast<Body*>(data_B->pointer);
+	// 	pointer_A->start_contact_with(pointer_B);
+	// 	pointer_B->start_contact_with(pointer_A);
+	// }
 /*
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();

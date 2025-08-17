@@ -17,9 +17,9 @@ class Bazooka : public Weapon {
     
     void explode();
     
-    void start_contact_with(Body* another_body) override;
+    // void start_contact_with(Body* another_body) override;
 	
-	void end_contact_with(Body* another_body) override;
+	// void end_contact_with(Body* another_body) override;
 	
 	int get_type() override;
 };

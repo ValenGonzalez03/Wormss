@@ -32,7 +32,6 @@ typedef duration<float> dur_f;
 class Game : public Thread {
 private:
   std::mutex m;
-  std::map<uint8_t, std::shared_ptr<Queue<GameState>>> queues_sender;
   Broadcaster broadcaster;
   Queue<std::shared_ptr<RunnableCommandGame>> commands;
   uint8_t game_id;
@@ -48,9 +47,7 @@ private:
 public:
   explicit Game(uint8_t game_id, GameConfig &game_config, std::shared_ptr<World> world);
 
-  void
-  add_player(std::shared_ptr<Queue<GameState>> sender_queue,
-             uint8_t &player_id);
+  void add_player(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id);
 
   void delete_player(const uint8_t &player_id);
 
@@ -60,7 +57,7 @@ public:
 
   void run() override;
 
-  void update(int &it);
+  void update();
 
   void stop_playing();
 

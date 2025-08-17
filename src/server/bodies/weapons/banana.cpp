@@ -25,12 +25,12 @@ Banana::Banana(b2World *world, float pos_x, float pos_y)
   body->GetUserData().pointer = (uintptr_t)this;
 }
 
-void Banana::start_contact_with(Body* another_body) {
-	if (another_body->get_type() == WORM) {
-	}
-};
+// void Banana::start_contact_with(Body* another_body) {
+// 	if (another_body->get_type() == WORM) {
+// 	}
+// };
 	
-void Banana::end_contact_with(Body* another_body) {}
+// void Banana::end_contact_with(Body* another_body) {}
 
 int Banana::get_type() {
 	return MISSILE;}

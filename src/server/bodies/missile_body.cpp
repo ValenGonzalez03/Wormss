@@ -58,10 +58,48 @@ bool MissileBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool MissileBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-void MissileBody::start_contact_with(Body *another_body) {}
-void MissileBody::end_contact_with(Body *another_body) {}
+void MissileBody::touch_beam(BeamBody* beam) {
+  /* NADA */
+}
+
+void MissileBody::touch_worm(WormBody* worm) {
+  /* NADA */
+}
+
+void MissileBody::touch_missile(MissileBody* missile) {
+  /* MISIL DEBE EXPLOTAR */
+}
+
+void MissileBody::stop_touching_worm(WormBody* worm) {
+  /* NADA */
+}
+
+void MissileBody::stop_touching_beam(BeamBody* beam) {
+  /* NADA */
+}
+
+void MissileBody::stop_touching_missile(MissileBody* missile) {
+  /* NADA */
+}
+
+void MissileBody::explode() {
+  exploded = true;
+}
+
+bool MissileBody::has_exploded() {
+  return exploded;
+}
+
+// void MissileBody::start_contact_with(Body *another_body) {
+//   std::cout << "MISIL EXPLOTO" << std::endl;
+// }
+// void MissileBody::end_contact_with(Body *another_body) {}
 
 int MissileBody::get_type() {return MISSILE;}
+
+b2Body* MissileBody::get_body() {
+  return body;
+}
 
 MissileBody::~MissileBody() {
   free(reinterpret_cast<UserData*>(body->GetUserData().pointer));

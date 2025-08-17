@@ -90,17 +90,25 @@ public:
 
   bool has_exceeded_height_limit();
 
+  void touch_worm(WormBody* worm) override;
+
+  void touch_beam(BeamBody* beam) override;
+
+  void touch_missile(MissileBody* missile) override;
+
+  void stop_touching_worm(WormBody* worm) override;
+
+  void stop_touching_beam(BeamBody* beam) override;
+	
+  void stop_touching_missile(MissileBody* missile) override;
+
   // POR AHORA DE PRUEBA
   void start_contact();
   void end_contact();
 
-  void start_contact_with(Body *another_body) override;
+  //void start_contact_with(Body *another_body) override;
 
-  void start_contact_with(WormBody *another_worm);
-  
-  void start_contact_with(WaterBody *water);
-
-  void end_contact_with(Body *another_body) override;
+  //void end_contact_with(Body *another_body) override;
 
   void hit_a_surface();
 

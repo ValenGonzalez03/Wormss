@@ -25,12 +25,12 @@ BaseballBat::BaseballBat(b2World *world, float pos_x, float pos_y)
   body->GetUserData().pointer = (uintptr_t)this;
 }
 
-void BaseballBat::start_contact_with(Body* another_body) {
-	if (another_body->get_type() == WORM) {
-	}
-};
+// void BaseballBat::start_contact_with(Body* another_body) {
+// 	if (another_body->get_type() == WORM) {
+// 	}
+// };
 	
-void BaseballBat::end_contact_with(Body* another_body) {}
+// void BaseballBat::end_contact_with(Body* another_body) {}
 
 int BaseballBat::get_type() {
 	return MISSILE;}

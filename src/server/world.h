@@ -35,13 +35,15 @@ public:
 
   WormBody* create_worm(float pos_x, float pos_y, float vel, int health, const uint8_t& player_id);
   
-  void create_water(float pos_x, float pos_y, float width, int height);
+  // void create_water(float pos_x, float pos_y, float width, int height);
   
-  void create_bazooka_missile(float pos_x, float pos_y);
+  // void create_bazooka_missile(float pos_x, float pos_y);
   
-  void create_banana(float pos_x, float pos_y);
+  // void create_banana(float pos_x, float pos_y);
   
-  void create_dynamite(float pos_x, float pos_y);
+  // void create_dynamite(float pos_x, float pos_y);
+
+  void destroy_missile(MissileBody* missile);
 	
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 	

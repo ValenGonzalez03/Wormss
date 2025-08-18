@@ -11,12 +11,14 @@ class MissileBody : public Body {
 private:
   uint8_t id;
   float initial_force;
+  uint8_t missile_direction;
   bool m_contacting = false;
   bool exploded = false;
 
 public:
 
-  explicit MissileBody(b2World* world, float pos_x, float pos_y, float initial_force, float angle, uint8_t id);
+  explicit MissileBody(b2World* world, float pos_x, float pos_y, float initial_force, float angle, uint8_t missile_direction, 
+    uint8_t id);
 
   void apply_initial_impulse(float shooting_angle);
 
@@ -27,6 +29,8 @@ public:
   float get_pos_y();
 
   float get_angle();
+
+  uint8_t get_direction();
 
   uint8_t get_id();
 

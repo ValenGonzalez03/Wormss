@@ -62,7 +62,7 @@ Missile WorldView::add_missile(MissileData data) {
   int heigth_px = convert_meters_to_pixels_x(heigth);
 
 
-  Missile missile(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(), data.get_id(),
+  Missile missile(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(), data.get_direction(), data.get_id(),
                   std::move(missile_texture), renderer);
   return missile;
 }

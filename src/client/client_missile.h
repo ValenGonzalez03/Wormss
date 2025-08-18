@@ -12,6 +12,7 @@ private:
   int width; // En pixeles
   int height; // En pixeles
   float angle;
+  uint8_t direction;
   uint8_t id;
   std::vector<SDL2pp::Texture *> texture; // Vector de texturas
   SDL2pp::Renderer &renderer;
@@ -23,7 +24,7 @@ public:
   explicit Missile();
 
   // Crea un Missile con un renderer y las texturas correspondientes
-  explicit Missile(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t id,
+  explicit Missile(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t dir, uint8_t id,
     std::vector<SDL2pp::Texture *> &&textures, SDL2pp::Renderer &rend);
 
   void update(MissileData data);

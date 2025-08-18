@@ -47,12 +47,10 @@ void BeamBody::touch_worm(WormBody* worm) {
 
 void BeamBody::touch_missile(MissileBody* missile) {
     missile->explode();
-    std::cout << "MISIL EXPLOTA" << std::endl;
-    /* MISIL DEBE EXPLOTAR */
 }
 
 void BeamBody::stop_touching_worm(WormBody* worm) {
-    /* ??? */
+    worm->move_away_from_surface();
 }
 
 void BeamBody::stop_touching_beam(BeamBody* beam) {

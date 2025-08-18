@@ -117,7 +117,17 @@ void WormBody::stop_aiming() { state = IDLE; }
 
 MissileBody* WormBody::shoot(float initial_force, uint8_t missile_id) {
   b2Vec2 pos = body->GetPosition();
-  MissileBody *missile = new MissileBody(world, pos.x, pos.y, initial_force, aiming_angle, missile_id);
+  uint8_t worm_dir = get_direction();
+  float missile_dist_x = (worm_dir == RIGHT ? 1 : -1) * ((WORM_WIDTH / 2) + (MISSILE_WIDTH / 2) + 0.27f);
+  float adjusted_pos_x = pos.x  + missile_dist_x * cos(aiming_angle);
+
+  float missile_dist_y = ((WORM_HEIGHT / 2) + (MISSILE_HEIGHT / 2) + 0.27f);
+  float adjusted_pos_y = pos.y  + missile_dist_y * sin(aiming_angle);
+
+  float final_angle = (worm_dir == RIGHT ? aiming_angle : -aiming_angle);
+
+  MissileBody *missile = new MissileBody(world, adjusted_pos_x, adjusted_pos_y, initial_force, final_angle, worm_dir, 
+                                         missile_id);
   return missile;
 }
 
@@ -175,30 +185,6 @@ bool WormBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool WormBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-// void WormBody::start_contact_with(Body *other) {
-//   if (other->get_type() == BEAM) {
-//     state = IDLE;
-//   }
-
-//   /*
-//   if (other->get_type() == WORM) {
-// 		//std::cout << "GUSANO CHOCO CON UN GUSANO\n";
-// 		reinterpret_cast<WormBody*>(other)->start_contact_with(this);
-//   }
-  
-//   if (other->get_type() == WATER) {
-// 		std::cout << "GUSANO CHOCO CON AGUA\n";
-// 		die();
-//   }
-  
-//   if (other->get_type() == BAZOOKA) {
-// 		std::cout << "GUSANO CHOCO CON MUNICION DE BAZOOKA\n";
-// 		//take_damage(another_body->get_damage());
-//   }
-//   */
-  
-// }
-
 void WormBody::touch_beam(BeamBody* beam) {
   /* NADA */
 }
@@ -208,7 +194,7 @@ void WormBody::touch_worm(WormBody* worm) {
 }
 
 void WormBody::touch_missile(MissileBody* missile) {
-  /* MISIL DEBE EXPLOTAR */
+  missile->explode();
 }
 
 void WormBody::stop_touching_worm(WormBody* worm) {
@@ -223,17 +209,12 @@ void WormBody::stop_touching_missile(MissileBody* missile) {
   /* NADA */
 }
 
-// void WormBody::end_contact_with(Body *another_body) {}
-
 void WormBody::hit_a_surface() { 
   state = IDLE;
 }
 
 void WormBody::move_away_from_surface() {
-  num_foot_contacts--;
-  if (num_foot_contacts == 0) {
-	  state = JUMPING;
-  }
+  state = JUMPING;
 }
 
 void WormBody::show_vel_and_health() {
@@ -253,8 +234,7 @@ void WormBody::die() {
 void WormBody::start_contact() { m_contacting = true; }
 void WormBody::end_contact() { m_contacting = false; }
 
-int WormBody::get_type() {
-	return WORM;}
+int WormBody::get_type() { return WORM; }
 
 WormBody::~WormBody() {
   free(reinterpret_cast<UserData*>(body->GetUserData().pointer));

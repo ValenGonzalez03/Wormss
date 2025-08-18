@@ -40,7 +40,7 @@ public:
 
   BeamBody* create_beam(float pos_x, float pos_y, int angle, float length);
 
-  MissileBody* create_missile(MissileBody* missile, float aim_angle);
+  MissileBody* create_missile(MissileBody* missile);
 
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 

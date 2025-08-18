@@ -100,7 +100,8 @@ void GameManager::shoot(const uint8_t &player_id, float initial_force) {
 
   auto missile = worm->shoot(initial_force, missiles_id_counter);
   missiles_id_counter++;
-  world.create_missile(missile, worm->get_aiming_angle());
+  world.create_missile(missile);
+  missile->apply_initial_impulse(worm->get_aiming_angle());
 }
 
 GameState GameManager::create_state() {

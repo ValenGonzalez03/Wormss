@@ -5,12 +5,13 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial_force, float angle, uint8_t id)
-    : Body(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, 1.0f, 0.3f), initial_force(inicial_force), id(id) {
+MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial_force, float angle, uint8_t dir, uint8_t id)
+    : Body(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, 1.0f, 0.3f), initial_force(inicial_force), 
+      missile_direction(dir), id(id) {
   b2BodyDef bodyDef;
   bodyDef.bullet = true;
   bodyDef.type = b2_dynamicBody;
-  bodyDef.position.Set(pos_x + (WORM_WIDTH / 2) + 0.3f * cos(angle), pos_y + 1.0f * sin(angle)); // Ajusto la distancia inicial un poco mas adelante para que no choque con el gusano.
+  bodyDef.position.Set(pos_x, pos_y); // Ajusto la distancia inicial un poco mas adelante para que no choque con el gusano.
   bodyDef.angle = angle;
   body = world->CreateBody(&bodyDef);
 
@@ -31,7 +32,8 @@ MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial
 void MissileBody::apply_initial_impulse(float aim_angle) {
   float vel_x = cos(aim_angle) * this->initial_force;
   float vel_y = sin(aim_angle) * this->initial_force;
-  body->ApplyLinearImpulse(b2Vec2(vel_x, vel_y), body->GetWorldCenter(), true);
+  b2Vec2 dir_vec = (missile_direction == RIGHT ? b2Vec2(vel_x, vel_y) : b2Vec2(-vel_x, vel_y)) ;
+  body->ApplyLinearImpulse(dir_vec, body->GetWorldCenter(), true);
 }
 
 b2Vec2 MissileBody::get_position() { return body->GetPosition(); }
@@ -41,6 +43,8 @@ float MissileBody::get_pos_x() { return body->GetPosition().x; }
 float MissileBody::get_pos_y() { return body->GetPosition().y; }
 
 float MissileBody::get_angle() { return body->GetAngle(); }
+
+uint8_t MissileBody::get_direction() { return missile_direction; }
 
 uint8_t MissileBody::get_id() { return id; }
 

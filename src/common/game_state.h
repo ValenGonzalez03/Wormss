@@ -112,17 +112,18 @@ private:
   float pos_x; // En metros
   float pos_y; // En metros
   float angle; // En radianes
+  uint8_t direction;
   uint8_t missile_id;
 
 public:
 
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
-  explicit MissileData() : pos_x(0), pos_y(0), angle(0), missile_id(0) {}
+  explicit MissileData() : pos_x(0), pos_y(0), angle(0), direction(0), missile_id(0) {}
 
-  explicit MissileData(float pos_x, float pos_y, float angle, uint8_t id)
-      : pos_x(pos_x), pos_y(pos_y), angle(angle), missile_id(id) {}
+  explicit MissileData(float pos_x, float pos_y, float angle, uint8_t dir, uint8_t id)
+      : pos_x(pos_x), pos_y(pos_y), angle(angle), direction(dir), missile_id(id) {}
 
-  explicit MissileData(Socket &skt) : pos_x(0), pos_y(0), angle(0), missile_id(0) {
+  explicit MissileData(Socket &skt) : pos_x(0), pos_y(0), angle(0), direction(0), missile_id(0) {
     bool was_closed = false;
     deserialize(skt, &was_closed);
   }
@@ -148,6 +149,9 @@ public:
     skt.recvall(&angle_int_net, sizeof(angle_int_net), was_closed);
     int angle_int = ntohl(angle_int_net);
     this->angle = float(angle_int) / float(100.0);
+
+    // Recibo la direccion del misil
+    skt.recvall(&direction, sizeof(direction), was_closed);
   }
 
   void serialize(Socket &skt, bool *was_closed) {
@@ -166,6 +170,9 @@ public:
     int angle_int = int(this->angle * 100);
     int angle_int_net = htonl(angle_int);
     skt.sendall(&angle_int_net, sizeof(angle_int_net), was_closed);
+
+    // Envio la direccion del misil
+    skt.sendall(&direction, sizeof(direction), was_closed);
   }
 
   float get_pos_x() { return pos_x; }
@@ -173,6 +180,8 @@ public:
   float get_pos_y() { return pos_y; }
 
   float get_angle() { return angle; }
+
+  uint8_t get_direction() { return direction; }
 
   uint8_t get_id() { return missile_id; }
 };
@@ -233,7 +242,7 @@ public:
   std::map<uint8_t, MissileData> get_missiles() { return missiles_list; }
 
   void add_missile(MissileAttr& attr) {
-    MissileData missile(attr.pos_x, attr.pos_y, attr.angle, attr.missile_id);
+    MissileData missile(attr.pos_x, attr.pos_y, attr.angle, attr.direction, attr.missile_id);
     missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
   }
 

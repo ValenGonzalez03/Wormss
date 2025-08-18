@@ -92,8 +92,7 @@ void Worm::render_worm_aiming(int frame) {
   //std::cout << "Normalized angle: " << normalized_angle << std::endl;
 
   renderer.Copy(*aim_texture[frame_position], SDL2pp::NullOpt,
-                SDL2pp::Rect((int)pos_x - 4, pos_y - 2, width + 8, height + 2), 0.0, SDL2pp::NullOpt,
-                flip);
+                SDL2pp::Rect((int)pos_x - 4, pos_y - 2, width + 8, height + 2), 0.0, SDL2pp::NullOpt, flip);
 }
 
 SDL_RendererFlip Worm::choose_flip_direction() {

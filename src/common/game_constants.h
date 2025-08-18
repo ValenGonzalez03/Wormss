@@ -45,6 +45,7 @@ struct MissileAttr {
     float pos_x; // En metros
     float pos_y; // En metros
     float angle; // En radianes
+    uint8_t direction;
 };
 
 #endif

@@ -19,9 +19,8 @@ WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn
   return worm;
 }
 
-MissileBody* World::create_missile(MissileBody* missile, float aim_angle) {
+MissileBody* World::create_missile(MissileBody* missile) {
   missiles.push_back(missile);
-  missile->apply_initial_impulse(aim_angle);
   return missile;
 }
 
@@ -83,7 +82,7 @@ std::list<WormAttr> World::get_worms_attr() {
 std::list<MissileAttr> World::get_missiles_attr() {
   std::list<MissileAttr> missiles_attr;
   for (auto missile : missiles) {
-    MissileAttr attr ({missile->get_id(), missile->get_pos_x(), missile->get_pos_y(), missile->get_angle()});
+    MissileAttr attr ({missile->get_id(), missile->get_pos_x(), missile->get_pos_y(), missile->get_angle(), missile->get_direction()});
     missiles_attr.emplace_back(attr);
   }
   return missiles_attr;

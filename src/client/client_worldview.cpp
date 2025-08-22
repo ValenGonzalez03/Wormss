@@ -67,6 +67,15 @@ Missile WorldView::add_missile(MissileData data) {
   return missile;
 }
 
+void WorldView::add_explosion(ExplosionData data, int frame) {
+  int pos_x_px = convert_meters_to_pixels_x(data.get_pos_x());
+  int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y());
+  int radius_px = convert_meters_to_pixels_x(data.get_radius());
+
+  Explosion explosion (pos_x_px, pos_y_px, radius_px, frame, renderer);
+  explosions.emplace_back(explosion);
+}
+
 void WorldView::render(int frame) {
   // Renderizar fondo
   render_background();
@@ -86,6 +95,10 @@ void WorldView::render(int frame) {
     missile.second.render(frame);
   }
 
+  // Renderizar explosiones
+  for (auto explosion: explosions) {
+    explosion.render(frame);
+  }
 
   // render_text("Position: " + std::to_string((int)state.position)
   //       + ", running: " + (state.is_running ? "true" : "false")
@@ -93,21 +106,34 @@ void WorldView::render(int frame) {
   //       0);
 }
 
-void WorldView::update(GameState &game_state) {
+void WorldView::update(GameState &game_state, int frame) {
   auto worms_data = game_state.get_worms();
   for (auto &worm : worms) {
     worm.second.update(worms_data[worm.second.get_id()]);
   }
 
-  missiles.clear();
   auto missiles_data = game_state.get_missiles();
-  for (auto data : missiles_data) {
-    // Si el misil no existe, lo creo
+  auto missiles_data_aux = missiles_data;
+  for (auto missile : missiles) {
+    if (missiles_data_aux.find(missile.first) == missiles_data_aux.end()) { // No encontró el elemento en missiles_data, quiere decir que el misil explotó (o desaparecio (?))
+      missiles.erase(missile.first);
+    } else { // En otro caso lo encontró (Es un misil que sigue viajando y no chocó con nada), por lo que lo descarto de missiles_data
+      missiles_data_aux.erase(missile.first);
+    }
+  }
+  for (auto data : missiles_data_aux) { // Itero sobre los misiles que quedan de missiles_data, que son los que NO tiene missiles por lo que debo crearlos.
     auto missile = add_missile(data.second);
     missiles.insert({data.first, missile});
   }
+
   for (auto &missile : missiles) {
     missile.second.update(missiles_data[missile.second.get_id()]);
+  }
+
+  explosions.clear();
+  auto explosions_data = game_state.get_explosions();
+  for (auto data : explosions_data) {
+    add_explosion(data, frame);
   }
 }
 

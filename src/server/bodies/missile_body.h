@@ -22,6 +22,10 @@ public:
 
   void apply_initial_impulse(float shooting_angle);
 
+  float explosion_intersect_value(float fraction) override;
+
+  void apply_explosion(b2Vec2& point, b2Vec2& normal) override;
+
   b2Vec2 get_position();
 
   float get_pos_x();

@@ -173,6 +173,14 @@ void WormBody::update() {
   }
 }
 
+float WormBody::explosion_intersect_value(float fraction) {
+  return 1;
+}
+
+void WormBody::apply_explosion(b2Vec2& point, b2Vec2& normal) {
+  
+}
+
 bool WormBody::is_facing_left() { return (direction == LEFT); }
 
 bool WormBody::is_facing_right() { return (direction == RIGHT); }

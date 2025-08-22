@@ -62,6 +62,10 @@ public:
   
   void teleport(float pos_x, float pos_y);
 
+  float explosion_intersect_value(float fraction) override;
+
+  void apply_explosion(b2Vec2& point, b2Vec2& normal) override;
+
   uint8_t get_id();
 
   b2Vec2 get_position();

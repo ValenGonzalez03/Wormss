@@ -32,6 +32,10 @@ public:
   // Renderiza el misil pasado por parámetro según el estado del mismo
   void render(int frame);
 
+  int get_pos_x();
+
+  int get_pos_y();
+
   uint8_t get_id();
 };
 

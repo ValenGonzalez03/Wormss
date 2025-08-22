@@ -1,6 +1,10 @@
 #include "world.h"
 #include "box2d/box2d.h"
+#include "explosion_callback.h"
 #include <stdio.h>
+#include <chrono>
+
+#define EXPLOSION_RADIUS 3
 
 World::World() : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f)))  {
   world->SetContactListener(&contact_listener);
@@ -22,6 +26,23 @@ WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn
 MissileBody* World::create_missile(MissileBody* missile) {
   missiles.push_back(missile);
   return missile;
+}
+
+void World::create_explosion(MissileBody* missile) {
+  Explosion explosion (missile->get_pos_x(), missile->get_pos_y(), EXPLOSION_RADIUS);
+  for (int i = 0; i < NUM_RAYS; i++) {
+    float angle_rad = (i / (float)NUM_RAYS) * 360 * (b2_pi / 180.0f);
+    b2Vec2 center (missile->get_pos_x(), missile->get_pos_y());
+    b2Vec2 ray_dir ( EXPLOSION_RADIUS * sinf(angle_rad), EXPLOSION_RADIUS * cosf(angle_rad) );
+    b2Vec2 ray_end = center + ray_dir;
+
+    ExplosionCallback callback (i, explosion);
+    world->RayCast(&callback, center, ray_end);
+
+    explosion.update_ray_fraction(i, callback.get_ray_fraction());
+    //callback.evaluate_contact_for_bodies();
+  }
+  explosions.push_back(explosion);
 }
 
 void World::destroy_body(Body* body) {
@@ -52,11 +73,24 @@ void World::update_missiles() {
   for (std::list<MissileBody*>::iterator it = missiles.begin(); it != missiles.end();)
     {
       if ((*it)->has_exploded()) {
+        create_explosion(*it);
         destroy_body(*it);
         it = missiles.erase(it);
         std::cout << "KABOOM" << std::endl;
       } else {
         (*it)->update();
+        it++;
+      }
+    }
+}
+
+void World::update_explosions() {
+  for (std::list<Explosion>::iterator it = explosions.begin(); it != explosions.end();)
+    {
+      if ((it)->has_ended()) {
+        it = explosions.erase(it);
+      } else {
+        (it)->update();
         it++;
       }
     }
@@ -86,6 +120,15 @@ std::list<MissileAttr> World::get_missiles_attr() {
     missiles_attr.emplace_back(attr);
   }
   return missiles_attr;
+}
+
+std::list<ExplosionAttr> World::get_explosions_attr() {
+  std::list<ExplosionAttr> explosions_attr;
+  for (auto explosion : explosions) {
+    ExplosionAttr attr ({explosion.get_pos_x(), explosion.get_pos_y(), explosion.get_radius(), explosion.get_fraction_rays()});
+    explosions_attr.emplace_back(attr);
+  }
+  return explosions_attr;
 }
 
 void World::delete_worms() {

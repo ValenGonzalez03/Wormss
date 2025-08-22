@@ -2,6 +2,7 @@
 #define GAME_CONSTANTS_H_
 
 #include <cstdint>
+#include <vector>
 
 #define PIXEL_PER_METER 23.33f // 23,3 periodico (1 metro equivale a 23,33 pixeles)
 #define WORLD_HEIGHT 360 // En pixeles
@@ -46,6 +47,15 @@ struct MissileAttr {
     float pos_y; // En metros
     float angle; // En radianes
     uint8_t direction;
+};
+
+#define NUM_RAYS 16
+
+struct ExplosionAttr {
+    float pos_x;
+    float pos_y;
+    float radius;
+    std::vector<float> ray_fractions;
 };
 
 #endif

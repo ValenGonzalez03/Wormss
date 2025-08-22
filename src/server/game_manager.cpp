@@ -45,6 +45,8 @@ void GameManager::update() {
   world.update_worms();
 
   world.update_missiles();
+
+  world.update_explosions();
 }
 
 void GameManager::move(const uint8_t &player_id, const uint8_t &direction) {
@@ -118,6 +120,11 @@ GameState GameManager::create_state() {
   auto missiles_attr = world.get_missiles_attr();
   for (auto attr : missiles_attr) {
     game_state.add_missile(attr);
+  }
+
+  auto explosions_attr = world.get_explosions_attr();
+  for (auto attr : explosions_attr) {
+    game_state.add_explosion(attr);
   }
 
   return game_state;

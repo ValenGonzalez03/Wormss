@@ -56,12 +56,14 @@ int Client::run() {
     // ---------------------------------------------------------------------------
     // ---------------------------------------------------------------------------
     recv_world();
+
     
     start_threads();
-
+    
     
     int worms_amount = 0;
     // Esto claramente es una mala solucion pero por ahora sirve
+    std::cout << "LLEGA ACA EN CLIENT" << std::endl;
     last_game_state = receiver_queue.pop();
     std::cout << "Cantidad worms: " << (int) last_game_state.get_worms().size() << std::endl;
     for (auto worm_data : last_game_state.get_worms()) {
@@ -157,7 +159,7 @@ bool Client::func_to_execute() {
   // UPDATE ESTADO DEL JUEGO
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
-  client_sdl.world_view.update(game_state);
+  client_sdl.world_view.update(game_state, frame_ticks);
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // UPDATE ESTADO DEL JUEGO

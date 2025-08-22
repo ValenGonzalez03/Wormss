@@ -37,6 +37,14 @@ BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float wi
 // 	if (another_body->get_type() == WORM) {}
 // }
 
+float BeamBody::explosion_intersect_value(float fraction) {
+    return fraction;
+}
+
+void BeamBody::apply_explosion(b2Vec2& point, b2Vec2& normal) {
+    /* NADA */
+}
+
 void BeamBody::touch_beam(BeamBody* beam) {
     /* NADA */
 }

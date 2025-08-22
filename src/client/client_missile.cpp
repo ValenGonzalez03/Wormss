@@ -69,6 +69,14 @@ void Missile::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height,
   }
 }
 
+int Missile::get_pos_x() {
+  return pos_x;
+}
+
+int Missile::get_pos_y() {
+  return pos_y;
+}
+
 uint8_t Missile::get_id() {
   return id;
 }

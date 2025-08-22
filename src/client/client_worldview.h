@@ -6,6 +6,7 @@
 #include "client_resource_pool.h"
 #include "client_worm.h"
 #include "client_missile.h"
+#include "client_explosion.h"
 #include <vector>
 
 class WorldView {
@@ -15,6 +16,7 @@ private:
   std::vector<Beam> beams;
   std::map<uint8_t, Worm> worms;
   std::map<uint8_t, Missile> missiles;
+  std::vector<Explosion> explosions;
 
   void render_background();
 
@@ -33,9 +35,11 @@ public:
 
   Missile add_missile(MissileData data);
 
+  void add_explosion(ExplosionData data, int frame);
+
   // Recibe el estado de juego y actualiza la world_view
   // con los nuevos datos
-  void update(GameState &game_state);
+  void update(GameState &game_state, int frame);
 
   // Renderiza la world_view
   void render(int frame);

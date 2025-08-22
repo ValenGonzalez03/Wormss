@@ -18,6 +18,7 @@ add_executable(client ./src/client/client_main.cpp
 ./src/client/client_worldview.cpp
 ./src/client/client_worm.cpp
 ./src/client/client_missile.cpp
+./src/client/client_explosion.cpp
 ./src/client/client_protocol.cpp
 ./src/client/client_beam.cpp
 ./src/client/client_lobby.cpp
@@ -43,19 +44,20 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/server_game.cpp
 					  ./src/server/game_manager.cpp
 					  ./src/server/broadcaster.cpp
+					  ./src/server/explosion_callback.cpp
+					  ./src/server/server_explosion.cpp
 					  ./src/server/world.cpp
 					  ./src/server/bodies/body.cpp
 					  ./src/server/bodies/worm_body.cpp
 					  ./src/server/bodies/missile_body.cpp
 					  ./src/server/bodies/beam_body.cpp
-					  ./src/server/bodies/water_body.cpp
-					  ./src/server/bodies/weapons/bazooka.cpp
-					  ./src/server/bodies/weapons/banana.cpp
-					  ./src/server/bodies/weapons/dynamite.cpp
+					  #./src/server/bodies/water_body.cpp
+					  #./src/server/bodies/weapons/bazooka.cpp
+					  #./src/server/bodies/weapons/banana.cpp
+					  #./src/server/bodies/weapons/dynamite.cpp
 					  ./src/server/server_protocol.cpp
 					  ./src/server/contact_listener.cpp
 					  ./src/server/query_callback.cpp
-					  ./src/server/explosion_manager.cpp
 					  ./src/common/lib/socket.cpp 
 					  ./src/common/lib/liberror.cpp 
 					  ./src/common/lib/resolver.cpp 

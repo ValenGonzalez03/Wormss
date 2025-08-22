@@ -7,6 +7,7 @@
 #include "bodies/worm_body.h"
 #include "bodies/beam_body.h"
 #include "bodies/missile_body.h"
+#include "server_explosion.h"
 #include <list>
 #include <vector>
 #include <stdio.h>
@@ -19,6 +20,7 @@ private:
   std::list<WormBody*> worms;
   std::list<BeamBody*> beams;
   std::list<MissileBody*> missiles;
+  std::list<Explosion> explosions;
   std::list<Body*> bodies;
   std::string name = "";
   std::string background = "";
@@ -42,6 +44,8 @@ public:
 
   MissileBody* create_missile(MissileBody* missile);
 
+  void create_explosion(MissileBody* missile);
+
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 
   WormBody* get_worm(const uint8_t &player_id);
@@ -49,6 +53,8 @@ public:
   void update_worms();
 
   void update_missiles();
+
+  void update_explosions();
 
   int get_worms_number();
 
@@ -67,6 +73,8 @@ public:
   std::list<WormAttr> get_worms_attr();
 
   std::list<MissileAttr> get_missiles_attr();
+
+  std::list<ExplosionAttr> get_explosions_attr();
 
   std::list<BeamBody*> get_beams() {
     return this->beams;

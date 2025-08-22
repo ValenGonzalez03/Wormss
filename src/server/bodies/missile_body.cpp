@@ -36,6 +36,14 @@ void MissileBody::apply_initial_impulse(float aim_angle) {
   body->ApplyLinearImpulse(dir_vec, body->GetWorldCenter(), true);
 }
 
+float MissileBody::explosion_intersect_value(float fraction) {
+  return fraction;
+}
+
+void MissileBody::apply_explosion(b2Vec2& point, b2Vec2& normal) {
+  /* NADA */
+}
+
 b2Vec2 MissileBody::get_position() { return body->GetPosition(); }
 
 float MissileBody::get_pos_x() { return body->GetPosition().x; }

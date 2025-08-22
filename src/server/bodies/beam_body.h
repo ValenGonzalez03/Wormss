@@ -31,6 +31,10 @@ class BeamBody : public Body {
   	void stop_touching_beam(BeamBody* beam) override;
 
   	void stop_touching_missile(MissileBody* missile) override;
+
+	float explosion_intersect_value(float fraction) override;
+
+	void apply_explosion(b2Vec2& point, b2Vec2& normal) override;
 	
 	BeamBody(const BeamBody&) = delete;
 	BeamBody& operator=(const BeamBody&) = delete;

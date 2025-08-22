@@ -186,11 +186,89 @@ public:
   uint8_t get_id() { return missile_id; }
 };
 
+struct ExplosionData {
+  private:
+    float pos_x; // En metros
+    float pos_y; // En metros
+    float radius; // En radianes
+    std::vector<float> rays_fraction = std::vector<float> (NUM_RAYS);
+  
+  public:
+  
+    // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
+    explicit ExplosionData() : pos_x(0), pos_y(0), radius(0) {}
+  
+    explicit ExplosionData(float pos_x, float pos_y, float radius, std::vector<float> rays)
+        : pos_x(pos_x), pos_y(pos_y), radius(radius), rays_fraction(rays) {}
+  
+    explicit ExplosionData(Socket &skt) : pos_x(0), pos_y(0), radius(0) {
+      bool was_closed = false;
+      deserialize(skt, &was_closed);
+    }
+  
+    void deserialize(Socket &skt, bool *was_closed) {
+      // Recibo la position
+      uint16_t pos_x;
+      uint16_t pos_y;
+      skt.recvall(&pos_x, sizeof(pos_x), was_closed);
+      skt.recvall(&pos_y, sizeof(pos_y), was_closed);
+      float final_pos_x = ntohs(pos_x) / 100.0;
+      float final_pos_y = ntohs(pos_y) / 100.0;
+      this->pos_x = final_pos_x;
+      this->pos_y = final_pos_y;
+    
+      // Recibo el radio de la explosion
+      uint16_t radius;
+      skt.recvall(&radius, sizeof(radius), was_closed);
+      float final_radius = ntohs(radius) / 100.0;
+      this->radius = final_radius;
+  
+      for (int i = 0 ; i < NUM_RAYS ; i++) {
+        uint16_t ray;
+        skt.recvall(&ray, sizeof(ray), was_closed);
+        float final_ray = ntohs(ray) / 100.0;
+        rays_fraction.assign(i, final_ray);
+      }
+    }
+  
+    void serialize(Socket &skt, bool *was_closed) {    
+      // Envio la posicion
+      uint16_t pos_x = uint(this->pos_x * 100);
+      uint16_t pos_y = uint(this->pos_y * 100);
+      uint16_t pos_x_be = htons(pos_x);
+      uint16_t pos_y_be = htons(pos_y);
+      skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
+      skt.sendall(&pos_y_be, sizeof(pos_y_be), was_closed);
+      
+      // Envio el radio de la explosion
+      uint16_t radius = uint(this->radius * 100);
+      uint16_t radius_be = htons(radius);
+      skt.sendall(&radius_be, sizeof(radius_be), was_closed);
+      
+      for (int i = 0 ; i < NUM_RAYS ; i++) {
+        uint16_t ray = uint(rays_fraction[i] * 100);
+        uint16_t ray_be = htons(pos_x);
+        skt.sendall(&ray_be, sizeof(ray_be), was_closed);
+      }
+
+    }
+  
+    float get_pos_x() { return pos_x; }
+  
+    float get_pos_y() { return pos_y; }
+  
+    float get_radius() { return radius; }
+
+    std::vector<float> get_rays_fraction() { return rays_fraction; }
+  
+  };
+
 struct GameState {
 private:
   bool game_finished = false;
   std::map<uint8_t, WormData> worms_list;
   std::map<uint8_t, MissileData> missiles_list;
+  std::list<ExplosionData> explosions_list;
 
 public:
   GameState() : worms_list(std::map<uint8_t, WormData>()) {}
@@ -200,19 +278,27 @@ public:
   // Constructor que funciona como una deserializacion, recibe la tira de bytes
   // y devuelve un game state
   GameState(Socket &skt, bool *was_closed) : worms_list() {
+
     uint8_t worms_amount = 0;
     uint8_t missiles_amount = 0;
+    uint8_t explosions_amount = 0;
     skt.recvall(&worms_amount, sizeof(worms_amount), was_closed);
     skt.recvall(&missiles_amount, sizeof(missiles_amount), was_closed);
+    skt.recvall(&explosions_amount, sizeof(explosions_amount), was_closed);
+    
     for (int i = 0; i < worms_amount; i++) {
       WormData worm(skt);
       worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
-      //std::cout << "worms_list_size: " << (int) worms_list.size() << std::endl;
     }
     for (int i = 0; i < missiles_amount; i++) {
       MissileData missile(skt);
       missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
     }
+    for (int i = 0; i < explosions_amount; i++) {
+      ExplosionData explosion(skt);
+      explosions_list.push_back(explosion);
+    }
+    
     bool game_finished;
     skt.recvall(&game_finished, sizeof(game_finished), was_closed);
     this->game_finished = game_finished;
@@ -221,14 +307,21 @@ public:
   void serialize(Socket &skt, bool *was_closed) {
     uint8_t worms_amount = worms_list.size();
     uint8_t missiles_amount = missiles_list.size();
+    uint8_t explosions_amount = explosions_list.size();
     skt.sendall(&worms_amount, sizeof(worms_amount), was_closed);
     skt.sendall(&missiles_amount, sizeof(missiles_amount), was_closed);
+    skt.sendall(&explosions_amount, sizeof(explosions_amount), was_closed);
+
     for (auto &worm : worms_list) {
       worm.second.serialize(skt, was_closed);
     }
     for (auto &missile : missiles_list) {
       missile.second.serialize(skt, was_closed);
     }
+    for (auto &explosion : explosions_list) {
+      explosion.serialize(skt, was_closed);
+    }
+  
     skt.sendall(&game_finished, sizeof(game_finished), was_closed);
   }
 
@@ -244,6 +337,13 @@ public:
   void add_missile(MissileAttr& attr) {
     MissileData missile(attr.pos_x, attr.pos_y, attr.angle, attr.direction, attr.missile_id);
     missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
+  }
+
+  std::list<ExplosionData> get_explosions() { return explosions_list; }
+
+  void add_explosion(ExplosionAttr& attr) {
+    ExplosionData explosion (attr.pos_x, attr.pos_y, attr.radius, attr.ray_fractions);
+    explosions_list.push_back(explosion);
   }
 
   bool is_game_finished() const { return game_finished; }

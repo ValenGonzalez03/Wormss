@@ -1,8 +1,9 @@
 #ifndef RUNNABLE_COMMAND_GAME_H_
 #define RUNNABLE_COMMAND_GAME_H_
 
-#include "../game_manager.h"
 #include "command_runnable.h"
+
+class GameManager;
 
 class RunnableCommandGame : public RunnableCommand {
 

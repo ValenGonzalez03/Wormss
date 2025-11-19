@@ -2,7 +2,6 @@
 #include "beam_body.h"
 #include "worm_body.h"
 #include "missile_body.h"
-#include "../../common/game_constants.h"
 #include <stdio.h>
 
 BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width) : 
@@ -72,3 +71,7 @@ void BeamBody::stop_touching_missile(MissileBody* missile) {
 //void BeamBody::end_contact_with(Body* another_body) { }
 
 int BeamBody::get_type() {return BEAM;}
+
+BeamAttr BeamBody::get_attr() {
+    return BeamAttr {pos_x, pos_y, angle, width};
+}

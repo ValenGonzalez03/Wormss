@@ -46,14 +46,14 @@ Queue<std::shared_ptr<RunnableCommandGame>>& Player::get_commands_queue_game() {
 }
 
 void Player::manage_create_game() {
-    protocol.send_id(player_id);
-
     bool was_closed = false;
+    protocol.send_byte(player_id, &was_closed);
+
     auto world_names = games_handler.get_world_names();
     sender.send_worlds_names(world_names);
     uint8_t world_id = protocol.recv_world_id(&was_closed);
 
-    Game *game = games_handler.create_game(sender_queue, player_id, world_id); // Asigno sender_queue al broadcaster.
+    Game *game = games_handler.create_game(sender_queue, player_id, world_id); // Asigno sender_queue al broadcaseter.
     this->game = game;
     has_game_assigned = true;
 
@@ -65,12 +65,13 @@ void Player::manage_create_game() {
 }
 
 void Player::manage_join_game(uint8_t game_id) {
-    protocol.send_id(player_id);
-  
+    bool was_closed = false;
+    protocol.send_byte(player_id, &was_closed);
+    
     Game *game = games_handler.join_game(sender_queue, game_id, player_id);
     std::cout << "Client of id: "<< (int) player_id << " joined game id: " << int(game_id) << std::endl;
     sender.send_world(game->get_world());
-  
+    
     this->game = game;
     //in_game = true;
     //sender.start();

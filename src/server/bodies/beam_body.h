@@ -3,6 +3,7 @@
 
 #include "box2d/box2d.h"
 #include "body.h"
+#include "../../common/game_constants.h"
 #include <stdio.h>
 #include <iostream>
 
@@ -64,6 +65,8 @@ class BeamBody : public Body {
 	float get_width() {
 		return this->width;
 	}
+
+	BeamAttr get_attr();
 	
 	int get_type() override;
 };

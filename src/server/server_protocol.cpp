@@ -69,16 +69,6 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
   }
 }
 
-void ServerProtocol::send_game_state(GameState &game_state) {
-  bool was_closed = false;
-  game_state.serialize(skt, &was_closed);
-}
-
-void ServerProtocol::send_id(const uint8_t id) {
-  bool was_closed = false;
-  skt.sendall(&id, sizeof(id), &was_closed);
-}
-
 void ServerProtocol::close_socket() {
   skt.shutdown(2);
   skt.close();
@@ -114,47 +104,29 @@ std::string ServerProtocol::recv_string(bool* was_closed) {
   return std::string(buffer);
 }
 
+void ServerProtocol::send_byte(const uint8_t n, bool *was_closed) {
+  skt.sendall(&n, sizeof(n), was_closed);
+}
+
 void ServerProtocol::send_float(float n, bool *was_closed) {
-  uint16_t number = uint(n * 100);
-  uint16_t number_be = htons(number);
+  int16_t number = int(n * 100);
+  int16_t number_be = htons(number);
   skt.sendall(&number_be, sizeof(number_be), was_closed);
+}
+
+void ServerProtocol::send_bool(bool b, bool *was_closed) {
+  skt.sendall(&b, sizeof(b), was_closed);
 }
 
 
 //////////////////////////////////////////////////////////////////////
 ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
-//////////////////////////////////////////////////////////////////////
-void ServerProtocol::send_world(World &world) {
-  bool was_closed = false;
-  // Envio el nombre del mundo
-  send_string(world.get_name(), &was_closed);
 
-  // Envio el path del background del mundo
-  send_string(world.get_background(), &was_closed);
-
-  // Envio la cantidad de vigas y sus posiciones
-  uint16_t beams_number = world.get_beams().size();
-  uint16_t beams_number_be = htons(beams_number);
-  skt.sendall(&beams_number_be, sizeof(beams_number_be), &was_closed);
-  for (auto &beam : world.get_beams()) {
-    send_beam(*beam, &was_closed);
-  }
-  // Envio la cantidad de spawn points y sus posiciones
-  // uint16_t spawn_points_number = world.get_spawn_points().size();
-  // uint16_t spawn_points_number_be = htons(spawn_points_number);
-  // skt.sendall(&spawn_points_number, sizeof(spawn_points_number), &was_closed);
-  // for (auto spawn_point : world.get_spawn_points()) {
-  //   send_spawn_points(spawn_point, &was_closed);
-  // }
-}
-
-void ServerProtocol::send_beam(BeamBody &beam, bool *was_closed) {
-  int16_t beam_angle = static_cast<int16_t>(beam.get_angle());
-  int16_t beam_angle_be = htons(beam_angle);
-  send_float(beam.get_pos_x(), was_closed);
-  send_float(beam.get_pos_y(), was_closed);
-  skt.sendall(&beam_angle_be, sizeof(beam_angle_be), was_closed);
-  send_float(beam.get_width(), was_closed);
+void ServerProtocol::send_beam(BeamAttr beam_attr, bool *was_closed) {
+  send_float(beam_attr.pos_x, was_closed);
+  send_float(beam_attr.pos_y, was_closed);
+  send_float(beam_attr.angle, was_closed);
+  send_float(beam_attr.width, was_closed);
 }
 
 void ServerProtocol::send_spawn_points(std::vector<float> spawn_point, bool *was_closed) {
@@ -162,8 +134,7 @@ void ServerProtocol::send_spawn_points(std::vector<float> spawn_point, bool *was
   send_float(spawn_point[1], was_closed);
 }
 
-void ServerProtocol::send_worlds_names(
-    const std::vector<std::string>& world_names, bool *was_closed) {
+void ServerProtocol::send_worlds_names(const std::vector<std::string>& world_names, bool *was_closed) {
   uint16_t worlds_number = world_names.size();
   uint16_t worlds_number_be = htons(worlds_number);
   skt.sendall(&worlds_number_be, sizeof(worlds_number_be), was_closed);
@@ -172,6 +143,5 @@ void ServerProtocol::send_worlds_names(
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
+///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
+//////////////////////////////////////////////////////////////////////

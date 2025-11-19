@@ -7,7 +7,9 @@ void ClientReceiverThread::run() {
   // Blocking push
   while (keep_playing && _keep_running) {
     try {
-      GameState game_state = prot.process_game_state();
+      bool was_closed = false;
+      GameState game_state (prot, &was_closed);
+      //GameState game_state = prot.process_game_state();
       receiver_queue.push(game_state);
       
     } catch (const std::exception &e) {

@@ -27,7 +27,7 @@ void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_clos
   CreateGame create_comm = CreateGame();
   prot.send_command(create_comm);
 
-  player_id = prot.receive_id();
+  player_id = prot.recv_byte(was_closed);
   std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 
   std::vector<std::string> world_names = prot.recv_worlds_names(was_closed);
@@ -37,7 +37,7 @@ void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_clos
   
   prot.send_world_id(world_id, was_closed);
 
-  int game_id = prot.receive_id();
+  int game_id = prot.recv_byte(was_closed);
   std::cout << "GAME ID: " << game_id << std::endl;
 
   wait_start_command(prot, game_id);
@@ -51,7 +51,7 @@ void Lobby::join_game(ClientProtocol& prot, uint8_t& player_id, bool *was_closed
   JoinGame join_comm(game_id);
   prot.send_command(join_comm);
 
-  player_id = prot.receive_id();
+  player_id = prot.recv_byte(was_closed);
   std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 }
 

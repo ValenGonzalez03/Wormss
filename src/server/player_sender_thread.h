@@ -5,6 +5,7 @@
 #include "../common/lib/queue.h"
 #include "../common/lib/socket.h"
 #include "../common/lib/thread.h"
+#include "world.h"
 #include "server_protocol.h"
 
 class PlayerSender : public Thread {
@@ -24,6 +25,8 @@ public:
   void send_id(const uint8_t id);
 
   void send_worlds_names(const std::vector<std::string>& world_names);
+
+  void send_beams_number();
 
   void send_world(World& world);
 

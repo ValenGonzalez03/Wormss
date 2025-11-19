@@ -8,7 +8,7 @@
 #include <utility>
 
 #include "../common/commands/command.h"
-#include "../common/game_state.h"
+#include "../common/game_constants.h"
 #include "../common/lib/liberror.h"
 #include "../common/lib/socket.h"
 
@@ -36,15 +36,13 @@ public:
 
   std::shared_ptr<RunnableCommandLobby> process_command_lobby();
 
-  void send_game_state(GameState &game_state);
-
-  void send_id(const uint8_t id);
-
   bool recv_client_ready(bool *was_closed);
-
+  
   int recv_world_id(bool* was_closed);
-
+  
   std::string recv_string(bool* was_closed);
+
+  void send_byte(const uint8_t id, bool *was_closed);
 
   // Envía el tamaño de una cadena y luego la cadena
   void send_string(std::string str, bool *was_closed);
@@ -54,17 +52,14 @@ public:
   // dividirlo por 100 para obtener otra vez el num original
   void send_float(float n, bool *was_closed);
 
+  void send_bool(bool b, bool *was_closed);
+
   //////////////////////////////////////////////////////////////////////
   ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
-  //////////////////////////////////////////////////////////////////////
-
-  // Envía el mundo pasado por parámetro por el socket
-  // (nombre, background path, vigas, spawn_points)
-  void send_world(World &world);
 
   // Envía las características de una viga
   // (pos_x, pos_y, angle, width)
-  void send_beam(BeamBody &beam, bool *was_closed);
+  void send_beam(BeamAttr beam_attr, bool *was_closed);
 
   // Envía las carac de un spawn_point del mundo
   void send_spawn_points(std::vector<float> spawn_point, bool *was_closed);
@@ -74,8 +69,7 @@ public:
   void send_worlds_names(const std::vector<std::string>& world_names,
                          bool *was_closed);
 
-  //////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////
+  ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
   //////////////////////////////////////////////////////////////////////
 
   void close_socket();

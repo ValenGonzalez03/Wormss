@@ -91,13 +91,14 @@ void Client::recv_world() {
   std::string background_name = prot.recv_string(&was_closed);
   client_sdl.world_view.set_background(background_name);
 
-  int beams_number = prot.recv_beams_number(&was_closed);
+  uint8_t beams_number = prot.recv_byte(&was_closed);
+  //int beams_number = prot.recv_beams_number(&was_closed);
 
   std::cout << "Nombre mundo: " << world_name <<  ", Cantidad vigas: " << (int) beams_number << std::endl;
   for (int i = 0; i < beams_number; i ++) {
     BeamAttr beam_attr = prot.recv_beam(&was_closed);
 
-    if (beam_attr.width == 6 || beam_attr.width == 3) {
+    if (beam_attr.width == 6.0f || beam_attr.width == 3.0f) {
       client_sdl.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width, BEAM_HEIGHT, beam_attr.angle);
     } else {
       std::cout << "Error tamanio viga" << std::endl;

@@ -63,11 +63,10 @@ bool ClientManager::threads_have_finished() {
   return !(receiver->is_alive()) || !(sender.is_alive());
 }
 
-
 void ClientManager::finish() {
-  protocol.close_socket();
   sender.join();
   receiver->join();
+  protocol.close_socket();
 }
 
 void ClientManager::kill() {

@@ -37,7 +37,7 @@ struct WormAttr {
 struct BeamAttr {
     float pos_x; // En metros
     float pos_y; // En metros
-    int angle; // En grados
+    float angle; // En grados
     float width; // En metros
 };
 

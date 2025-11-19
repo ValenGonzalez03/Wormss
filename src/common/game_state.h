@@ -9,7 +9,8 @@
 
 #include "position.h"
 #include "game_constants.h"
-#include "lib/socket.h"
+#include "../client/client_protocol.h"
+#include "../server/server_protocol.h"
 
 
 struct WormData {
@@ -29,66 +30,47 @@ public:
   explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st, float angle)
       : player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st), aim_angle(angle) {}
 
-  explicit WormData(Socket &skt) : pos_x(0), pos_y(0) {
+  explicit WormData(ClientProtocol &prot) : pos_x(0), pos_y(0) {
     bool was_closed = false;
-    deserialize(skt, &was_closed);
+    deserialize(prot, &was_closed);
   }
 
   // Recibe la pos, la direccion, el state, etc del gusano (Lado cliente)
-  void deserialize(Socket &skt, bool *was_closed) {
+  void deserialize(ClientProtocol &prot, bool *was_closed) {
     // Recibo el player_id
-    skt.recvall(&player_id, sizeof(player_id), was_closed);
+    this->player_id = prot.recv_byte(was_closed);
   
     // Recibo la position
-    uint16_t pos_x;
-    uint16_t pos_y;
-    skt.recvall(&pos_x, sizeof(pos_x), was_closed);
-    skt.recvall(&pos_y, sizeof(pos_y), was_closed);
-    float final_pos_x = ntohs(pos_x) / 100.0;
-    float final_pos_y = ntohs(pos_y) / 100.0;
-    // std::cout << "final_pos_x: " << final_pos_x << std::endl;
-    // std::cout << "final_pos_y: " << final_pos_y << std::endl;
-    this->pos_x = final_pos_x;
-    this->pos_y = final_pos_y;
-  
+    this->pos_x = prot.recv_float(was_closed);
+    this->pos_y = prot.recv_float(was_closed);
+
     // Recibo la direccion
-    skt.recvall(&(this->direction), sizeof(this->direction), was_closed);
+    this->direction = prot.recv_byte(was_closed);
   
     // Recibo el estado
-    skt.recvall(&(this->state), sizeof(this->state), was_closed);
+    this->state = static_cast<WormState>(prot.recv_byte(was_closed));
   
     // Recibo el angulo de apuntado
-    int angle_int_net;
-    skt.recvall(&angle_int_net, sizeof(angle_int_net), was_closed);
-    int angle_int = ntohl(angle_int_net);
-    this->aim_angle = float(angle_int) / float(100.0);
+    this->aim_angle = prot.recv_float(was_closed);
   }
 
   // Envia los datos del gusano (Lado servidor)
-  void serialize(Socket &skt, bool *was_closed) {
+  void serialize(ServerProtocol &prot, bool *was_closed) {
     // Envio el player_id
-    skt.sendall(&(this->player_id), sizeof(this->player_id), was_closed);
+    prot.send_byte(this->player_id, was_closed);
   
     // Envio la posicion
-    // std::cout << "final_pos_x: " << pos_x << std::endl;
-    // std::cout << "final_pos_y: " << pos_y << std::endl;
-    uint16_t pos_x = uint(this->pos_x * 100);
-    uint16_t pos_y = uint(this->pos_y * 100);
-    uint16_t pos_x_be = htons(pos_x);
-    uint16_t pos_y_be = htons(pos_y);
-    skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
-    skt.sendall(&pos_y_be, sizeof(pos_y_be), was_closed);
+    prot.send_float(pos_x, was_closed);
+    prot.send_float(pos_y, was_closed);
   
     // Envio la direccion
-    skt.sendall(&(this->direction), sizeof(this->direction), was_closed);
+    prot.send_byte(this->direction, was_closed); // Si bien pone send_id, es un uint8_t. Luego debo cambiarle el nombre a la funcion
   
     // Envio el estado
-    skt.sendall(&(this->state), sizeof(this->state), was_closed);
+    prot.send_byte(this->state, was_closed);
   
     // Envio el angulo de apuntado
-    int angle_int = int(this->aim_angle * 100);
-    int angle_int_net = htonl(angle_int);
-    skt.sendall(&angle_int_net, sizeof(angle_int_net), was_closed);
+    prot.send_float(this->aim_angle, was_closed);
   }
 
   uint8_t get_player_id() { return player_id; }
@@ -103,8 +85,6 @@ public:
 
   float get_aim_angle() { return aim_angle; }
 
-  // Devuelve la pos del gusano. Uso const para evitar que sea modificada
-  //Position get_position() const { return pos; }
 };
 
 struct MissileData {
@@ -123,56 +103,39 @@ public:
   explicit MissileData(float pos_x, float pos_y, float angle, uint8_t dir, uint8_t id)
       : pos_x(pos_x), pos_y(pos_y), angle(angle), direction(dir), missile_id(id) {}
 
-  explicit MissileData(Socket &skt) : pos_x(0), pos_y(0), angle(0), direction(0), missile_id(0) {
+  explicit MissileData(ClientProtocol &prot) : pos_x(0), pos_y(0), angle(0), direction(0), missile_id(0) {
     bool was_closed = false;
-    deserialize(skt, &was_closed);
+    deserialize(prot, &was_closed);
   }
 
-  void deserialize(Socket &skt, bool *was_closed) {
+  void deserialize(ClientProtocol &prot, bool *was_closed) {
     // Recibo el id del misil
-    skt.recvall(&missile_id, sizeof(missile_id), was_closed);
+    this->missile_id = prot.recv_byte(was_closed);
 
     // Recibo la position
-    uint16_t pos_x;
-    uint16_t pos_y;
-    skt.recvall(&pos_x, sizeof(pos_x), was_closed);
-    skt.recvall(&pos_y, sizeof(pos_y), was_closed);
-    float final_pos_x = ntohs(pos_x) / 100.0;
-    float final_pos_y = ntohs(pos_y) / 100.0;
-    // std::cout << "final_pos_x: " << final_pos_x << std::endl;
-    // std::cout << "final_pos_y: " << final_pos_y << std::endl;
-    this->pos_x = final_pos_x;
-    this->pos_y = final_pos_y;
+    this->pos_x = prot.recv_float(was_closed);
+    this->pos_y = prot.recv_float(was_closed);
   
     // Recibo el angulo del misil
-    int angle_int_net;
-    skt.recvall(&angle_int_net, sizeof(angle_int_net), was_closed);
-    int angle_int = ntohl(angle_int_net);
-    this->angle = float(angle_int) / float(100.0);
+    this->angle = prot.recv_float(was_closed);
 
     // Recibo la direccion del misil
-    skt.recvall(&direction, sizeof(direction), was_closed);
+    this->direction = prot.recv_byte(was_closed);
   }
 
-  void serialize(Socket &skt, bool *was_closed) {
+  void serialize(ServerProtocol &prot, bool *was_closed) {
     // Envio el id del misil
-    skt.sendall(&(missile_id), sizeof(missile_id), was_closed);
+    prot.send_byte(missile_id, was_closed);
 
     // Envio la posicion
-    uint16_t pos_x = uint(this->pos_x * 100);
-    uint16_t pos_y = uint(this->pos_y * 100);
-    uint16_t pos_x_be = htons(pos_x);
-    uint16_t pos_y_be = htons(pos_y);
-    skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
-    skt.sendall(&pos_y_be, sizeof(pos_y_be), was_closed);
+    prot.send_float(pos_x, was_closed);
+    prot.send_float(pos_y, was_closed);
 
     // Envio el angulo del misil
-    int angle_int = int(this->angle * 100);
-    int angle_int_net = htonl(angle_int);
-    skt.sendall(&angle_int_net, sizeof(angle_int_net), was_closed);
+    prot.send_float(angle, was_closed);
 
     // Envio la direccion del misil
-    skt.sendall(&direction, sizeof(direction), was_closed);
+    prot.send_byte(direction, was_closed);
   }
 
   float get_pos_x() { return pos_x; }
@@ -201,56 +164,38 @@ struct ExplosionData {
     explicit ExplosionData(float pos_x, float pos_y, float radius, std::vector<float> rays)
         : pos_x(pos_x), pos_y(pos_y), radius(radius), rays_fraction(rays) {}
   
-    explicit ExplosionData(Socket &skt) : pos_x(0), pos_y(0), radius(0) {
+    explicit ExplosionData(ClientProtocol &prot) : pos_x(0), pos_y(0), radius(0) {
       bool was_closed = false;
-      deserialize(skt, &was_closed);
+      deserialize(prot, &was_closed);
     }
   
-    void deserialize(Socket &skt, bool *was_closed) {
+    void deserialize(ClientProtocol &prot, bool *was_closed) {
       // Recibo la position
-      uint16_t pos_x;
-      uint16_t pos_y;
-      skt.recvall(&pos_x, sizeof(pos_x), was_closed);
-      skt.recvall(&pos_y, sizeof(pos_y), was_closed);
-      float final_pos_x = ntohs(pos_x) / 100.0;
-      float final_pos_y = ntohs(pos_y) / 100.0;
-      this->pos_x = final_pos_x;
-      this->pos_y = final_pos_y;
+      this->pos_x = prot.recv_float(was_closed);
+      this->pos_y = prot.recv_float(was_closed);
     
       // Recibo el radio de la explosion
-      uint16_t radius;
-      skt.recvall(&radius, sizeof(radius), was_closed);
-      float final_radius = ntohs(radius) / 100.0;
-      this->radius = final_radius;
+      this->radius = prot.recv_float(was_closed);
   
+      // Recibo las fraciones de cada rayo de la explosion
       for (int i = 0 ; i < NUM_RAYS ; i++) {
-        uint16_t ray;
-        skt.recvall(&ray, sizeof(ray), was_closed);
-        float final_ray = ntohs(ray) / 100.0;
+        float final_ray = prot.recv_float(was_closed);
         rays_fraction.assign(i, final_ray);
       }
     }
   
-    void serialize(Socket &skt, bool *was_closed) {    
+    void serialize(ServerProtocol &prot, bool *was_closed) {    
       // Envio la posicion
-      uint16_t pos_x = uint(this->pos_x * 100);
-      uint16_t pos_y = uint(this->pos_y * 100);
-      uint16_t pos_x_be = htons(pos_x);
-      uint16_t pos_y_be = htons(pos_y);
-      skt.sendall(&pos_x_be, sizeof(pos_x_be), was_closed);
-      skt.sendall(&pos_y_be, sizeof(pos_y_be), was_closed);
+      prot.send_float(pos_x, was_closed);
+      prot.send_float(pos_y, was_closed);
       
       // Envio el radio de la explosion
-      uint16_t radius = uint(this->radius * 100);
-      uint16_t radius_be = htons(radius);
-      skt.sendall(&radius_be, sizeof(radius_be), was_closed);
+      prot.send_float(radius, was_closed);
       
+      // Envio las fraciones de cada rayo de la explosion
       for (int i = 0 ; i < NUM_RAYS ; i++) {
-        uint16_t ray = uint(rays_fraction[i] * 100);
-        uint16_t ray_be = htons(pos_x);
-        skt.sendall(&ray_be, sizeof(ray_be), was_closed);
+        prot.send_float(rays_fraction[i], was_closed);
       }
-
     }
   
     float get_pos_x() { return pos_x; }
@@ -277,52 +222,45 @@ public:
 
   // Constructor que funciona como una deserializacion, recibe la tira de bytes
   // y devuelve un game state
-  GameState(Socket &skt, bool *was_closed) : worms_list() {
+  GameState(ClientProtocol &prot, bool *was_closed) : worms_list() {
 
-    uint8_t worms_amount = 0;
-    uint8_t missiles_amount = 0;
-    uint8_t explosions_amount = 0;
-    skt.recvall(&worms_amount, sizeof(worms_amount), was_closed);
-    skt.recvall(&missiles_amount, sizeof(missiles_amount), was_closed);
-    skt.recvall(&explosions_amount, sizeof(explosions_amount), was_closed);
-    
+    uint8_t worms_amount = prot.recv_byte(was_closed);
+    uint8_t missiles_amount = prot.recv_byte(was_closed);
+    uint8_t explosions_amount = prot.recv_byte(was_closed);
+
     for (int i = 0; i < worms_amount; i++) {
-      WormData worm(skt);
+      WormData worm(prot);
       worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
     }
     for (int i = 0; i < missiles_amount; i++) {
-      MissileData missile(skt);
+      MissileData missile(prot);
       missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
     }
     for (int i = 0; i < explosions_amount; i++) {
-      ExplosionData explosion(skt);
+      ExplosionData explosion(prot);
       explosions_list.push_back(explosion);
     }
     
-    bool game_finished;
-    skt.recvall(&game_finished, sizeof(game_finished), was_closed);
-    this->game_finished = game_finished;
+    this->game_finished = static_cast<bool>(prot.recv_byte(was_closed));
   }
 
-  void serialize(Socket &skt, bool *was_closed) {
-    uint8_t worms_amount = worms_list.size();
-    uint8_t missiles_amount = missiles_list.size();
-    uint8_t explosions_amount = explosions_list.size();
-    skt.sendall(&worms_amount, sizeof(worms_amount), was_closed);
-    skt.sendall(&missiles_amount, sizeof(missiles_amount), was_closed);
-    skt.sendall(&explosions_amount, sizeof(explosions_amount), was_closed);
+  void serialize(ServerProtocol &prot, bool *was_closed) {
+    prot.send_byte(worms_list.size(), was_closed);
+    prot.send_byte(missiles_list.size(), was_closed);
+    prot.send_byte(explosions_list.size(), was_closed);
 
     for (auto &worm : worms_list) {
-      worm.second.serialize(skt, was_closed);
+      worm.second.serialize(prot, was_closed);
     }
     for (auto &missile : missiles_list) {
-      missile.second.serialize(skt, was_closed);
+      missile.second.serialize(prot, was_closed);
     }
     for (auto &explosion : explosions_list) {
-      explosion.serialize(skt, was_closed);
+      explosion.serialize(prot, was_closed);
     }
   
-    skt.sendall(&game_finished, sizeof(game_finished), was_closed);
+    uint8_t finished = static_cast<uint8_t>(this->game_finished);
+    prot.send_byte(game_finished, was_closed);
   }
 
   std::map<uint8_t, WormData> get_worms() { return worms_list; }

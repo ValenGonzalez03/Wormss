@@ -1,31 +1,31 @@
 #include "client_protocol.h"
 
 #include "../common/protocol_codes.h"
+#include "../common/game_constants.h"
+#include <arpa/inet.h>
 
 ClientProtocol::ClientProtocol(Socket &&socket) : skt(std::move(socket)) {}
-
-uint8_t ClientProtocol::receive_id() {
-  bool was_closed = false;
-  uint8_t id = 0;
-  // esto habria que chequearlo, no se si funcionaria bien
-  skt.recvall(&id, sizeof(id), &was_closed);
-  return id;
-}
 
 void ClientProtocol::send_command(Command &cmd) {
   bool was_closed = false;
   cmd.send(skt, &was_closed);
 }
 
-GameState ClientProtocol::process_game_state() {
-  bool was_closed = false;
-  return GameState(skt, &was_closed);
-}
+// GameState ClientProtocol::process_game_state() {
+//   bool was_closed = false;
+//   return GameState(*this, &was_closed);
+// }
 
 void ClientProtocol::send_client_ready() {
   bool was_closed = false;
   uint8_t code = CODE_PLAYER_COMM::CLIENT_READY;
   skt.sendall(&code, sizeof(code), &was_closed);
+}
+
+uint8_t ClientProtocol::recv_byte(bool *was_closed) {
+  uint8_t b = 0;
+  skt.recvall(&b, sizeof(b), was_closed);
+  return b;
 }
 
 std::string ClientProtocol::recv_string(bool *was_closed) {
@@ -46,11 +46,17 @@ void ClientProtocol::send_string(std::string str, bool *was_closed) {
 }
 
 float ClientProtocol::recv_float(bool *was_closed) {
-  uint16_t number;
+  int16_t number;
   skt.recvall(&number, sizeof(number), was_closed);
-  uint16_t number_be = ntohs(number);
-  float final_number = number_be / 100;
+  int16_t number_be = ntohs(number);
+  float final_number = number_be / 100.0f;
   return final_number;
+}
+
+bool ClientProtocol::recv_bool(bool *was_closed) {
+  bool b = false;
+  skt.recvall(&b, sizeof(b), was_closed);
+  return b;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -86,18 +92,13 @@ int ClientProtocol::recv_beams_number(bool *was_closed) {
 }
 
 BeamAttr ClientProtocol::recv_beam(bool *was_closed) {
-  uint16_t beam_angle;
 
   float pos_x = recv_float(was_closed);
   float pos_y = recv_float(was_closed);
-  skt.recvall(&beam_angle, sizeof(beam_angle), was_closed);
-
-  uint16_t beam_angle_be = ntohs(beam_angle);
-  int beam_angle_int = static_cast<int>(beam_angle_be);
-
+  float angle = recv_float(was_closed);
   float width = recv_float(was_closed);
 
-  BeamAttr data {pos_x, pos_y, beam_angle_int, width};
+  BeamAttr data {pos_x, pos_y, angle, width};
   return data;
 }
 

@@ -14,7 +14,7 @@ bool Explosion::has_ended() {
 }
 
 void Explosion::update_ray_fraction(int ray_number, float new_fraction) {
-	fraction_rays.assign(ray_number, new_fraction);
+	fraction_rays[ray_number] = new_fraction;
 }
 
 float Explosion::get_pos_x() {

@@ -31,14 +31,15 @@ MissileBody* World::create_missile(MissileBody* missile) {
 void World::create_explosion(MissileBody* missile) {
   Explosion explosion (missile->get_pos_x(), missile->get_pos_y(), EXPLOSION_RADIUS);
   for (int i = 0; i < NUM_RAYS; i++) {
-    float angle_rad = (i / (float)NUM_RAYS) * 360 * (b2_pi / 180.0f);
+    float angle_rad = (i / (float)NUM_RAYS) * 2.0f * b2_pi;
     b2Vec2 center (missile->get_pos_x(), missile->get_pos_y());
-    b2Vec2 ray_dir ( EXPLOSION_RADIUS * sinf(angle_rad), EXPLOSION_RADIUS * cosf(angle_rad) );
+    b2Vec2 ray_dir ( EXPLOSION_RADIUS * sin(angle_rad), EXPLOSION_RADIUS * cos(angle_rad) );
     b2Vec2 ray_end = center + ray_dir;
 
     ExplosionCallback callback (i, explosion);
     world->RayCast(&callback, center, ray_end);
 
+    //std::cout << "Ray fraction n° " << i << ": " << callback.get_ray_fraction() << std::endl;
     explosion.update_ray_fraction(i, callback.get_ray_fraction());
     //callback.evaluate_contact_for_bodies();
   }

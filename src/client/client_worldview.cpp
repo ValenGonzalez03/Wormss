@@ -72,7 +72,7 @@ void WorldView::add_explosion(ExplosionData data, int frame) {
   int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y());
   int radius_px = convert_meters_to_pixels_x(data.get_radius());
 
-  Explosion explosion (pos_x_px, pos_y_px, radius_px, frame, renderer);
+  Explosion explosion (pos_x_px, pos_y_px, radius_px, data.get_rays_fraction(), frame, renderer);
   explosions.emplace_back(explosion);
 }
 

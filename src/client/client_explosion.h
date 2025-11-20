@@ -10,6 +10,7 @@ private:
   int pos_x; // En pixeles
   int pos_y; // En pixeles
   float radius; // En pixeles
+  std::vector<float> ray_fractions;
   int frame_where_started;
   bool finished = false;
   //std::vector<SDL2pp::Texture *> texture; // Vector de texturas
@@ -20,7 +21,7 @@ public:
   explicit Explosion();
 
   // Crea un Missile con un renderer y las texturas correspondientes
-  explicit Explosion(int pos_x, int pos_y, int radius, int start_frame, SDL2pp::Renderer &rend);
+  explicit Explosion(int pos_x, int pos_y, int radius, std::vector<float> fractions, int start_frame, SDL2pp::Renderer &rend);
 
   void update(int frame);
 

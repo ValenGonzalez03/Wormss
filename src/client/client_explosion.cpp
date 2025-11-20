@@ -5,9 +5,9 @@
 
 #define EXPLOSION_DURATION_MS 3 * 1000
 
-Explosion::Explosion(int pos_x, int pos_y, int radius, int start_frame, SDL2pp::Renderer &rend) 
+Explosion::Explosion(int pos_x, int pos_y, int radius, std::vector<float> ray_fractions, int start_frame, SDL2pp::Renderer &rend) 
   :
-  pos_x(pos_x), pos_y(pos_y), radius(radius), frame_where_started(start_frame), renderer(rend)
+  pos_x(pos_x), pos_y(pos_y), radius(radius), ray_fractions(ray_fractions), frame_where_started(start_frame), renderer(rend)
   {}
 
 void Explosion::update(int frame) {
@@ -22,12 +22,15 @@ void Explosion::render(int frame) {
   renderer.SetDrawColor(c);
   if (std::getenv("DEBUG") != NULL) {
     for (int i = 0; i < NUM_RAYS; i++) {
-      float angle_rad = (i / (float)NUM_RAYS) * 360 * (b2_pi / 180.0f);
+      float angle_rad = (i / (float)NUM_RAYS) * 2.0f * b2_pi;
+      //std::cout << "fraction n° " << i << ": " << ray_fractions[i] << std::endl;
+      float radius_fraction = ray_fractions[i] * radius;
       SDL2pp::Point center (pos_x, pos_y);
-      SDL2pp::Point ray_dir ( radius * sinf(angle_rad), radius * cosf(angle_rad) );
-      SDL2pp::Point ray_end = center + ray_dir;
+      SDL2pp::Point ray_dir ( radius_fraction * sin(angle_rad), -radius_fraction * cos(angle_rad) );
+      SDL2pp::Point ray_end = (center + ray_dir);
       renderer.DrawLine(center, ray_end);
     }
+    //std::cout << std::endl;
   }
 }
 

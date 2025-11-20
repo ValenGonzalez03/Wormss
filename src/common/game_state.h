@@ -180,7 +180,7 @@ struct ExplosionData {
       // Recibo las fraciones de cada rayo de la explosion
       for (int i = 0 ; i < NUM_RAYS ; i++) {
         float final_ray = prot.recv_float(was_closed);
-        rays_fraction.assign(i, final_ray);
+        rays_fraction[i] = final_ray;
       }
     }
   
@@ -220,8 +220,7 @@ public:
 
   explicit GameState(const std::map<uint8_t, WormData> &list) : worms_list(list) {}
 
-  // Constructor que funciona como una deserializacion, recibe la tira de bytes
-  // y devuelve un game state
+  // Constructor que funciona como una deserializacion, recibe la tira de bytes y devuelve un game state
   GameState(ClientProtocol &prot, bool *was_closed) : worms_list() {
 
     uint8_t worms_amount = prot.recv_byte(was_closed);

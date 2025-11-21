@@ -1,6 +1,9 @@
 //Fuente: https://www.iforce2d.net/b2dtut/explosions
 
 #include "server_explosion.h"
+#include <iostream>
+
+#define BLAST_POWER 3.0f
 
 Explosion::Explosion(float pos_x, float pos_y, float radius) : pos_x(pos_x), pos_y(pos_y), radius(radius) 
 {}
@@ -15,6 +18,28 @@ bool Explosion::has_ended() {
 
 void Explosion::update_ray_fraction(int ray_number, float new_fraction) {
 	fraction_rays[ray_number] = new_fraction;
+}
+
+void Explosion::try_add_affected_body(Body *body) {
+	if ((affected_bodies.find(body) == affected_bodies.end()) && (body->is_affected_by_explosions())) {
+		affected_bodies[body] = BodyExplosionInfo {b2Vec2(0,0), b2Vec2(0,0), 0};
+	}
+}
+
+void Explosion::apply_explosion_to_bodies() {
+	for (auto& [body_ptr, info] : affected_bodies) {
+		BodyExplosionInfo expl_info = body_ptr->get_explosion_info();
+		apply_explosion_impulse(body_ptr, expl_info, BLAST_POWER);
+	}
+}
+
+void Explosion::apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_info, float blast_power) {
+	b2Body* body_b2 = body->get_body();
+	float inv_distance = 1 / explosion_info.fraction_force;
+	float impulse_mag = blast_power * inv_distance * inv_distance;
+	std::cout << "fraction: " << explosion_info.fraction_force << std::endl;
+	std::cout << "inv_distance: " << inv_distance << std::endl;
+	body_b2->ApplyLinearImpulse(impulse_mag * explosion_info.impulse_dir, explosion_info.apply_point, true);
 }
 
 float Explosion::get_pos_x() {
@@ -52,11 +77,3 @@ std::vector<float> Explosion::get_fraction_rays() {
 // }
 
 
-// void Explosion::applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower) {
-// 	b2Vec2 blastDir = applyPoint - blastCenter;
-//     float distance = blastDir.Normalize();
-      
-//     float invDistance = 1 / distance;
-//     float impulseMag = blastPower * invDistance * invDistance;
-// 	body->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
-// }

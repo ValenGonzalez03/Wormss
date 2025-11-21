@@ -24,6 +24,8 @@ WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int heal
   body->CreateFixture(&fixtureDef);
   body->SetFixedRotation(true);
 
+  affected_by_explosions = true;
+
   UserData* data = new UserData {BODY_TYPES::WORM, this};
   body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
 
@@ -177,8 +179,31 @@ float WormBody::explosion_intersect_value(float fraction) {
   return 1;
 }
 
-void WormBody::apply_explosion(b2Vec2& point, b2Vec2& normal) {
-  
+void WormBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) {
+  num_ray_contacts++;
+  b2Vec2 ray_direction = b2Vec2(-normal.x, -normal.y);
+  impulse_dir += ray_direction;
+  apply_point += point;
+  if (fraction_force < fraction) {
+    fraction_force = fraction;
+  }
+}
+
+BodyExplosionInfo WormBody::get_explosion_info() {
+  auto final_impulse_dir =  (1 / static_cast<float>(num_ray_contacts)) * impulse_dir;
+  auto final_apply_point =  (1 / static_cast<float>(num_ray_contacts)) * apply_point;
+
+  std::cout << "num_ray_contacts: " << num_ray_contacts << std::endl;
+  std::cout << "final_impulse_dir: (" << final_impulse_dir.x << ", " << final_impulse_dir.y << ")" << std::endl;
+  std::cout << "final_apply_point: (" << final_apply_point.x << ", " << final_apply_point.y << ")" << std::endl;
+
+  auto body_explosion_info = BodyExplosionInfo {final_apply_point, final_impulse_dir, fraction_force};
+
+  num_ray_contacts = 0;
+  impulse_dir = b2Vec2(0,0);
+  apply_point = b2Vec2(0,0);
+
+  return body_explosion_info;
 }
 
 bool WormBody::is_facing_left() { return (direction == LEFT); }

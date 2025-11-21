@@ -41,8 +41,9 @@ void World::create_explosion(MissileBody* missile) {
 
     //std::cout << "Ray fraction n° " << i << ": " << callback.get_ray_fraction() << std::endl;
     explosion.update_ray_fraction(i, callback.get_ray_fraction());
-    //callback.evaluate_contact_for_bodies();
+    callback.evaluate_contact_for_bodies();
   }
+  explosion.apply_explosion_to_bodies();
   explosions.push_back(explosion);
 }
 

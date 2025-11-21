@@ -20,6 +20,12 @@ private:
 
   WormState state = IDLE;
 
+  bool hit_by_explosion = false;
+  b2Vec2 impulse_dir = b2Vec2(0,0);
+  b2Vec2 apply_point = b2Vec2(0,0);
+  int num_ray_contacts = 0;
+  float fraction_force = 0;
+
   bool m_contacting = false;
   int num_foot_contacts = 0;
 
@@ -64,7 +70,9 @@ public:
 
   float explosion_intersect_value(float fraction) override;
 
-  void apply_explosion(b2Vec2& point, b2Vec2& normal) override;
+  void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) override;
+
+  BodyExplosionInfo get_explosion_info() override;
 
   uint8_t get_id();
 

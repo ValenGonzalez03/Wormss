@@ -40,8 +40,12 @@ float MissileBody::explosion_intersect_value(float fraction) {
   return fraction;
 }
 
-void MissileBody::apply_explosion(b2Vec2& point, b2Vec2& normal) {
+void MissileBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) {
   /* NADA */
+}
+
+BodyExplosionInfo MissileBody::get_explosion_info() {
+  return BodyExplosionInfo {b2Vec2(0,0), b2Vec2(0,0), 0};
 }
 
 b2Vec2 MissileBody::get_position() { return body->GetPosition(); }

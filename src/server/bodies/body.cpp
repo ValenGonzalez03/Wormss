@@ -61,6 +61,10 @@ void Body::stop_touching(Body *other) {
   }
 }
 
+bool Body::is_affected_by_explosions() {
+  return affected_by_explosions;
+}
+
 b2Body* Body::get_body() {
   return body;
 }

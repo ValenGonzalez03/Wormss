@@ -23,7 +23,8 @@ float ExplosionCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, 
 void ExplosionCallback::evaluate_contact_for_bodies() {
     for (auto body : bodies) {
         if (smallest_intersection >= body.fraction) {
-            body.body->apply_explosion(body.point, body.normal);
+            explosion.try_add_affected_body(body.body);
+            body.body->update_explosion_ray_contact(body.point, body.normal, body.fraction);
         }
     }
 }

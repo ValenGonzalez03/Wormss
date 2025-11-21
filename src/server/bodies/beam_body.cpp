@@ -40,8 +40,12 @@ float BeamBody::explosion_intersect_value(float fraction) {
     return fraction;
 }
 
-void BeamBody::apply_explosion(b2Vec2& point, b2Vec2& normal) {
+void BeamBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) {
     /* NADA */
+}
+
+BodyExplosionInfo BeamBody::get_explosion_info() {
+    return BodyExplosionInfo {b2Vec2(0,0), b2Vec2(0,0), 0};
 }
 
 void BeamBody::touch_beam(BeamBody* beam) {
@@ -69,6 +73,7 @@ void BeamBody::stop_touching_missile(MissileBody* missile) {
 }
 
 //void BeamBody::end_contact_with(Body* another_body) { }
+
 
 int BeamBody::get_type() {return BEAM;}
 

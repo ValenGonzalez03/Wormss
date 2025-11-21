@@ -20,6 +20,12 @@ struct UserData {
   void* pointer;
 };
 
+struct BodyExplosionInfo {
+	b2Vec2 apply_point;
+	b2Vec2 impulse_dir;
+	float fraction_force;
+};
+
 class Body {
 protected:
   b2World* world;
@@ -31,6 +37,8 @@ protected:
 	const float height;
 	float density;
 	float friction;
+
+  bool affected_by_explosions = false;
 
 public:
   Body(b2World* world, const float pos_x, const float pos_y, int angle, const float width, const float height, float density, float friction);
@@ -49,10 +57,14 @@ public:
 
   virtual float explosion_intersect_value(float fraction) = 0;
 
-  virtual void apply_explosion(b2Vec2& point, b2Vec2& normal) = 0;
+  virtual void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) = 0;
+
+  virtual BodyExplosionInfo get_explosion_info() = 0;
 
   b2Body* get_body();
   virtual int get_type() = 0;
+
+  bool is_affected_by_explosions();
   //virtual void start_contact_with(Weapon* weamon) = 0;
 	
   Body(const Body &) = delete;

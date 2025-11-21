@@ -6,12 +6,7 @@
 #include "server_explosion.h"
 #include <list>
 
-struct BodyRayInfo {
-	Body* body;
-	b2Vec2 point;
-	b2Vec2 normal;
-	float fraction;
-};
+
 
 class ExplosionCallback  : public b2RayCastCallback {
 private:

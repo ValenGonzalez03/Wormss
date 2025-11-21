@@ -7,6 +7,13 @@
 #include "bodies/body.h"
 #include <map>
 
+struct BodyRayInfo {
+	Body* body;
+	b2Vec2 point;
+	b2Vec2 normal;
+	float fraction;
+};
+
 class Explosion {
 private:
 	float pos_x;
@@ -14,7 +21,9 @@ private:
 	float radius;
 	float time_since_explosion_started = 0;
 	std::vector<float> fraction_rays = std::vector<float>(NUM_RAYS, 1);
+	std::map<Body*,BodyExplosionInfo> affected_bodies;
 
+	void apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_info, float blast_power);
 public:  
 	Explosion(float pos_x, float pos_y, float radius);
 
@@ -23,6 +32,10 @@ public:
 	bool has_ended();
 	
 	void update_ray_fraction(int ray_number, float new_fraction);
+
+	void try_add_affected_body(Body *body);
+
+	void apply_explosion_to_bodies();
 
 	float get_pos_x();
 

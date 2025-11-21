@@ -35,7 +35,9 @@ class BeamBody : public Body {
 
 	float explosion_intersect_value(float fraction) override;
 
-	void apply_explosion(b2Vec2& point, b2Vec2& normal) override;
+	void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) override;
+
+	BodyExplosionInfo get_explosion_info() override;
 	
 	BeamBody(const BeamBody&) = delete;
 	BeamBody& operator=(const BeamBody&) = delete;

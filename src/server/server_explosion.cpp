@@ -3,7 +3,7 @@
 #include "server_explosion.h"
 #include <iostream>
 
-#define BLAST_POWER 3.0f
+#define BLAST_POWER 15.0f
 
 Explosion::Explosion(float pos_x, float pos_y, float radius) : pos_x(pos_x), pos_y(pos_y), radius(radius) 
 {}
@@ -35,19 +35,15 @@ void Explosion::apply_explosion_to_bodies() {
 
 void Explosion::apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_info, float blast_power) {
 	b2Body* body_b2 = body->get_body();
-	float inv_distance = 1 / explosion_info.fraction_force;
-	float impulse_mag = blast_power * inv_distance * inv_distance;
+	float explotion_intensity = 1 - explosion_info.fraction_force;
+	float impulse_mag = blast_power * explotion_intensity;
 	std::cout << "fraction: " << explosion_info.fraction_force << std::endl;
-	std::cout << "inv_distance: " << inv_distance << std::endl;
+	std::cout << "explotion_intensity: " << explotion_intensity << std::endl;
 	body_b2->ApplyLinearImpulse(impulse_mag * explosion_info.impulse_dir, explosion_info.apply_point, true);
 }
 
-float Explosion::get_pos_x() {
-	return pos_x;
-}
-
-float Explosion::get_pos_y() {
-	return pos_y;
+b2Vec2 Explosion::get_center() {
+	return b2Vec2(pos_x, pos_y);
 }
 
 float Explosion::get_radius() {

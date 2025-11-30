@@ -117,7 +117,16 @@ void WormBody::aim_down() {
 
 void WormBody::stop_aiming() { state = IDLE; }
 
-MissileBody* WormBody::shoot(float initial_force, uint8_t missile_id) {
+MissileBody* WormBody::shoot(b2Vec2 missile_pos, float initial_force, uint8_t missile_id) {
+  uint8_t worm_dir = get_direction();
+  float final_angle = (worm_dir == RIGHT ? aiming_angle : -aiming_angle);
+
+  MissileBody *missile = new MissileBody(world, missile_pos.x, missile_pos.y, initial_force, final_angle, worm_dir, 
+                                         missile_id);
+  return missile;
+}
+
+b2Vec2 WormBody::calculate_missile_launch_position() {
   b2Vec2 pos = body->GetPosition();
   uint8_t worm_dir = get_direction();
   float missile_dist_x = (worm_dir == RIGHT ? 1 : -1) * ((WORM_WIDTH / 2) + (MISSILE_WIDTH / 2) + 0.27f);
@@ -126,11 +135,7 @@ MissileBody* WormBody::shoot(float initial_force, uint8_t missile_id) {
   float missile_dist_y = ((WORM_HEIGHT / 2) + (MISSILE_HEIGHT / 2) + 0.27f);
   float adjusted_pos_y = pos.y  + missile_dist_y * sin(aiming_angle);
 
-  float final_angle = (worm_dir == RIGHT ? aiming_angle : -aiming_angle);
-
-  MissileBody *missile = new MissileBody(world, adjusted_pos_x, adjusted_pos_y, initial_force, final_angle, worm_dir, 
-                                         missile_id);
-  return missile;
+  return b2Vec2(adjusted_pos_x, adjusted_pos_y);
 }
 
 void WormBody::teleport(float pos_x, float pos_y) {
@@ -179,14 +184,20 @@ float WormBody::explosion_intersect_value(float fraction) {
   return 1;
 }
 
-void WormBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) {
+void WormBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& center_expl, float fraction) {
   num_ray_contacts++;
-  b2Vec2 ray_direction = b2Vec2(-normal.x, -normal.y);
+  b2Vec2 ray_direction = point - center_expl;
+  ray_direction.Normalize();
   impulse_dir += ray_direction;
   apply_point += point;
-  if (fraction_force < fraction) {
+  if (fraction < fraction_force) {
     fraction_force = fraction;
   }
+  std::cout << "ray_direction added: (" << ray_direction.x << ", " << ray_direction.y << ")" << std::endl;
+  std::cout << "fraction of ray: " << fraction << std::endl;
+  std::cout << "fraction_force updated to: " << fraction_force << std::endl;
+  std::cout << "new impulse_dir: (" << impulse_dir.x << ", " << impulse_dir.y << ")" << std::endl;
+  std::cout << std::endl;
 }
 
 BodyExplosionInfo WormBody::get_explosion_info() {
@@ -195,13 +206,19 @@ BodyExplosionInfo WormBody::get_explosion_info() {
 
   std::cout << "num_ray_contacts: " << num_ray_contacts << std::endl;
   std::cout << "final_impulse_dir: (" << final_impulse_dir.x << ", " << final_impulse_dir.y << ")" << std::endl;
-  std::cout << "final_apply_point: (" << final_apply_point.x << ", " << final_apply_point.y << ")" << std::endl;
+  std::cout << std::endl;
+  //std::cout << "final_apply_point: (" << final_apply_point.x << ", " << final_apply_point.y << ")" << std::endl;
+
+  if (fraction_force <= 0.0f) {
+    fraction_force = 0.01f;
+  }
 
   auto body_explosion_info = BodyExplosionInfo {final_apply_point, final_impulse_dir, fraction_force};
 
   num_ray_contacts = 0;
   impulse_dir = b2Vec2(0,0);
   apply_point = b2Vec2(0,0);
+  fraction_force = 2.0f;
 
   return body_explosion_info;
 }
@@ -214,9 +231,9 @@ bool WormBody::is_stopped() { return (IDLE); } // ??
 
 bool WormBody::is_inactive() { return (state == IDLE); } // ??
 
-bool WormBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
+bool WormBody::has_exceeded_width_limit() { return (get_pos_x() < 0) || (get_pos_x() > 25); }
 
-bool WormBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
+bool WormBody::has_exceeded_height_limit() { return (get_pos_y() < 0) || (get_pos_y() > WORLD_HEIGHT); }
 
 void WormBody::touch_beam(BeamBody* beam) {
   /* NADA */

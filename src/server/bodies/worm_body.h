@@ -24,7 +24,7 @@ private:
   b2Vec2 impulse_dir = b2Vec2(0,0);
   b2Vec2 apply_point = b2Vec2(0,0);
   int num_ray_contacts = 0;
-  float fraction_force = 0;
+  float fraction_force = 2.0f;
 
   bool m_contacting = false;
   int num_foot_contacts = 0;
@@ -64,13 +64,15 @@ public:
   void stop_aiming();
 
   // Por ahora un shoot generico que solo va a ser usado para la bazooka
-  MissileBody* shoot(float initial_force, uint8_t missile_id);
+  MissileBody* shoot(b2Vec2 misile_pos, float initial_force, uint8_t missile_id);
+
+  b2Vec2 calculate_missile_launch_position();
   
   void teleport(float pos_x, float pos_y);
 
   float explosion_intersect_value(float fraction) override;
 
-  void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) override;
+  void update_explosion_ray_contact(b2Vec2& point, b2Vec2& center_expl, float fraction) override;
 
   BodyExplosionInfo get_explosion_info() override;
 

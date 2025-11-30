@@ -44,7 +44,7 @@ public:
 
   MissileBody* create_missile(MissileBody* missile);
 
-  void create_explosion(MissileBody* missile);
+  void create_explosion(float center_x, float center_y);
 
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 
@@ -59,6 +59,8 @@ public:
   int get_worms_number();
 
   int get_missiles_number();
+
+  void ray_cast(b2RayCastCallback *callback, const b2Vec2 &point1, const b2Vec2 &point2);
 	
   ~World();
 

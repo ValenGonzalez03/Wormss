@@ -8,7 +8,6 @@ float ExplosionCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, 
     if (data) {
         auto* body = reinterpret_cast<Body*>(data->pointer);
         float intersect_val = body->explosion_intersect_value(fraction);
-        //std::cout << "Callback n° " << ray_number << " con cuerpo de tipo: " << body->get_type() << "Con valor de interseccion: " << intersect_val << std::endl;
         if (intersect_val < smallest_intersection ) {
             smallest_intersection = intersect_val;
         }
@@ -24,7 +23,8 @@ void ExplosionCallback::evaluate_contact_for_bodies() {
     for (auto body : bodies) {
         if (smallest_intersection >= body.fraction) {
             explosion.try_add_affected_body(body.body);
-            body.body->update_explosion_ray_contact(body.point, body.normal, body.fraction);
+            b2Vec2 center_explosion = explosion.get_center();
+            body.body->update_explosion_ray_contact(body.point, center_explosion, body.fraction);
         }
     }
 }

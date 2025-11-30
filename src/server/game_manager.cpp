@@ -1,4 +1,5 @@
 #include "game_manager.h"
+#include "trajectory_missile_callback.h"
 #include "box2d/box2d.h"
 #include <algorithm>
 #include <stdio.h>
@@ -100,10 +101,20 @@ void GameManager::shoot(const uint8_t &player_id, float initial_force) {
   // }
   WormBody *worm = world.get_worm(player_id);
 
-  auto missile = worm->shoot(initial_force, missiles_id_counter);
-  missiles_id_counter++;
-  world.create_missile(missile);
-  missile->apply_initial_impulse(worm->get_aiming_angle());
+  b2Vec2 missile_pos = worm->calculate_missile_launch_position();
+  b2Vec2 worm_pos = worm->get_position();
+  MissileCallback callback;
+  world.ray_cast(&callback, worm_pos, missile_pos);
+
+  if (callback.did_hit_wall()) {
+    b2Vec2 hit_point = callback.get_hit_point();
+    world.create_explosion(hit_point.x, hit_point.y);
+  } else {
+    MissileBody* missile = worm->shoot(missile_pos, initial_force, missiles_id_counter);
+    missiles_id_counter++;
+    world.create_missile(missile);
+    missile->apply_initial_impulse(worm->get_aiming_angle());
+  }
 }
 
 GameState GameManager::create_state() {

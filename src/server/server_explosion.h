@@ -3,7 +3,6 @@
 
 #include "box2d/box2d.h"
 #include "../common/game_constants.h"
-#include "query_callback.h"
 #include "bodies/body.h"
 #include <map>
 
@@ -37,9 +36,7 @@ public:
 
 	void apply_explosion_to_bodies();
 
-	float get_pos_x();
-
-	float get_pos_y();
+	b2Vec2 get_center();
 
 	float get_radius();
 

@@ -28,12 +28,12 @@ MissileBody* World::create_missile(MissileBody* missile) {
   return missile;
 }
 
-void World::create_explosion(MissileBody* missile) {
-  Explosion explosion (missile->get_pos_x(), missile->get_pos_y(), EXPLOSION_RADIUS);
+void World::create_explosion(float pos_x, float pos_y) {
+  Explosion explosion (pos_x, pos_y, EXPLOSION_RADIUS);
   for (int i = 0; i < NUM_RAYS; i++) {
     float angle_rad = (i / (float)NUM_RAYS) * 2.0f * b2_pi;
-    b2Vec2 center (missile->get_pos_x(), missile->get_pos_y());
-    b2Vec2 ray_dir ( EXPLOSION_RADIUS * sin(angle_rad), EXPLOSION_RADIUS * cos(angle_rad) );
+    b2Vec2 center (pos_x, pos_y);
+    b2Vec2 ray_dir ( EXPLOSION_RADIUS * sinf(angle_rad), EXPLOSION_RADIUS * cosf(angle_rad) );
     b2Vec2 ray_end = center + ray_dir;
 
     ExplosionCallback callback (i, explosion);
@@ -75,7 +75,7 @@ void World::update_missiles() {
   for (std::list<MissileBody*>::iterator it = missiles.begin(); it != missiles.end();)
     {
       if ((*it)->has_exploded()) {
-        create_explosion(*it);
+        create_explosion((*it)->get_pos_x(), (*it)->get_pos_y());
         destroy_body(*it);
         it = missiles.erase(it);
         std::cout << "KABOOM" << std::endl;
@@ -106,6 +106,10 @@ int World::get_missiles_number() {
   return missiles.size();
 }
 
+void World::ray_cast(b2RayCastCallback *callback, const b2Vec2 &point1, const b2Vec2 &point2) {
+  world->RayCast(callback, point1, point2);
+}
+
 std::list<WormAttr> World::get_worms_attr() {
   std::list<WormAttr> worms_attr;
   for (auto worm : worms) {
@@ -127,7 +131,8 @@ std::list<MissileAttr> World::get_missiles_attr() {
 std::list<ExplosionAttr> World::get_explosions_attr() {
   std::list<ExplosionAttr> explosions_attr;
   for (auto explosion : explosions) {
-    ExplosionAttr attr ({explosion.get_pos_x(), explosion.get_pos_y(), explosion.get_radius(), explosion.get_fraction_rays()});
+    b2Vec2 center = explosion.get_center();
+    ExplosionAttr attr ({center.x, center.y, explosion.get_radius(), explosion.get_fraction_rays()});
     explosions_attr.emplace_back(attr);
   }
   return explosions_attr;

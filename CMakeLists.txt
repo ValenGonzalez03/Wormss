@@ -58,6 +58,7 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/server/server_protocol.cpp
 					  ./src/server/contact_listener.cpp
 					  ./src/server/query_callback.cpp
+					  ./src/server/trajectory_missile_callback.cpp
 					  ./src/common/lib/socket.cpp 
 					  ./src/common/lib/liberror.cpp 
 					  ./src/common/lib/resolver.cpp 

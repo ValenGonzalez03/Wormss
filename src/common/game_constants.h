@@ -25,12 +25,15 @@
 
 enum WormState { IDLE, MOVING, JUMPING, AIMING, SHOOTING };
 
+enum WeaponType { NONE, BAZOOKA, BAT };
+
 struct WormAttr {
     uint8_t player_id;
     float pos_x; // En metros
     float pos_y; // En metros
     uint8_t direction;
     WormState state;
+    WeaponType current_weapon;
     float aim_angle; // En radianes
 };
 

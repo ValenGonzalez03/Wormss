@@ -95,26 +95,49 @@ void GameManager::stop_aiming(const uint8_t &player_id) {
   worm->stop_aiming();
 }
 
-void GameManager::shoot(const uint8_t &player_id, float initial_force) {
+void GameManager::change_weapon(const uint8_t &player_id, const uint8_t &weapon_type) {
   // if (player_id != current_turn_id) {
   //   return;
   // }
   WormBody *worm = world.get_worm(player_id);
 
-  b2Vec2 missile_pos = worm->calculate_missile_launch_position();
-  b2Vec2 worm_pos = worm->get_position();
-  MissileCallback callback;
-  world.ray_cast(&callback, worm_pos, missile_pos);
+  worm->change_weapon(static_cast<WeaponType>(weapon_type));
+}
 
-  if (callback.did_hit_wall()) {
-    b2Vec2 hit_point = callback.get_hit_point();
-    world.create_explosion(hit_point.x, hit_point.y);
-  } else {
-    MissileBody* missile = worm->shoot(missile_pos, initial_force, missiles_id_counter);
-    missiles_id_counter++;
-    world.create_missile(missile);
-    missile->apply_initial_impulse(worm->get_aiming_angle());
+void GameManager::attack(const uint8_t &player_id, float initial_force) {
+  // if (player_id != current_turn_id) {
+  //   return;
+  // }
+  WormBody *worm = world.get_worm(player_id);
+
+  WeaponType weapon = worm->get_weapon_selected();
+  switch (weapon)
+  {
+  case BAZOOKA: {
+    b2Vec2 missile_pos = worm->calculate_missile_launch_position();
+    b2Vec2 worm_pos = worm->get_position();
+    MissileCallback callback;
+    world.ray_cast(&callback, worm_pos, missile_pos);
+
+    if (callback.did_hit_wall()) {
+      b2Vec2 hit_point = callback.get_hit_point();
+      world.create_explosion(hit_point.x, hit_point.y);
+    } else {
+      MissileBody* missile = worm->attack_throwable(missile_pos, initial_force, missiles_id_counter);
+      missiles_id_counter++;
+      world.create_missile(missile);
+      missile->apply_initial_impulse(worm->get_aiming_angle());
+    }
   }
+    break;
+  case BAT:
+    /* code */
+    break;
+  default:
+    /* Ningun arma (?) */
+    break;
+  }
+
 }
 
 GameState GameManager::create_state() {

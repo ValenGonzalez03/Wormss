@@ -19,6 +19,7 @@ private:
   uint8_t id;
 
   WormState state = IDLE;
+  WeaponType current_weapon = BAZOOKA;
 
   bool hit_by_explosion = false;
   b2Vec2 impulse_dir = b2Vec2(0,0);
@@ -63,8 +64,12 @@ public:
 
   void stop_aiming();
 
+  void change_weapon(WeaponType weapon);
+
+  void attack();
+
   // Por ahora un shoot generico que solo va a ser usado para la bazooka
-  MissileBody* shoot(b2Vec2 misile_pos, float initial_force, uint8_t missile_id);
+  MissileBody* attack_throwable(b2Vec2 misile_pos, float initial_force, uint8_t missile_id);
 
   b2Vec2 calculate_missile_launch_position();
   
@@ -89,6 +94,8 @@ public:
   WormState get_state();
 
   float get_aiming_angle();
+
+  WeaponType get_weapon_selected();
 
   void update();
 

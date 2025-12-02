@@ -20,15 +20,16 @@ private:
   float pos_y; // En metros
   uint8_t direction;
   WormState state;
+  WeaponType current_weapon;
   float aim_angle;
 
 public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   explicit WormData()
-      : player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE), aim_angle(0) {}
+      : player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE), current_weapon(BAZOOKA), aim_angle(0) {}
 
-  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st, float angle)
-      : player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st), aim_angle(angle) {}
+  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st, WeaponType wp, float angle)
+      : player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st), current_weapon(wp), aim_angle(angle) {}
 
   explicit WormData(ClientProtocol &prot) : pos_x(0), pos_y(0) {
     bool was_closed = false;
@@ -49,6 +50,9 @@ public:
   
     // Recibo el estado
     this->state = static_cast<WormState>(prot.recv_byte(was_closed));
+
+    // Recibo el arma actual equipada
+    this->current_weapon = static_cast<WeaponType>(prot.recv_byte(was_closed));
   
     // Recibo el angulo de apuntado
     this->aim_angle = prot.recv_float(was_closed);
@@ -68,6 +72,9 @@ public:
   
     // Envio el estado
     prot.send_byte(this->state, was_closed);
+
+    // Envio el arma actual equipada
+    prot.send_byte(this->current_weapon, was_closed);
   
     // Envio el angulo de apuntado
     prot.send_float(this->aim_angle, was_closed);
@@ -82,6 +89,8 @@ public:
   uint8_t get_direction() { return direction; }
 
   WormState get_state() { return state; }
+
+  WeaponType get_weapon_selected() { return current_weapon; }
 
   float get_aim_angle() { return aim_angle; }
 
@@ -265,7 +274,7 @@ public:
   std::map<uint8_t, WormData> get_worms() { return worms_list; }
 
   void add_worm(WormAttr& attr) {
-    WormData worm(attr.player_id, attr.pos_x, attr.pos_y, attr.direction, attr.state, attr.aim_angle);
+    WormData worm(attr.player_id, attr.pos_x, attr.pos_y, attr.direction, attr.state, attr.current_weapon, attr.aim_angle);
     worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
   }
 

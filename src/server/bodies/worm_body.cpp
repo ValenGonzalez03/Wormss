@@ -117,12 +117,17 @@ void WormBody::aim_down() {
 
 void WormBody::stop_aiming() { state = IDLE; }
 
-MissileBody* WormBody::shoot(b2Vec2 missile_pos, float initial_force, uint8_t missile_id) {
+void WormBody::change_weapon(WeaponType weapon) {
+  current_weapon = weapon;
+}
+
+MissileBody* WormBody::attack_throwable(b2Vec2 missile_pos, float initial_force, uint8_t missile_id) {
   uint8_t worm_dir = get_direction();
   float final_angle = (worm_dir == RIGHT ? aiming_angle : -aiming_angle);
-
-  MissileBody *missile = new MissileBody(world, missile_pos.x, missile_pos.y, initial_force, final_angle, worm_dir, 
-                                         missile_id);
+  float pos_x = missile_pos.x;
+  float pos_y = missile_pos.y;
+  
+  MissileBody *missile = new MissileBody(world, pos_x, pos_y, initial_force, final_angle, worm_dir, missile_id);
   return missile;
 }
 
@@ -156,6 +161,10 @@ uint8_t WormBody::get_direction() { return direction; }
 WormState WormBody::get_state() { return state; }
 
 float WormBody::get_aiming_angle() { return aiming_angle; }
+
+WeaponType WormBody::get_weapon_selected() {
+  return current_weapon;
+}
 
 void WormBody::update() {
   if (has_exceeded_width_limit()) {

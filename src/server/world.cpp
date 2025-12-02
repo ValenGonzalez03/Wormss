@@ -113,7 +113,8 @@ void World::ray_cast(b2RayCastCallback *callback, const b2Vec2 &point1, const b2
 std::list<WormAttr> World::get_worms_attr() {
   std::list<WormAttr> worms_attr;
   for (auto worm : worms) {
-    WormAttr attr ({worm->get_id(), worm->get_pos_x(), worm->get_pos_y(), worm->get_direction(), worm->get_state(), worm->get_aiming_angle()});
+    WormAttr attr ({worm->get_id(), worm->get_pos_x(), worm->get_pos_y(), worm->get_direction(), worm->get_state(), 
+                    worm->get_weapon_selected(), worm->get_aiming_angle()});
     worms_attr.emplace_back(attr);
   }
   return worms_attr;
@@ -122,7 +123,8 @@ std::list<WormAttr> World::get_worms_attr() {
 std::list<MissileAttr> World::get_missiles_attr() {
   std::list<MissileAttr> missiles_attr;
   for (auto missile : missiles) {
-    MissileAttr attr ({missile->get_id(), missile->get_pos_x(), missile->get_pos_y(), missile->get_angle(), missile->get_direction()});
+    MissileAttr attr ({missile->get_id(), missile->get_pos_x(), missile->get_pos_y(), missile->get_angle(), 
+                        missile->get_direction()});
     missiles_attr.emplace_back(attr);
   }
   return missiles_attr;

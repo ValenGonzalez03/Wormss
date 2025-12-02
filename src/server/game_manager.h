@@ -52,7 +52,9 @@ public:
 
   void stop_aiming(const uint8_t &player_id);
 
-  void shoot(const uint8_t &player_id, float initial_force);
+  void change_weapon(const uint8_t &player_id, const uint8_t &weapon_type);
+
+  void attack(const uint8_t &player_id, float initial_force);
 
   GameState create_state();
 

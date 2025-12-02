@@ -157,6 +157,67 @@ void WorldView::render_background() {
   }
 }
 
+void WorldView::render_text(WormData &worm_data) {
+  SDL2pp::Font font(RESOURCES_PATH "/Vera.ttf", 12);
+
+  std::string text =
+      "Pos x: " +
+      std::to_string(worm_data.get_pos_x()) +
+      ", Pos y: " +
+      std::to_string(worm_data.get_pos_y() - WORM_HEIGHT) +
+      ", state: " +
+      (print_state(worm_data.get_state())) +
+      ", weapon: " +
+      (print_weapon_selected(worm_data.get_weapon_selected()));
+
+  SDL2pp::Texture text_sprite(renderer, (font).RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+
+  renderer.Copy(text_sprite, SDL2pp::NullOpt,
+      SDL2pp::Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
+  
+
+  std::string dir = (worm_data.get_direction() == LEFT ? "left" : "right");
+  std::string text_2 = "direction: " + dir +
+      ", player_id: " + std::to_string(worm_data.get_player_id());
+
+  SDL2pp::Texture text_sprite_2(renderer, (font).RenderText_Blended(text_2, SDL_Color{255, 255, 255, 255}));
+
+  renderer.Copy(text_sprite_2, SDL2pp::NullOpt,
+    SDL2pp::Rect(0, text_sprite.GetHeight(), text_sprite_2.GetWidth(), text_sprite_2.GetHeight()));
+}
+
+std::string WorldView::print_state(WormState state)
+{
+  switch (state)
+  {
+  case IDLE:
+    return "idle";
+  case MOVING:
+    return "running";
+  case JUMPING:
+    return "jumping";
+  case AIMING:
+    return "aiming";
+  case SHOOTING:
+    return "shooting";
+  default:
+    return "unknown";
+  }
+}
+
+std::string WorldView::print_weapon_selected(WeaponType weapon)
+{
+  switch (weapon)
+  {
+  case BAZOOKA:
+    return "bazooka";
+  case BAT:
+    return "baseball bat";
+  default:
+    return "unknown";
+  }
+}
+
 /*
 void WorldView::render_text(const std::string text, const std::string font_name,
 int pos_x, int pos_y) { SDL2pp::Texture text_sprite(renderer,

@@ -71,8 +71,14 @@ private:
   // Maneja el evento de finalización de disparo
   void handle_stop_shooting();
 
+  // Maneja el evento de cambio de arma
+  void handle_change_weapon(uint8_t weapon_type);
+
   // Muestra el estado del gusano
   std::string print_state(WormState state);
+
+  // Muestra el arma seleccionada del gusano
+  std::string print_weapon_selected(WeaponType weapon);
 
 public:
   explicit Client(ClientProtocol &&prot, uint8_t player_id);

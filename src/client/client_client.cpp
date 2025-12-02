@@ -12,6 +12,7 @@
 #include "../common/commands/stop_moving.h"
 #include "../common/commands/start_shooting.h"
 #include "../common/commands/stop_game.h"
+#include "../common/commands/change_weapon.h"
 #include "../common/game_constants.h"
 
 using namespace SDL2pp;
@@ -23,57 +24,58 @@ Client::Client(ClientProtocol &&prot, uint8_t player_id)
       receiver(this->prot, receiver_queue, keep_playing), sender(this->prot, sender_queue, keep_playing),
       client_sdl(), player_id(player_id), last_game_state() {}
 
-void Client::start_threads() {
+void Client::start_threads()
+{
   sender.start();
   receiver.start();
 }
 
-void Client::join_threads() {
+void Client::join_threads()
+{
   sender.join();
   receiver.join();
 }
 
-int Client::run() {
+int Client::run()
+{
 
   // Initialize SDL library
   SDL2pp::SDL sdl(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
-  
+
   // Initialize SDL_ttf library
   SDLTTF ttf;
-  
+
   // Initialize SDLMIXER library
   SDLMixer mixer;
-  if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
-        throw std::runtime_error("SDL_mixer could not initialize!");
-    }
-    
-    // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS, MUSICA, ETC)
-    client_sdl.resource_pool.initialize();
-    client_sdl.resource_pool.play_music();
-    
-    
-    // INICIALIZACION DEL MUNDO
-    // ---------------------------------------------------------------------------
-    // ---------------------------------------------------------------------------
-    recv_world();
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+  {
+    throw std::runtime_error("SDL_mixer could not initialize!");
+  }
 
-    
-    start_threads();
-    
-    
-    int worms_amount = 0;
-    // Esto claramente es una mala solucion pero por ahora sirve
-    std::cout << "LLEGA ACA EN CLIENT" << std::endl;
-    last_game_state = receiver_queue.pop();
-    std::cout << "Cantidad worms: " << (int) last_game_state.get_worms().size() << std::endl;
-    for (auto worm_data : last_game_state.get_worms()) {
-      client_sdl.world_view.add_worm(worm_data.second);
-    }
-    prot.send_client_ready();
-    // ---------------------------------------------------------------------------
-    // ---------------------------------------------------------------------------
-    // INICIALIZACION DEL MUNDO
+  // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS, MUSICA, ETC)
+  client_sdl.resource_pool.initialize();
+  client_sdl.resource_pool.play_music();
 
+  // INICIALIZACION DEL MUNDO
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  recv_world();
+
+  start_threads();
+
+  int worms_amount = 0;
+  // Esto claramente es una mala solucion pero por ahora sirve
+  std::cout << "LLEGA ACA EN CLIENT" << std::endl;
+  last_game_state = receiver_queue.pop();
+  std::cout << "Cantidad worms: " << (int)last_game_state.get_worms().size() << std::endl;
+  for (auto worm_data : last_game_state.get_worms())
+  {
+    client_sdl.world_view.add_worm(worm_data.second);
+  }
+  prot.send_client_ready();
+  // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // INICIALIZACION DEL MUNDO
 
   // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
   // cuantos frames se renderizan en un segundo
@@ -84,7 +86,8 @@ int Client::run() {
   return 0;
 }
 
-void Client::recv_world() {
+void Client::recv_world()
+{
   bool was_closed = false;
 
   std::string world_name = prot.recv_string(&was_closed); // Por ahora no se hace nada con el nombre
@@ -92,22 +95,26 @@ void Client::recv_world() {
   client_sdl.world_view.set_background(background_name);
 
   uint8_t beams_number = prot.recv_byte(&was_closed);
-  //int beams_number = prot.recv_beams_number(&was_closed);
+  // int beams_number = prot.recv_beams_number(&was_closed);
 
-  std::cout << "Nombre mundo: " << world_name <<  ", Cantidad vigas: " << (int) beams_number << std::endl;
-  for (int i = 0; i < beams_number; i ++) {
+  std::cout << "Nombre mundo: " << world_name << ", Cantidad vigas: " << (int)beams_number << std::endl;
+  for (int i = 0; i < beams_number; i++)
+  {
     BeamAttr beam_attr = prot.recv_beam(&was_closed);
 
-    if (beam_attr.width == 6.0f || beam_attr.width == 3.0f) {
+    if (beam_attr.width == 6.0f || beam_attr.width == 3.0f)
+    {
       client_sdl.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width, BEAM_HEIGHT, beam_attr.angle);
-    } else {
+    }
+    else
+    {
       std::cout << "Error tamanio viga" << std::endl;
     }
   }
 }
 
-
-bool Client::func_to_execute() {
+bool Client::func_to_execute()
+{
   // Timing: calculate difference between this and previous frame
   // in milliseconds
   unsigned int frame_ticks = SDL_GetTicks();
@@ -125,28 +132,33 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   // EVENT LOOP
 
-
   // TRY-POP DE LA RECEIVER QUEUE
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   GameState game_state = GameState();
 
-  try {
+  try
+  {
     bool was_received = receiver_queue.pop_last_one(game_state);
 
     // Si no pudo recibir el game_state se queda con el ultimo game_state
     // popeado, en caso contrario utiliza el nuevo.
-    if (!was_received) {
+    if (!was_received)
+    {
       game_state = last_game_state;
-    } else {
+    }
+    else
+    {
       last_game_state = game_state;
     }
-
-    } catch (const std::exception &e) {
-      std::cerr << e.what();
+  }
+  catch (const std::exception &e)
+  {
+    std::cerr << e.what();
   }
 
-  if (game_state.is_game_finished()) {
+  if (game_state.is_game_finished())
+  {
     std::cout << "El juego ha terminado" << std::endl;
     prot.close_socket();
     sender_queue.close();
@@ -156,7 +168,6 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   // TRY-POP DE LA RECEIVER QUEUE
 
-
   // UPDATE ESTADO DEL JUEGO
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
@@ -165,61 +176,38 @@ bool Client::func_to_execute() {
   // ---------------------------------------------------------------------------
   // UPDATE ESTADO DEL JUEGO
 
-
   // RENDER DE TEXTURAS
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   client_sdl.renderer.Clear();
   client_sdl.world_view.render(frame_ticks);
-  
-  auto player_data = game_state.get_worms()[player_id];
-  std::string text =
-      "Pos x: " +
-      std::to_string(player_data.get_pos_x()) +
-      ", Pos y: " +
-      std::to_string(player_data.get_pos_y() - WORM_HEIGHT) +
-      ", state: " +
-      (print_state(player_data.get_state())) +
-      ", direction: " +
-      (player_data.get_direction() == LEFT ? "left" : "right") + 
-      ", player_id: " + 
-      std::to_string(player_data.get_player_id());
-
-
-  Font font(RESOURCES_PATH "/Vera.ttf", 12);
-
-  Texture text_sprite(
-      client_sdl.renderer,
-      (font).RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
-
-  client_sdl.renderer.Copy(
-      text_sprite, NullOpt,
-      Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
-
-
-
+  client_sdl.world_view.render_text(game_state.get_worms()[player_id]);
+        
   // Show rendered frame
   client_sdl.renderer.Present();
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // RENDER DE TEXTURAS
 
-
   return false;
 }
 
-
-bool Client::execute_event(SDL_Event &event) {
+bool Client::execute_event(SDL_Event &event)
+{
   auto worm_client = last_game_state.get_worms()[player_id];
-  while (SDL_PollEvent(&event)) {
-    if (event.type == SDL_QUIT) { // Cierra el juego
+  while (SDL_PollEvent(&event))
+  {
+    if (event.type == SDL_QUIT)
+    { // Cierra el juego
       handle_quit_game();
       return true;
-
-    } else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
+    }
+    else if (event.type == SDL_KEYDOWN)
+    { // Aprieta una tecla
       int key_mov_dir;
       int key_aim_dir;
-      switch (event.key.keysym.sym) {
+      switch (event.key.keysym.sym)
+      {
       case SDLK_ESCAPE:
         handle_stop_game();
         break;
@@ -229,7 +217,8 @@ bool Client::execute_event(SDL_Event &event) {
         break;
       case SDLK_RIGHT:
       case SDLK_LEFT:
-        if (mov_keys_pressed.count(event.key.keysym.sym) == 0) {
+        if (mov_keys_pressed.count(event.key.keysym.sym) == 0)
+        {
           mov_keys_pressed.insert(event.key.keysym.sym);
         }
         key_mov_dir = (event.key.keysym.sym == SDLK_RIGHT ? RIGHT : LEFT);
@@ -245,7 +234,8 @@ bool Client::execute_event(SDL_Event &event) {
         break;
       case SDLK_UP:
       case SDLK_DOWN:
-        if (aim_keys_pressed.count(event.key.keysym.sym) == 0) {
+        if (aim_keys_pressed.count(event.key.keysym.sym) == 0)
+        {
           aim_keys_pressed.insert(event.key.keysym.sym);
         }
         key_aim_dir = (event.key.keysym.sym == SDLK_UP ? UP : DOWN);
@@ -255,6 +245,10 @@ bool Client::execute_event(SDL_Event &event) {
         handle_start_shooting();
         break;
       case SDLK_1:
+        handle_change_weapon(BAZOOKA);
+        break;
+      case SDLK_2:
+        handle_change_weapon(BAT);
         break;
       case SDLK_i:
         client_sdl.resource_pool.turn_music_volume_down();
@@ -263,25 +257,29 @@ bool Client::execute_event(SDL_Event &event) {
         client_sdl.resource_pool.turn_music_volume_up();
         break;
       }
-
-    } else if (event.type == SDL_KEYUP) { // Suelta una tecla
-      switch (event.key.keysym.sym) {
+    }
+    else if (event.type == SDL_KEYUP)
+    { // Suelta una tecla
+      switch (event.key.keysym.sym)
+      {
       case SDLK_RIGHT:
       case SDLK_LEFT:
         mov_keys_pressed.erase(event.key.keysym.sym);
-        if (mov_keys_pressed.empty()) {
-            handle_stop_moving(); 
+        if (mov_keys_pressed.empty())
+        {
+          handle_stop_moving();
         }
         break;
       case SDLK_RETURN:
       case SDLK_BACKSPACE:
-        //state.is_jumping = false;
+        // state.is_jumping = false;
         break;
       case SDLK_UP:
       case SDLK_DOWN:
         aim_keys_pressed.erase(event.key.keysym.sym);
-        if (aim_keys_pressed.empty()) {
-            handle_stop_aiming();          
+        if (aim_keys_pressed.empty())
+        {
+          handle_stop_aiming();
         }
         break;
       }
@@ -290,68 +288,78 @@ bool Client::execute_event(SDL_Event &event) {
   return false;
 }
 
-
-void Client::handle_start_moving(int direction) {
+void Client::handle_start_moving(int direction)
+{
   std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(player_id, direction);
   sender_queue.try_push(cmd);
   // is_running = true;
   // state.direction = direction;
 }
 
-
-void Client::handle_stop_moving() {
+void Client::handle_stop_moving()
+{
   std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>(player_id);
   sender_queue.try_push(cmd);
   // is_running = false;
 }
 
-
-void Client::handle_jump_forward(uint8_t worm_dir, uint8_t jump_type) {
+void Client::handle_jump_forward(uint8_t worm_dir, uint8_t jump_type)
+{
   std::shared_ptr<Jump> cmd = std::make_shared<Jump>(player_id, worm_dir, jump_type);
   sender_queue.try_push(cmd);
   // state.is_running = false;
 }
 
-
-void Client::handle_jump_backward(uint8_t worm_dir, uint8_t jump_type) {
+void Client::handle_jump_backward(uint8_t worm_dir, uint8_t jump_type)
+{
   int jump_direction = (worm_dir == LEFT ? RIGHT : LEFT); // Calculo la direccion opuesta
   std::shared_ptr<Jump> cmd = std::make_shared<Jump>(player_id, jump_direction, jump_type);
   sender_queue.try_push(cmd);
   // state.is_running = false;
 }
 
-
-void Client::handle_start_aiming(int direction) {
+void Client::handle_start_aiming(int direction)
+{
   std::shared_ptr<StartAiming> cmd = std::make_shared<StartAiming>(player_id, direction);
   sender_queue.try_push(cmd);
 }
 
-
-void Client::handle_stop_aiming() {
+void Client::handle_stop_aiming()
+{
   std::shared_ptr<StopAiming> cmd = std::make_shared<StopAiming>(player_id);
   sender_queue.try_push(cmd);
 }
 
-void Client::handle_start_shooting() {
+void Client::handle_start_shooting()
+{
   std::shared_ptr<StartShooting> cmd = std::make_shared<StartShooting>(player_id, 8);
   sender_queue.try_push(cmd);
 }
 
-void Client::handle_stop_game() {
+void Client::handle_change_weapon(uint8_t weapon_type)
+{
+  std::shared_ptr<ChangeWeapon> cmd = std::make_shared<ChangeWeapon>(player_id, weapon_type);
+  sender_queue.try_push(cmd);
+}
+
+void Client::handle_stop_game()
+{
   std::shared_ptr<StopGame> cmd = std::make_shared<StopGame>(player_id);
   sender_queue.try_push(cmd);
 }
 
-void Client::handle_quit_game() {
+void Client::handle_quit_game()
+{
   keep_playing = false;
   sender_queue.close();
   receiver_queue.close();
   prot.close_socket();
 }
 
-
-std::string Client::print_state(WormState state) {
-  switch (state) {
+std::string Client::print_state(WormState state)
+{
+  switch (state)
+  {
   case IDLE:
     return "idle";
   case MOVING:
@@ -362,6 +370,19 @@ std::string Client::print_state(WormState state) {
     return "aiming";
   case SHOOTING:
     return "shooting";
+  default:
+    return "unknown";
+  }
+}
+
+std::string Client::print_weapon_selected(WeaponType weapon)
+{
+  switch (weapon)
+  {
+  case BAZOOKA:
+    return "bazooka";
+  case BAT:
+    return "baseball bat";
   default:
     return "unknown";
   }

@@ -11,7 +11,7 @@ public:
       : RunnableCommandGame(std::make_shared<StartShooting>(clt_id, skt, was_closed)) {}
 
   void run(GameManager &game_manager) override {
-    game_manager.shoot(command->get_client_id(), ((StartShooting *)command.get())->get_initial_force());
+    game_manager.attack(command->get_client_id(), ((StartShooting *)command.get())->get_initial_force());
   }
 };
 

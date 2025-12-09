@@ -55,6 +55,7 @@ add_executable(server ./src/server/server_main.cpp
 					  #./src/server/bodies/weapons/bazooka.cpp
 					  #./src/server/bodies/weapons/banana.cpp
 					  #./src/server/bodies/weapons/dynamite.cpp
+					  ./src/server/baseball_bat_callback.cpp
 					  ./src/server/server_protocol.cpp
 					  ./src/server/contact_listener.cpp
 					  ./src/server/query_callback.cpp

@@ -168,7 +168,7 @@ WeaponType WormBody::get_weapon_selected() {
 
 void WormBody::update() {
   if (has_exceeded_width_limit()) {
-    body->SetTransform(b2Vec2(15, 25), 0); // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
+    body->SetTransform(b2Vec2(5, 25), 0); // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
   }
   if (has_exceeded_height_limit()) {
     body->SetTransform(b2Vec2(get_pos_x(), 25), 0); // Por ahora solo fuerzo a que reaparezca 25 metros mas arriba
@@ -202,11 +202,11 @@ void WormBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& center_expl, 
   if (fraction < fraction_force) {
     fraction_force = fraction;
   }
-  std::cout << "ray_direction added: (" << ray_direction.x << ", " << ray_direction.y << ")" << std::endl;
-  std::cout << "fraction of ray: " << fraction << std::endl;
-  std::cout << "fraction_force updated to: " << fraction_force << std::endl;
-  std::cout << "new impulse_dir: (" << impulse_dir.x << ", " << impulse_dir.y << ")" << std::endl;
-  std::cout << std::endl;
+  // std::cout << "ray_direction added: (" << ray_direction.x << ", " << ray_direction.y << ")" << std::endl;
+  // std::cout << "fraction of ray: " << fraction << std::endl;
+  // std::cout << "fraction_force updated to: " << fraction_force << std::endl;
+  // std::cout << "new impulse_dir: (" << impulse_dir.x << ", " << impulse_dir.y << ")" << std::endl;
+  // std::cout << std::endl;
 }
 
 BodyExplosionInfo WormBody::get_explosion_info() {

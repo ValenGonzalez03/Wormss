@@ -53,23 +53,3 @@ float Explosion::get_radius() {
 std::vector<float> Explosion::get_fraction_rays() {
 	return fraction_rays;
 }
-
-// void Explosion::simulate_explosion(b2Vec2 center, float blastRadius, float blastPower){
-// 	QueryCallback queryCallback;
-// 	b2AABB aabb;
-// 	aabb.lowerBound = center - b2Vec2(blastRadius, blastRadius);
-// 	aabb.upperBound = center + b2Vec2(blastRadius, blastRadius);
-// 	world->QueryAABB(&queryCallback, aabb);
-  
-// 	for (int i = 0; i < queryCallback.foundBodies.size(); i++) {
-// 		b2Body* body = queryCallback.foundBodies[i];
-// 		b2Vec2 bodyCom = body->GetWorldCenter();
-      
-// 		if ((bodyCom - center).Length() >= blastRadius)
-// 			continue;
-          
-// 		applyBlastImpulse(body, center, bodyCom, blastPower);
-// 	}
-// }
-
-

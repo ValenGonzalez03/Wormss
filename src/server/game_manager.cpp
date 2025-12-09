@@ -1,8 +1,11 @@
 #include "game_manager.h"
 #include "trajectory_missile_callback.h"
+#include "baseball_bat_callback.h"
 #include "box2d/box2d.h"
 #include <algorithm>
 #include <stdio.h>
+
+#define BAT_LENGTH 3
 
 GameManager::GameManager() {}
 
@@ -130,8 +133,20 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
     }
   }
     break;
-  case BAT:
-    /* code */
+  case BAT: {
+    b2Vec2 worm_pos = worm->get_position();
+    UserData* data = reinterpret_cast<UserData*>(worm->get_body()->GetUserData().pointer);
+    BaseballBatCallback bat_callback(worm_pos, data);
+
+    float aim_angle = worm->get_aiming_angle();
+    uint8_t worm_dir = worm->get_direction();
+    float bat_end_x = (worm_dir == RIGHT ? 1 : -1) * cosf(aim_angle);
+    b2Vec2 bat_end_pos = worm_pos + (BAT_LENGTH * b2Vec2( bat_end_x, sinf(aim_angle)));
+    b2Vec2 dir = bat_end_pos - worm_pos;
+    dir.Normalize();
+    std::cout << "Bat direction: (" << dir.x << ", " << dir.y << ")" << std::endl;
+    world.ray_cast(&bat_callback, worm_pos, bat_end_pos);
+  }
     break;
   default:
     /* Ningun arma (?) */

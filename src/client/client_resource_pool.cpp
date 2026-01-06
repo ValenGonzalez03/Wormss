@@ -16,7 +16,8 @@ void ResourcePool::initialize() {
 
 void ResourcePool::add_texture(const std::string &texture_name,
                    const std::string &image_path, int width, int height,
-                   int amount_frames, int offset_x, int offset_y, int offset_width, int offset_height, bool textures_not_centered) {
+                   int amount_frames, BACKGROUND_COLOR back_color, int offset_x, int offset_y, int offset_width, int offset_height, 
+                   bool textures_not_centered) {
   SDL2pp::Surface src_surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
   std::vector<SDL2pp::Texture *> textures(amount_frames);
 
@@ -34,9 +35,13 @@ void ResourcePool::add_texture(const std::string &texture_name,
     int_surface.BlitScaled(dst_rect, dst_surface, SDL2pp::NullOpt);
     //}
 
-    Uint32 color_key = SDL_MapRGB(dst_surface.Get()->format, 128, 128, 192);
-    SDL2pp::Texture *texture(new SDL2pp::Texture(
-        renderer, dst_surface.SetColorKey(true, color_key)));
+    Uint32 color_key;
+    if (back_color == LIGHT_BLUE)
+      color_key = SDL_MapRGB(dst_surface.Get()->format, 128, 128, 192);
+    else if (back_color == YELLOW)
+      color_key = SDL_MapRGB(dst_surface.Get()->format, 192, 192, 128);
+    
+    SDL2pp::Texture *texture(new SDL2pp::Texture(renderer, dst_surface.SetColorKey(true, color_key)));
     textures[i] = texture;
   }
   texture_arrays[texture_name] = textures;
@@ -52,7 +57,7 @@ std::vector<SDL2pp::Texture* > ResourcePool::get_texture(const std::string &text
 
 
 void ResourcePool::add_short_beam() { 
-  add_texture(SHORT_BEAM, SHORT_BEAM_PATH, 72, 20, 1);
+  add_texture(SHORT_BEAM, SHORT_BEAM_PATH, 72, 20, 1, LIGHT_BLUE);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_short_beam_texture() {
@@ -60,7 +65,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_short_beam_texture() {
 }
 
 void ResourcePool::add_long_beam() { 
-  add_texture(LONG_BEAM, LONG_BEAM_PATH, 140, 20, 1);
+  add_texture(LONG_BEAM, LONG_BEAM_PATH, 140, 20, 1, LIGHT_BLUE);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() {
@@ -68,7 +73,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() {
 }
 
 void ResourcePool::add_worm_walking() {
-  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, 19, 15, -38, -33, true);
+  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, LIGHT_BLUE, 19, 15, -38, -33, true);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() {
@@ -76,7 +81,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() {
 }
 
 void ResourcePool::add_worm_jumping() {
-  add_texture(WORM_JUMPING, WORM_JUMPING_PATH, 60, 60, 10);
+  add_texture(WORM_JUMPING, WORM_JUMPING_PATH, 60, 60, 10, LIGHT_BLUE);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() {
@@ -84,15 +89,25 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() {
 }
 
 void ResourcePool::add_worm_aiming() {
-  add_texture(WORM_AIMING, WORM_AIMING_PATH, 60, 60, 32, 16, 14, -29, -31, false);
+  add_texture(WORM_AIMING_BAZ, WORM_AIMING_BAZ_PATH, 60, 60, 32, LIGHT_BLUE, 16, 14, -29, -31, false);
+  add_texture(WORM_AIMING_BAT, WORM_AIMING_BAT_PATH, 60, 60, 32, YELLOW, 14, 0, -15, 0, false);
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming() {
-  return get_texture(WORM_AIMING);
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming(WeaponType type) {
+  switch (type)
+  {
+  case BAZOOKA:
+    return get_texture(WORM_AIMING_BAZ);
+  case BAT:
+    return get_texture(WORM_AIMING_BAT);
+  default:
+    throw std::runtime_error("Invalid weapon type for aiming texture");
+    break;
+  }
 }
 
 void ResourcePool::add_missile_texture() {
-  add_texture(MISSILE, MISSILE_PATH, 60, 60, 32, 17, 23, -35, -46, false);
+  add_texture(MISSILE, MISSILE_PATH, 60, 60, 32, LIGHT_BLUE, 17, 23, -35, -46, false);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_missile_texture() {

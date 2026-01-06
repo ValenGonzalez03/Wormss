@@ -7,6 +7,7 @@
 #include <optional>
 #include <string>
 #include <vector>
+#include "../common/game_constants.h"
 
 #define SHORT_BEAM "short_beam"
 #define SHORT_BEAM_PATH "/Images/Weapons/grds4.png"
@@ -20,11 +21,19 @@
 #define WORM_JUMPING "worm_jumping"
 #define WORM_JUMPING_PATH "/Images/Worms/wjump.png"
 
-#define WORM_AIMING "worm_aiming"
-#define WORM_AIMING_PATH "/Images/Worms/wbaz.png"
+#define WORM_AIMING_BAZ "worm_aiming_baz"
+#define WORM_AIMING_BAZ_PATH "/Images/Worms/wbaz.png"
+
+#define WORM_AIMING_BAT "worm_aiming_bat"
+#define WORM_AIMING_BAT_PATH "/Images/Worms/wbsbaim.png"
 
 #define MISSILE "missile"
 #define MISSILE_PATH "/Images/Weapons/missile.png"
+
+enum BACKGROUND_COLOR {
+  LIGHT_BLUE,
+  YELLOW
+};
 
 class ResourcePool {
 private:
@@ -38,7 +47,7 @@ private:
 
   void add_texture(const std::string &texture_name,
                    const std::string &image_path, int width, int height,
-                   int amount_frames, int offset_x = 0, int offset_y = 0, 
+                   int amount_frames, BACKGROUND_COLOR back_color, int offset_x = 0, int offset_y = 0, 
                    int offset_width = 0, int offset_height = 0, 
                    bool textures_not_centered = false);
   
@@ -89,7 +98,7 @@ public:
 
   std::vector<SDL2pp::Texture *> get_worm_jumping();
 
-  std::vector<SDL2pp::Texture *> get_worm_aiming();
+  std::vector<SDL2pp::Texture *> get_worm_aiming(WeaponType type);
 
   std::vector<SDL2pp::Texture *> get_missile_texture();
   /*

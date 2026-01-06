@@ -3,9 +3,9 @@
 #include <cmath>
 
 Worm::Worm(int id, int pos_x, int pos_y, int width, int height, float aim_angle, uint8_t direction, 
-  WormState worm_state, std::vector<std::vector<SDL2pp::Texture *>> &&textures, SDL2pp::Renderer &rend)
+  WormState worm_state, std::vector<std::vector<SDL2pp::Texture *>> &&textures, SDL2pp::Renderer &rend, ResourcePool &res_pool)
       : id(id), pos_x(pos_x), pos_y(pos_y), width(width), height(height), aim_angle(aim_angle), direction(direction), 
-        worm_state(worm_state), textures(textures), renderer(rend) {}
+        worm_state(worm_state), textures(textures), renderer(rend), weapon_textures(res_pool) {}
 
 int Worm::get_id() {
   return id;
@@ -18,6 +18,7 @@ void Worm::update(WormData data) {
   worm_state = data.get_state();
   direction = data.get_direction();
   aim_angle = data.get_aim_angle();
+  weapon = data.get_weapon_selected();
 }
 
 void Worm::render(int frame) {
@@ -82,7 +83,7 @@ void Worm::render_worm_jumping(int frame) {}
 void Worm::render_worm_aiming(int frame) {
   SDL_RendererFlip flip = choose_flip_direction();
 
-  auto aim_texture = textures[1];
+  auto aim_texture = weapon_textures.get_aim_texture(weapon);
   auto normalized_angle = (aim_angle / M_PI_2);
   auto frame_position = 16 + (int)(normalized_angle * ((aim_texture.size() / 2)));
   aim_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
@@ -90,9 +91,13 @@ void Worm::render_worm_aiming(int frame) {
 
   //std::cout << "angle: " << angle << std::endl;
   //std::cout << "Normalized angle: " << normalized_angle << std::endl;
+  int fixed_pos_x = pos_x + (weapon == BAZOOKA ? -4 : -8);
+  int fixed_pos_y = pos_y + (weapon == BAZOOKA ? -2 : -13);
+  int fixed_width = width + (weapon == BAZOOKA ? +8 : +12);
+  int fixed_height = height + (weapon == BAZOOKA ? +2 : +28);
 
   renderer.Copy(*aim_texture[frame_position], SDL2pp::NullOpt,
-                SDL2pp::Rect((int)pos_x - 4, pos_y - 2, width + 8, height + 2), 0.0, SDL2pp::NullOpt, flip);
+                SDL2pp::Rect(fixed_pos_x, fixed_pos_y, fixed_width, fixed_height), 0.0, SDL2pp::NullOpt, flip);
 }
 
 SDL_RendererFlip Worm::choose_flip_direction() {

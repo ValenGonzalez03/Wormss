@@ -166,6 +166,10 @@ WeaponType WormBody::get_weapon_selected() {
   return current_weapon;
 }
 
+void WormBody::set_worm_to_attack() {
+  state = ATTACKING;
+}
+
 void WormBody::update() {
   if (has_exceeded_width_limit()) {
     body->SetTransform(b2Vec2(5, 25), 0); // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
@@ -185,6 +189,12 @@ void WormBody::update() {
       aim_up();
     } else {
       aim_down();
+    }
+  } else if (state == ATTACKING) {
+    frames_attacking++;
+    if (frames_attacking >= 10) {
+      frames_attacking = 0;
+      state = IDLE;
     }
   }
 }

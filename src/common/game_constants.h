@@ -23,7 +23,7 @@
 #define JUMP_FORWARD 0
 #define JUMP_BACKWARD 1
 
-enum WormState { IDLE, MOVING, JUMPING, AIMING, SHOOTING };
+enum WormState { IDLE, MOVING, JUMPING, AIMING, ATTACKING };
 
 enum WeaponType { NONE, BAZOOKA, BAT };
 

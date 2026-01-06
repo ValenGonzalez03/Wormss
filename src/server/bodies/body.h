@@ -7,6 +7,8 @@ class WormBody;
 class BeamBody;
 class MissileBody;
 
+class World;
+
 
 enum BODY_TYPES {
     WORM = 0,
@@ -40,6 +42,8 @@ protected:
 
   bool affected_by_explosions = false;
 
+  friend class World;
+
 public:
   Body(b2World* world, const float pos_x, const float pos_y, int angle, const float width, const float height, float density, float friction);
 
@@ -55,13 +59,18 @@ public:
   virtual void stop_touching_beam(BeamBody* beam) = 0;
   virtual void stop_touching_missile(MissileBody* missile) = 0;
 
+  void apply_impulse(const b2Vec2 &impulse, const b2Vec2 &point);
+
   virtual float explosion_intersect_value(float fraction) = 0;
 
   virtual void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) = 0;
 
   virtual BodyExplosionInfo get_explosion_info() = 0;
 
-  b2Body* get_body();
+  //b2Body* get_body();
+
+  UserData* get_user_data();
+
   virtual int get_type() = 0;
 
   bool is_affected_by_explosions();

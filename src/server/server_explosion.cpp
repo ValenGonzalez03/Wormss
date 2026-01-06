@@ -34,12 +34,11 @@ void Explosion::apply_explosion_to_bodies() {
 }
 
 void Explosion::apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_info, float blast_power) {
-	b2Body* body_b2 = body->get_body();
 	float explotion_intensity = 1 - explosion_info.fraction_force;
 	float impulse_mag = blast_power * explotion_intensity;
 	std::cout << "fraction: " << explosion_info.fraction_force << std::endl;
 	std::cout << "explotion_intensity: " << explotion_intensity << std::endl;
-	body_b2->ApplyLinearImpulse(impulse_mag * explosion_info.impulse_dir, explosion_info.apply_point, true);
+	body->apply_impulse(impulse_mag * explosion_info.impulse_dir, explosion_info.apply_point);
 }
 
 b2Vec2 Explosion::get_center() {

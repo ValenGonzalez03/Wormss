@@ -23,6 +23,10 @@ private:
   int32 velocityIterations = 6;
   int32 positionIterations = 2;
 
+  void use_bazooka(WormBody* worm, float initial_force);
+
+  void use_bat(WormBody* worm);
+
 public:
   explicit GameManager();
 

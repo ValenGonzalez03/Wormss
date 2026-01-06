@@ -9,10 +9,9 @@ float BaseballBatCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point
     auto* data = reinterpret_cast<UserData*>(fixture->GetBody()->GetUserData().pointer);
     if (data && data != attacker) {
         auto* body = reinterpret_cast<Body*>(data->pointer);
-        b2Body* body_2d = body->get_body();
         b2Vec2 attack_dir = point - attacker_pos;
         attack_dir.Normalize();
-        body_2d->ApplyLinearImpulse(BAT_POWER * attack_dir, point, true);
+        body->apply_impulse(BAT_POWER * attack_dir, point);
     }
     return 1;
 }

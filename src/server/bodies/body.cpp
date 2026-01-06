@@ -65,6 +65,14 @@ bool Body::is_affected_by_explosions() {
   return affected_by_explosions;
 }
 
-b2Body* Body::get_body() {
-  return body;
+void Body::apply_impulse(const b2Vec2 &impulse, const b2Vec2 &point) {
+  body->ApplyLinearImpulse(impulse, point, true);
 }
+
+UserData* Body::get_user_data() {
+  return reinterpret_cast<UserData*>(body->GetUserData().pointer);
+}
+
+// b2Body* Body::get_body() {
+//   return body;
+// }

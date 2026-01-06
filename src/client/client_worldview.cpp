@@ -198,8 +198,8 @@ std::string WorldView::print_state(WormState state)
     return "jumping";
   case AIMING:
     return "aiming";
-  case SHOOTING:
-    return "shooting";
+  case ATTACKING:
+    return "attacking";
   default:
     return "unknown";
   }

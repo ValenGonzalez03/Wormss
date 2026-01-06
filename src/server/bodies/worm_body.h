@@ -20,6 +20,7 @@ private:
 
   WormState state = IDLE;
   WeaponType current_weapon = BAZOOKA;
+  int frames_attacking = 0;
 
   bool hit_by_explosion = false;
   b2Vec2 impulse_dir = b2Vec2(0,0);
@@ -96,6 +97,8 @@ public:
   float get_aiming_angle();
 
   WeaponType get_weapon_selected();
+
+  void set_worm_to_attack();
 
   void update();
 

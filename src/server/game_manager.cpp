@@ -116,43 +116,49 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
   WeaponType weapon = worm->get_weapon_selected();
   switch (weapon)
   {
-  case BAZOOKA: {
-    b2Vec2 missile_pos = worm->calculate_missile_launch_position();
-    b2Vec2 worm_pos = worm->get_position();
-    MissileCallback callback;
-    world.ray_cast(&callback, worm_pos, missile_pos);
-
-    if (callback.did_hit_wall()) {
-      b2Vec2 hit_point = callback.get_hit_point();
-      world.create_explosion(hit_point.x, hit_point.y);
-    } else {
-      MissileBody* missile = worm->attack_throwable(missile_pos, initial_force, missiles_id_counter);
-      missiles_id_counter++;
-      world.create_missile(missile);
-      missile->apply_initial_impulse(worm->get_aiming_angle());
-    }
-  }
+  case BAZOOKA:
+    use_bazooka(worm, initial_force);
     break;
-  case BAT: {
-    b2Vec2 worm_pos = worm->get_position();
-    UserData* data = reinterpret_cast<UserData*>(worm->get_body()->GetUserData().pointer);
-    BaseballBatCallback bat_callback(worm_pos, data);
-
-    float aim_angle = worm->get_aiming_angle();
-    uint8_t worm_dir = worm->get_direction();
-    float bat_end_x = (worm_dir == RIGHT ? 1 : -1) * cosf(aim_angle);
-    b2Vec2 bat_end_pos = worm_pos + (BAT_LENGTH * b2Vec2( bat_end_x, sinf(aim_angle)));
-    b2Vec2 dir = bat_end_pos - worm_pos;
-    dir.Normalize();
-    std::cout << "Bat direction: (" << dir.x << ", " << dir.y << ")" << std::endl;
-    world.ray_cast(&bat_callback, worm_pos, bat_end_pos);
-  }
+  case BAT:
+    use_bat(worm);
     break;
   default:
     /* Ningun arma (?) */
     break;
   }
+  worm->set_worm_to_attack();
+}
 
+void GameManager::use_bazooka(WormBody* worm, float initial_force) {
+  b2Vec2 missile_pos = worm->calculate_missile_launch_position();
+  b2Vec2 worm_pos = worm->get_position();
+  MissileCallback callback;
+  world.ray_cast(&callback, worm_pos, missile_pos);
+
+  if (callback.did_hit_wall()) {
+    b2Vec2 hit_point = callback.get_hit_point();
+    world.create_explosion(hit_point.x, hit_point.y);
+  } else {
+    MissileBody* missile = worm->attack_throwable(missile_pos, initial_force, missiles_id_counter);
+    missiles_id_counter++;
+    world.create_missile(missile);
+    missile->apply_initial_impulse(worm->get_aiming_angle());
+  }
+}
+
+void GameManager::use_bat(WormBody* worm) {
+  b2Vec2 worm_pos = worm->get_position();
+  UserData* data = worm->get_user_data();
+  BaseballBatCallback bat_callback(worm_pos, data);
+
+  float aim_angle = worm->get_aiming_angle();
+  uint8_t worm_dir = worm->get_direction();
+  float bat_end_x = (worm_dir == RIGHT ? 1 : -1) * cosf(aim_angle);
+  b2Vec2 bat_end_pos = worm_pos + (BAT_LENGTH * b2Vec2( bat_end_x, sinf(aim_angle)));
+  b2Vec2 dir = bat_end_pos - worm_pos;
+  dir.Normalize();
+  std::cout << "Bat direction: (" << dir.x << ", " << dir.y << ")" << std::endl;
+  world.ray_cast(&bat_callback, worm_pos, bat_end_pos);
 }
 
 GameState GameManager::create_state() {

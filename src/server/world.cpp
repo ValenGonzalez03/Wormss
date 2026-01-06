@@ -48,7 +48,7 @@ void World::create_explosion(float pos_x, float pos_y) {
 }
 
 void World::destroy_body(Body* body) {
-  world->DestroyBody(body->get_body());
+  world->DestroyBody(body->body);
   delete body;
 }
 

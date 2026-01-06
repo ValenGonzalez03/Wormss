@@ -356,25 +356,6 @@ void Client::handle_quit_game()
   prot.close_socket();
 }
 
-std::string Client::print_state(WormState state)
-{
-  switch (state)
-  {
-  case IDLE:
-    return "idle";
-  case MOVING:
-    return "running";
-  case JUMPING:
-    return "jumping";
-  case AIMING:
-    return "aiming";
-  case SHOOTING:
-    return "shooting";
-  default:
-    return "unknown";
-  }
-}
-
 std::string Client::print_weapon_selected(WeaponType weapon)
 {
   switch (weapon)

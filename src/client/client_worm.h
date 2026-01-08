@@ -17,6 +17,7 @@ public:
   WeaponTextureList(ResourcePool &res_pool) {
     weapon_textures.push_back(res_pool.get_worm_aiming(BAZOOKA));
     weapon_textures.push_back(res_pool.get_worm_aiming(BAT));
+    weapon_textures.push_back(res_pool.get_worm_attacking(BAT));
   }
 
   std::vector<SDL2pp::Texture*> get_aim_texture(WeaponType type) {
@@ -54,38 +55,43 @@ private:
   WormState worm_state;
   WeaponType weapon;
   std::vector<std::vector<SDL2pp::Texture *>> textures; // Vector de grillas de texturas
-  WeaponTextureList weapon_textures;
+  WeaponTextureList weapon_textures; // Objeto que contiene las texturas de todas las armas
   SDL2pp::Renderer &renderer;
   // SDL2pp::Texture &shooting_texture;
 
   SDL_RendererFlip choose_flip_direction();
 
+  // Renderiza el worm cuando se encuentra en estado "idle"
+  void render_worm_idle(int frame);
+
+  // Renderiza el worm cuando se encuentra en estado "running"
+  void render_worm_running(int frame);
+
+  // Renderiza al worm cuando se encuentra en estado "jumping" (NO TERMINADA)
+  void render_worm_jumping(int frame);
+
+  // Renderiza el worm cuando se encuentra en estado "aiming" en funcion del arma seleccionada
+  void render_worm_aiming(int frame);
+
+  // Renderiza el worm cuando se encuentra en estado "attacking" en funcion del arma seleccionada
+  void render_worm_attacking(int frame);
+
 public:
 
   explicit Worm();
+
   // Crea un Worm con un renderer y las texturas correspondientes
   explicit Worm(int id, int pos_x, int pos_y, int width, int heigth, float aim_angle, uint8_t direction, 
     WormState worm_state, std::vector<std::vector<SDL2pp::Texture *>> &&textures, SDL2pp::Renderer &rend, ResourcePool &res_pool);
 
   int get_id();
 
+  // Actualiza el estado del Worm con la informacion del server
   void update(WormData data);
 
-  // Renderiza el worm pasado por parámetro según el estado del
-  // mismo
+  // Renderiza el worm en función de su estado actual
   void render(int frame);
 
-  // Renderiza el worm cuando este se encuentra en estado "idle"
-  void render_worm_idle(int frame);
-
-  // Renderiza el worm cuando este se encuentra en estado "running"
-  void render_worm_running(int frame);
-
-  // Renderiza al worm saltando
-  void render_worm_jumping(int frame);
-
-  // Renderiza el worm apuntando cuando este se encuentra en estado "aiming"
-  void render_worm_aiming(int frame);
 };
 
 

@@ -1,5 +1,29 @@
 #include "client_resource_pool.h"
 
+#define SHORT_BEAM "short_beam"
+#define SHORT_BEAM_PATH "/Images/Weapons/grds4.png"
+
+#define LONG_BEAM "long_beam"
+#define LONG_BEAM_PATH "/Images/Weapons/grdl4.png"
+
+#define WORM_WALKING "worm_walking"
+#define WORM_WALKING_PATH "/Images/Worms/wwalk2.png"
+
+#define WORM_JUMPING "worm_jumping"
+#define WORM_JUMPING_PATH "/Images/Worms/wjump.png"
+
+#define WORM_AIMING_BAZ "worm_aiming_baz"
+#define WORM_AIMING_BAZ_PATH "/Images/Worms/wbaz.png"
+
+#define WORM_AIMING_BAT "worm_aiming_bat"
+#define WORM_AIMING_BAT_PATH "/Images/Worms/wbsbaim.png"
+
+#define WORM_ATTACKING_BAT "worm_attacking_bat"
+#define WORM_ATTACKING_BAT_PATH "/Images/Worms/wbsbswn.png"
+
+#define MISSILE "missile"
+#define MISSILE_PATH "/Images/Weapons/missile.png"
+
 ResourcePool::ResourcePool(SDL2pp::Renderer &rend) : renderer(rend) {}
 
 void ResourcePool::initialize() {
@@ -8,6 +32,7 @@ void ResourcePool::initialize() {
   add_worm_walking();
   add_worm_jumping();
   add_worm_aiming();
+  add_worm_attacking();
   add_missile_texture();
   add_music(std::string(RESOURCES_PATH) + "/Sounds/music.wav");
   //add_font("Vera20", "/Vera.ttf", 20);
@@ -55,42 +80,74 @@ std::vector<SDL2pp::Texture* > ResourcePool::get_texture(const std::string &text
   }
 }
 
+// ==================================== AGREGADO DE TEXTURAS ==================================== //
+// ============================================================================================== //
+
+void ResourcePool::add_background(const std::string &image_path) {
+  SDL2pp::Surface surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + "/Images/Backgrounds/" + image_path);
+  Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
+
+  background = std::make_shared<SDL2pp::Texture>(renderer, surface.SetColorKey(true, color_key));
+}
 
 void ResourcePool::add_short_beam() { 
   add_texture(SHORT_BEAM, SHORT_BEAM_PATH, 72, 20, 1, LIGHT_BLUE);
-}
-
-std::vector<SDL2pp::Texture *> ResourcePool::get_short_beam_texture() {
-  return get_texture(SHORT_BEAM);
 }
 
 void ResourcePool::add_long_beam() { 
   add_texture(LONG_BEAM, LONG_BEAM_PATH, 140, 20, 1, LIGHT_BLUE);
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() {
-  return get_texture(LONG_BEAM);
-}
-
 void ResourcePool::add_worm_walking() {
   add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, LIGHT_BLUE, 19, 15, -38, -33, true);
-}
-
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() {
-  return get_texture(WORM_WALKING);
 }
 
 void ResourcePool::add_worm_jumping() {
   add_texture(WORM_JUMPING, WORM_JUMPING_PATH, 60, 60, 10, LIGHT_BLUE);
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() {
-  return get_texture(WORM_JUMPING);
-}
-
 void ResourcePool::add_worm_aiming() {
   add_texture(WORM_AIMING_BAZ, WORM_AIMING_BAZ_PATH, 60, 60, 32, LIGHT_BLUE, 16, 14, -29, -31, false);
-  add_texture(WORM_AIMING_BAT, WORM_AIMING_BAT_PATH, 60, 60, 32, YELLOW, 14, 0, -15, 0, false);
+  add_texture(WORM_AIMING_BAT, WORM_AIMING_BAT_PATH, 60, 60, 32, YELLOW, 15, 0, -15, 0, false);
+}
+
+void ResourcePool::add_worm_attacking() {
+  add_texture(WORM_ATTACKING_BAT, WORM_ATTACKING_BAT_PATH, 60, 60, 32, YELLOW, 0, 0, -16, 0, false);
+}
+
+void ResourcePool::add_missile_texture() {
+  add_texture(MISSILE, MISSILE_PATH, 60, 60, 32, LIGHT_BLUE, 17, 23, -35, -46, false);
+}
+
+// ============================================================================================== //
+// ============================================================================================== //
+
+
+// ======================================= GET DE TEXTURAS ==================================== //
+// ============================================================================================ //
+
+std::shared_ptr<SDL2pp::Texture> ResourcePool::get_background() {
+  try {
+    return background;
+  } catch (const std::exception &e) {
+    throw std::runtime_error("Background not found.");
+  }
+}
+
+std::vector<SDL2pp::Texture *> ResourcePool::get_short_beam_texture() {
+  return get_texture(SHORT_BEAM);
+}
+
+std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() {
+  return get_texture(LONG_BEAM);
+}
+
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() {
+  return get_texture(WORM_WALKING);
+}
+
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() {
+  return get_texture(WORM_JUMPING);
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming(WeaponType type) {
@@ -106,13 +163,28 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming(WeaponType type) {
   }
 }
 
-void ResourcePool::add_missile_texture() {
-  add_texture(MISSILE, MISSILE_PATH, 60, 60, 32, LIGHT_BLUE, 17, 23, -35, -46, false);
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_attacking(WeaponType type) {
+  switch (type)
+  {
+  case BAZOOKA:
+    return get_texture(WORM_AIMING_BAZ);
+  case BAT:
+    return get_texture(WORM_ATTACKING_BAT);
+  default:
+    throw std::runtime_error("Invalid weapon type for aiming texture");
+    break;
+  }
 }
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_missile_texture() {
   return get_texture(MISSILE);
 }
+// ============================================================================================== //
+// ============================================================================================== //
+
+
+// ======================================= OTROS ==================================== //
+// ================================================================================== //
 
 void ResourcePool::add_font(const std::string &font_name, const std::string &font_path,
               int font_size) {
@@ -130,23 +202,6 @@ std::shared_ptr<SDL2pp::Font> ResourcePool::get_font(const std::string &font_nam
     throw std::runtime_error("Font not found: " + font_name);
   }
   return it->second;
-}
-
-void ResourcePool::add_background(const std::string &image_path) {
-  SDL2pp::Surface surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + "/Images/Backgrounds/" + image_path);
-  Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
-
-  background = std::make_shared<SDL2pp::Texture>(
-      renderer, surface.SetColorKey(
-                    true, color_key));
-}
-
-std::shared_ptr<SDL2pp::Texture> ResourcePool::get_background() {
-  try {
-    return background;
-  } catch (const std::exception &e) {
-    throw std::runtime_error("Background not found.");
-  }
 }
 
 void ResourcePool::add_music(std::string absolute_path) {
@@ -177,6 +232,9 @@ void ResourcePool::turn_music_volume_up() {
     Mix_VolumeMusic(music_volume);
   }
 }
+
+// ================================================================================== //
+// ================================================================================== //
 
 ResourcePool::~ResourcePool() {
   // Elimino las texturas

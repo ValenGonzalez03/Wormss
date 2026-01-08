@@ -9,27 +9,6 @@
 #include <vector>
 #include "../common/game_constants.h"
 
-#define SHORT_BEAM "short_beam"
-#define SHORT_BEAM_PATH "/Images/Weapons/grds4.png"
-
-#define LONG_BEAM "long_beam"
-#define LONG_BEAM_PATH "/Images/Weapons/grdl4.png"
-
-#define WORM_WALKING "worm_walking"
-#define WORM_WALKING_PATH "/Images/Worms/wwalk2.png"
-
-#define WORM_JUMPING "worm_jumping"
-#define WORM_JUMPING_PATH "/Images/Worms/wjump.png"
-
-#define WORM_AIMING_BAZ "worm_aiming_baz"
-#define WORM_AIMING_BAZ_PATH "/Images/Worms/wbaz.png"
-
-#define WORM_AIMING_BAT "worm_aiming_bat"
-#define WORM_AIMING_BAT_PATH "/Images/Worms/wbsbaim.png"
-
-#define MISSILE "missile"
-#define MISSILE_PATH "/Images/Weapons/missile.png"
-
 enum BACKGROUND_COLOR {
   LIGHT_BLUE,
   YELLOW
@@ -69,15 +48,19 @@ private:
   // Agrega la textura de long_beam al map de texturas
   void add_long_beam();
 
-  // Agrega la textura del gusano caminando al map de texturas
+  // Agrega las texturas del gusano caminando al map de texturas
   void add_worm_walking();
 
-  // Agrega la textura del gusano saltando al map de texturas
+  // Agrega las texturas del gusano saltando al map de texturas
   void add_worm_jumping();
 
-  // Agrega la textura del gusano apuntando al map de texturas
+  // Agrega las texturas del gusano apuntando con todas las armas al map de texturas
   void add_worm_aiming();
 
+  // Agrega las texturas del gusano atacando con todas las armas al map de texturas
+  void add_worm_attacking();
+
+  // Agrega la textura del gusano misil de la bazooka al map de texturas
   void add_missile_texture();
 
 public:
@@ -96,10 +79,16 @@ public:
   // Devuelve un ptr a la textura del worm caminando
   std::vector<SDL2pp::Texture *> get_worm_walking();
 
+  // Devuelve un ptr a la textura del worm saltando
   std::vector<SDL2pp::Texture *> get_worm_jumping();
 
+  // Devuelve un ptr a la textura del worm apuntando dependiendo del arma que este utilizando en ese momento
   std::vector<SDL2pp::Texture *> get_worm_aiming(WeaponType type);
 
+  // Devuelve un ptr a la textura del worm atacando dependiendo del arma que este utilizando en ese momento
+  std::vector<SDL2pp::Texture *> get_worm_attacking(WeaponType type);
+
+  // Devuelve un ptr a la textura del misil de la bazooka
   std::vector<SDL2pp::Texture *> get_missile_texture();
   /*
     void add_sound(const std::string sound_name, const std::string &sound_path)

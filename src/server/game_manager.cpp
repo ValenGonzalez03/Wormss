@@ -113,6 +113,8 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
   // }
   WormBody *worm = world.get_worm(player_id);
 
+  if (worm->get_state() == ATTACKING) return;
+
   WeaponType weapon = worm->get_weapon_selected();
   switch (weapon)
   {

@@ -347,6 +347,30 @@ src/client/client_client.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_client.cpp.s
 .PHONY : src/client/client_client.cpp.s
 
+src/client/client_explosion.o: src/client/client_explosion.cpp.o
+.PHONY : src/client/client_explosion.o
+
+# target to build an object file
+src/client/client_explosion.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_explosion.cpp.o
+.PHONY : src/client/client_explosion.cpp.o
+
+src/client/client_explosion.i: src/client/client_explosion.cpp.i
+.PHONY : src/client/client_explosion.i
+
+# target to preprocess a source file
+src/client/client_explosion.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_explosion.cpp.i
+.PHONY : src/client/client_explosion.cpp.i
+
+src/client/client_explosion.s: src/client/client_explosion.cpp.s
+.PHONY : src/client/client_explosion.s
+
+# target to generate assembly for a file
+src/client/client_explosion.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/client/client_explosion.cpp.s
+.PHONY : src/client/client_explosion.cpp.s
+
 src/client/client_lobby.o: src/client/client_lobby.cpp.o
 .PHONY : src/client/client_lobby.o
 
@@ -671,6 +695,30 @@ src/common/lib/socket.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/common/lib/socket.cpp.s
 .PHONY : src/common/lib/socket.cpp.s
 
+src/server/baseball_bat_callback.o: src/server/baseball_bat_callback.cpp.o
+.PHONY : src/server/baseball_bat_callback.o
+
+# target to build an object file
+src/server/baseball_bat_callback.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/baseball_bat_callback.cpp.o
+.PHONY : src/server/baseball_bat_callback.cpp.o
+
+src/server/baseball_bat_callback.i: src/server/baseball_bat_callback.cpp.i
+.PHONY : src/server/baseball_bat_callback.i
+
+# target to preprocess a source file
+src/server/baseball_bat_callback.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/baseball_bat_callback.cpp.i
+.PHONY : src/server/baseball_bat_callback.cpp.i
+
+src/server/baseball_bat_callback.s: src/server/baseball_bat_callback.cpp.s
+.PHONY : src/server/baseball_bat_callback.s
+
+# target to generate assembly for a file
+src/server/baseball_bat_callback.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/baseball_bat_callback.cpp.s
+.PHONY : src/server/baseball_bat_callback.cpp.s
+
 src/server/bodies/beam_body.o: src/server/bodies/beam_body.cpp.o
 .PHONY : src/server/bodies/beam_body.o
 
@@ -742,102 +790,6 @@ src/server/bodies/missile_body.s: src/server/bodies/missile_body.cpp.s
 src/server/bodies/missile_body.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/missile_body.cpp.s
 .PHONY : src/server/bodies/missile_body.cpp.s
-
-src/server/bodies/water_body.o: src/server/bodies/water_body.cpp.o
-.PHONY : src/server/bodies/water_body.o
-
-# target to build an object file
-src/server/bodies/water_body.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/water_body.cpp.o
-.PHONY : src/server/bodies/water_body.cpp.o
-
-src/server/bodies/water_body.i: src/server/bodies/water_body.cpp.i
-.PHONY : src/server/bodies/water_body.i
-
-# target to preprocess a source file
-src/server/bodies/water_body.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/water_body.cpp.i
-.PHONY : src/server/bodies/water_body.cpp.i
-
-src/server/bodies/water_body.s: src/server/bodies/water_body.cpp.s
-.PHONY : src/server/bodies/water_body.s
-
-# target to generate assembly for a file
-src/server/bodies/water_body.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/water_body.cpp.s
-.PHONY : src/server/bodies/water_body.cpp.s
-
-src/server/bodies/weapons/banana.o: src/server/bodies/weapons/banana.cpp.o
-.PHONY : src/server/bodies/weapons/banana.o
-
-# target to build an object file
-src/server/bodies/weapons/banana.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/banana.cpp.o
-.PHONY : src/server/bodies/weapons/banana.cpp.o
-
-src/server/bodies/weapons/banana.i: src/server/bodies/weapons/banana.cpp.i
-.PHONY : src/server/bodies/weapons/banana.i
-
-# target to preprocess a source file
-src/server/bodies/weapons/banana.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/banana.cpp.i
-.PHONY : src/server/bodies/weapons/banana.cpp.i
-
-src/server/bodies/weapons/banana.s: src/server/bodies/weapons/banana.cpp.s
-.PHONY : src/server/bodies/weapons/banana.s
-
-# target to generate assembly for a file
-src/server/bodies/weapons/banana.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/banana.cpp.s
-.PHONY : src/server/bodies/weapons/banana.cpp.s
-
-src/server/bodies/weapons/bazooka.o: src/server/bodies/weapons/bazooka.cpp.o
-.PHONY : src/server/bodies/weapons/bazooka.o
-
-# target to build an object file
-src/server/bodies/weapons/bazooka.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/bazooka.cpp.o
-.PHONY : src/server/bodies/weapons/bazooka.cpp.o
-
-src/server/bodies/weapons/bazooka.i: src/server/bodies/weapons/bazooka.cpp.i
-.PHONY : src/server/bodies/weapons/bazooka.i
-
-# target to preprocess a source file
-src/server/bodies/weapons/bazooka.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/bazooka.cpp.i
-.PHONY : src/server/bodies/weapons/bazooka.cpp.i
-
-src/server/bodies/weapons/bazooka.s: src/server/bodies/weapons/bazooka.cpp.s
-.PHONY : src/server/bodies/weapons/bazooka.s
-
-# target to generate assembly for a file
-src/server/bodies/weapons/bazooka.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/bazooka.cpp.s
-.PHONY : src/server/bodies/weapons/bazooka.cpp.s
-
-src/server/bodies/weapons/dynamite.o: src/server/bodies/weapons/dynamite.cpp.o
-.PHONY : src/server/bodies/weapons/dynamite.o
-
-# target to build an object file
-src/server/bodies/weapons/dynamite.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/dynamite.cpp.o
-.PHONY : src/server/bodies/weapons/dynamite.cpp.o
-
-src/server/bodies/weapons/dynamite.i: src/server/bodies/weapons/dynamite.cpp.i
-.PHONY : src/server/bodies/weapons/dynamite.i
-
-# target to preprocess a source file
-src/server/bodies/weapons/dynamite.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/dynamite.cpp.i
-.PHONY : src/server/bodies/weapons/dynamite.cpp.i
-
-src/server/bodies/weapons/dynamite.s: src/server/bodies/weapons/dynamite.cpp.s
-.PHONY : src/server/bodies/weapons/dynamite.s
-
-# target to generate assembly for a file
-src/server/bodies/weapons/dynamite.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/bodies/weapons/dynamite.cpp.s
-.PHONY : src/server/bodies/weapons/dynamite.cpp.s
 
 src/server/bodies/worm_body.o: src/server/bodies/worm_body.cpp.o
 .PHONY : src/server/bodies/worm_body.o
@@ -935,29 +887,29 @@ src/server/contact_listener.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/contact_listener.cpp.s
 .PHONY : src/server/contact_listener.cpp.s
 
-src/server/explosion_manager.o: src/server/explosion_manager.cpp.o
-.PHONY : src/server/explosion_manager.o
+src/server/explosion_callback.o: src/server/explosion_callback.cpp.o
+.PHONY : src/server/explosion_callback.o
 
 # target to build an object file
-src/server/explosion_manager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/explosion_manager.cpp.o
-.PHONY : src/server/explosion_manager.cpp.o
+src/server/explosion_callback.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/explosion_callback.cpp.o
+.PHONY : src/server/explosion_callback.cpp.o
 
-src/server/explosion_manager.i: src/server/explosion_manager.cpp.i
-.PHONY : src/server/explosion_manager.i
+src/server/explosion_callback.i: src/server/explosion_callback.cpp.i
+.PHONY : src/server/explosion_callback.i
 
 # target to preprocess a source file
-src/server/explosion_manager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/explosion_manager.cpp.i
-.PHONY : src/server/explosion_manager.cpp.i
+src/server/explosion_callback.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/explosion_callback.cpp.i
+.PHONY : src/server/explosion_callback.cpp.i
 
-src/server/explosion_manager.s: src/server/explosion_manager.cpp.s
-.PHONY : src/server/explosion_manager.s
+src/server/explosion_callback.s: src/server/explosion_callback.cpp.s
+.PHONY : src/server/explosion_callback.s
 
 # target to generate assembly for a file
-src/server/explosion_manager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/explosion_manager.cpp.s
-.PHONY : src/server/explosion_manager.cpp.s
+src/server/explosion_callback.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/explosion_callback.cpp.s
+.PHONY : src/server/explosion_callback.cpp.s
 
 src/server/game_manager.o: src/server/game_manager.cpp.o
 .PHONY : src/server/game_manager.o
@@ -1054,6 +1006,30 @@ src/server/server_accept_thread.s: src/server/server_accept_thread.cpp.s
 src/server/server_accept_thread.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_accept_thread.cpp.s
 .PHONY : src/server/server_accept_thread.cpp.s
+
+src/server/server_explosion.o: src/server/server_explosion.cpp.o
+.PHONY : src/server/server_explosion.o
+
+# target to build an object file
+src/server/server_explosion.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_explosion.cpp.o
+.PHONY : src/server/server_explosion.cpp.o
+
+src/server/server_explosion.i: src/server/server_explosion.cpp.i
+.PHONY : src/server/server_explosion.i
+
+# target to preprocess a source file
+src/server/server_explosion.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_explosion.cpp.i
+.PHONY : src/server/server_explosion.cpp.i
+
+src/server/server_explosion.s: src/server/server_explosion.cpp.s
+.PHONY : src/server/server_explosion.s
+
+# target to generate assembly for a file
+src/server/server_explosion.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_explosion.cpp.s
+.PHONY : src/server/server_explosion.cpp.s
 
 src/server/server_game.o: src/server/server_game.cpp.o
 .PHONY : src/server/server_game.o
@@ -1223,6 +1199,30 @@ src/server/server_server.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/server_server.cpp.s
 .PHONY : src/server/server_server.cpp.s
 
+src/server/trajectory_missile_callback.o: src/server/trajectory_missile_callback.cpp.o
+.PHONY : src/server/trajectory_missile_callback.o
+
+# target to build an object file
+src/server/trajectory_missile_callback.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/trajectory_missile_callback.cpp.o
+.PHONY : src/server/trajectory_missile_callback.cpp.o
+
+src/server/trajectory_missile_callback.i: src/server/trajectory_missile_callback.cpp.i
+.PHONY : src/server/trajectory_missile_callback.i
+
+# target to preprocess a source file
+src/server/trajectory_missile_callback.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/trajectory_missile_callback.cpp.i
+.PHONY : src/server/trajectory_missile_callback.cpp.i
+
+src/server/trajectory_missile_callback.s: src/server/trajectory_missile_callback.cpp.s
+.PHONY : src/server/trajectory_missile_callback.s
+
+# target to generate assembly for a file
+src/server/trajectory_missile_callback.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server/trajectory_missile_callback.cpp.s
+.PHONY : src/server/trajectory_missile_callback.cpp.s
+
 src/server/world.o: src/server/world.cpp.o
 .PHONY : src/server/world.o
 
@@ -1282,6 +1282,9 @@ help:
 	@echo "... src/client/client_client.o"
 	@echo "... src/client/client_client.i"
 	@echo "... src/client/client_client.s"
+	@echo "... src/client/client_explosion.o"
+	@echo "... src/client/client_explosion.i"
+	@echo "... src/client/client_explosion.s"
 	@echo "... src/client/client_lobby.o"
 	@echo "... src/client/client_lobby.i"
 	@echo "... src/client/client_lobby.s"
@@ -1321,6 +1324,9 @@ help:
 	@echo "... src/common/lib/socket.o"
 	@echo "... src/common/lib/socket.i"
 	@echo "... src/common/lib/socket.s"
+	@echo "... src/server/baseball_bat_callback.o"
+	@echo "... src/server/baseball_bat_callback.i"
+	@echo "... src/server/baseball_bat_callback.s"
 	@echo "... src/server/bodies/beam_body.o"
 	@echo "... src/server/bodies/beam_body.i"
 	@echo "... src/server/bodies/beam_body.s"
@@ -1330,18 +1336,6 @@ help:
 	@echo "... src/server/bodies/missile_body.o"
 	@echo "... src/server/bodies/missile_body.i"
 	@echo "... src/server/bodies/missile_body.s"
-	@echo "... src/server/bodies/water_body.o"
-	@echo "... src/server/bodies/water_body.i"
-	@echo "... src/server/bodies/water_body.s"
-	@echo "... src/server/bodies/weapons/banana.o"
-	@echo "... src/server/bodies/weapons/banana.i"
-	@echo "... src/server/bodies/weapons/banana.s"
-	@echo "... src/server/bodies/weapons/bazooka.o"
-	@echo "... src/server/bodies/weapons/bazooka.i"
-	@echo "... src/server/bodies/weapons/bazooka.s"
-	@echo "... src/server/bodies/weapons/dynamite.o"
-	@echo "... src/server/bodies/weapons/dynamite.i"
-	@echo "... src/server/bodies/weapons/dynamite.s"
 	@echo "... src/server/bodies/worm_body.o"
 	@echo "... src/server/bodies/worm_body.i"
 	@echo "... src/server/bodies/worm_body.s"
@@ -1354,9 +1348,9 @@ help:
 	@echo "... src/server/contact_listener.o"
 	@echo "... src/server/contact_listener.i"
 	@echo "... src/server/contact_listener.s"
-	@echo "... src/server/explosion_manager.o"
-	@echo "... src/server/explosion_manager.i"
-	@echo "... src/server/explosion_manager.s"
+	@echo "... src/server/explosion_callback.o"
+	@echo "... src/server/explosion_callback.i"
+	@echo "... src/server/explosion_callback.s"
 	@echo "... src/server/game_manager.o"
 	@echo "... src/server/game_manager.i"
 	@echo "... src/server/game_manager.s"
@@ -1369,6 +1363,9 @@ help:
 	@echo "... src/server/server_accept_thread.o"
 	@echo "... src/server/server_accept_thread.i"
 	@echo "... src/server/server_accept_thread.s"
+	@echo "... src/server/server_explosion.o"
+	@echo "... src/server/server_explosion.i"
+	@echo "... src/server/server_explosion.s"
 	@echo "... src/server/server_game.o"
 	@echo "... src/server/server_game.i"
 	@echo "... src/server/server_game.s"
@@ -1390,6 +1387,9 @@ help:
 	@echo "... src/server/server_server.o"
 	@echo "... src/server/server_server.i"
 	@echo "... src/server/server_server.s"
+	@echo "... src/server/trajectory_missile_callback.o"
+	@echo "... src/server/trajectory_missile_callback.i"
+	@echo "... src/server/trajectory_missile_callback.s"
 	@echo "... src/server/world.o"
 	@echo "... src/server/world.i"
 	@echo "... src/server/world.s"

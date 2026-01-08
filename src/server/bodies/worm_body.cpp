@@ -55,9 +55,10 @@ void WormBody::apply_vertical_impulse(float jump_speed) {
 }
 
 void WormBody::start_moving(const uint8_t &dir) {
-  if (state == JUMPING) return;
-  state = MOVING;
-  direction = dir;
+  if (state == IDLE || JUMPING)  {
+    state = MOVING;
+    direction = dir;
+  }
 }
 
 void WormBody::stop_moving() {
@@ -95,8 +96,10 @@ void WormBody::jump(const uint8_t &dir, const uint8_t &jump_type) {
 }
 
 void WormBody::start_aiming(const uint8_t &dir) {
-  state = AIMING;
-  aim_direction = dir;
+  if (state == IDLE) {
+    state = AIMING;
+    aim_direction = dir;
+  }
 }
 
 void WormBody::aim_up() {
@@ -192,7 +195,7 @@ void WormBody::update() {
     }
   } else if (state == ATTACKING) {
     frames_attacking++;
-    if (frames_attacking >= 10) {
+    if (frames_attacking >= 60) {
       frames_attacking = 0;
       state = IDLE;
     }

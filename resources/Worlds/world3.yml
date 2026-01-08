@@ -28,5 +28,5 @@ beams:
 spawn_points:
   - position_x: 6.0
     position_y: 15.0
-  - position_x: 2.0
-    position_y: 8.0
+  - position_x: 10.0
+    position_y: 15.0

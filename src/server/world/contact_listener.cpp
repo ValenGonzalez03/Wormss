@@ -1,9 +1,8 @@
 #include "contact_listener.h"
-#include "bodies/worm_body.h"
-
-#include "bodies/beam_body.h"
-#include "bodies/water_body.h"
-#include "bodies/body.h"
+#include "../bodies/body.h"
+#include "../bodies/worm_body.h"
+#include "../bodies/beam_body.h"
+#include "../bodies/water_body.h"
 
 #include <iostream>
 

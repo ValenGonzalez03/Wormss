@@ -7,12 +7,12 @@
 #include <memory>
 #include <utility>
 
-#include "../common/commands/command.h"
-#include "../common/game_constants.h"
-#include "../common/lib/liberror.h"
-#include "../common/lib/socket.h"
+#include "../../common/commands/command.h"
+#include "../../common/game_constants.h"
+#include "../../common/lib/liberror.h"
+#include "../../common/lib/socket.h"
 
-#include "runnable_commands/command_runnable_game.h"
+#include "../runnable_commands/command_runnable_game.h"
 //#include "runnable_commands/command_runnable_lobby.h"
 
 class RunnableCommandLobby;

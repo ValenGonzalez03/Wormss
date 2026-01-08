@@ -27,6 +27,7 @@ MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float inicial
 
   UserData* data = new UserData {MISSILE, this};
   body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
+
 }
 
 void MissileBody::apply_initial_impulse(float aim_angle) {

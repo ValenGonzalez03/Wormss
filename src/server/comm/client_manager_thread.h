@@ -1,14 +1,14 @@
 #ifndef CLIENT_MANAGER_THREAD_H
 #define CLIENT_MANAGER_THREAD_H
 
-#include "../common/lib/socket.h"
+#include "../../common/lib/socket.h"
 #include <atomic>
 #include <vector>
 
 #include "server_receiver_thread.h"
 #include "player_sender_thread.h"
-#include "../common/game_state.h"
-#include "server_games_handler.h"
+#include "../../common/game_state.h"
+#include "../game/server_games_handler.h"
 #include "server_player.h"
 
 class ServerReceiver;

@@ -1,4 +1,4 @@
-#include "world.h"
+#include "server_world.h"
 #include "box2d/box2d.h"
 #include "explosion_callback.h"
 #include <stdio.h>

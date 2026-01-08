@@ -1,12 +1,12 @@
-#ifndef WORLD_H
-#define WORLD_H
+#ifndef SERVER_WORLD_H
+#define SERVER_WORLD_H
 
 #include "box2d/box2d.h"
-#include "game_config.h"
+#include "../game/game_config.h"
 #include "contact_listener.h"
-#include "bodies/worm_body.h"
-#include "bodies/beam_body.h"
-#include "bodies/missile_body.h"
+#include "../bodies/worm_body.h"
+#include "../bodies/beam_body.h"
+#include "../bodies/missile_body.h"
 #include "server_explosion.h"
 #include <list>
 #include <vector>

@@ -1,7 +1,7 @@
 #ifndef BASEBALL_BAT_CALLBACK_H
 #define BASEBALL_BAT_CALLBACK_H
 
-#include "bodies/body.h"
+#include "../bodies/body.h"
 
 class BaseballBatCallback : public b2RayCastCallback {
 private:

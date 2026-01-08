@@ -1,11 +1,11 @@
 #ifndef PLAYER_SENDER_THREAD_H
 #define PLAYER_SENDER_THREAD_H
 
-#include "../common/game_state.h"
-#include "../common/lib/queue.h"
-#include "../common/lib/socket.h"
-#include "../common/lib/thread.h"
-#include "world.h"
+#include "../../common/game_state.h"
+#include "../../common/lib/queue.h"
+#include "../../common/lib/socket.h"
+#include "../../common/lib/thread.h"
+#include "../world/server_world.h"
 #include "server_protocol.h"
 
 class PlayerSender : public Thread {

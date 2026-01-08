@@ -10,7 +10,7 @@
 #include "position.h"
 #include "game_constants.h"
 #include "../client/client_protocol.h"
-#include "../server/server_protocol.h"
+#include "../server/comm/server_protocol.h"
 
 
 struct WormData {

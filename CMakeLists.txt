@@ -37,31 +37,27 @@ target_link_libraries(client PUBLIC SDL2pp::SDL2pp)
 # define targets
 add_executable(server ./src/server/server_main.cpp 
 					  ./src/server/server_server.cpp 
-					  ./src/server/server_accept_thread.cpp
-					  ./src/server/client_manager_thread.cpp
-					  ./src/server/server_player.cpp
-					  ./src/server/player_sender_thread.cpp
-					  ./src/server/server_receiver_thread.cpp
-					  ./src/server/server_games_handler.cpp
-					  ./src/server/server_game.cpp
-					  ./src/server/game_manager.cpp
-					  ./src/server/broadcaster.cpp
-					  ./src/server/explosion_callback.cpp
-					  ./src/server/server_explosion.cpp
-					  ./src/server/world.cpp
+					  ./src/server/comm/server_accept_thread.cpp
+					  ./src/server/comm/client_manager_thread.cpp
+					  ./src/server/comm/server_player.cpp
+					  ./src/server/comm/player_sender_thread.cpp
+					  ./src/server/comm/server_receiver_thread.cpp
+					  ./src/server/comm/broadcaster.cpp
+					  ./src/server/comm/server_protocol.cpp
+					  ./src/server/game/server_games_handler.cpp
+					  ./src/server/game/game_manager.cpp
+					  ./src/server/game/server_game.cpp
 					  ./src/server/bodies/body.cpp
 					  ./src/server/bodies/worm_body.cpp
 					  ./src/server/bodies/missile_body.cpp
 					  ./src/server/bodies/beam_body.cpp
-					  #./src/server/bodies/water_body.cpp
-					  #./src/server/bodies/weapons/bazooka.cpp
-					  #./src/server/bodies/weapons/banana.cpp
-					  #./src/server/bodies/weapons/dynamite.cpp
-					  ./src/server/baseball_bat_callback.cpp
-					  ./src/server/server_protocol.cpp
-					  ./src/server/contact_listener.cpp
-					  ./src/server/query_callback.cpp
-					  ./src/server/trajectory_missile_callback.cpp
+					  ./src/server/world/explosion_callback.cpp
+					  ./src/server/world/server_explosion.cpp
+					  ./src/server/world/server_world.cpp
+					  ./src/server/world/baseball_bat_callback.cpp
+					  ./src/server/world/contact_listener.cpp
+					  ./src/server/world/query_callback.cpp
+					  ./src/server/world/trajectory_missile_callback.cpp
 					  ./src/common/lib/socket.cpp 
 					  ./src/common/lib/liberror.cpp 
 					  ./src/common/lib/resolver.cpp 

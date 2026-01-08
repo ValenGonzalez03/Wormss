@@ -12,14 +12,14 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "../common/commands/command.h"
-#include "../common/constant_rate_loop.h"
-#include "../common/game_state.h"
-#include "../common/lib/queue.h"
-#include "../common/lib/thread.h"
-#include "broadcaster.h"
+#include "../../common/commands/command.h"
+#include "../../common/constant_rate_loop.h"
+#include "../../common/game_state.h"
+#include "../../common/lib/queue.h"
+#include "../../common/lib/thread.h"
+#include "../comm/broadcaster.h"
 #include "game_manager.h"
-#include "runnable_commands/command_runnable_game.h"
+#include "../runnable_commands/command_runnable_game.h"
 
 #define MAX_PLAYERS 2
 #define MS_PER_UPDATE 10

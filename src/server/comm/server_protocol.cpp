@@ -1,18 +1,18 @@
 #include "server_protocol.h"
 
-#include "../common/protocol_codes.h"
+#include "../../common/protocol_codes.h"
 
-#include "runnable_commands/create_game_runnable.h"
-#include "runnable_commands/join_game_runnable.h"
-#include "runnable_commands/jump_runnable.h"
-#include "runnable_commands/start_aiming_runnable.h"
-#include "runnable_commands/start_game_runnable.h"
-#include "runnable_commands/start_moving_runnable.h"
-#include "runnable_commands/stop_aiming_runnable.h"
-#include "runnable_commands/stop_moving_runnable.h"
-#include "runnable_commands/start_shooting_runnable.h"
-#include "runnable_commands/stop_game_runnable.h"
-#include "runnable_commands/change_weapon_runnable.h"
+#include "../runnable_commands/create_game_runnable.h"
+#include "../runnable_commands/join_game_runnable.h"
+#include "../runnable_commands/jump_runnable.h"
+#include "../runnable_commands/start_aiming_runnable.h"
+#include "../runnable_commands/start_game_runnable.h"
+#include "../runnable_commands/start_moving_runnable.h"
+#include "../runnable_commands/stop_aiming_runnable.h"
+#include "../runnable_commands/stop_moving_runnable.h"
+#include "../runnable_commands/start_shooting_runnable.h"
+#include "../runnable_commands/stop_game_runnable.h"
+#include "../runnable_commands/change_weapon_runnable.h"
 
 class RunnableCommandLobby;
 

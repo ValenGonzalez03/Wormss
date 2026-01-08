@@ -2,8 +2,8 @@
 #define SERVER_EXPLOSION_H
 
 #include "box2d/box2d.h"
-#include "../common/game_constants.h"
-#include "bodies/body.h"
+#include "../../common/game_constants.h"
+#include "../bodies/body.h"
 #include <map>
 
 struct BodyRayInfo {

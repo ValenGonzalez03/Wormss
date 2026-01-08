@@ -6,9 +6,8 @@
 #include <vector>
 #include <mutex>
 
-#include "runnable_commands/command_runnable_game.h"
+#include "../runnable_commands/command_runnable_game.h"
 #include "server_game.h"
-#include "worlds_reader.h"
 
 class Command;
 

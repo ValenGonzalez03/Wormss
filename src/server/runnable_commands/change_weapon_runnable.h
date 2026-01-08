@@ -3,7 +3,6 @@
 
 #include "../../common/commands/change_weapon.h"
 #include "command_runnable_game.h"
-#include "../game_manager.h"
 
 class RunnableChangeWeapon : public RunnableCommandGame {
 

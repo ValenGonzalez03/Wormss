@@ -5,9 +5,9 @@
 #include <map>
 #include <mutex>
 
-#include "../common/commands/command.h"
-#include "../common/game_state.h"
-#include "../common/lib/queue.h"
+#include "../../common/commands/command.h"
+#include "../../common/game_state.h"
+#include "../../common/lib/queue.h"
 
 class Broadcaster {
 private:

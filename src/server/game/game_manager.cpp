@@ -1,6 +1,6 @@
 #include "game_manager.h"
-#include "trajectory_missile_callback.h"
-#include "baseball_bat_callback.h"
+#include "../world/trajectory_missile_callback.h"
+#include "../world/baseball_bat_callback.h"
 #include "box2d/box2d.h"
 #include <algorithm>
 #include <stdio.h>

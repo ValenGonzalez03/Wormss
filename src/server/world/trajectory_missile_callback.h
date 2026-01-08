@@ -1,7 +1,7 @@
 #ifndef TRAJECTORY_MISSILE_CALLBACK_H
 #define TRAJECTORY_MISSILE_CALLBACK_H
 
-#include "bodies/body.h"
+#include "../bodies/body.h"
 
 class MissileCallback : public b2RayCastCallback {
 private:

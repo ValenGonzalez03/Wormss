@@ -1,10 +1,10 @@
 #ifndef SERVER_RECEIVER_THREAD_H
 #define SERVER_RECEIVER_THREAD_H
 
-#include "../common/lib/socket.h"
-#include "../common/lib/thread.h"
-#include "runnable_commands/command_runnable_game.h"
-#include "runnable_commands/command_runnable_lobby.h"
+#include "../../common/lib/socket.h"
+#include "../../common/lib/thread.h"
+#include "../runnable_commands/command_runnable_game.h"
+#include "../runnable_commands/command_runnable_lobby.h"
 #include "server_protocol.h"
 #include <condition_variable>
 

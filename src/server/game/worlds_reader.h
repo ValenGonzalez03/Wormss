@@ -1,7 +1,7 @@
 #ifndef WORLDS_READER_H_
 #define WORLDS_READER_H_
 
-#include "world.h"
+#include "../world/server_world.h"
 #include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <filesystem>

@@ -1,9 +1,9 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
-#include "../common/game_state.h"
+#include "../../common/game_state.h"
 #include "box2d/box2d.h"
-#include "world.h"
+#include "../world/server_world.h"
 #include "worlds_reader.h"
 #include "game_config.h"
 #include <stdio.h>

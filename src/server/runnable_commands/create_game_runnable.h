@@ -3,7 +3,6 @@
 
 #include "../../common/commands/create_game.h"
 #include "command_runnable_lobby.h"
-#include "../server_player.h"
 
 
 class RunnableCreateGame : public RunnableCommandLobby {

@@ -2,8 +2,8 @@
 #define RUNNABLE_COMMAND_LOBBY_H_
 
 #include "command_runnable.h"
-#include "../server_player.h"
-#include "../client_manager_thread.h"
+#include "../comm/server_player.h"
+#include "../comm/client_manager_thread.h"
 
 class ClientHandler;
 class GamesHandler;

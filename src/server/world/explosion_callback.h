@@ -2,7 +2,7 @@
 #define EXPLOSION_CALLBACK_H
 
 #include "box2d/box2d.h"
-#include "bodies/body.h"
+#include "../bodies/body.h"
 #include "server_explosion.h"
 #include <list>
 

@@ -27,6 +27,17 @@ enum WormState { IDLE, MOVING, JUMPING, AIMING, ATTACKING };
 
 enum WeaponType { NONE, BAZOOKA, BAT };
 
+struct texture_vals {
+    int x;
+    int y;
+    int width;
+    int height;
+
+    texture_vals operator+(const texture_vals &other) {
+        return {x + other.x, y + other.y, width + other.width, height + other.height};
+    }
+};
+
 struct WormAttr {
     uint8_t player_id;
     float pos_x; // En metros

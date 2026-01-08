@@ -19,6 +19,8 @@ add_executable(client ./src/client/client_main.cpp
 ./src/client/client_worm.cpp
 ./src/client/client_missile.cpp
 ./src/client/client_explosion.cpp
+./src/client/weapons/client_bazooka.cpp
+./src/client/weapons/client_bat.cpp
 ./src/client/client_protocol.cpp
 ./src/client/client_beam.cpp
 ./src/client/client_lobby.cpp

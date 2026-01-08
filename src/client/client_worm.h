@@ -3,45 +3,10 @@
 
 #include "../common/game_state.h"
 #include "../common/game_constants.h"
-#include "client_resource_pool.h"
+#include "client_weapons_list.h"
+#include "weapons/client_bazooka.h"
+#include "weapons/client_bat.h"
 
-
-#define FIRST_BAZ_TEXT 0
-#define FIRST_BAT_TEXT 1
-
-class WeaponTextureList {
-private:
-  std::vector<std::vector<SDL2pp::Texture *>> weapon_textures;
-
-public:
-  WeaponTextureList(ResourcePool &res_pool) {
-    weapon_textures.push_back(res_pool.get_worm_aiming(BAZOOKA));
-    weapon_textures.push_back(res_pool.get_worm_aiming(BAT));
-    weapon_textures.push_back(res_pool.get_worm_attacking(BAT));
-  }
-
-  std::vector<SDL2pp::Texture*> get_aim_texture(WeaponType type) {
-    switch (type) {
-      case BAZOOKA:
-        return weapon_textures[FIRST_BAZ_TEXT];
-      case BAT:
-        return weapon_textures[FIRST_BAT_TEXT];
-      default:
-        throw std::runtime_error("Weapon type not supported");
-    }
-  }
-
-  std::vector<SDL2pp::Texture*> get_attack_texture(WeaponType type) {
-    switch (type) {
-      case BAZOOKA:
-        return weapon_textures[FIRST_BAZ_TEXT];
-      case BAT:
-        return weapon_textures[FIRST_BAT_TEXT + 1];
-      default:
-        throw std::runtime_error("Weapon type not supported");
-    }
-  }
-};
 
 class Worm {
 private:
@@ -53,11 +18,14 @@ private:
   float aim_angle;
   uint8_t direction;
   WormState worm_state;
-  WeaponType weapon;
-  std::vector<std::vector<SDL2pp::Texture *>> textures; // Vector de grillas de texturas
-  WeaponTextureList weapon_textures; // Objeto que contiene las texturas de todas las armas
+  Weapon *weapon;
+  ResourcePool &resource_pool;
   SDL2pp::Renderer &renderer;
   // SDL2pp::Texture &shooting_texture;
+
+  void update_weapon_selected(WeaponType type);
+
+  void assign_new_weapon(WeaponType type);
 
   SDL_RendererFlip choose_flip_direction();
 
@@ -82,7 +50,7 @@ public:
 
   // Crea un Worm con un renderer y las texturas correspondientes
   explicit Worm(int id, int pos_x, int pos_y, int width, int heigth, float aim_angle, uint8_t direction, 
-    WormState worm_state, std::vector<std::vector<SDL2pp::Texture *>> &&textures, SDL2pp::Renderer &rend, ResourcePool &res_pool);
+    WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool);
 
   int get_id();
 
@@ -91,6 +59,8 @@ public:
 
   // Renderiza el worm en función de su estado actual
   void render(int frame);
+
+  ~Worm();
 
 };
 

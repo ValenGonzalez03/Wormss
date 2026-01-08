@@ -3,33 +3,52 @@
 #include <cmath>
 
 Worm::Worm(int id, int pos_x, int pos_y, int width, int height, float aim_angle, uint8_t direction, 
-  WormState worm_state, std::vector<std::vector<SDL2pp::Texture *>> &&textures, SDL2pp::Renderer &rend, ResourcePool &res_pool)
+  WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool)
       : id(id), pos_x(pos_x), pos_y(pos_y), width(width), height(height), aim_angle(aim_angle), direction(direction), 
-        worm_state(worm_state), textures(textures), renderer(rend), weapon_textures(res_pool) {}
+        worm_state(worm_state), resource_pool(res_pool), renderer(rend) {
+          weapon = new Bazooka(BAZOOKA);
+        }
 
 int Worm::get_id() {
   return id;
 }
 
 void Worm::update(WormData data) {
+  id = data.get_player_id();
+
   pos_x = convert_meters_to_pixels_x(data.get_pos_x()) - width / 2;
   pos_y = convert_meters_to_pixels_y(data.get_pos_y()) - height / 2;
-  id = data.get_player_id();
+
   worm_state = data.get_state();
   direction = data.get_direction();
   aim_angle = data.get_aim_angle();
-  weapon = data.get_weapon_selected();
+
+  WeaponType w_type = data.get_weapon_selected();
+  update_weapon_selected(w_type);
+}
+
+void Worm::update_weapon_selected(WeaponType type) {
+  if (weapon->is_same_weapon(type)) return;
+
+  assign_new_weapon(type);
+}
+
+void Worm::assign_new_weapon(WeaponType type) {
+  delete weapon;
+
+  switch (type) {
+    case BAZOOKA:
+      weapon = new Bazooka(BAZOOKA);
+      break;
+    case BAT:
+      weapon = new Bat(BAT);
+      break;
+    default:
+      throw std::runtime_error("Weapon type not supported");
+  }
 }
 
 void Worm::render(int frame) {
-  /*
-  std::cout << "Posx en m: " << worm.get_position().get_position_x()
-            << std::endl;
-  std::cout << "Posy en m: " << worm.get_position().get_position_y()
-            << std::endl;
-  std::cout << "Posx en px: " << pos_x << std::endl;
-  std::cout << "Posy en px: " << pos_y << std::endl;
-  */
   if (this->worm_state == MOVING)
     render_worm_running(frame);
   else if (this->worm_state == AIMING) {
@@ -53,7 +72,7 @@ void Worm::render(int frame) {
 void Worm::render_worm_idle(int frame) {
   SDL_RendererFlip flip = choose_flip_direction();
 
-  auto walk_texture = textures[0];
+  auto walk_texture = resource_pool.get_worm_walking();
   //std::cout << "LLEGO?" << std::endl;
   walk_texture.front()->SetAlphaMod(255);
   walk_texture.front()->SetBlendMode(SDL_BLENDMODE_BLEND);
@@ -69,7 +88,7 @@ void Worm::render_worm_idle(int frame) {
 void Worm::render_worm_running(int frame) {
   SDL_RendererFlip flip = choose_flip_direction();
 
-  auto walk_texture = textures[0];
+  auto walk_texture = resource_pool.get_worm_walking();
   auto normalized_frame = frame / 40;
   auto frame_position = normalized_frame % walk_texture.size();
   walk_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
@@ -85,7 +104,8 @@ void Worm::render_worm_jumping(int frame) {}
 void Worm::render_worm_aiming(int frame) {
   SDL_RendererFlip flip = choose_flip_direction();
 
-  auto aim_texture = weapon_textures.get_aim_texture(weapon);
+  auto aim_texture = weapon->get_aim_textures(resource_pool);
+
   auto normalized_angle = (aim_angle / M_PI_2);
   auto frame_position = 16 + (int)(normalized_angle * ((aim_texture.size() / 2)));
   aim_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
@@ -93,35 +113,41 @@ void Worm::render_worm_aiming(int frame) {
 
   //std::cout << "angle: " << angle << std::endl;
   //std::cout << "Normalized angle: " << normalized_angle << std::endl;
-  int fixed_pos_x = pos_x + (weapon == BAZOOKA ? -4 : (flip == SDL_FLIP_HORIZONTAL ? -10 : 0));
-  int fixed_pos_y = pos_y + (weapon == BAZOOKA ? -2 : -17);
-  int fixed_width = width + (weapon == BAZOOKA ? +8 : +14);
-  int fixed_height = height + (weapon == BAZOOKA ? +2 : +34);
+  auto vals = weapon->get_fixed_vals_aim(direction, texture_vals{pos_x, pos_y, width, height});
+  // int fixed_pos_x = pos_x + (weapon == BAZOOKA ? -4 : (flip == SDL_FLIP_HORIZONTAL ? -10 : 0));
+  // int fixed_pos_y = pos_y + (weapon == BAZOOKA ? -2 : -17);
+  // int fixed_width = width + (weapon == BAZOOKA ? +8 : +14);
+  // int fixed_height = height + (weapon == BAZOOKA ? +2 : +34);
 
   renderer.Copy(*aim_texture[frame_position], SDL2pp::NullOpt,
-                SDL2pp::Rect(fixed_pos_x, fixed_pos_y, fixed_width, fixed_height), 0.0, SDL2pp::NullOpt, flip);
+                SDL2pp::Rect(vals.x, vals.y, vals.width, vals.height), 0.0, SDL2pp::NullOpt, flip);
 }
 
 void Worm::render_worm_attacking(int frame) {
   SDL_RendererFlip flip = choose_flip_direction();
 
-  auto attack_texture = weapon_textures.get_attack_texture(weapon);
+  auto attack_texture = weapon->get_attack_textures(resource_pool);
   
   auto normalized_angle = (aim_angle / M_PI_2);
   auto frame_position = 16 + (int)(normalized_angle * ((attack_texture.size() / 2)));
   attack_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
   attack_texture[frame_position]->SetAlphaMod(255);
 
-  int fixed_pos_x = pos_x + (weapon == BAZOOKA ? -4 : (flip == SDL_FLIP_HORIZONTAL ? -2 : -14));
-  int fixed_pos_y = pos_y + (weapon == BAZOOKA ? -2 : -17);
-  int fixed_width = width + (weapon == BAZOOKA ? +8 : +16);
-  int fixed_height = height + (weapon == BAZOOKA ? +2 : +34);
+  auto vals = weapon->get_fixed_vals_attack(direction, texture_vals{pos_x, pos_y, width, height});
+  // int fixed_pos_x = pos_x + (weapon == BAZOOKA ? -4 : (flip == SDL_FLIP_HORIZONTAL ? -2 : -14));
+  // int fixed_pos_y = pos_y + (weapon == BAZOOKA ? -2 : -17);
+  // int fixed_width = width + (weapon == BAZOOKA ? +8 : +16);
+  // int fixed_height = height + (weapon == BAZOOKA ? +2 : +34);
 
   renderer.Copy(*attack_texture[frame_position], SDL2pp::NullOpt,
-    SDL2pp::Rect(fixed_pos_x, fixed_pos_y, fixed_width, fixed_height), 0.0, SDL2pp::NullOpt, flip);
+    SDL2pp::Rect(vals.x, vals.y, vals.width, vals.height), 0.0, SDL2pp::NullOpt, flip);
 }
 
 SDL_RendererFlip Worm::choose_flip_direction() {
   // Chequeo solo si la direccion es a la derecha ya que todos los sprites miran por defecto hacia la izquierda
   return (direction == RIGHT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+}
+
+Worm::~Worm() {
+  //delete weapon;
 }

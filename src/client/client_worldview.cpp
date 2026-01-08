@@ -31,12 +31,6 @@ void WorldView::add_beam(float pos_x, float pos_y, float width, float height, in
 // }
 
 void WorldView::add_worm(WormData data) {
-  std::vector<std::vector<SDL2pp::Texture *>> worm_textures;
-  worm_textures.push_back(resource_pool.get_worm_walking());
-  worm_textures.push_back(resource_pool.get_worm_aiming(BAZOOKA));
-  worm_textures.push_back(resource_pool.get_worm_aiming(BAT));
-  //worm_textures.push_back(resource_pool.get_worm_jumping());
-
   float width = WORM_WIDTH;
   float heigth = WORM_HEIGHT;
 
@@ -45,9 +39,8 @@ void WorldView::add_worm(WormData data) {
   int width_px = convert_meters_to_pixels_x(width);
   int heigth_px = convert_meters_to_pixels_x(heigth);
 
-  
   Worm worm(data.get_player_id(), pos_x_px, pos_y_px, width_px, heigth_px, data.get_aim_angle(), data.get_direction(), 
-  data.get_state(), std::move(worm_textures), renderer, resource_pool);
+  data.get_state(), renderer, resource_pool);
   worms.insert({worm.get_id(), worm});
 }
 

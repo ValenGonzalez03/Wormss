@@ -1,9 +1,9 @@
 #ifndef CLIENT_WORLDVIEW_H_
 #define CLIENT_WORLDVIEW_H_
 
-#include "../common/game_state.h"
+#include "../../common/game_state.h"
 #include "client_beam.h"
-#include "client_resource_pool.h"
+#include "../client_resource_pool.h"
 #include "client_worm.h"
 #include "client_missile.h"
 #include "client_explosion.h"

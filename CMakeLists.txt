@@ -11,31 +11,34 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(${SDL2PP_INCLUDE_DIRS})
 
 # Agregar un ejecutable llamado "client" y especificar los archivos fuente
-add_executable(client ./src/client/client_main.cpp
-./src/client/client_client.cpp
-./src/client/client_receiver_thread.cpp
-./src/client/client_sender_thread.cpp
-./src/client/client_worldview.cpp
-./src/client/client_worm.cpp
-./src/client/client_missile.cpp
-./src/client/client_explosion.cpp
-./src/client/weapons/client_bazooka.cpp
-./src/client/weapons/client_bat.cpp
-./src/client/client_protocol.cpp
-./src/client/client_beam.cpp
-./src/client/client_lobby.cpp
-./src/client/client_resource_pool.cpp
-./src/common/lib/socket.cpp 
-./src/common/lib/liberror.cpp 
-./src/common/lib/resolver.cpp 
-./src/common/lib/resolvererror.cpp)
+add_executable(client 
+				./src/client/client_main.cpp
+				./src/client/client_client.cpp
+				./src/client/client_lobby.cpp
+				./src/client/client_resource_pool.cpp
+				./src/client/comm/client_receiver_thread.cpp
+				./src/client/comm/client_sender_thread.cpp
+				./src/client/comm/client_protocol.cpp
+				./src/client/view/client_worldview.cpp
+				./src/client/view/client_beam.cpp
+				./src/client/view/client_worm.cpp
+				./src/client/view/client_missile.cpp
+				./src/client/view/client_explosion.cpp
+				./src/client/weapons/client_bazooka.cpp
+				./src/client/weapons/client_bat.cpp
+				./src/common/lib/socket.cpp 
+				./src/common/lib/liberror.cpp 
+				./src/common/lib/resolver.cpp 
+				./src/common/lib/resolvererror.cpp
+)
 
 
 target_link_libraries(client PUBLIC pthread)
 target_link_libraries(client PUBLIC SDL2pp::SDL2pp)
 
 # define targets
-add_executable(server ./src/server/server_main.cpp 
+add_executable(server 
+					  ./src/server/server_main.cpp 
 					  ./src/server/server_server.cpp 
 					  ./src/server/comm/server_accept_thread.cpp
 					  ./src/server/comm/client_manager_thread.cpp
@@ -61,7 +64,8 @@ add_executable(server ./src/server/server_main.cpp
 					  ./src/common/lib/socket.cpp 
 					  ./src/common/lib/liberror.cpp 
 					  ./src/common/lib/resolver.cpp 
-					  ./src/common/lib/resolvererror.cpp)
+					  ./src/common/lib/resolvererror.cpp
+)
 
 target_link_libraries (server PUBLIC box2d)
 target_link_libraries(server PUBLIC pthread)

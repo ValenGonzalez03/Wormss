@@ -12,10 +12,10 @@
 #include "../common/game_state.h"
 #include "../common/lib/queue.h"
 #include "client_SDL.h"
-#include "client_protocol.h"
-#include "client_receiver_thread.h"
 #include "client_resource_pool.h"
-#include "client_sender_thread.h"
+#include "comm/client_protocol.h"
+#include "comm/client_receiver_thread.h"
+#include "comm/client_sender_thread.h"
 
 class Client : public ConstantRateLoop {
 private:

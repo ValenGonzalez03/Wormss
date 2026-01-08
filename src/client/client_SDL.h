@@ -1,7 +1,7 @@
 #ifndef CLIENT_SDL_H_
 #define CLIENT_SDL_H_
 
-#include "client_worldview.h"
+#include "view/client_worldview.h"
 
 // Contiene los datos del cliente SDL, como la window, el renderer
 // la resource pool, el world_view, etc

@@ -4,7 +4,7 @@
 #include "../common/commands/create_game.h"
 #include "../common/commands/join_game.h"
 #include "../common/commands/start_game.h"
-#include "client_protocol.h"
+#include "comm/client_protocol.h"
 #include <iostream>
 
 class Lobby {

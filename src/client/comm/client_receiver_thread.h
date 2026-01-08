@@ -3,11 +3,11 @@
 
 #include <string>
 
-#include "../common/message.h"
+#include "../../common/message.h"
 #include "client_protocol.h"
-#include "../common/game_state.h"
-#include "../common/lib/queue.h"
-#include "../common/lib/thread.h"
+#include "../../common/game_state.h"
+#include "../../common/lib/queue.h"
+#include "../../common/lib/thread.h"
 
 class ClientReceiverThread : public Thread {
 private:

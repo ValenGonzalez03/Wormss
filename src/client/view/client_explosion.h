@@ -1,9 +1,9 @@
 #ifndef CLIENT_EXPLOSION_H_
 #define CLIENT_EXPLOSION_H_
 
-#include "../common/game_state.h"
-#include "../common/game_constants.h"
-#include "client_resource_pool.h"
+#include "../../common/game_state.h"
+#include "../../common/game_constants.h"
+#include "../client_resource_pool.h"
 
 class Explosion {
 private:

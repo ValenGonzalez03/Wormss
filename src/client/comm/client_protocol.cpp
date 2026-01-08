@@ -1,7 +1,7 @@
 #include "client_protocol.h"
 
-#include "../common/protocol_codes.h"
-#include "../common/game_constants.h"
+#include "../../common/protocol_codes.h"
+#include "../../common/game_constants.h"
 #include <arpa/inet.h>
 
 ClientProtocol::ClientProtocol(Socket &&socket) : skt(std::move(socket)) {}

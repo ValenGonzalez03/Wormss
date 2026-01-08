@@ -1,5 +1,5 @@
 #include "client_worldview.h"
-#include "../common/game_constants.h"
+#include "../../common/game_constants.h"
 
 WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
     : resource_pool(res_pool), renderer(rend), worms() {}

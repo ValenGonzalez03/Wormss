@@ -7,10 +7,10 @@
 #include <memory>
 #include <utility>
 
-#include "../common/game_constants.h"
-#include "../common/commands/command.h"
-#include "../common/lib/liberror.h"
-#include "../common/lib/socket.h"
+#include "../../common/game_constants.h"
+#include "../../common/commands/command.h"
+#include "../../common/lib/liberror.h"
+#include "../../common/lib/socket.h"
 
 class ClientProtocol {
 private:

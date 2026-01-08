@@ -1,11 +1,10 @@
 #ifndef CLIENT_WORM_H_
 #define CLIENT_WORM_H_
 
-#include "../common/game_state.h"
-#include "../common/game_constants.h"
-#include "client_weapons_list.h"
-#include "weapons/client_bazooka.h"
-#include "weapons/client_bat.h"
+#include "../../common/game_state.h"
+#include "../../common/game_constants.h"
+#include "../weapons/client_bazooka.h"
+#include "../weapons/client_bat.h"
 
 
 class Worm {

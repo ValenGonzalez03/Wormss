@@ -9,7 +9,7 @@
 
 #include "position.h"
 #include "game_constants.h"
-#include "../client/client_protocol.h"
+#include "../client/comm/client_protocol.h"
 #include "../server/comm/server_protocol.h"
 
 

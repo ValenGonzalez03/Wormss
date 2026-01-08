@@ -1,6 +1,6 @@
 #include "client_client.h"
 #include "client_lobby.h"
-#include "client_protocol.h"
+#include "comm/client_protocol.h"
 #include <iostream>
 
 #define SUCCESS 0

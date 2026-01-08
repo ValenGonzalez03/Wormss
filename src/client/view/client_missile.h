@@ -1,9 +1,9 @@
 #ifndef CLIENT_MISSILE_H_
 #define CLIENT_MISSILE_H_
 
-#include "../common/game_state.h"
-#include "../common/game_constants.h"
-#include "client_resource_pool.h"
+#include "../../common/game_state.h"
+#include "../../common/game_constants.h"
+#include "../client_resource_pool.h"
 
 class Missile {
 private:

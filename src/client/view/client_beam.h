@@ -1,7 +1,7 @@
 #ifndef CLIENT_BEAM_H_
 #define CLIENT_BEAM_H_
 
-#include "../common/position.h"
+#include "../../common/position.h"
 #include <SDL2pp/SDL2pp.hh>
 
 class Beam {

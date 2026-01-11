@@ -21,8 +21,14 @@
 #define WORM_ATTACKING_BAT "worm_attacking_bat"
 #define WORM_ATTACKING_BAT_PATH "/Images/Worms/wbsbswn.png"
 
+#define WORM_AIMING_GRN "worm_aiming_grn"
+#define WORM_AIMING_GRN_PATH "/Images/Worms/wthrgrn.png"
+
 #define MISSILE "missile"
 #define MISSILE_PATH "/Images/Weapons/missile.png"
+
+#define GRENADE_TX "grenade"
+#define GRENADE_TX_PATH "/Images/Weapons/grenade.png"
 
 ResourcePool::ResourcePool(SDL2pp::Renderer &rend) : renderer(rend) {}
 
@@ -33,7 +39,7 @@ void ResourcePool::initialize() {
   add_worm_jumping();
   add_worm_aiming();
   add_worm_attacking();
-  add_missile_texture();
+  add_explodables_textures();
   add_music(std::string(RESOURCES_PATH) + "/Sounds/music.wav");
   //add_font("Vera20", "/Vera.ttf", 20);
   //add_font("Vera12", "/Vera.ttf", 12);
@@ -99,7 +105,7 @@ void ResourcePool::add_long_beam() {
 }
 
 void ResourcePool::add_worm_walking() {
-  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, LIGHT_BLUE, 19, 15, -38, -33, true);
+  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, LIGHT_BLUE, 19, 13, -38, -30, true);
 }
 
 void ResourcePool::add_worm_jumping() {
@@ -109,14 +115,16 @@ void ResourcePool::add_worm_jumping() {
 void ResourcePool::add_worm_aiming() {
   add_texture(WORM_AIMING_BAZ, WORM_AIMING_BAZ_PATH, 60, 60, 32, LIGHT_BLUE, 16, 14, -29, -31, false);
   add_texture(WORM_AIMING_BAT, WORM_AIMING_BAT_PATH, 60, 60, 32, YELLOW, 15, 0, -15, 0, false);
+  add_texture(WORM_AIMING_GRN, WORM_AIMING_GRN_PATH, 60, 60, 32, LIGHT_BLUE, 16, 12, -29, -28, false);
 }
 
 void ResourcePool::add_worm_attacking() {
   add_texture(WORM_ATTACKING_BAT, WORM_ATTACKING_BAT_PATH, 60, 60, 32, YELLOW, 0, 0, -16, 0, false);
 }
 
-void ResourcePool::add_missile_texture() {
+void ResourcePool::add_explodables_textures() {
   add_texture(MISSILE, MISSILE_PATH, 60, 60, 32, LIGHT_BLUE, 17, 23, -35, -46, false);
+  add_texture(GRENADE_TX, GRENADE_TX_PATH, 60, 60, 32, LIGHT_BLUE, 24, 16, -48, -38, false);
 }
 
 // ============================================================================================== //
@@ -157,6 +165,8 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming(WeaponType type) {
     return get_texture(WORM_AIMING_BAZ);
   case BAT:
     return get_texture(WORM_AIMING_BAT);
+  case GRENADE:
+    return get_texture(WORM_AIMING_GRN);
   default:
     throw std::runtime_error("Invalid weapon type for aiming texture");
     break;
@@ -178,6 +188,10 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_attacking(WeaponType type)
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_missile_texture() {
   return get_texture(MISSILE);
+}
+
+std::vector<SDL2pp::Texture *> ResourcePool::get_grenade_texture() {
+  return get_texture(GRENADE_TX);
 }
 // ============================================================================================== //
 // ============================================================================================== //

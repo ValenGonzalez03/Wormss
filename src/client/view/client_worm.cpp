@@ -81,7 +81,7 @@ void Worm::render_worm_idle(int frame) {
   walk_texture.front()->SetBlendMode(SDL_BLENDMODE_BLEND);
 
   renderer.Copy(*walk_texture.front(), SDL2pp::NullOpt, // Size
-                SDL2pp::Rect(pos_x, pos_y - 2, width + 2, height + 2),        // Destination
+                SDL2pp::Rect(pos_x, pos_y - 3, width + 2, height + 4),        // Destination
                 0.0,                                       // don't rotate
                 SDL2pp::NullOpt, // rotation center - not needed
                 flip             // horizontal flip
@@ -98,7 +98,7 @@ void Worm::render_worm_running(int frame) {
   walk_texture[frame_position]->SetAlphaMod(255); // sprite is fully opaque
 
   renderer.Copy(*walk_texture[frame_position],
-                SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y - 2, width + 2, height + 2), 0.0,
+                SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y - 3, width + 2, height + 4), 0.0,
                 SDL2pp::NullOpt, flip);
 }
 

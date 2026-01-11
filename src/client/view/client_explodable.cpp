@@ -4,10 +4,10 @@
 #include <box2d/b2_common.h>
 
 Explodable::Explodable(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t dir, uint8_t id,
-  std::vector<SDL2pp::Texture *> &&textures, SDL2pp::Renderer &rend) 
+  SDL2pp::Texture* texture, SDL2pp::Renderer &rend) 
   :
   pos_x(pos_x), pos_y(pos_y), width(width), height(heigth), angle(angle), direction(dir), id(id),
-  texture(textures), renderer(rend)
+  texture(texture), renderer(rend)
   {}
 
 void Explodable::update(ExplodableData data) {
@@ -18,10 +18,10 @@ void Explodable::update(ExplodableData data) {
 
 void Explodable::render(int frame) {
 
-  texture[8]->SetAlphaMod(255);
+  texture->SetAlphaMod(255);
   float angle_deg =  angle * (180.0f / b2_pi);
   SDL_RendererFlip flip = (direction == RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-  renderer.Copy(*(texture[8]), SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y, width, height), -angle_deg, SDL2pp::NullOpt, flip);
+  renderer.Copy(*texture, SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y, width, height), -angle_deg, SDL2pp::NullOpt, flip);
 
   if (std::getenv("DEBUG") != NULL) {
     SDL2pp::Rect box(pos_x, pos_y, width, height);

@@ -60,8 +60,8 @@ private:
   // Agrega las texturas del gusano atacando con todas las armas al map de texturas
   void add_worm_attacking();
 
-  // Agrega la textura del gusano misil de la bazooka al map de texturas
-  void add_missile_texture();
+  // Agrega la textura de los explodables al map de texturas
+  void add_explodables_textures();
 
 public:
   // Crea la Resource pool y le carga las texturas
@@ -90,6 +90,9 @@ public:
 
   // Devuelve un ptr a la textura del misil de la bazooka
   std::vector<SDL2pp::Texture *> get_missile_texture();
+
+  // Devuelve un ptr a la textura de la granada
+  std::vector<SDL2pp::Texture *> get_grenade_texture();
   /*
     void add_sound(const std::string sound_name, const std::string &sound_path)
     { Mix_Chunk *

@@ -15,7 +15,7 @@ private:
   uint8_t direction;
   uint8_t id;
   SDL2pp::Renderer &renderer;
-  std::vector<SDL2pp::Texture *> texture; // Vector de texturas
+  SDL2pp::Texture* texture; // Textura
 
   void DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height, int pos_x, int pos_y, float angle);
 
@@ -23,7 +23,7 @@ public:
 
   // Crea un Explodable con un renderer y las texturas correspondientes
   explicit Explodable(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t dir, uint8_t id,
-                std::vector<SDL2pp::Texture *> &&textures, SDL2pp::Renderer &rend);
+                SDL2pp::Texture* texture, SDL2pp::Renderer &rend);
   
   void update(ExplodableData data);
 

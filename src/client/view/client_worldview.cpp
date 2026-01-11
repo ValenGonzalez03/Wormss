@@ -45,7 +45,18 @@ void WorldView::add_worm(WormData data) {
 }
 
 Explodable WorldView::add_explodable(ExplodableData data) {
-  std::vector<SDL2pp::Texture *> missile_texture = resource_pool.get_missile_texture();
+  SDL2pp::Texture* explodable_texture;
+  switch (data.get_type())
+  {
+  case MISSILE:
+    explodable_texture = resource_pool.get_missile_texture()[8];
+    break;
+  case GRENADE_BODY:
+    explodable_texture = resource_pool.get_grenade_texture()[0];
+    break;
+  default:
+    break;
+  }
 
   auto size = get_explodable_size(data.get_type());
   float width = size.first;
@@ -58,7 +69,7 @@ Explodable WorldView::add_explodable(ExplodableData data) {
 
 
   Explodable explodable(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(), data.get_direction(), data.get_id(),
-                  std::move(missile_texture), renderer);
+                  std::move(explodable_texture), renderer);
   return explodable;
 }
 

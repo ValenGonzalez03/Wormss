@@ -48,7 +48,7 @@ void GameManager::step() {
 void GameManager::update() {
   world.update_worms();
 
-  world.update_missiles();
+  world.update_explodables();
 
   world.update_explosions();
 }
@@ -124,6 +124,9 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
   case BAT:
     use_bat(worm);
     break;
+  case GRENADE:
+    use_grenade(worm, initial_force);
+    break;
   default:
     /* Ningun arma (?) */
     break;
@@ -132,7 +135,7 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
 }
 
 void GameManager::use_bazooka(WormBody* worm, float initial_force) {
-  b2Vec2 missile_pos = worm->calculate_missile_launch_position();
+  b2Vec2 missile_pos = worm->calculate_projectile_launch_position(MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
   b2Vec2 worm_pos = worm->get_position();
   MissileCallback callback;
   world.ray_cast(&callback, worm_pos, missile_pos);
@@ -141,10 +144,9 @@ void GameManager::use_bazooka(WormBody* worm, float initial_force) {
     b2Vec2 hit_point = callback.get_hit_point();
     world.create_explosion(hit_point.x, hit_point.y);
   } else {
-    MissileBody* missile = worm->attack_throwable(missile_pos, initial_force, missiles_id_counter);
-    missiles_id_counter++;
-    world.create_missile(missile);
-    missile->apply_initial_impulse(worm->get_aiming_angle());
+    ExplodableAttr proj_attr = worm->attack_projectile(missile_pos, projectiles_id_counter);
+    projectiles_id_counter++;
+    world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);
   }
 }
 
@@ -163,6 +165,13 @@ void GameManager::use_bat(WormBody* worm) {
   world.ray_cast(&bat_callback, worm_pos, bat_end_pos);
 }
 
+void GameManager::use_grenade(WormBody* worm, float initial_force) {
+  b2Vec2 grenade_pos = worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT, 0.27f, 0.27f);
+  ExplodableAttr proj_attr = worm->attack_projectile(grenade_pos, projectiles_id_counter);
+  projectiles_id_counter++;
+  world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);
+}
+
 GameState GameManager::create_state() {
   GameState game_state;
   if (game_finished) {
@@ -174,9 +183,9 @@ GameState GameManager::create_state() {
     game_state.add_worm(attr);
   }
 
-  auto missiles_attr = world.get_missiles_attr();
-  for (auto attr : missiles_attr) {
-    game_state.add_missile(attr);
+  auto explodables_attr = world.get_explodables_attr();
+  for (auto attr : explodables_attr) {
+    game_state.add_explodable(attr);
   }
 
   auto explosions_attr = world.get_explosions_attr();

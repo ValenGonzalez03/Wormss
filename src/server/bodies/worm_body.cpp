@@ -1,4 +1,6 @@
 #include "worm_body.h"
+#include "grenade_body.h"
+#include "missile_body.h"
 #include "box2d/box2d.h"
 #include "../../common/game_constants.h"
 #include <stdio.h>
@@ -124,23 +126,21 @@ void WormBody::change_weapon(WeaponType weapon) {
   current_weapon = weapon;
 }
 
-MissileBody* WormBody::attack_throwable(b2Vec2 missile_pos, float initial_force, uint8_t missile_id) {
+ExplodableAttr WormBody::attack_projectile(b2Vec2 proj_pos, uint8_t proj_id) {
   uint8_t worm_dir = get_direction();
   float final_angle = (worm_dir == RIGHT ? aiming_angle : -aiming_angle);
-  float pos_x = missile_pos.x;
-  float pos_y = missile_pos.y;
-  
-  MissileBody *missile = new MissileBody(world, pos_x, pos_y, initial_force, final_angle, worm_dir, missile_id);
-  return missile;
+  float pos_x = proj_pos.x;
+  float pos_y = proj_pos.y;
+  return ExplodableAttr {proj_id, WORM, pos_x, pos_y, final_angle, worm_dir};
 }
 
-b2Vec2 WormBody::calculate_missile_launch_position() {
+b2Vec2 WormBody::calculate_projectile_launch_position(float proj_width, float proj_height, float offset_x, float offset_y) {
   b2Vec2 pos = body->GetPosition();
   uint8_t worm_dir = get_direction();
-  float missile_dist_x = (worm_dir == RIGHT ? 1 : -1) * ((WORM_WIDTH / 2) + (MISSILE_WIDTH / 2) + 0.27f);
+  float missile_dist_x = (worm_dir == RIGHT ? 1 : -1) * ((WORM_WIDTH / 2) + (proj_width / 2) + offset_x);
   float adjusted_pos_x = pos.x  + missile_dist_x * cos(aiming_angle);
 
-  float missile_dist_y = ((WORM_HEIGHT / 2) + (MISSILE_HEIGHT / 2) + 0.27f);
+  float missile_dist_y = ((WORM_HEIGHT / 2) + (proj_height / 2) + offset_y);
   float adjusted_pos_y = pos.y  + missile_dist_y * sin(aiming_angle);
 
   return b2Vec2(adjusted_pos_x, adjusted_pos_y);
@@ -257,29 +257,15 @@ bool WormBody::has_exceeded_width_limit() { return (get_pos_x() < 0) || (get_pos
 
 bool WormBody::has_exceeded_height_limit() { return (get_pos_y() < 0) || (get_pos_y() > WORLD_HEIGHT); }
 
-void WormBody::touch_beam(BeamBody* beam) {
-  /* NADA */
-}
+void WormBody::touch_beam(BeamBody* beam) { /* NADA */ }
+void WormBody::touch_worm(WormBody* worm) { /* NADA */ }
+void WormBody::touch_missile(MissileBody* missile) { missile->explode(); }
+void WormBody::touch_grenade(GrenadeBody* grenade) { /* NADA */ }
 
-void WormBody::touch_worm(WormBody* worm) {
-  /* NADA */
-}
-
-void WormBody::touch_missile(MissileBody* missile) {
-  missile->explode();
-}
-
-void WormBody::stop_touching_worm(WormBody* worm) {
-  /* NADA */
-}
-
-void WormBody::stop_touching_beam(BeamBody* beam) {
-  /* NADA */
-}
-
-void WormBody::stop_touching_missile(MissileBody* missile) {
-  /* NADA */
-}
+void WormBody::stop_touching_worm(WormBody* worm) { /* NADA */ }
+void WormBody::stop_touching_beam(BeamBody* beam) { /* NADA */ }
+void WormBody::stop_touching_missile(MissileBody* missile) { /* NADA */ }
+void WormBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
 
 void WormBody::hit_a_surface() { 
   state = IDLE;
@@ -306,7 +292,7 @@ void WormBody::die() {
 void WormBody::start_contact() { m_contacting = true; }
 void WormBody::end_contact() { m_contacting = false; }
 
-int WormBody::get_type() { return WORM; }
+BODY_TYPES WormBody::get_type() { return WORM; }
 
 WormBody::~WormBody() {
   free(reinterpret_cast<UserData*>(body->GetUserData().pointer));

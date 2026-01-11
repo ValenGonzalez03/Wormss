@@ -43,6 +43,9 @@ void Worm::assign_new_weapon(WeaponType type) {
     case BAT:
       weapon = new Bat(BAT);
       break;
+    case GRENADE:
+      weapon = new Grenade(GRENADE);
+      break;
     default:
       throw std::runtime_error("Weapon type not supported");
   }

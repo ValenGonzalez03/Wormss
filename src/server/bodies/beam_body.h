@@ -16,22 +16,16 @@ class BeamBody : public Body {
 	//explicit BeamBody(b2World* world, float pos_x, float pos_y);
 
 	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width);
-	
-	//void start_contact_with(Body* another_body) override;
 
 	void touch_worm(WormBody* worm) override;
-
 	void touch_beam(BeamBody* beam) override;
-  
 	void touch_missile(MissileBody* missile) override;
-	
-    // void end_contact_with(Body* another_body) override;
+	void touch_grenade(GrenadeBody* grenade) override;
 
 	void stop_touching_worm(WormBody* worm) override;
-
   	void stop_touching_beam(BeamBody* beam) override;
-
   	void stop_touching_missile(MissileBody* missile) override;
+	void stop_touching_grenade(GrenadeBody* grenade) override;
 
 	float explosion_intersect_value(float fraction) override;
 
@@ -70,7 +64,7 @@ class BeamBody : public Body {
 
 	BeamAttr get_attr();
 	
-	int get_type() override;
+	BODY_TYPES get_type() override;
 };
 
 #endif

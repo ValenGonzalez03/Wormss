@@ -7,6 +7,7 @@
 #include "../bodies/worm_body.h"
 #include "../bodies/beam_body.h"
 #include "../bodies/missile_body.h"
+#include "../bodies/grenade_body.h"
 #include "server_explosion.h"
 #include <list>
 #include <vector>
@@ -19,7 +20,7 @@ private:
   std::shared_ptr<b2World> world;
   std::list<WormBody*> worms;
   std::list<BeamBody*> beams;
-  std::list<MissileBody*> missiles;
+  std::list<Explodable*> explodables;
   std::list<Explosion> explosions;
   std::list<Body*> bodies;
   std::string name = "";
@@ -33,7 +34,7 @@ private:
   
   void delete_beams();
   
-  void delete_missiles();
+  void delete_explodables();
 
 public:
   explicit World();
@@ -42,7 +43,9 @@ public:
 
   BeamBody* create_beam(float pos_x, float pos_y, int angle, float length);
 
-  MissileBody* create_missile(MissileBody* missile);
+  MissileBody* create_missile(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction, float initial_force);
+
+  GrenadeBody* create_grenade(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction, float initial_force);
 
   void create_explosion(float center_x, float center_y);
 
@@ -52,13 +55,13 @@ public:
 
   void update_worms();
 
-  void update_missiles();
+  void update_explodables();
 
   void update_explosions();
 
   int get_worms_number();
 
-  int get_missiles_number();
+  int get_explodables_number();
 
   void ray_cast(b2RayCastCallback *callback, const b2Vec2 &point1, const b2Vec2 &point2);
 	
@@ -74,7 +77,7 @@ public:
 
   std::list<WormAttr> get_worms_attr();
 
-  std::list<MissileAttr> get_missiles_attr();
+  std::list<ExplodableAttr> get_explodables_attr();
 
   std::list<ExplosionAttr> get_explosions_attr();
 

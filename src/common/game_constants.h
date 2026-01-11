@@ -15,6 +15,9 @@
 #define MISSILE_WIDTH 1.0f // En metros (Equivale aproximadamente a unos 23,33 pixeles)
 #define MISSILE_HEIGHT 0.8f // En metros (Equivale aproximadamente a unos 18,66 pixeles)
 
+#define GRENADE_WIDTH 0.4f // En metros (Equivale aproximadamente a unos 4,66 pixeles)
+#define GRENADE_HEIGHT 0.8f // En metros (Equivale aproximadamente a unos 18,66 pixeles)
+
 #define LEFT 0
 #define RIGHT 1
 #define UP 2
@@ -25,7 +28,7 @@
 
 enum WormState { IDLE, MOVING, JUMPING, AIMING, ATTACKING };
 
-enum WeaponType { NONE, BAZOOKA, BAT };
+enum WeaponType { NONE, BAZOOKA, BAT, GRENADE };
 
 struct texture_vals {
     int x;
@@ -36,6 +39,14 @@ struct texture_vals {
     texture_vals operator+(const texture_vals &other) {
         return {x + other.x, y + other.y, width + other.width, height + other.height};
     }
+};
+
+enum BODY_TYPES {
+    WORM = 0,
+    WATER = 1,
+    BEAM = 2,
+    MISSILE = 3,
+    GRENADE_BODY = 4
 };
 
 struct WormAttr {
@@ -55,8 +66,9 @@ struct BeamAttr {
     float width; // En metros
 };
 
-struct MissileAttr {
-    uint8_t missile_id;
+struct ExplodableAttr {
+    uint8_t id;
+    BODY_TYPES type;
     float pos_x; // En metros
     float pos_y; // En metros
     float angle; // En radianes

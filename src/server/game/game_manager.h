@@ -16,7 +16,7 @@ private:
   //int current_player_id;
   //int current_worm_id;
   //uint8_t current_turn_id = 0;
-  int missiles_id_counter = 0;
+  int projectiles_id_counter = 0;
   std::list<uint8_t> players;
 
   float timeStep = 1.0f / 60.0f;
@@ -26,6 +26,8 @@ private:
   void use_bazooka(WormBody* worm, float initial_force);
 
   void use_bat(WormBody* worm);
+
+  void use_grenade(WormBody* worm, float initial_force);
 
 public:
   explicit GameManager();

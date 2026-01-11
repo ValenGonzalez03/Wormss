@@ -1,22 +1,22 @@
-#include "client_missile.h"
+#include "client_explodable.h"
 
 #include <cmath>
 #include <box2d/b2_common.h>
 
-Missile::Missile(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t dir, uint8_t id,
+Explodable::Explodable(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t dir, uint8_t id,
   std::vector<SDL2pp::Texture *> &&textures, SDL2pp::Renderer &rend) 
   :
   pos_x(pos_x), pos_y(pos_y), width(width), height(heigth), angle(angle), direction(dir), id(id),
   texture(textures), renderer(rend)
   {}
 
-void Missile::update(ExplodableData data) {
+void Explodable::update(ExplodableData data) {
   pos_x = convert_meters_to_pixels_x(data.get_pos_x()) - width / 2;
   pos_y = convert_meters_to_pixels_y(data.get_pos_y()) - height / 2;
   angle = data.get_angle();
 }
 
-void Missile::render(int frame) {
+void Explodable::render(int frame) {
 
   texture[8]->SetAlphaMod(255);
   float angle_deg =  angle * (180.0f / b2_pi);
@@ -35,7 +35,7 @@ void Missile::render(int frame) {
 
 }
 
-void Missile::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height, int pos_x, int pos_y, float angle) {
+void Explodable::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height, int pos_x, int pos_y, float angle) {
   int hw = (width * 0.5f);
   int hh = (height * 0.5f);
 
@@ -69,14 +69,14 @@ void Missile::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height,
   }
 }
 
-int Missile::get_pos_x() {
+int Explodable::get_pos_x() {
   return pos_x;
 }
 
-int Missile::get_pos_y() {
+int Explodable::get_pos_y() {
   return pos_y;
 }
 
-uint8_t Missile::get_id() {
+uint8_t Explodable::get_id() {
   return id;
 }

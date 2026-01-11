@@ -5,6 +5,7 @@
 #include "../../common/game_constants.h"
 #include "../weapons/client_bazooka.h"
 #include "../weapons/client_bat.h"
+#include "../weapons/client_grenade.h"
 
 
 class Worm {

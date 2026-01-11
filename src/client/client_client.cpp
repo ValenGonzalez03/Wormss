@@ -250,6 +250,9 @@ bool Client::execute_event(SDL_Event &event)
       case SDLK_2:
         handle_change_weapon(BAT);
         break;
+      case SDLK_3:
+        handle_change_weapon(GRENADE);
+        break;
       case SDLK_i:
         client_sdl.resource_pool.turn_music_volume_down();
         break;

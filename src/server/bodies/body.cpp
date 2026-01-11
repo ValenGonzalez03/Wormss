@@ -27,6 +27,11 @@ void Body::touch(Body *other) {
     touch_missile(missile);
     break;
   }
+  case GRENADE_BODY: {
+    GrenadeBody* grenade = reinterpret_cast<GrenadeBody*>(other);
+    touch_grenade(grenade);
+    break;
+  }
   
   default:
     break;
@@ -50,9 +55,9 @@ void Body::stop_touching(Body *other) {
     stop_touching_beam(beam);
     break;
   }
-  case MISSILE: {
-    MissileBody* missile = reinterpret_cast<MissileBody*>(other);
-    stop_touching_missile(missile);
+  case GRENADE_BODY: {
+    GrenadeBody* grenade = reinterpret_cast<GrenadeBody*>(other);
+    stop_touching_grenade(grenade);
     break;
   }
   

@@ -23,9 +23,19 @@ WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn
   return worm;
 }
 
-MissileBody* World::create_missile(MissileBody* missile) {
-  missiles.push_back(missile);
+MissileBody* World::create_missile(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction, float initial_force) {
+  MissileBody* missile = new MissileBody(world.get(), pos_x, pos_y, angle, direction, id);
+  missile->apply_initial_impulse(initial_force, angle);
+  explodables.push_back(missile);
+  //std::cout << "Angle: " << angle << "  Direction: " << (int)direction << "  Initial force: " << initial_force << std::endl;
   return missile;
+}
+
+GrenadeBody* World::create_grenade(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction, float initial_force) {
+  GrenadeBody* grenade = new GrenadeBody(world.get(), pos_x, pos_y, angle, direction, id);
+  grenade->apply_initial_impulse(initial_force, angle);
+  explodables.push_back(grenade);
+  return grenade;
 }
 
 void World::create_explosion(float pos_x, float pos_y) {
@@ -71,13 +81,13 @@ void World::update_worms() {
   }
 }
 
-void World::update_missiles() {
-  for (std::list<MissileBody*>::iterator it = missiles.begin(); it != missiles.end();)
+void World::update_explodables() {
+  for (std::list<Explodable*>::iterator it = explodables.begin(); it != explodables.end();)
     {
       if ((*it)->has_exploded()) {
         create_explosion((*it)->get_pos_x(), (*it)->get_pos_y());
         destroy_body(*it);
-        it = missiles.erase(it);
+        it = explodables.erase(it);
         std::cout << "KABOOM" << std::endl;
       } else {
         (*it)->update();
@@ -102,8 +112,8 @@ int World::get_worms_number() {
   return worms.size();
 }
 
-int World::get_missiles_number() {
-  return missiles.size();
+int World::get_explodables_number() {
+  return explodables.size();
 }
 
 void World::ray_cast(b2RayCastCallback *callback, const b2Vec2 &point1, const b2Vec2 &point2) {
@@ -120,14 +130,14 @@ std::list<WormAttr> World::get_worms_attr() {
   return worms_attr;
 }
 
-std::list<MissileAttr> World::get_missiles_attr() {
-  std::list<MissileAttr> missiles_attr;
-  for (auto missile : missiles) {
-    MissileAttr attr ({missile->get_id(), missile->get_pos_x(), missile->get_pos_y(), missile->get_angle(), 
-                        missile->get_direction()});
-    missiles_attr.emplace_back(attr);
+std::list<ExplodableAttr> World::get_explodables_attr() {
+  std::list<ExplodableAttr> expl_attr;
+  for (auto explodable : explodables) {
+    ExplodableAttr attr {explodable->get_id(), explodable->get_type(), explodable->get_pos_x(), explodable->get_pos_y(), 
+      explodable->get_angle(), explodable->get_direction()};
+      expl_attr.emplace_back(attr);
   }
-  return missiles_attr;
+  return expl_attr;
 }
 
 std::list<ExplosionAttr> World::get_explosions_attr() {
@@ -154,11 +164,11 @@ void World::delete_beams() {
   beams.clear();
 }
 
-void World::delete_missiles() {
-  for (auto &missile : missiles) {
-    destroy_body(missile);
+void World::delete_explodables() {
+  for (auto &explodable : explodables) {
+    destroy_body(explodable);
   }
-  missiles.clear();
+  explodables.clear();
 }
 
 World::~World() {
@@ -166,6 +176,6 @@ World::~World() {
 
   delete_beams();
 
-  delete_missiles();
+  delete_explodables();
 }
 

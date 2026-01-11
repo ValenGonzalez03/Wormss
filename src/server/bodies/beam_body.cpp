@@ -48,34 +48,17 @@ BodyExplosionInfo BeamBody::get_explosion_info() {
     return BodyExplosionInfo {b2Vec2(0,0), b2Vec2(0,0), 0};
 }
 
-void BeamBody::touch_beam(BeamBody* beam) {
-    /* NADA */
-}
-  
-void BeamBody::touch_worm(WormBody* worm) {
-    worm->hit_a_surface();
-}
+void BeamBody::touch_beam(BeamBody* beam) { /* NADA */ }
+void BeamBody::touch_worm(WormBody* worm) { worm->hit_a_surface(); }
+void BeamBody::touch_missile(MissileBody* missile) { missile->explode(); }
+void BeamBody::touch_grenade(GrenadeBody* grenade) { /* NADA */ }
 
-void BeamBody::touch_missile(MissileBody* missile) {
-    missile->explode();
-}
+void BeamBody::stop_touching_worm(WormBody* worm) { worm->move_away_from_surface(); }
+void BeamBody::stop_touching_beam(BeamBody* beam) { /* NADA */ }
+void BeamBody::stop_touching_missile(MissileBody* missile) { /* NADA */ }
+void BeamBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
 
-void BeamBody::stop_touching_worm(WormBody* worm) {
-    worm->move_away_from_surface();
-}
-
-void BeamBody::stop_touching_beam(BeamBody* beam) {
-    /* NADA */
-}
-
-void BeamBody::stop_touching_missile(MissileBody* missile) {
-    /* NADA */
-}
-
-//void BeamBody::end_contact_with(Body* another_body) { }
-
-
-int BeamBody::get_type() {return BEAM;}
+BODY_TYPES BeamBody::get_type() {return BEAM;}
 
 BeamAttr BeamBody::get_attr() {
     return BeamAttr {pos_x, pos_y, angle, width};

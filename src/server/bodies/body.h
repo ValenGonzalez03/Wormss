@@ -2,20 +2,14 @@
 #define BODY_H
 
 #include "box2d/box2d.h"
+#include "../../common/game_constants.h"
 
 class WormBody;
 class BeamBody;
 class MissileBody;
+class GrenadeBody;
 
 class World;
-
-
-enum BODY_TYPES {
-    WORM = 0,
-    WATER = 1,
-    BEAM = 2,
-    MISSILE = 3
-};
 
 struct UserData {
   BODY_TYPES type;
@@ -52,12 +46,14 @@ public:
   virtual void touch_worm(WormBody* worm) = 0;
   virtual void touch_beam(BeamBody* beam) = 0;
   virtual void touch_missile(MissileBody* missile) = 0;
+  virtual void touch_grenade(GrenadeBody* grenade) = 0;
 
   void end_contact_with(Body* another_body);
   void stop_touching(Body *other);
   virtual void stop_touching_worm(WormBody* worm) = 0;
   virtual void stop_touching_beam(BeamBody* beam) = 0;
   virtual void stop_touching_missile(MissileBody* missile) = 0;
+  virtual void stop_touching_grenade(GrenadeBody* grenade) = 0;
 
   void apply_impulse(const b2Vec2 &impulse, const b2Vec2 &point);
 
@@ -71,7 +67,7 @@ public:
 
   UserData* get_user_data();
 
-  virtual int get_type() = 0;
+  virtual BODY_TYPES get_type() = 0;
 
   bool is_affected_by_explosions();
   //virtual void start_contact_with(Weapon* weamon) = 0;

@@ -1,5 +1,5 @@
-#ifndef MISSILE_BODY_H
-#define MISSILE_BODY_H
+#ifndef GRENADE_BODY_H
+#define GRENADE_BODY_H
 
 #include "../../common/game_constants.h"
 #include "explodable.h"
@@ -7,14 +7,20 @@
 #include <iostream>
 #include <stdio.h>
 
-class MissileBody : public Explodable {
+#define TIME_DETONATION 5 * 60  // 5 segundos a 60 FPS
+
+class GrenadeBody : public Explodable {
 private:
   uint8_t id;
   bool m_contacting = false;
+  bool started_countdown = false;
+  int frames_counted = 0;
+
+  void check_grenade_in_movement();
 
 public:
 
-  explicit MissileBody(b2World* world, float pos_x, float pos_y, float angle, uint8_t direction, uint8_t id);
+  explicit GrenadeBody(b2World* world, float pos_x, float pos_y, float angle, uint8_t direction, uint8_t id);
 
   void update() override;
 
@@ -34,10 +40,10 @@ public:
   
   BODY_TYPES get_type() override;
 
-  ~MissileBody();
+  ~GrenadeBody();
   
-  MissileBody(const MissileBody&) = delete;
-  MissileBody& operator=(const MissileBody&) = delete;
+  GrenadeBody(const GrenadeBody&) = delete;
+  GrenadeBody& operator=(const GrenadeBody&) = delete;
 };
 
 #endif

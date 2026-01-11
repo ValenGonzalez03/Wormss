@@ -5,7 +5,7 @@
 #include "client_beam.h"
 #include "../client_resource_pool.h"
 #include "client_worm.h"
-#include "client_missile.h"
+#include "client_explodable.h"
 #include "client_explosion.h"
 #include <vector>
 
@@ -15,10 +15,12 @@ private:
   SDL2pp::Renderer &renderer;
   std::vector<Beam> beams;
   std::map<uint8_t, Worm> worms;
-  std::map<uint8_t, Missile> missiles;
+  std::map<uint8_t, Explodable> explodables;
   std::vector<Explosion> explosions;
 
   void render_background();
+
+  std::pair<float, float> get_explodable_size(BODY_TYPES type);
 
   // Muestra el estado del gusano
   std::string print_state(WormState state);
@@ -39,7 +41,7 @@ private:
   // crea la long_beam y la agrega al WorldView
   void add_beam(float pos_x, float pos_y, float width, float height, int angle);
   
-  Missile add_missile(MissileData data);
+  Explodable add_explodable(ExplodableData data);
   
   void add_explosion(ExplosionData data, int frame);
   

@@ -44,11 +44,12 @@ void WorldView::add_worm(WormData data) {
   worms.insert({worm.get_id(), worm});
 }
 
-Missile WorldView::add_missile(MissileData data) {
+Explodable WorldView::add_explodable(ExplodableData data) {
   std::vector<SDL2pp::Texture *> missile_texture = resource_pool.get_missile_texture();
 
-  float width = MISSILE_WIDTH;
-  float heigth = MISSILE_HEIGHT;
+  auto size = get_explodable_size(data.get_type());
+  float width = size.first;
+  float heigth = size.second;
 
   int pos_x_px = convert_meters_to_pixels_x(data.get_pos_x() - width / 2);
   int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y() + heigth / 2);
@@ -56,9 +57,32 @@ Missile WorldView::add_missile(MissileData data) {
   int heigth_px = convert_meters_to_pixels_x(heigth);
 
 
-  Missile missile(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(), data.get_direction(), data.get_id(),
+  Explodable explodable(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(), data.get_direction(), data.get_id(),
                   std::move(missile_texture), renderer);
-  return missile;
+  return explodable;
+}
+
+std::pair<float, float> WorldView::get_explodable_size(BODY_TYPES type) {
+  float width;
+  float height;
+
+  switch (type) {
+    case MISSILE:
+      width = MISSILE_WIDTH;
+      height = MISSILE_HEIGHT;
+      break;
+    case GRENADE_BODY:
+      width = GRENADE_WIDTH;
+      height = GRENADE_HEIGHT;
+      break;
+    default:
+      std::cout << "No se encontro el body correspondiente" << std::endl;
+      width = MISSILE_WIDTH;
+      height = MISSILE_HEIGHT;
+      break;
+  }
+
+  return {width, height};
 }
 
 void WorldView::add_explosion(ExplosionData data, int frame) {
@@ -85,8 +109,8 @@ void WorldView::render(int frame) {
   }
 
   // Renderizar misiles
-  for (auto &missile : missiles) {
-    missile.second.render(frame);
+  for (auto &explodable : explodables) {
+    explodable.second.render(frame);
   }
 
   // Renderizar explosiones
@@ -106,22 +130,22 @@ void WorldView::update(GameState &game_state, int frame) {
     worm.second.update(worms_data[worm.second.get_id()]);
   }
 
-  auto missiles_data = game_state.get_missiles();
-  auto missiles_data_aux = missiles_data;
-  for (auto missile : missiles) {
-    if (missiles_data_aux.find(missile.first) == missiles_data_aux.end()) { // No encontró el elemento en missiles_data, quiere decir que el misil explotó (o desaparecio (?))
-      missiles.erase(missile.first);
+  auto explodables_data = game_state.get_explodables();
+  auto explodables_data_aux = explodables_data;
+  for (auto explodable : explodables) {
+    if (explodables_data_aux.find(explodable.first) == explodables_data_aux.end()) { // No encontró el elemento en missiles_data, quiere decir que el misil explotó (o desaparecio (?))
+      explodables.erase(explodable.first);
     } else { // En otro caso lo encontró (Es un misil que sigue viajando y no chocó con nada), por lo que lo descarto de missiles_data
-      missiles_data_aux.erase(missile.first);
+      explodables_data_aux.erase(explodable.first);
     }
   }
-  for (auto data : missiles_data_aux) { // Itero sobre los misiles que quedan de missiles_data, que son los que NO tiene missiles por lo que debo crearlos.
-    auto missile = add_missile(data.second);
-    missiles.insert({data.first, missile});
+  for (auto data : explodables_data_aux) { // Itero sobre los misiles que quedan de missiles_data, que son los que NO tiene missiles por lo que debo crearlos.
+    auto missile = add_explodable(data.second);
+    explodables.insert({data.first, missile});
   }
 
-  for (auto &missile : missiles) {
-    missile.second.update(missiles_data[missile.second.get_id()]);
+  for (auto &missile : explodables) {
+    missile.second.update(explodables_data[missile.second.get_id()]);
   }
 
   explosions.clear();
@@ -207,6 +231,8 @@ std::string WorldView::print_weapon_selected(WeaponType weapon)
     return "bazooka";
   case BAT:
     return "baseball bat";
+  case GRENADE:
+    return "grenade";
   default:
     return "unknown";
   }

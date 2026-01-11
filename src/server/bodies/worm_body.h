@@ -2,7 +2,6 @@
 #define WORM_BODY_H
 
 #include "../../common/game_constants.h"
-#include "missile_body.h"
 #include "body.h"
 #include "box2d/box2d.h"
 #include <iostream>
@@ -70,9 +69,9 @@ public:
   void attack();
 
   // Por ahora un shoot generico que solo va a ser usado para la bazooka
-  MissileBody* attack_throwable(b2Vec2 misile_pos, float initial_force, uint8_t missile_id);
+  ExplodableAttr attack_projectile(b2Vec2 proj_pos, uint8_t proj_id);
 
-  b2Vec2 calculate_missile_launch_position();
+  b2Vec2 calculate_projectile_launch_position(float proj_width, float proj_height, float offset_x = 0.0f, float offset_y = 0.0f);
   
   void teleport(float pos_x, float pos_y);
 
@@ -115,16 +114,14 @@ public:
   bool has_exceeded_height_limit();
 
   void touch_worm(WormBody* worm) override;
-
   void touch_beam(BeamBody* beam) override;
-
   void touch_missile(MissileBody* missile) override;
+  void touch_grenade(GrenadeBody* grenade) override;
 
   void stop_touching_worm(WormBody* worm) override;
-
   void stop_touching_beam(BeamBody* beam) override;
-	
   void stop_touching_missile(MissileBody* missile) override;
+  void stop_touching_grenade(GrenadeBody* grenade) override;
 
   // POR AHORA DE PRUEBA
   void start_contact();
@@ -146,7 +143,7 @@ public:
   
   void shoot_bazooka();
   
-  int get_type() override;
+  BODY_TYPES get_type() override;
 
   ~WormBody();
   

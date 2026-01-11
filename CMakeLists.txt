@@ -22,10 +22,11 @@ add_executable(client
 				./src/client/view/client_worldview.cpp
 				./src/client/view/client_beam.cpp
 				./src/client/view/client_worm.cpp
-				./src/client/view/client_missile.cpp
+				./src/client/view/client_explodable.cpp
 				./src/client/view/client_explosion.cpp
 				./src/client/weapons/client_bazooka.cpp
 				./src/client/weapons/client_bat.cpp
+				./src/client/weapons/client_grenade.cpp
 				./src/common/lib/socket.cpp 
 				./src/common/lib/liberror.cpp 
 				./src/common/lib/resolver.cpp 
@@ -52,7 +53,9 @@ add_executable(server
 					  ./src/server/game/server_game.cpp
 					  ./src/server/bodies/body.cpp
 					  ./src/server/bodies/worm_body.cpp
+					  ./src/server/bodies/explodable.cpp
 					  ./src/server/bodies/missile_body.cpp
+					  ./src/server/bodies/grenade_body.cpp
 					  ./src/server/bodies/beam_body.cpp
 					  ./src/server/world/explosion_callback.cpp
 					  ./src/server/world/server_explosion.cpp

@@ -96,54 +96,61 @@ public:
 
 };
 
-struct MissileData {
+struct ExplodableData {
 private:
   float pos_x; // En metros
   float pos_y; // En metros
   float angle; // En radianes
+  BODY_TYPES type;
   uint8_t direction;
-  uint8_t missile_id;
+  uint8_t id;
 
 public:
 
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
-  explicit MissileData() : pos_x(0), pos_y(0), angle(0), direction(0), missile_id(0) {}
+  explicit ExplodableData() : pos_x(0), pos_y(0), angle(0), type(WATER), direction(0), id(0) {}
 
-  explicit MissileData(float pos_x, float pos_y, float angle, uint8_t dir, uint8_t id)
-      : pos_x(pos_x), pos_y(pos_y), angle(angle), direction(dir), missile_id(id) {}
+  explicit ExplodableData(float pos_x, float pos_y, float angle, BODY_TYPES type, uint8_t dir, uint8_t id)
+      : pos_x(pos_x), pos_y(pos_y), angle(angle), type(type), direction(dir), id(id) {}
 
-  explicit MissileData(ClientProtocol &prot) : pos_x(0), pos_y(0), angle(0), direction(0), missile_id(0) {
+  explicit ExplodableData(ClientProtocol &prot) : pos_x(0), pos_y(0), angle(0), type(WATER), direction(0), id(0) {
     bool was_closed = false;
     deserialize(prot, &was_closed);
   }
 
   void deserialize(ClientProtocol &prot, bool *was_closed) {
-    // Recibo el id del misil
-    this->missile_id = prot.recv_byte(was_closed);
+    // Recibo el id del proyectil
+    this->id = prot.recv_byte(was_closed);
 
-    // Recibo la position
+    // Recibo el tipo de proyectil
+    this->type = static_cast<BODY_TYPES>(prot.recv_byte(was_closed));
+
+    // Recibo la posicion del proyectil
     this->pos_x = prot.recv_float(was_closed);
     this->pos_y = prot.recv_float(was_closed);
   
-    // Recibo el angulo del misil
+    // Recibo el angulo del proyectil
     this->angle = prot.recv_float(was_closed);
 
-    // Recibo la direccion del misil
+    // Recibo la direccion del proyectil
     this->direction = prot.recv_byte(was_closed);
   }
 
   void serialize(ServerProtocol &prot, bool *was_closed) {
-    // Envio el id del misil
-    prot.send_byte(missile_id, was_closed);
+    // Envio el id del proyectil
+    prot.send_byte(id, was_closed);
 
-    // Envio la posicion
+    // Envio el tipo de proyectil
+    prot.send_byte(static_cast<uint8_t>(type), was_closed);
+
+    // Envio la posicion del proyectil
     prot.send_float(pos_x, was_closed);
     prot.send_float(pos_y, was_closed);
 
-    // Envio el angulo del misil
+    // Envio el angulo del proyectil
     prot.send_float(angle, was_closed);
 
-    // Envio la direccion del misil
+    // Envio la direccion del proyectil
     prot.send_byte(direction, was_closed);
   }
 
@@ -153,9 +160,11 @@ public:
 
   float get_angle() { return angle; }
 
+  BODY_TYPES get_type() { return type; }
+
   uint8_t get_direction() { return direction; }
 
-  uint8_t get_id() { return missile_id; }
+  uint8_t get_id() { return id; }
 };
 
 struct ExplosionData {
@@ -221,7 +230,7 @@ struct GameState {
 private:
   bool game_finished = false;
   std::map<uint8_t, WormData> worms_list;
-  std::map<uint8_t, MissileData> missiles_list;
+  std::map<uint8_t, ExplodableData> explodables_list;
   std::list<ExplosionData> explosions_list;
 
 public:
@@ -233,16 +242,16 @@ public:
   GameState(ClientProtocol &prot, bool *was_closed) : worms_list() {
 
     uint8_t worms_amount = prot.recv_byte(was_closed);
-    uint8_t missiles_amount = prot.recv_byte(was_closed);
+    uint8_t explodables_amount = prot.recv_byte(was_closed);
     uint8_t explosions_amount = prot.recv_byte(was_closed);
 
     for (int i = 0; i < worms_amount; i++) {
       WormData worm(prot);
       worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
     }
-    for (int i = 0; i < missiles_amount; i++) {
-      MissileData missile(prot);
-      missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
+    for (int i = 0; i < explodables_amount; i++) {
+      ExplodableData explodable(prot);
+      explodables_list.insert(std::pair<uint8_t, ExplodableData>(explodable.get_id(), explodable));
     }
     for (int i = 0; i < explosions_amount; i++) {
       ExplosionData explosion(prot);
@@ -254,14 +263,14 @@ public:
 
   void serialize(ServerProtocol &prot, bool *was_closed) {
     prot.send_byte(worms_list.size(), was_closed);
-    prot.send_byte(missiles_list.size(), was_closed);
+    prot.send_byte(explodables_list.size(), was_closed);
     prot.send_byte(explosions_list.size(), was_closed);
 
     for (auto &worm : worms_list) {
       worm.second.serialize(prot, was_closed);
     }
-    for (auto &missile : missiles_list) {
-      missile.second.serialize(prot, was_closed);
+    for (auto &explodable : explodables_list) {
+      explodable.second.serialize(prot, was_closed);
     }
     for (auto &explosion : explosions_list) {
       explosion.serialize(prot, was_closed);
@@ -278,11 +287,11 @@ public:
     worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
   }
 
-  std::map<uint8_t, MissileData> get_missiles() { return missiles_list; }
+  std::map<uint8_t, ExplodableData> get_explodables() { return explodables_list; }
 
-  void add_missile(MissileAttr& attr) {
-    MissileData missile(attr.pos_x, attr.pos_y, attr.angle, attr.direction, attr.missile_id);
-    missiles_list.insert(std::pair<uint8_t, MissileData>(missile.get_id(), missile));
+  void add_explodable(ExplodableAttr& attr) {
+    ExplodableData explodable(attr.pos_x, attr.pos_y, attr.angle, attr.type, attr.direction, attr.id);
+    explodables_list.insert(std::pair<uint8_t, ExplodableData>(explodable.get_id(), explodable));
   }
 
   std::list<ExplosionData> get_explosions() { return explosions_list; }

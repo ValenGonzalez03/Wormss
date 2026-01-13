@@ -70,7 +70,7 @@ GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const ui
 //   return selected_world;
 // }
 
-World& GamesHandler::get_game_world(const uint8_t& game_id) {
+std::shared_ptr<World> GamesHandler::get_game_world(const uint8_t& game_id) {
   for (const auto& game : games) {
     if (game_id == game->get_game_id()){
       return game->get_world();

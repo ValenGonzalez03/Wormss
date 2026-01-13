@@ -39,7 +39,7 @@ private:
 
   //World select_world(int world_id, const uint8_t& game_id);
 
-  World& get_game_world(const uint8_t& game_id);
+  std::shared_ptr<World> get_game_world(const uint8_t& game_id);
 
   bool game_exist(uint8_t game_id);
 

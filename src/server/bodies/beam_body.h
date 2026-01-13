@@ -2,20 +2,19 @@
 #define BEAM_BODY_H
 
 #include "box2d/box2d.h"
-#include "body.h"
+#include "static_body.h"
 #include "../../common/game_constants.h"
 #include <stdio.h>
 #include <iostream>
 
 //class WormBody;
 
-class BeamBody : public Body {
-	private:
-
+class BeamBody : public StaticBody {
 	public:
 	//explicit BeamBody(b2World* world, float pos_x, float pos_y);
+	//explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
 
-	explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width);
+	explicit BeamBody(b2World* world, float pos_x, float pos_y, float angle, float width);
 
 	void touch_worm(WormBody* worm) override;
 	void touch_beam(BeamBody* beam) override;
@@ -33,38 +32,14 @@ class BeamBody : public Body {
 
 	BodyExplosionInfo get_explosion_info() override;
 	
-	BeamBody(const BeamBody&) = delete;
-	BeamBody& operator=(const BeamBody&) = delete;
-
-	//explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
-
-	void print_beam() {
-		std::cout << "BEAM" << std::endl;
-		std::cout << "pos_x: " << pos_x << std::endl;
-		std::cout << "pos_y: " << pos_y << std::endl;
-		std::cout << "width: " << width << std::endl;
-		std::cout << "height: " << height << std::endl;
-	}
-
-	float get_pos_x() {
-		return this->pos_x;
-	}
-
-	float get_pos_y() {
-		return this->pos_y;
-	}
-
-	int get_angle() {
-		return this->angle;
-	}
-
-	float get_width() {
-		return this->width;
-	}
-
+	void print_beam();
+	
 	BeamAttr get_attr();
 	
 	BODY_TYPES get_type() override;
+
+	BeamBody(const BeamBody&) = delete;
+	BeamBody& operator=(const BeamBody&) = delete;
 };
 
 #endif

@@ -5,30 +5,10 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-Explodable::Explodable(b2World *world, float pos_x, float pos_y, float angle, float width, float height, 
-                        uint8_t dir, uint8_t id, BODY_TYPES type)
-    : Body(world, pos_x, pos_y, angle, width, height, 1.0f, 0.3f), direction(dir), id(id) {
-  b2BodyDef bodyDef;
-  bodyDef.bullet = true;
-  bodyDef.type = b2_dynamicBody;
-  bodyDef.position.Set(pos_x, pos_y); // Ajusto la distancia inicial un poco mas adelante para que no choque con el gusano.
-  bodyDef.angle = angle;
-  body = world->CreateBody(&bodyDef);
-
-  b2PolygonShape polygonShape;
-  polygonShape.SetAsBox(width / 2, height / 2);
-
-  b2FixtureDef fixtureDef;
-  fixtureDef.shape = &polygonShape;
-  fixtureDef.density = density;
-  fixtureDef.friction = friction;
-
-  body->CreateFixture(&fixtureDef);
-
-  UserData* data = new UserData {type, this};
-  body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
-
-}
+Explodable::Explodable(b2World *world, float pos_x, float pos_y, float angle, float width, float height, uint8_t dir, uint8_t id, BODY_TYPES type)
+  : DynamicBody(world, pos_x, pos_y, angle, width, height, 1.0f, 0.3f, type), direction(dir), id(id) {
+    std::cout << "Explodable angle: " << angle << std::endl;
+  }
 
 void Explodable::apply_initial_impulse(float initial_force, float aim_angle) {
   float vel_x = cos(aim_angle) * initial_force;
@@ -50,14 +30,6 @@ void Explodable::update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, flo
 BodyExplosionInfo Explodable::get_explosion_info() {
   return BodyExplosionInfo {b2Vec2(0,0), b2Vec2(0,0), 0};
 }
-
-b2Vec2 Explodable::get_position() { return body->GetPosition(); }
-
-float Explodable::get_pos_x() { return body->GetPosition().x; }
-
-float Explodable::get_pos_y() { return body->GetPosition().y; }
-
-float Explodable::get_angle() { return body->GetAngle(); }
 
 uint8_t Explodable::get_direction() { return direction; }
 

@@ -4,11 +4,13 @@
 WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
     : resource_pool(res_pool), renderer(rend), worms() {}
 
-void WorldView::add_beam(float pos_x, float pos_y, float width, float height, int angle) {
+void WorldView::add_beam(float pos_x, float pos_y, float width, float height, float angle) {
   int pos_x_px = convert_meters_to_pixels_x(pos_x - width / 2);
   int pos_y_px = convert_meters_to_pixels_y(pos_y + height / 2);
   int width_px = convert_meters_to_pixels_x(width);
   int height_px = convert_meters_to_pixels_x(height);
+
+  int angle_deg = angle * (180.0f / M_PI);
 
   std::vector<SDL2pp::Texture *> beam_texture =
       resource_pool.get_long_beam_texture();
@@ -18,7 +20,7 @@ void WorldView::add_beam(float pos_x, float pos_y, float width, float height, in
     beam_texture = resource_pool.get_short_beam_texture();
   }
 
-  Beam beam(width_px, height_px, pos_x_px, pos_y_px, angle, beam_texture,
+  Beam beam(width_px, height_px, pos_x_px, pos_y_px, angle_deg, beam_texture,
             renderer);
   beams.push_back(beam);
 }

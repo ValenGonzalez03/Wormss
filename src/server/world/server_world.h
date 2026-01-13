@@ -104,44 +104,47 @@ public:
     spawn_points.push_back(spawn_point);
   }
 	
-  World(const World& other)
-        : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f))),
-          worms(other.worms),
-          name(other.name),
-          background(other.background),
-          contact_listener(other.contact_listener) {
-        world->SetContactListener(&contact_listener);
-        for (const auto& beam : other.beams) {
-          create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
-        }
+  // World(const World& other)
+  //       : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f))),
+  //         worms(other.worms),
+  //         name(other.name),
+  //         background(other.background),
+  //         contact_listener(other.contact_listener) {
+  //       world->SetContactListener(&contact_listener);
+  //       for (const auto& beam : other.beams) {
+  //         create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
+  //       }
         
-        for (const auto& spawn_point : other.spawn_points) {
-          add_spawn_point(spawn_point[0], spawn_point[1]);
-        }
-  }
+  //       for (const auto& spawn_point : other.spawn_points) {
+  //         add_spawn_point(spawn_point[0], spawn_point[1]);
+  //       }
+  // }
 
-  World &operator=(const World& other) {
-    if (this == &other) {
-        return *this;
-    }
+  // World &operator=(const World& other) {
+  //   if (this == &other) {
+  //       return *this;
+  //   }
 
-    this->world = std::make_shared<b2World>(b2Vec2(0.0f, -10.0f));
+  //   this->world = std::make_shared<b2World>(b2Vec2(0.0f, -10.0f));
     
-    for (const auto& beam : other.beams) {
-      this->create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
-    }
+  //   for (const auto& beam : other.beams) {
+  //     this->create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
+  //   }
 
-    for (const auto& spawn_point : other.spawn_points) {
-      this->add_spawn_point(spawn_point[0], spawn_point[1]);
-    }
+  //   for (const auto& spawn_point : other.spawn_points) {
+  //     this->add_spawn_point(spawn_point[0], spawn_point[1]);
+  //   }
 
-    this->name = other.name;
-    this->background = other.background;
-    this->contact_listener = other.contact_listener;
-    world->SetContactListener(&contact_listener);
+  //   this->name = other.name;
+  //   this->background = other.background;
+  //   this->contact_listener = other.contact_listener;
+  //   world->SetContactListener(&contact_listener);
 
-    return *this;
-  }
+  //   return *this;
+  // }
+
+  World(const World&) = delete;
+  World& operator=(const World&) = delete;
 };
 
 #endif

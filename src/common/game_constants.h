@@ -49,6 +49,13 @@ enum BODY_TYPES {
     GRENADE_BODY = 4
 };
 
+enum BODY_CATEGORIES {
+    WORM_CATEGORY = 0x0001,
+    BEAM_CATEGORY = 0x0002,
+    MISSILE_CATEGORY = 0x0003,
+    GRENADE_CATEGORY = 0x0004
+};
+
 struct WormAttr {
     uint8_t player_id;
     float pos_x; // En metros
@@ -62,7 +69,7 @@ struct WormAttr {
 struct BeamAttr {
     float pos_x; // En metros
     float pos_y; // En metros
-    float angle; // En grados
+    float angle; // En radianes
     float width; // En metros
 };
 

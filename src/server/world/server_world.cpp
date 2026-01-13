@@ -11,9 +11,11 @@ World::World() : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f)))  {
 }
 
 BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) {
-  BeamBody* beam = new BeamBody(world.get(), pos_x, pos_y, angle, length);
+  float angle_radians = static_cast<float>(angle) * b2_pi / 180.0f;
+  BeamBody* beam = new BeamBody(world.get(), pos_x, pos_y, angle_radians, length);
   beams.push_back(beam);
-  //beam->print_beam();
+  //std::cout << "Creating beam of angle: " << beam->get_angle() << std::endl;
+  beam->print_beam();
   return beam;
 }
 
@@ -136,6 +138,7 @@ std::list<ExplodableAttr> World::get_explodables_attr() {
     ExplodableAttr attr {explodable->get_id(), explodable->get_type(), explodable->get_pos_x(), explodable->get_pos_y(), 
       explodable->get_angle(), explodable->get_direction()};
       expl_attr.emplace_back(attr);
+    std::cout << "Getting angle from body: " << explodable->get_angle() << std::endl;
   }
   return expl_attr;
 }

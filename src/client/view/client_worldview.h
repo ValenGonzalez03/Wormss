@@ -39,7 +39,7 @@ private:
   
   // Convierte la posicion pasada por parámetro de m a px,
   // crea la long_beam y la agrega al WorldView
-  void add_beam(float pos_x, float pos_y, float width, float height, int angle);
+  void add_beam(float pos_x, float pos_y, float width, float height, float angle);
   
   Explodable add_explodable(ExplodableData data);
   

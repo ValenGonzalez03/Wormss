@@ -37,17 +37,20 @@ void PlayerSender::send_worlds_names(const std::vector<std::string>& world_names
   protocol.send_worlds_names(world_names, &was_closed);
 }
 
-void PlayerSender::send_world(World& world) {
+void PlayerSender::send_world(std::shared_ptr<World> world) {
   bool was_closed = false;
-  protocol.send_string(world.get_name(), &was_closed);
-  protocol.send_string(world.get_background(), &was_closed);
+  protocol.send_string(world->get_name(), &was_closed);
+  protocol.send_string(world->get_background(), &was_closed);
 
-  std::list<BeamBody*> beams = world.get_beams();
+  std::cout << "Enviando mundo: " << world->get_name() << std::endl;
+
+  std::list<BeamBody*> beams = world->get_beams();
   uint8_t beams_number = beams.size();
   protocol.send_byte(beams_number, &was_closed);
 
   for (auto &beam : beams) {
     BeamAttr attr = beam->get_attr();
+    //std::cout << "Sending beam with angle: " << attr.angle << std::endl;
     protocol.send_beam(attr, &was_closed);
   }
   //protocol.send_world(world);

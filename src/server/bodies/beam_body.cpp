@@ -4,27 +4,8 @@
 #include "missile_body.h"
 #include <stdio.h>
 
-BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, int angle, float width) : 
-                Body(world, pos_x, pos_y, angle, width, BEAM_HEIGHT, 1.0f, 0.5f) {
-	b2BodyDef bodyDef;
-    bodyDef.type = b2_staticBody;
-    bodyDef.position.Set(pos_x, pos_y);
-    body = world->CreateBody(&bodyDef);
-
-    b2PolygonShape polygonShape;
-    float angleInRadians = static_cast<float>(angle) * b2_pi / 180.0f;
-    polygonShape.SetAsBox(width / 2.0f, height / 2.0f, b2Vec2(0,0), angleInRadians);
-  
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &polygonShape;
-    fixtureDef.density = density;
-    fixtureDef.friction = friction;
-    
-    body->CreateFixture(&fixtureDef);
-
-    UserData* data = new UserData {BODY_TYPES::BEAM, this};
-    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
-
+BeamBody::BeamBody(b2World* world, float pos_x, float pos_y, float angle, float width) : 
+                StaticBody(world, pos_x, pos_y, angle, width, BEAM_HEIGHT, 1.0f, 0.5f, BEAM) {
     /*polygonShape.SetAsBox(width, width, b2Vec2(0, 0), angleInRadians);
     fixtureDef.isSensor = true;
     b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
@@ -58,8 +39,18 @@ void BeamBody::stop_touching_beam(BeamBody* beam) { /* NADA */ }
 void BeamBody::stop_touching_missile(MissileBody* missile) { /* NADA */ }
 void BeamBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
 
-BODY_TYPES BeamBody::get_type() {return BEAM;}
+void BeamBody::print_beam() {
+    std::cout << "BEAM =>  ";
+    std::cout << "pos_x: " << get_pos_x();
+    std::cout << ",  pos_y: " << get_pos_y();
+    std::cout << ",  width: " << width;
+    std::cout << ",  height: " << height;
+    std::cout << ",  angle: " << angle << std::endl;
+}
+
+BODY_TYPES BeamBody::get_type() { return BEAM; }
 
 BeamAttr BeamBody::get_attr() {
-    return BeamAttr {pos_x, pos_y, angle, width};
+    std::cout << "Get beam angle: " << angle << std::endl;
+    return BeamAttr {get_pos_x(), get_pos_y(), get_angle(), width};
 }

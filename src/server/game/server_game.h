@@ -63,9 +63,7 @@ public:
 
   bool compare_id(const uint8_t &another_game_id);
 
-  void set_world(World& world);
-
-  World& get_world();
+  std::shared_ptr<World> get_world();
 
   void push_game_state();
 

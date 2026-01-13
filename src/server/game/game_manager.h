@@ -10,7 +10,7 @@
 
 class GameManager {
 private:
-  World world;
+  std::shared_ptr<World> world;
   bool game_finished = false;
   int current_players = 0;
   //int current_player_id;
@@ -30,7 +30,7 @@ private:
   void use_grenade(WormBody* worm, float initial_force);
 
 public:
-  explicit GameManager();
+  explicit GameManager(std::shared_ptr<World> world);
 
   void initialize_game(GameConfig &game_config);
 
@@ -40,9 +40,7 @@ public:
 
   //void set_current_turn_id(const uint8_t &id);
 
-  void set_world(World& selected_world);
-
-  World& get_world();
+  std::shared_ptr<World> get_world();
 
   void step();
 

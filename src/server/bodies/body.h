@@ -24,22 +24,16 @@ struct BodyExplosionInfo {
 
 class Body {
 protected:
-  b2World* world;
 	b2Body* body;
-	const float pos_x; 
-	const float pos_y;
-	float angle;
-	const float width;
-	const float height;
-	float density;
-	float friction;
-
+  const float width;
+  const float height;
+  const float angle;
   bool affected_by_explosions = false;
 
   friend class World;
 
 public:
-  Body(b2World* world, const float pos_x, const float pos_y, int angle, const float width, const float height, float density, float friction);
+  Body(b2World* world, const float pos_x, const float pos_y, const float angle, const float width, const float height, float density, float friction, b2BodyType body_type, BODY_TYPES type);
 
   void start_contact_with(Body* another_body);
   void touch(Body *other);
@@ -55,6 +49,8 @@ public:
   virtual void stop_touching_missile(MissileBody* missile) = 0;
   virtual void stop_touching_grenade(GrenadeBody* grenade) = 0;
 
+  void check_boundaries();
+
   void apply_impulse(const b2Vec2 &impulse, const b2Vec2 &point);
 
   virtual float explosion_intersect_value(float fraction) = 0;
@@ -64,6 +60,16 @@ public:
   virtual BodyExplosionInfo get_explosion_info() = 0;
 
   //b2Body* get_body();
+
+  float get_pos_x();
+
+  float get_pos_y();
+
+  float get_width();
+
+  float get_height();
+
+  float get_angle();
 
   UserData* get_user_data();
 

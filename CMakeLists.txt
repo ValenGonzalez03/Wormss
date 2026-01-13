@@ -52,6 +52,8 @@ add_executable(server
 					  ./src/server/game/game_manager.cpp
 					  ./src/server/game/server_game.cpp
 					  ./src/server/bodies/body.cpp
+					  ./src/server/bodies/dynamic_body.cpp
+					  ./src/server/bodies/static_body.cpp
 					  ./src/server/bodies/worm_body.cpp
 					  ./src/server/bodies/explodable.cpp
 					  ./src/server/bodies/missile_body.cpp

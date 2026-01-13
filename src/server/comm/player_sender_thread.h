@@ -28,7 +28,7 @@ public:
 
   void send_beams_number();
 
-  void send_world(World& world);
+  void send_world(std::shared_ptr<World> world);
 
   bool has_started();
 

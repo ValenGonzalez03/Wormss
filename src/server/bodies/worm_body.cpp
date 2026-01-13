@@ -8,29 +8,8 @@
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
 WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int health, uint8_t id)
-    : Body(world, pos_x, pos_y, 0, WORM_WIDTH, WORM_HEIGHT, 1, 0.2), vel(vel), id(id), health(health) {
-  b2BodyDef bodyDef;
-  bodyDef.type = b2_dynamicBody;
-  bodyDef.position.Set(pos_x, pos_y);
-  bodyDef.angle = angle;
-  body = world->CreateBody(&bodyDef);
-
-  b2PolygonShape polygonShape;
-  polygonShape.SetAsBox(width / 2, height / 2);
-
-  b2FixtureDef fixtureDef;
-  fixtureDef.shape = &polygonShape;
-  fixtureDef.density = density;
-  fixtureDef.friction = friction;
-
-  body->CreateFixture(&fixtureDef);
+    : DynamicBody(world, pos_x, pos_y, 0, WORM_WIDTH, WORM_HEIGHT, 1, 0.2, WORM), vel(vel), id(id), health(health) {
   body->SetFixedRotation(true);
-
-  affected_by_explosions = true;
-
-  UserData* data = new UserData {BODY_TYPES::WORM, this};
-  body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
-
   // // sensor
   // polygonShape.SetAsBox(0.3, 0.6, b2Vec2(pos_x, -0.5), 0);
   // fixtureDef.isSensor = true;
@@ -174,12 +153,8 @@ void WormBody::set_worm_to_attack() {
 }
 
 void WormBody::update() {
-  if (has_exceeded_width_limit()) {
-    body->SetTransform(b2Vec2(5, 25), 0); // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
-  }
-  if (has_exceeded_height_limit()) {
-    body->SetTransform(b2Vec2(get_pos_x(), 25), 0); // Por ahora solo fuerzo a que reaparezca 25 metros mas arriba
-  }
+  check_boundaries();
+
   if (state == MOVING) {
     if (direction == LEFT) {
       move_left();
@@ -252,10 +227,6 @@ bool WormBody::is_facing_right() { return (direction == RIGHT); }
 bool WormBody::is_stopped() { return (IDLE); } // ??
 
 bool WormBody::is_inactive() { return (state == IDLE); } // ??
-
-bool WormBody::has_exceeded_width_limit() { return (get_pos_x() < 0) || (get_pos_x() > 25); }
-
-bool WormBody::has_exceeded_height_limit() { return (get_pos_y() < 0) || (get_pos_y() > WORLD_HEIGHT); }
 
 void WormBody::touch_beam(BeamBody* beam) { /* NADA */ }
 void WormBody::touch_worm(WormBody* worm) { /* NADA */ }

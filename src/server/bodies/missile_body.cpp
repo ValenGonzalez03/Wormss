@@ -7,12 +7,7 @@ MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float angle, 
     : Explodable(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, dir, id, MISSILE) {}
 
 void MissileBody::update() {
-  if (has_exceeded_width_limit()) {
-    body->SetTransform(b2Vec2(15, 25), 0); // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
-  }
-  if (has_exceeded_height_limit()) {
-    body->SetTransform(b2Vec2(get_pos_x(), 25), 0); // Por ahora solo fuerzo a que reaparezca 25 metros mas arriba
-  }
+  check_boundaries();
 }
 
 bool MissileBody::has_exceeded_width_limit() { return get_pos_x() < 0; }

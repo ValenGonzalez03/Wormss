@@ -2,12 +2,12 @@
 #define EXPLODABLE_H
 
 #include "../../common/game_constants.h"
-#include "body.h"
+#include "dynamic_body.h"
 #include "box2d/box2d.h"
 #include <iostream>
 #include <stdio.h>
 
-class Explodable : public Body {
+class Explodable : public DynamicBody {
 private:
   uint8_t id;
   uint8_t direction;
@@ -26,14 +26,6 @@ public:
   void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction);
 
   BodyExplosionInfo get_explosion_info() override;
-
-  b2Vec2 get_position();
-
-  float get_pos_x();
-
-  float get_pos_y();
-
-  float get_angle();
 
   uint8_t get_direction();
 

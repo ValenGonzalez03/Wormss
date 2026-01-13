@@ -7,12 +7,7 @@ GrenadeBody::GrenadeBody(b2World *world, float pos_x, float pos_y, float angle, 
     : Explodable(world, pos_x, pos_y, angle, GRENADE_WIDTH, GRENADE_HEIGHT, dir, id, GRENADE_BODY) {}
 
 void GrenadeBody::update() {
-  if (has_exceeded_width_limit()) {
-    body->SetTransform(b2Vec2(15, 25), 0); // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
-  }
-  if (has_exceeded_height_limit()) {
-    body->SetTransform(b2Vec2(get_pos_x(), 25), 0); // Por ahora solo fuerzo a que reaparezca 25 metros mas arriba
-  }
+  check_boundaries();
 
   if (started_countdown) {
     if (frames_counted >= TIME_DETONATION) {

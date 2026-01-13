@@ -2,25 +2,29 @@
 #define WORM_BODY_H
 
 #include "../../common/game_constants.h"
-#include "body.h"
+#include "dynamic_body.h"
 #include "box2d/box2d.h"
 #include <iostream>
 #include <stdio.h>
 
-class WormBody : public Body {
+class WormBody : public DynamicBody {
 private:
+  // Atributos fijos del gusano
+  uint8_t id;
+  float vel;
+  int health;
+  float jump_vel_forward = 5;
+  float jump_vel_backward = 5;
+
+  // Atributos de estado del gusano
+  WormState state = IDLE;
+  WeaponType current_weapon = BAZOOKA;
   uint8_t direction = RIGHT;
   uint8_t aim_direction;
   float aiming_angle = 0;
-  float vel;
-  float jump_vel_backward = 5;
-  float jump_vel_forward = 5;
-  uint8_t id;
-
-  WormState state = IDLE;
-  WeaponType current_weapon = BAZOOKA;
   int frames_attacking = 0;
 
+  // Atributos para manejar la explosion sobre un gusano
   bool hit_by_explosion = false;
   b2Vec2 impulse_dir = b2Vec2(0,0);
   b2Vec2 apply_point = b2Vec2(0,0);
@@ -30,7 +34,6 @@ private:
   bool m_contacting = false;
   int num_foot_contacts = 0;
 
-  int health;
 
 public:
   //explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
@@ -108,10 +111,6 @@ public:
   bool is_stopped();
   
   bool is_inactive();
-
-  bool has_exceeded_width_limit();
-
-  bool has_exceeded_height_limit();
 
   void touch_worm(WormBody* worm) override;
   void touch_beam(BeamBody* beam) override;

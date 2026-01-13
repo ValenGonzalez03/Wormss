@@ -15,9 +15,11 @@ private:
     std::shared_ptr<World> world = std::make_shared<World>();
     std::string name = file["name"].as<std::string>();
     std::string background = file["background"].as<std::string>();
-
+    
     world->set_name(name);
     world->set_background(background);
+
+    std::cout << "Creando mundo: " << world->get_name() << std::endl;
 
     // Leo las vigas
     if (file["beams"]) {
@@ -27,6 +29,7 @@ private:
         float angle = beam["angle"].as<float>();
         float length = beam["length"].as<float>();
         // Agregar la viga al mundo (world)
+        //std::cout << "Loading beam with angle " << angle << std::endl;
         world->create_beam(position_x, position_y, angle, length);
       }
     }

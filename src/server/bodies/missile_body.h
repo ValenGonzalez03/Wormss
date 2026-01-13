@@ -9,12 +9,11 @@
 
 class MissileBody : public Explodable {
 private:
-  uint8_t id;
   bool m_contacting = false;
 
 public:
 
-  explicit MissileBody(b2World* world, float pos_x, float pos_y, float angle, uint8_t direction, uint8_t id);
+  explicit MissileBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world);
 
   void update() override;
 

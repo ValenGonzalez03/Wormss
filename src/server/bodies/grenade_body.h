@@ -11,7 +11,6 @@
 
 class GrenadeBody : public Explodable {
 private:
-  uint8_t id;
   bool m_contacting = false;
   bool started_countdown = false;
   int frames_counted = 0;
@@ -20,7 +19,7 @@ private:
 
 public:
 
-  explicit GrenadeBody(b2World* world, float pos_x, float pos_y, float angle, uint8_t direction, uint8_t id);
+  explicit GrenadeBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world);
 
   void update() override;
 

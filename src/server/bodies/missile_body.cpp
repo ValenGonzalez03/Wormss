@@ -3,8 +3,8 @@
 #include "../../common/game_constants.h"
 #include <stdio.h>
 
-MissileBody::MissileBody(b2World *world, float pos_x, float pos_y, float angle, uint8_t dir, uint8_t id)
-    : Explodable(world, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT, dir, id, MISSILE) {}
+MissileBody::MissileBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world)
+    : Explodable(basic_data, dir, adv_data, MISSILE, world) {}
 
 void MissileBody::update() {
   check_boundaries();

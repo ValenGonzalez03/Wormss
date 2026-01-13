@@ -10,9 +10,8 @@
 class WormBody : public DynamicBody {
 private:
   // Atributos fijos del gusano
-  uint8_t id;
-  float vel;
   int health;
+  float vel;
   float jump_vel_forward = 5;
   float jump_vel_backward = 5;
 
@@ -39,7 +38,7 @@ public:
   //explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
 
   // Constructor con pos_x, pos_y, velocidad, vida, etc
-  explicit WormBody(b2World* world, float pos_x, float pos_y, float vel, int health, uint8_t id);
+  explicit WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, float vel, b2World* world);
   
   void move_left();
 

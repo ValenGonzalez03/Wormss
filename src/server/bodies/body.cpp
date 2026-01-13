@@ -2,13 +2,13 @@
 #include "box2d/box2d.h"
 #include <iostream>
 
-Body::Body(b2World* world, const float pos_x, const float pos_y, const float angle, const float width, const float height, float density, float friction, b2BodyType body_type, BODY_TYPES type)
-  : width(width), height(height), angle(angle) {
+Body::Body(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2BodyType body_type, b2World* world)
+  : width(basic_data.width), height(basic_data.height), angle(basic_data.angle), id(basic_data.id) {
   b2BodyDef bodyDef;
   bodyDef.type = body_type;
-  bodyDef.position.Set(pos_x, pos_y);
+  bodyDef.position.Set(basic_data.pos_x, basic_data.pos_y);
   //std::cout << "Creating body of type " << type << " with angle " << angle << std::endl;
-  bodyDef.angle = angle;
+  bodyDef.angle = basic_data.angle;
   body = world->CreateBody(&bodyDef);
 
 
@@ -17,8 +17,10 @@ Body::Body(b2World* world, const float pos_x, const float pos_y, const float ang
 
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &polygonShape;
-  fixtureDef.density = density;
-  fixtureDef.friction = friction;
+  fixtureDef.density = adv_data.density;
+  fixtureDef.friction = adv_data.friction;
+  fixtureDef.filter.categoryBits = adv_data.category_bits;
+  fixtureDef.filter.maskBits = adv_data.mask_bits;
 
   body->CreateFixture(&fixtureDef);
 

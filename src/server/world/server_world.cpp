@@ -12,7 +12,10 @@ World::World() : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f)))  {
 
 BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) {
   float angle_radians = static_cast<float>(angle) * b2_pi / 180.0f;
-  BeamBody* beam = new BeamBody(world.get(), pos_x, pos_y, angle_radians, length);
+  BodyBasicData basic_data {0, pos_x, pos_y, angle_radians, length, BEAM_HEIGHT};
+  BodyAdvData adv_data {1.0f, 0.5f, BEAM_CATEGORY, BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
+  BeamBody* beam = new BeamBody(basic_data, adv_data, world.get());
+
   beams.push_back(beam);
   //std::cout << "Creating beam of angle: " << beam->get_angle() << std::endl;
   beam->print_beam();
@@ -20,13 +23,19 @@ BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) 
 }
 
 WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn_y, GameConfig& config) {
-  WormBody* worm = new WormBody(world.get(), spawn_x, spawn_y, config.get_worm_speed(), config.get_worm_life(), player_id);
+  BodyBasicData basic_data {player_id, spawn_x, spawn_y, 0.0f, WORM_WIDTH, WORM_HEIGHT};
+  BodyAdvData adv_data {1.0f, 0.2f, WORM_CATEGORY, BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY};
+  WormBody* worm = new WormBody(basic_data, adv_data, config.get_worm_life(), config.get_worm_speed(), world.get());
+
   worms.push_back(worm);
   return worm;
 }
 
 MissileBody* World::create_missile(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction, float initial_force) {
-  MissileBody* missile = new MissileBody(world.get(), pos_x, pos_y, angle, direction, id);
+  BodyBasicData basic_data {id, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT};
+  BodyAdvData adv_data {1.0f, 0.3f, MISSILE_CATEGORY, BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
+  MissileBody* missile = new MissileBody(basic_data, direction, adv_data, world.get());
+
   missile->apply_initial_impulse(initial_force, angle);
   explodables.push_back(missile);
   //std::cout << "Angle: " << angle << "  Direction: " << (int)direction << "  Initial force: " << initial_force << std::endl;
@@ -34,7 +43,9 @@ MissileBody* World::create_missile(uint8_t id, float pos_x, float pos_y, float a
 }
 
 GrenadeBody* World::create_grenade(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction, float initial_force) {
-  GrenadeBody* grenade = new GrenadeBody(world.get(), pos_x, pos_y, angle, direction, id);
+  BodyBasicData basic_data {id, pos_x, pos_y, angle, GRENADE_WIDTH, GRENADE_HEIGHT};
+  BodyAdvData adv_data {1.0f, 0.3f, GRENADE_CATEGORY, BEAM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
+  GrenadeBody* grenade = new GrenadeBody(basic_data, direction, adv_data, world.get());
   grenade->apply_initial_impulse(initial_force, angle);
   explodables.push_back(grenade);
   return grenade;

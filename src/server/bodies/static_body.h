@@ -7,7 +7,7 @@
 
 class StaticBody : public Body {
 public:
-  StaticBody(b2World* world, const float pos_x, const float pos_y, float angle, const float width, const float height, float density, float friction, BODY_TYPES type);
+  StaticBody(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2World* world);
 
   virtual void touch_worm(WormBody* worm) = 0;
   virtual void touch_beam(BeamBody* beam) = 0;

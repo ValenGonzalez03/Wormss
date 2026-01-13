@@ -7,8 +7,8 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-WormBody::WormBody(b2World *world, float pos_x, float pos_y, float vel, int health, uint8_t id)
-    : DynamicBody(world, pos_x, pos_y, 0, WORM_WIDTH, WORM_HEIGHT, 1, 0.2, WORM), vel(vel), id(id), health(health) {
+WormBody::WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, float vel, b2World* world)
+    : DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
   body->SetFixedRotation(true);
   // // sensor
   // polygonShape.SetAsBox(0.3, 0.6, b2Vec2(pos_x, -0.5), 0);

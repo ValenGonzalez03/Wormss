@@ -166,7 +166,7 @@ void GameManager::use_bat(WormBody* worm) {
 }
 
 void GameManager::use_grenade(WormBody* worm, float initial_force) {
-  b2Vec2 grenade_pos = worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT, 0.27f, 0.27f);
+  b2Vec2 grenade_pos = worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT);
   ExplodableAttr proj_attr = worm->attack_projectile(grenade_pos, projectiles_id_counter);
   projectiles_id_counter++;
   world->create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);

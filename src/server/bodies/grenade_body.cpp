@@ -3,8 +3,8 @@
 #include "../../common/game_constants.h"
 #include <stdio.h>
 
-GrenadeBody::GrenadeBody(b2World *world, float pos_x, float pos_y, float angle, uint8_t dir, uint8_t id)
-    : Explodable(world, pos_x, pos_y, angle, GRENADE_WIDTH, GRENADE_HEIGHT, dir, id, GRENADE_BODY) {}
+GrenadeBody::GrenadeBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world)
+    : Explodable(basic_data, dir, adv_data, GRENADE_BODY, world) {}
 
 void GrenadeBody::update() {
   check_boundaries();

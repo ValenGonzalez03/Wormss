@@ -25,6 +25,7 @@ struct BodyExplosionInfo {
 class Body {
 protected:
 	b2Body* body;
+  const uint8_t id;
   const float width;
   const float height;
   const float angle;
@@ -33,7 +34,7 @@ protected:
   friend class World;
 
 public:
-  Body(b2World* world, const float pos_x, const float pos_y, const float angle, const float width, const float height, float density, float friction, b2BodyType body_type, BODY_TYPES type);
+  Body(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2BodyType body_type, b2World* world);
 
   void start_contact_with(Body* another_body);
   void touch(Body *other);

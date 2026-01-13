@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <vector>
+#include "box2d/box2d.h"
 
 #define PIXEL_PER_METER 23.33f // 23,3 periodico (1 metro equivale a 23,33 pixeles)
 #define WORLD_HEIGHT 360 // En pixeles
@@ -54,6 +55,22 @@ enum BODY_CATEGORIES {
     BEAM_CATEGORY = 0x0002,
     MISSILE_CATEGORY = 0x0003,
     GRENADE_CATEGORY = 0x0004
+};
+
+struct BodyBasicData {
+    uint8_t id;
+    float pos_x;
+    float pos_y;
+    float angle;
+    float width;
+    float height;
+};
+
+struct BodyAdvData {
+    float density;
+    float friction;
+    uint16 category_bits;
+    uint16 mask_bits;
 };
 
 struct WormAttr {

@@ -63,16 +63,19 @@ bool ClientProtocol::recv_bool(bool *was_closed) {
 ///////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
 //////////////////////////////////////////////////////////////////////
 
-std::vector<std::string> ClientProtocol::recv_worlds_names(bool *was_closed) {
-  std::vector<std::string> names;
-  uint16_t names_number;
-  skt.recvall(&names_number, sizeof(names_number), was_closed);
-  uint16_t names_number_be = ntohs(names_number);
-  for (int i = 0; i < names_number_be; i++) {
+std::map<uint8_t, std::string> ClientProtocol::recv_worlds_map(bool *was_closed) {
+  std::map<uint8_t, std::string> worlds_map;
+
+  uint16_t worlds_number;
+  skt.recvall(&worlds_number, sizeof(worlds_number), was_closed);
+  uint16_t worlds_number_be = ntohs(worlds_number);
+  
+  for (int i = 0; i < worlds_number_be; i++) {
+    uint8_t id = recv_byte(was_closed);
     std::string name = recv_string(was_closed);
-    names.push_back(name);
+    worlds_map[id] = name;
   }
-  return names;
+  return worlds_map;
 }
 
 void ClientProtocol::send_world_name_selected(std::string &world_name,

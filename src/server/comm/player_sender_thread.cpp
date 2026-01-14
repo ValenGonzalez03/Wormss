@@ -32,17 +32,17 @@ void PlayerSender::send_id(const uint8_t id) {
   protocol.send_byte(id, &was_closed);
 }
 
-void PlayerSender::send_worlds_names(const std::vector<std::string>& world_names) {
+void PlayerSender::send_worlds_map(const std::map<uint8_t, std::string>& worlds_map) {
   bool was_closed = false;
-  protocol.send_worlds_names(world_names, &was_closed);
+  protocol.send_worlds_map(worlds_map, &was_closed);
 }
 
-void PlayerSender::send_world(std::shared_ptr<World> world) {
+void PlayerSender::send_world(World world) {
   bool was_closed = false;
-  protocol.send_string(world->get_name(), &was_closed);
-  protocol.send_string(world->get_background(), &was_closed);
+  protocol.send_string(world.get_name(), &was_closed);
+  protocol.send_string(world.get_background(), &was_closed);
 
-  std::list<BeamBody*> beams = world->get_beams();
+  std::list<BeamBody*> beams = world.get_beams();
   uint8_t beams_number = beams.size();
   protocol.send_byte(beams_number, &was_closed);
 

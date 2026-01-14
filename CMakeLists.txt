@@ -49,6 +49,7 @@ add_executable(server
 					  ./src/server/comm/broadcaster.cpp
 					  ./src/server/comm/server_protocol.cpp
 					  ./src/server/game/server_games_handler.cpp
+					  ./src/server/game/worlds_reader.cpp
 					  ./src/server/game/game_manager.cpp
 					  ./src/server/game/server_game.cpp
 					  ./src/server/bodies/body.cpp

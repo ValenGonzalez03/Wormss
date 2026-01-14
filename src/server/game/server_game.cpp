@@ -2,7 +2,7 @@
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(uint8_t game_id, GameConfig &game_config, std::shared_ptr<World> world) : 
+Game::Game(uint8_t game_id, GameConfig &game_config, World world) : 
 game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config), game_manager(world) {}
 
 void
@@ -102,7 +102,7 @@ bool Game::compare_id(const uint8_t &another_game_id) {
 //   game_manager.set_world(world);
 // }
 
-std::shared_ptr<World> Game::get_world(){
+World Game::get_world(){
   return game_manager.get_world();
 }
 

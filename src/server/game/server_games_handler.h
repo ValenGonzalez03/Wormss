@@ -16,8 +16,10 @@ private:
   std::mutex m;
   std::list<Game *> games;
   int games_counter = 0;
-  std::map<int, std::shared_ptr<World>> worlds;
-  std::vector<std::string> world_names;
+  std::map<uint8_t, std::string> worlds_map;
+  WorldsReader worlds_reader;
+  //std::map<int, World> worlds;
+  //std::vector<std::string> world_names;
   GameConfig games_config = GameConfig(std::string(RESOURCES_PATH) + "/game_config.yml");
 
   public:
@@ -39,7 +41,7 @@ private:
 
   //World select_world(int world_id, const uint8_t& game_id);
 
-  std::shared_ptr<World> get_game_world(const uint8_t& game_id);
+  //World get_game_world(const uint8_t& game_id);
 
   bool game_exist(uint8_t game_id);
 
@@ -47,7 +49,7 @@ private:
 
   std::list<uint8_t> *obtain_all_games_id();
 
-  std::vector<std::string> get_world_names() const;
+  std::map<uint8_t, std::string> get_worlds_map() const;
 
   ~GamesHandler();
 

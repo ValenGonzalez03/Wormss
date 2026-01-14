@@ -6,6 +6,7 @@
 #include <iostream>
 #include <memory>
 #include <utility>
+#include <map>
 
 #include "../../common/commands/command.h"
 #include "../../common/game_constants.h"
@@ -66,7 +67,7 @@ public:
 
   // Recibe una lista de punteros a mundos y envía la cantidad de
   // mundos y sus nombres por socket
-  void send_worlds_names(const std::vector<std::string>& world_names,
+  void send_worlds_map(const std::map<uint8_t, std::string>& worlds_map,
                          bool *was_closed);
 
   ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////

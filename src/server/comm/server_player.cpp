@@ -49,8 +49,8 @@ void Player::manage_create_game() {
     bool was_closed = false;
     protocol.send_byte(player_id, &was_closed);
 
-    auto world_names = games_handler.get_world_names();
-    sender.send_worlds_names(world_names);
+    auto worlds_map = games_handler.get_worlds_map();
+    sender.send_worlds_map(worlds_map);
     uint8_t world_id = protocol.recv_world_id(&was_closed);
 
     Game *game = games_handler.create_game(sender_queue, player_id, world_id); // Asigno sender_queue al broadcaseter.

@@ -24,11 +24,11 @@ public:
 
   void send_id(const uint8_t id);
 
-  void send_worlds_names(const std::vector<std::string>& world_names);
+  void send_worlds_map(const std::map<uint8_t, std::string>& world_names);
 
   void send_beams_number();
 
-  void send_world(std::shared_ptr<World> world);
+  void send_world(World world);
 
   bool has_started();
 

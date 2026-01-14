@@ -12,13 +12,11 @@ char Lobby::get_option() {
   return option;
 }
 
-int Lobby::get_world_id(std::vector<std::string>& world_names) {
+uint8_t Lobby::select_world(std::map<uint8_t, std::string>& worlds_map) {
   int option;
-  while (true){
+  while (true) {
     std::cin >> option;
-    if (option < world_names.size()){
-    return option;
-    }
+    if (worlds_map.find(static_cast<uint8_t>(option)) != worlds_map.end()) { return option; }
     std::cout << "Elija una opción válida" << std::endl;
   }
 }
@@ -30,15 +28,16 @@ void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_clos
   player_id = prot.recv_byte(was_closed);
   std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 
-  std::vector<std::string> world_names = prot.recv_worlds_names(was_closed);
-  show_worlds(world_names);
+  std::map<uint8_t, std::string> worlds_map = prot.recv_worlds_map(was_closed);
+  show_worlds(worlds_map);
   
-  int world_id = get_world_id(world_names);
+  uint8_t world_id = select_world(worlds_map);
+  std::cout << "WORLD_ID SELECCIONADO: " << static_cast<int>(world_id) << std::endl;
   
   prot.send_world_id(world_id, was_closed);
 
   int game_id = prot.recv_byte(was_closed);
-  std::cout << "GAME ID: " << game_id << std::endl;
+  std::cout << "GAME ID SELECCIONADO: " << game_id << std::endl;
 
   wait_start_command(prot, game_id);
 }
@@ -55,10 +54,10 @@ void Lobby::join_game(ClientProtocol& prot, uint8_t& player_id, bool *was_closed
   std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 }
 
-void Lobby::show_worlds(const std::vector<std::string>& world_names) {
+void Lobby::show_worlds(const std::map<uint8_t, std::string>& worlds_map) {
   std::cout << "Elige un numero de escenario:" << std::endl;
-  for (int i = 0; i < world_names.size(); ++i) {
-    std::cout << i << ": " << world_names[i] << std::endl;
+  for (auto &world_pair : worlds_map) {
+    std::cout << static_cast<int>(world_pair.first) << ": " << world_pair.second << std::endl;
   }
 }
 

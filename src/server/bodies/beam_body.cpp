@@ -51,6 +51,5 @@ void BeamBody::print_beam() {
 BODY_TYPES BeamBody::get_type() { return BEAM; }
 
 BeamAttr BeamBody::get_attr() {
-    std::cout << "Get beam angle: " << angle << std::endl;
     return BeamAttr {get_pos_x(), get_pos_y(), get_angle(), width};
 }

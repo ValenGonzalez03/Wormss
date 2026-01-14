@@ -7,13 +7,13 @@
 
 #define BAT_LENGTH 3
 
-GameManager::GameManager(std::shared_ptr<World> world) : world(world) {}
+GameManager::GameManager(World world) : world(world) {}
 
 void GameManager::initialize_game(GameConfig &game_config) {
   int i = 0;
-  std::vector<std::vector<float>> spawn_points = world->get_spawn_points();
+  std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
   for (uint8_t player_id : players) {
-    WormBody *worm = world->create_worm(player_id, spawn_points[i][0], spawn_points[i][1], game_config);
+    WormBody *worm = world.create_worm(player_id, spawn_points[i][0], spawn_points[i][1], game_config);
     std::cout << "worm created" << std::endl;
     i++;
   }
@@ -37,20 +37,20 @@ void GameManager::delete_player(const uint8_t &player_id) {
 //   world = selected_world;
 // }
 
-std::shared_ptr<World> GameManager::get_world() {
-  return this->world;
+World GameManager::get_world() {
+  return world;
 }
 
 void GameManager::step() {
-  world->step(timeStep, velocityIterations, positionIterations);
+  world.step(timeStep, velocityIterations, positionIterations);
 }
 
 void GameManager::update() {
-  world->update_worms();
+  world.update_worms();
 
-  world->update_explodables();
+  world.update_explodables();
 
-  world->update_explosions();
+  world.update_explosions();
 }
 
 void GameManager::move(const uint8_t &player_id, const uint8_t &direction) {
@@ -58,7 +58,7 @@ void GameManager::move(const uint8_t &player_id, const uint8_t &direction) {
   //   return;
   // }
 
-  WormBody *worm = world->get_worm(player_id);
+  WormBody *worm = world.get_worm(player_id);
   worm->start_moving(direction);
 }
 
@@ -67,7 +67,7 @@ void GameManager::stop_moving(const uint8_t &player_id) {
   //   return;
   // }
 
-  WormBody *worm = world->get_worm(player_id);
+  WormBody *worm = world.get_worm(player_id);
   worm->stop_moving();
 }
 
@@ -76,7 +76,7 @@ void GameManager::jump(const uint8_t &player_id, const uint8_t &direction, const
   //   return;
   // }
 
-  WormBody *worm = world->get_worm(player_id);
+  WormBody *worm = world.get_worm(player_id);
   worm->jump(direction, jump_type);
 }
 
@@ -85,7 +85,7 @@ void GameManager::aim(const uint8_t &player_id, const uint8_t &direction) {
   //   return;
   // }
 
-  WormBody *worm = world->get_worm(player_id);
+  WormBody *worm = world.get_worm(player_id);
   worm->start_aiming(direction);
 }
 
@@ -94,7 +94,7 @@ void GameManager::stop_aiming(const uint8_t &player_id) {
   //   return;
   // }
 
-  WormBody *worm = world->get_worm(player_id);
+  WormBody *worm = world.get_worm(player_id);
   worm->stop_aiming();
 }
 
@@ -102,7 +102,7 @@ void GameManager::change_weapon(const uint8_t &player_id, const uint8_t &weapon_
   // if (player_id != current_turn_id) {
   //   return;
   // }
-  WormBody *worm = world->get_worm(player_id);
+  WormBody *worm = world.get_worm(player_id);
 
   worm->change_weapon(static_cast<WeaponType>(weapon_type));
 }
@@ -111,7 +111,7 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
   // if (player_id != current_turn_id) {
   //   return;
   // }
-  WormBody *worm = world->get_worm(player_id);
+  WormBody *worm = world.get_worm(player_id);
 
   if (worm->get_state() == ATTACKING) return;
 
@@ -138,15 +138,15 @@ void GameManager::use_bazooka(WormBody* worm, float initial_force) {
   b2Vec2 missile_pos = worm->calculate_projectile_launch_position(MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
   b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
   MissileCallback callback;
-  world->ray_cast(&callback, worm_pos, missile_pos);
+  world.ray_cast(&callback, worm_pos, missile_pos);
 
   if (callback.did_hit_wall()) {
     b2Vec2 hit_point = callback.get_hit_point();
-    world->create_explosion(hit_point.x, hit_point.y);
+    world.create_explosion(hit_point.x, hit_point.y);
   } else {
     ExplodableAttr proj_attr = worm->attack_projectile(missile_pos, projectiles_id_counter);
     projectiles_id_counter++;
-    world->create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);
+    world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);
   }
 }
 
@@ -162,14 +162,14 @@ void GameManager::use_bat(WormBody* worm) {
   b2Vec2 dir = bat_end_pos - worm_pos;
   dir.Normalize();
   std::cout << "Bat direction: (" << dir.x << ", " << dir.y << ")" << std::endl;
-  world->ray_cast(&bat_callback, worm_pos, bat_end_pos);
+  world.ray_cast(&bat_callback, worm_pos, bat_end_pos);
 }
 
 void GameManager::use_grenade(WormBody* worm, float initial_force) {
   b2Vec2 grenade_pos = worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT);
   ExplodableAttr proj_attr = worm->attack_projectile(grenade_pos, projectiles_id_counter);
   projectiles_id_counter++;
-  world->create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);
+  world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);
 }
 
 GameState GameManager::create_state() {
@@ -178,17 +178,17 @@ GameState GameManager::create_state() {
     game_state.set_game_finished();
   }
 
-  auto worms_attr = world->get_worms_attr();
+  auto worms_attr = world.get_worms_attr();
   for (auto attr : worms_attr) {
     game_state.add_worm(attr);
   }
 
-  auto explodables_attr = world->get_explodables_attr();
+  auto explodables_attr = world.get_explodables_attr();
   for (auto attr : explodables_attr) {
     game_state.add_explodable(attr);
   }
 
-  auto explosions_attr = world->get_explosions_attr();
+  auto explosions_attr = world.get_explosions_attr();
   for (auto attr : explosions_attr) {
     game_state.add_explosion(attr);
   }

@@ -10,9 +10,8 @@ World::World() : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f)))  {
   world->SetContactListener(&contact_listener);
 }
 
-BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) {
-  float angle_radians = static_cast<float>(angle) * b2_pi / 180.0f;
-  BodyBasicData basic_data {0, pos_x, pos_y, angle_radians, length, BEAM_HEIGHT};
+BeamBody* World::create_beam(float pos_x, float pos_y, float angle, float length) {
+  BodyBasicData basic_data {0, pos_x, pos_y, angle, length, BEAM_HEIGHT};
   BodyAdvData adv_data {1.0f, 0.5f, BEAM_CATEGORY, BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
   BeamBody* beam = new BeamBody(basic_data, adv_data, world.get());
 
@@ -148,7 +147,6 @@ std::list<ExplodableAttr> World::get_explodables_attr() {
     ExplodableAttr attr {explodable->get_id(), explodable->get_type(), explodable->get_pos_x(), explodable->get_pos_y(), 
       explodable->get_angle(), explodable->get_direction()};
       expl_attr.emplace_back(attr);
-    std::cout << "Getting angle from body: " << explodable->get_angle() << std::endl;
   }
   return expl_attr;
 }

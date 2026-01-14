@@ -34,7 +34,7 @@ void WormBody::update() {
       move_right();
     }
   } else if (state == AIMING) {
-    std::cout << aiming_angle << std::endl;
+    //std::cout << aiming_angle << std::endl;
     if (aim_direction == UP) {
       aim_up();
     } else {
@@ -254,7 +254,6 @@ void WormBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
 void WormBody::hit_a_surface() {
   num_foot_contacts++;
   if (num_foot_contacts == 1) {
-    std::cout << "Ha tocado su primera superficie" << std::endl;
     state = IDLE;
   }
   jump_timeout = 30;

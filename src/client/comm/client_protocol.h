@@ -6,6 +6,7 @@
 #include <iostream>
 #include <memory>
 #include <utility>
+#include <map>
 
 #include "../../common/game_constants.h"
 #include "../../common/commands/command.h"
@@ -51,7 +52,7 @@ public:
   ///////////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET///////////////
 
   // Recibe la cantidad y los nombres de los mundos y los retorna.
-  std::vector<std::string> recv_worlds_names(bool *was_closed);
+  std::map<uint8_t, std::string> recv_worlds_map(bool *was_closed);
 
   // Envía el nombre 'world_name' del mundo elegido.
   void send_world_name_selected(std::string &world_name, bool *was_closed);

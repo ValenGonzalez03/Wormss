@@ -1,6 +1,5 @@
 #include "body.h"
 #include "box2d/box2d.h"
-#include <iostream>
 
 Body::Body(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2BodyType body_type, b2World* world)
   : width(basic_data.width), height(basic_data.height), angle(basic_data.angle), id(basic_data.id) {

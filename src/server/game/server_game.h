@@ -45,7 +45,7 @@ private:
   GameConfig &config;
 
 public:
-  explicit Game(uint8_t game_id, GameConfig &game_config, std::shared_ptr<World> world);
+  explicit Game(uint8_t game_id, GameConfig &game_config, World world);
 
   void add_player(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id);
 
@@ -63,7 +63,7 @@ public:
 
   bool compare_id(const uint8_t &another_game_id);
 
-  std::shared_ptr<World> get_world();
+  World get_world();
 
   void push_game_state();
 

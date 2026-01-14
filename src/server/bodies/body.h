@@ -62,6 +62,8 @@ public:
 
   //b2Body* get_body();
 
+  uint8_t get_id();
+
   float get_pos_x();
 
   float get_pos_y();

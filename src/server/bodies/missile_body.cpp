@@ -14,9 +14,9 @@ bool MissileBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool MissileBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-void MissileBody::touch_beam(BeamBody* beam) { /* NADA */ }
-void MissileBody::touch_worm(WormBody* worm) { /* NADA */ }
-void MissileBody::touch_missile(MissileBody* missile) { /* MISIL DEBE EXPLOTAR */ }
+void MissileBody::touch_beam(BeamBody* beam) { explode(); }
+void MissileBody::touch_worm(WormBody* worm) { explode(); }
+void MissileBody::touch_missile(MissileBody* missile) { explode(); }
 void MissileBody::touch_grenade(GrenadeBody* grenade) { /* NADA */ }
 
 void MissileBody::stop_touching_worm(WormBody* worm) { /* NADA */ }

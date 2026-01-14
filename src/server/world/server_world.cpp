@@ -17,8 +17,7 @@ BeamBody* World::create_beam(float pos_x, float pos_y, int angle, float length) 
   BeamBody* beam = new BeamBody(basic_data, adv_data, world.get());
 
   beams.push_back(beam);
-  //std::cout << "Creating beam of angle: " << beam->get_angle() << std::endl;
-  beam->print_beam();
+  //beam->print_beam();
   return beam;
 }
 

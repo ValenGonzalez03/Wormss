@@ -136,7 +136,7 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
 
 void GameManager::use_bazooka(WormBody* worm, float initial_force) {
   b2Vec2 missile_pos = worm->calculate_projectile_launch_position(MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
-  b2Vec2 worm_pos = worm->get_position();
+  b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
   MissileCallback callback;
   world->ray_cast(&callback, worm_pos, missile_pos);
 
@@ -151,7 +151,7 @@ void GameManager::use_bazooka(WormBody* worm, float initial_force) {
 }
 
 void GameManager::use_bat(WormBody* worm) {
-  b2Vec2 worm_pos = worm->get_position();
+  b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
   UserData* data = worm->get_user_data();
   BaseballBatCallback bat_callback(worm_pos, data);
 

@@ -29,7 +29,7 @@ Body::Body(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2Bo
 };
 
 void Body::start_contact_with(Body* another_body) {
-  another_body->touch(this);
+  touch(another_body);
 }
 
 void Body::touch(Body *other) {
@@ -63,7 +63,7 @@ void Body::touch(Body *other) {
 }
 
 void Body::end_contact_with(Body* another_body) {
-  another_body->stop_touching(this);
+  stop_touching(another_body);
 }
 
 void Body::stop_touching(Body *other) {
@@ -105,6 +105,10 @@ bool Body::is_affected_by_explosions() {
 
 void Body::apply_impulse(const b2Vec2 &impulse, const b2Vec2 &point) {
   body->ApplyLinearImpulse(impulse, point, true);
+}
+
+uint8_t Body::get_id() {
+  return id;
 }
 
 float Body::get_pos_x() {

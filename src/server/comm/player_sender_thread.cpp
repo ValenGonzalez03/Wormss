@@ -42,8 +42,6 @@ void PlayerSender::send_world(std::shared_ptr<World> world) {
   protocol.send_string(world->get_name(), &was_closed);
   protocol.send_string(world->get_background(), &was_closed);
 
-  std::cout << "Enviando mundo: " << world->get_name() << std::endl;
-
   std::list<BeamBody*> beams = world->get_beams();
   uint8_t beams_number = beams.size();
   protocol.send_byte(beams_number, &was_closed);

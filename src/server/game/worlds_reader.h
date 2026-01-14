@@ -19,8 +19,6 @@ private:
     world->set_name(name);
     world->set_background(background);
 
-    std::cout << "Creando mundo: " << world->get_name() << std::endl;
-
     // Leo las vigas
     if (file["beams"]) {
       for (const auto& beam : file["beams"]) {      

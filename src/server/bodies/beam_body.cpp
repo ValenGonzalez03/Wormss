@@ -30,11 +30,11 @@ BodyExplosionInfo BeamBody::get_explosion_info() {
 }
 
 void BeamBody::touch_beam(BeamBody* beam) { /* NADA */ }
-void BeamBody::touch_worm(WormBody* worm) { worm->hit_a_surface(); }
-void BeamBody::touch_missile(MissileBody* missile) { missile->explode(); }
+void BeamBody::touch_worm(WormBody* worm) { /* NADA */ }
+void BeamBody::touch_missile(MissileBody* missile) { /* NADA */ }
 void BeamBody::touch_grenade(GrenadeBody* grenade) { /* NADA */ }
 
-void BeamBody::stop_touching_worm(WormBody* worm) { worm->move_away_from_surface(); }
+void BeamBody::stop_touching_worm(WormBody* worm) { /* NADA */ }
 void BeamBody::stop_touching_beam(BeamBody* beam) { /* NADA */ }
 void BeamBody::stop_touching_missile(MissileBody* missile) { /* NADA */ }
 void BeamBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }

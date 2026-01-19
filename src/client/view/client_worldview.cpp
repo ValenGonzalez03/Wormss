@@ -1,8 +1,8 @@
 #include "client_worldview.h"
 #include "../../common/game_constants.h"
 
-WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend)
-    : resource_pool(res_pool), renderer(rend), worms() {}
+WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera& camera)
+    : resource_pool(res_pool), renderer(rend), worms(), camera(camera) {}
 
 void WorldView::add_beam(float pos_x, float pos_y, float width, float height, float angle) {
   int pos_x_px = convert_meters_to_pixels_x(pos_x - width / 2);
@@ -10,7 +10,7 @@ void WorldView::add_beam(float pos_x, float pos_y, float width, float height, fl
   int width_px = convert_meters_to_pixels_x(width);
   int height_px = convert_meters_to_pixels_x(height);
 
-  int angle_deg = angle * (180.0f / M_PI);
+  float angle_deg = angle * (180.0f / M_PI);
 
   std::vector<SDL2pp::Texture *> beam_texture =
       resource_pool.get_long_beam_texture();
@@ -108,27 +108,28 @@ void WorldView::add_explosion(ExplosionData data, int frame) {
 }
 
 void WorldView::render(int frame) {
+  //int cam_y = 0;
   // Renderizar fondo
   render_background();
 
   // Renderizar vigas
   for (auto &beam : beams) {
-    beam.render(frame);
+    beam.render(frame, camera.get_x(), camera.get_y());
   }
 
   // Renderizar gusanos
   for (auto &worm : worms) {
-    worm.second.render(frame);
+    worm.second.render(frame, camera.get_x(), camera.get_y());
   }
 
   // Renderizar misiles
   for (auto &explodable : explodables) {
-    explodable.second.render(frame);
+    explodable.second.render(frame, camera.get_x(), camera.get_y());
   }
 
   // Renderizar explosiones
   for (auto explosion: explosions) {
-    explosion.render(frame);
+    explosion.render(frame, camera.get_x(), camera.get_y());
   }
 
   // render_text("Position: " + std::to_string((int)state.position)
@@ -138,6 +139,8 @@ void WorldView::render(int frame) {
 }
 
 void WorldView::update(GameState &game_state, int frame) {
+  camera.update();
+
   auto worms_data = game_state.get_worms();
   for (auto &worm : worms) {
     worm.second.update(worms_data[worm.second.get_id()]);

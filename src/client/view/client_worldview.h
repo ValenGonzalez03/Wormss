@@ -4,6 +4,7 @@
 #include "../../common/game_state.h"
 #include "client_beam.h"
 #include "../client_resource_pool.h"
+#include "client_camera.h"
 #include "client_worm.h"
 #include "client_explodable.h"
 #include "client_explosion.h"
@@ -13,6 +14,7 @@ class WorldView {
 private:
   ResourcePool &resource_pool;
   SDL2pp::Renderer &renderer;
+  Camera& camera;
   std::vector<Beam> beams;
   std::map<uint8_t, Worm> worms;
   std::map<uint8_t, Explodable> explodables;
@@ -31,7 +33,7 @@ private:
   public:
   // Crea una WorldView con una referencia a una resource pool
   // y a un renderer
-  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend);
+  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera& camera);
   
   // void add_worms(std::vector<std::vector<float>> spawn_points);
   

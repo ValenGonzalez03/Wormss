@@ -22,7 +22,7 @@ const float RATE = (float)(1.0 / 60.0);
 Client::Client(ClientProtocol &&prot, uint8_t player_id)
     : prot(std::move(prot)), receiver_queue(), sender_queue(),
       receiver(this->prot, receiver_queue, keep_playing), sender(this->prot, sender_queue, keep_playing),
-      client_sdl(), player_id(player_id), last_game_state() {}
+      view(), player_id(player_id), last_game_state() {}
 
 void Client::start_threads()
 {
@@ -53,8 +53,8 @@ int Client::run()
   }
 
   // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS, MUSICA, ETC)
-  client_sdl.resource_pool.initialize();
-  client_sdl.resource_pool.play_music();
+  view.resource_pool.initialize();
+  view.resource_pool.play_music();
 
   // INICIALIZACION DEL MUNDO
   // ---------------------------------------------------------------------------
@@ -69,7 +69,7 @@ int Client::run()
   std::cout << "Cantidad worms: " << (int)last_game_state.get_worms().size() << std::endl;
   for (auto worm_data : last_game_state.get_worms())
   {
-    client_sdl.world_view.add_worm(worm_data.second);
+    view.world_view.add_worm(worm_data.second);
   }
   prot.send_client_ready();
 
@@ -92,7 +92,7 @@ void Client::recv_world()
 
   std::string world_name = prot.recv_string(&was_closed); // Por ahora no se hace nada con el nombre
   std::string background_name = prot.recv_string(&was_closed);
-  client_sdl.world_view.set_background(background_name);
+  view.world_view.set_background(background_name);
 
   uint8_t beams_number = prot.recv_byte(&was_closed);
   // int beams_number = prot.recv_beams_number(&was_closed);
@@ -104,7 +104,7 @@ void Client::recv_world()
 
     if (beam_attr.width == 6.0f || beam_attr.width == 3.0f)
     {
-      client_sdl.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width, BEAM_HEIGHT, beam_attr.angle);
+      view.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width, BEAM_HEIGHT, beam_attr.angle);
     }
     else
     {
@@ -121,6 +121,7 @@ bool Client::func_to_execute()
   // unsigned int frame_delta = frame_ticks - state.prev_ticks;
   // state.prev_ticks = frame_ticks;
 
+
   // EVENT LOOP
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
@@ -131,6 +132,7 @@ bool Client::func_to_execute()
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // EVENT LOOP
+
 
   // TRY-POP DE LA RECEIVER QUEUE
   // ---------------------------------------------------------------------------
@@ -168,26 +170,29 @@ bool Client::func_to_execute()
   // ---------------------------------------------------------------------------
   // TRY-POP DE LA RECEIVER QUEUE
 
+
   // UPDATE ESTADO DEL JUEGO
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
-  client_sdl.world_view.update(game_state, frame_ticks);
+  view.world_view.update(game_state, frame_ticks);
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // UPDATE ESTADO DEL JUEGO
 
+
   // RENDER DE TEXTURAS
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
-  client_sdl.renderer.Clear();
-  client_sdl.world_view.render(frame_ticks);
-  client_sdl.world_view.render_text(game_state.get_worms()[player_id]);
+  view.renderer.Clear();
+  view.world_view.render(frame_ticks);
+  view.world_view.render_text(game_state.get_worms()[player_id]);
         
   // Show rendered frame
-  client_sdl.renderer.Present();
+  view.renderer.Present();
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   // RENDER DE TEXTURAS
+
 
   return false;
 }
@@ -253,12 +258,24 @@ bool Client::execute_event(SDL_Event &event)
       case SDLK_3:
         handle_change_weapon(GRENADE);
         break;
-      case SDLK_i:
-        client_sdl.resource_pool.turn_music_volume_down();
+      case SDLK_y:
+      view.resource_pool.turn_music_volume_down();
         break;
-      case SDLK_o:
-        client_sdl.resource_pool.turn_music_volume_up();
+      case SDLK_u:
+      view.resource_pool.turn_music_volume_up();
         break;
+      }
+      if (event.key.keysym.sym == SDLK_i) {
+        view.camera.start_moving_up();
+      }
+      if (event.key.keysym.sym == SDLK_k) {
+        view.camera.start_moving_down();
+      }
+      if (event.key.keysym.sym == SDLK_j) {
+        view.camera.start_moving_left();
+      }
+      if (event.key.keysym.sym == SDLK_l) {
+        view.camera.start_moving_right();
       }
     }
     else if (event.type == SDL_KEYUP)
@@ -286,6 +303,18 @@ bool Client::execute_event(SDL_Event &event)
         }
         break;
       }
+      if (event.key.keysym.sym == SDLK_i) {
+        view.camera.stop_moving_up();
+      }
+      if (event.key.keysym.sym == SDLK_k) {
+        view.camera.stop_moving_down();
+      }
+      if (event.key.keysym.sym == SDLK_j) {
+        view.camera.stop_moving_left();
+      }
+      if (event.key.keysym.sym == SDLK_l) {
+        view.camera.stop_moving_right();
+      }
     }
   }
   return false;
@@ -295,22 +324,18 @@ void Client::handle_start_moving(int direction)
 {
   std::shared_ptr<StartMoving> cmd = std::make_shared<StartMoving>(player_id, direction);
   sender_queue.try_push(cmd);
-  // is_running = true;
-  // state.direction = direction;
 }
 
 void Client::handle_stop_moving()
 {
   std::shared_ptr<StopMoving> cmd = std::make_shared<StopMoving>(player_id);
   sender_queue.try_push(cmd);
-  // is_running = false;
 }
 
 void Client::handle_jump_forward(uint8_t worm_dir, uint8_t jump_type)
 {
   std::shared_ptr<Jump> cmd = std::make_shared<Jump>(player_id, worm_dir, jump_type);
   sender_queue.try_push(cmd);
-  // state.is_running = false;
 }
 
 void Client::handle_jump_backward(uint8_t worm_dir, uint8_t jump_type)
@@ -318,7 +343,6 @@ void Client::handle_jump_backward(uint8_t worm_dir, uint8_t jump_type)
   int jump_direction = (worm_dir == LEFT ? RIGHT : LEFT); // Calculo la direccion opuesta
   std::shared_ptr<Jump> cmd = std::make_shared<Jump>(player_id, jump_direction, jump_type);
   sender_queue.try_push(cmd);
-  // state.is_running = false;
 }
 
 void Client::handle_start_aiming(int direction)
@@ -357,17 +381,4 @@ void Client::handle_quit_game()
   sender_queue.close();
   receiver_queue.close();
   prot.close_socket();
-}
-
-std::string Client::print_weapon_selected(WeaponType weapon)
-{
-  switch (weapon)
-  {
-  case BAZOOKA:
-    return "bazooka";
-  case BAT:
-    return "baseball bat";
-  default:
-    return "unknown";
-  }
 }

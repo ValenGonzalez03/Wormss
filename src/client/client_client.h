@@ -11,7 +11,7 @@
 #include "../common/constant_rate_loop.h"
 #include "../common/game_state.h"
 #include "../common/lib/queue.h"
-#include "client_SDL.h"
+#include "client_view.h"
 #include "client_resource_pool.h"
 #include "comm/client_protocol.h"
 #include "comm/client_receiver_thread.h"
@@ -29,7 +29,7 @@ private:
 
   GameState last_game_state;
 
-  client_SDL client_sdl;
+  ClientView view;
 
   uint8_t player_id;
 
@@ -76,9 +76,6 @@ private:
 
   // Muestra el estado del gusano
   std::string print_state(WormState state);
-
-  // Muestra el arma seleccionada del gusano
-  std::string print_weapon_selected(WeaponType weapon);
 
 public:
   explicit Client(ClientProtocol &&prot, uint8_t player_id);

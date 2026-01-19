@@ -16,20 +16,20 @@ void Explodable::update(ExplodableData data) {
   angle = data.get_angle();
 }
 
-void Explodable::render(int frame) {
+void Explodable::render(int frame, int camera_x, int camera_y) {
 
   texture->SetAlphaMod(255);
   float angle_deg =  angle * (180.0f / b2_pi);
   SDL_RendererFlip flip = (direction == RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-  renderer.Copy(*texture, SDL2pp::NullOpt, SDL2pp::Rect(pos_x, pos_y, width, height), -angle_deg, SDL2pp::NullOpt, flip);
+  renderer.Copy(*texture, SDL2pp::NullOpt, SDL2pp::Rect(pos_x - camera_x, pos_y - camera_y, width, height), -angle_deg, SDL2pp::NullOpt, flip);
 
   if (std::getenv("DEBUG") != NULL) {
-    SDL2pp::Rect box(pos_x, pos_y, width, height);
+    SDL2pp::Rect box(pos_x- camera_x, pos_y - camera_y, width, height);
   
     SDL2pp::Color c(0, 255, 0);
     renderer.SetDrawColor(c);
 
-    DrawRotatedRect(renderer, width, height, pos_x, pos_y, -angle);
+    DrawRotatedRect(renderer, width, height, pos_x - camera_x, pos_y - camera_y, -angle);
     //renderer.DrawRect(box);
   }
 

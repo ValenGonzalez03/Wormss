@@ -94,7 +94,7 @@ void Body::check_boundaries() {
     body->SetTransform(b2Vec2(5, 25), 0); // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
   }
   if ((get_pos_y() < 0) || (get_pos_y() > WORLD_HEIGHT)) { // Excedio limite vertical
-    body->SetTransform(b2Vec2(get_pos_x(), 25), 0); // Por ahora solo fuerzo a que reaparezca 25 metros mas arriba
+    body->SetTransform(b2Vec2(get_pos_x(), 30), 0); // Por ahora solo fuerzo a que reaparezca 30 metros mas arriba
   }
 }
 

@@ -15,7 +15,7 @@ static int convert_meters_to_pixels_x(float pos_x) {
 
 // Recibe un numero en metros y devuelve el equivalente en pixeles (Exclusivamente para convertir posiciones en el eje Y)
 static int convert_meters_to_pixels_y(float pos_y) {
-  return WORLD_HEIGHT - pos_y * PIXEL_PER_METER;
+  return convert_meters_to_pixels_x(WORLD_HEIGHT) - pos_y * PIXEL_PER_METER;
 }
 
 static float convert_pixels_to_meters_x(int pos_x) {

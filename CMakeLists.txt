@@ -20,6 +20,7 @@ add_executable(client
 				./src/client/comm/client_sender_thread.cpp
 				./src/client/comm/client_protocol.cpp
 				./src/client/view/client_worldview.cpp
+				./src/client/view/client_camera.cpp
 				./src/client/view/client_beam.cpp
 				./src/client/view/client_worm.cpp
 				./src/client/view/client_explodable.cpp

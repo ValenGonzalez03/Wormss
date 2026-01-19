@@ -5,19 +5,20 @@
 #include <vector>
 #include "box2d/box2d.h"
 
-#define PIXEL_PER_METER 23.33f // 23,3 periodico (1 metro equivale a 23,33 pixeles)
-#define WORLD_HEIGHT 360 // En pixeles
+#define PIXEL_PER_METER 25.0f // 23,3 periodico (1 metro equivale a 25 pixeles)
+#define WORLD_WIDTH 50.0f // En metros (Equivale a 1250 pixeles)
+#define WORLD_HEIGHT 30.0f // En metros (Equivale a 750 pixeles)
 
-#define WORM_WIDTH 0.8154f // En metros (Equivale aproximadamente a unos 19 pixeles)
-#define WORM_HEIGHT 1.0729f // En metros (Equivale aproximadamente a unos 25 pixeles)
+#define WORM_WIDTH 0.8f // En metros (Equivale a 20 pixeles)
+#define WORM_HEIGHT 1.0f // En metros (Equivale a 25 pixeles)
 
-#define BEAM_HEIGHT 0.8583f // En metros (Equivale aproximadamente a unos 20 pixeles)
+#define BEAM_HEIGHT 0.85f // En metros (Equivale a 21,25 pixeles)
 
-#define MISSILE_WIDTH 1.0f // En metros (Equivale aproximadamente a unos 23,33 pixeles)
-#define MISSILE_HEIGHT 0.8f // En metros (Equivale aproximadamente a unos 18,66 pixeles)
+#define MISSILE_WIDTH 1.0f // En metros (Equivale a 25 pixeles)
+#define MISSILE_HEIGHT 0.8f // En metros (Equivale a 20 pixeles)
 
-#define GRENADE_WIDTH 0.6f // En metros (Equivale aproximadamente a unos 14 pixeles)
-#define GRENADE_HEIGHT 0.8f // En metros (Equivale aproximadamente a unos 18,66 pixeles)
+#define GRENADE_WIDTH 0.6f // En metros (Equivale a 15 pixeles)
+#define GRENADE_HEIGHT 0.8f // En metros (Equivale a 20 pixeles)
 
 #define LEFT 0
 #define RIGHT 1

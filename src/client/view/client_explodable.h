@@ -28,7 +28,7 @@ public:
   void update(ExplodableData data);
 
   // Renderiza el Explodable pasado por parámetro según el estado del mismo
-  virtual void render(int frame);
+  virtual void render(int frame, int camera_x, int camera_y);
 
   int get_pos_x();
 

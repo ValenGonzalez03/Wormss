@@ -26,7 +26,7 @@ public:
   void update(int frame);
 
   // Renderiza el misil pasado por parámetro según el estado del mismo
-  void render(int frame);
+  void render(int frame, int camera_x, int camera_y);
 
   bool has_finished();
 

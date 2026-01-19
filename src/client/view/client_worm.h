@@ -30,19 +30,19 @@ private:
   SDL_RendererFlip choose_flip_direction();
 
   // Renderiza el worm cuando se encuentra en estado "idle"
-  void render_worm_idle(int frame);
+  void render_worm_idle(int frame, int camera_x, int camera_y);
 
   // Renderiza el worm cuando se encuentra en estado "running"
-  void render_worm_running(int frame);
+  void render_worm_running(int frame, int camera_x, int camera_y);
 
   // Renderiza al worm cuando se encuentra en estado "jumping" (NO TERMINADA)
-  void render_worm_jumping(int frame);
+  void render_worm_jumping(int frame, int camera_x, int camera_y);
 
   // Renderiza el worm cuando se encuentra en estado "aiming" en funcion del arma seleccionada
-  void render_worm_aiming(int frame);
+  void render_worm_aiming(int frame, int camera_x, int camera_y);
 
   // Renderiza el worm cuando se encuentra en estado "attacking" en funcion del arma seleccionada
-  void render_worm_attacking(int frame);
+  void render_worm_attacking(int frame, int camera_x, int camera_y);
 
 public:
 
@@ -58,7 +58,7 @@ public:
   void update(WormData data);
 
   // Renderiza el worm en función de su estado actual
-  void render(int frame);
+  void render(int frame, int camera_x, int camera_y);
 
   ~Worm();
 

@@ -17,7 +17,7 @@ void Explosion::update(int frame) {
    }
 }
 
-void Explosion::render(int frame) {
+void Explosion::render(int frame, int camera_x, int camera_y) {
   SDL2pp::Color c(0, 0, 255);
   renderer.SetDrawColor(c);
   if (std::getenv("DEBUG") != NULL) {
@@ -25,7 +25,7 @@ void Explosion::render(int frame) {
       float angle_rad = (i / (float)NUM_RAYS) * 2.0f * b2_pi;
       //std::cout << "fraction n° " << i << ": " << ray_fractions[i] << std::endl;
       float radius_fraction = ray_fractions[i] * radius;
-      SDL2pp::Point center (pos_x, pos_y);
+      SDL2pp::Point center (pos_x - camera_x, pos_y - camera_y);
       SDL2pp::Point ray_dir ( radius_fraction * sinf(angle_rad), -radius_fraction * cosf(angle_rad) );
       SDL2pp::Point ray_end = (center + ray_dir);
       renderer.DrawLine(center, ray_end);

@@ -1,8 +1,8 @@
 #include "client_worldview.h"
 #include "../../common/game_constants.h"
 
-WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera& camera)
-    : resource_pool(res_pool), renderer(rend), worms(), camera(camera) {}
+WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera& camera, uint8_t& id)
+    : resource_pool(res_pool), renderer(rend), worms(), camera(camera), player_id(id) {}
 
 void WorldView::add_beam(float pos_x, float pos_y, float width, float height, float angle) {
   int pos_x_px = convert_meters_to_pixels_x(pos_x - width / 2);
@@ -139,13 +139,17 @@ void WorldView::render(int frame) {
 }
 
 void WorldView::update(GameState &game_state, int frame) {
-  camera.update();
-
+  
+  // Actualizo el estado de los gusanos
   auto worms_data = game_state.get_worms();
   for (auto &worm : worms) {
     worm.second.update(worms_data[worm.second.get_id()]);
   }
+  // Actualizo el estado de la camara
+  auto player_worm = (worms.find(player_id))->second;
+  camera.update(player_worm.get_pos_x(), player_worm.get_pos_y(), player_worm.get_width(), player_worm.get_height());
 
+  // Actualizo el estado de los explotables
   auto explodables_data = game_state.get_explodables();
   auto explodables_data_aux = explodables_data;
   for (auto explodable : explodables) {
@@ -164,6 +168,7 @@ void WorldView::update(GameState &game_state, int frame) {
     missile.second.update(explodables_data[missile.second.get_id()]);
   }
 
+  // Actualizo el estado de las explosiones
   explosions.clear();
   auto explosions_data = game_state.get_explosions();
   for (auto data : explosions_data) {

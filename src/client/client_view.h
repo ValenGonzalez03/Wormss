@@ -10,6 +10,8 @@
 // Contiene los datos del cliente SDL, como la window, el renderer
 // la resource pool, el world_view, etc
 struct ClientView {
+  ClientView(uint8_t& player_id) : resource_pool(renderer), world_view(resource_pool, renderer, camera, player_id) {}
+  
   // Create main window: 640x480 dimensions centered, resizable, "Worms" title
   SDL2pp::Window window = SDL2pp::Window("Worms", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
     SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE);
@@ -24,7 +26,7 @@ struct ClientView {
   Camera camera = Camera(SCREEN_WIDTH, SCREEN_HEIGHT);
 
   // Creo el WorldView encargado de manejar el renderizado completo de la vista del juego
-  WorldView world_view = WorldView(resource_pool, renderer, camera);
+  WorldView world_view;
 };
 
 #endif

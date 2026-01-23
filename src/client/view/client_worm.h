@@ -60,6 +60,11 @@ public:
   // Renderiza el worm en función de su estado actual
   void render(int frame, int camera_x, int camera_y);
 
+  int get_pos_x();
+  int get_pos_y();
+  int get_width();
+  int get_height();
+
   ~Worm();
 
 };

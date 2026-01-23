@@ -140,6 +140,11 @@ SDL_RendererFlip Worm::choose_flip_direction() {
   return (direction == RIGHT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
+int Worm::get_pos_x() { return pos_x; }
+int Worm::get_pos_y() { return pos_y; }
+int Worm::get_width() { return width; }
+int Worm::get_height() { return height; }
+
 Worm::~Worm() {
   //delete weapon;
 }

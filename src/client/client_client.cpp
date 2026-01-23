@@ -22,7 +22,7 @@ const float RATE = (float)(1.0 / 60.0);
 Client::Client(ClientProtocol &&prot, uint8_t player_id)
     : prot(std::move(prot)), receiver_queue(), sender_queue(),
       receiver(this->prot, receiver_queue, keep_playing), sender(this->prot, sender_queue, keep_playing),
-      view(), player_id(player_id), last_game_state() {}
+      view(player_id), player_id(player_id), last_game_state() {}
 
 void Client::start_threads()
 {
@@ -268,14 +268,18 @@ bool Client::execute_event(SDL_Event &event)
         handle_change_weapon(GRENADE);
         break;
       case SDLK_y:
-      view.resource_pool.turn_music_volume_down();
+        view.resource_pool.turn_music_volume_down();
         break;
       case SDLK_u:
-      view.resource_pool.turn_music_volume_up();
+        view.resource_pool.turn_music_volume_up();
+        break;
+      case SDLK_c:
+        view.camera.alternate_camera_type();
         break;
       }
+
     }
-    
+
     else if (event.type == SDL_KEYUP)
     { // Suelta una tecla
       switch (event.key.keysym.sym)

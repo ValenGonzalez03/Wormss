@@ -7,23 +7,30 @@
 
 Camera::Camera(int width, int height): camera_box(SDL2pp::Rect(0, 0, width, height)) {}
 
-void Camera::update() {
-  if (moving_up) {
-      if (camera_box.GetY() > 0)
-        camera_box.y -= SCROLL_SPEED;
+void Camera::update(int worm_x, int worm_y, int worm_width, int worm_height) {
+  if (worm_fixed) {
+    camera_box.x = ( worm_x + worm_width / 2.0f ) - camera_box.GetW() / 2.0f;
+    camera_box.y = ( worm_y + worm_height / 2.0f ) - camera_box.GetH() / 2.0f;
+  }
+  else 
+  {
+    if (moving_up) {
+        if (camera_box.GetY() > 0)
+          camera_box.y -= SCROLL_SPEED;
+      }
+      if (moving_down) {
+        if (camera_box.GetY() < convert_meters_to_pixels_x(WORLD_HEIGHT) - camera_box.GetH())
+          camera_box.y += SCROLL_SPEED;
+      }
+      if (moving_left) {
+        if (camera_box.GetX() > 0)
+          camera_box.x -= SCROLL_SPEED;
+      }
+      if (moving_right) {
+        if (camera_box.GetX() < convert_meters_to_pixels_x(WORLD_WIDTH) - camera_box.GetW())
+          camera_box.x += SCROLL_SPEED;
     }
-    if (moving_down) {
-      if (camera_box.GetY() < convert_meters_to_pixels_x(WORLD_HEIGHT) - camera_box.GetH())
-        camera_box.y += SCROLL_SPEED;
-    }
-    if (moving_left) {
-      if (camera_box.GetX() > 0)
-        camera_box.x -= SCROLL_SPEED;
-    }
-    if (moving_right) {
-      if (camera_box.GetX() < convert_meters_to_pixels_x(WORLD_WIDTH) - camera_box.GetW())
-        camera_box.x += SCROLL_SPEED;
-    }
+  }
 }
 
 bool Camera::is_up_corner(int mouse_x, int mouse_y) {
@@ -54,6 +61,10 @@ void Camera::stop_scrolling() {
   moving_down = false;
   moving_left = false;
   moving_right = false;
+}
+
+void Camera::alternate_camera_type() {
+  worm_fixed = !worm_fixed;
 }
 
 int Camera::get_x() { return camera_box.GetX(); }

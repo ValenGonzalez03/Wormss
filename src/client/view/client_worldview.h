@@ -19,6 +19,7 @@ private:
   std::map<uint8_t, Worm> worms;
   std::map<uint8_t, Explodable> explodables;
   std::vector<Explosion> explosions;
+  uint8_t player_id;
 
   void render_background();
 
@@ -33,7 +34,7 @@ private:
   public:
   // Crea una WorldView con una referencia a una resource pool
   // y a un renderer
-  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera& camera);
+  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera& camera, uint8_t& player_id);
   
   // void add_worms(std::vector<std::vector<float>> spawn_points);
   

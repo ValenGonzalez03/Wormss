@@ -207,6 +207,15 @@ bool Client::execute_event(SDL_Event &event)
       handle_quit_game();
       return true;
     }
+
+    else if (event.type == SDL_MOUSEMOTION)
+    { // Mouse en movimiento
+      int mouse_x;
+      int mouse_y;
+      SDL_GetMouseState(&mouse_x, &mouse_y);
+      view.camera.check_mouse_position(mouse_x, mouse_y);
+    }
+
     else if (event.type == SDL_KEYDOWN)
     { // Aprieta una tecla
       int key_mov_dir;
@@ -265,19 +274,8 @@ bool Client::execute_event(SDL_Event &event)
       view.resource_pool.turn_music_volume_up();
         break;
       }
-      if (event.key.keysym.sym == SDLK_i) {
-        view.camera.start_moving_up();
-      }
-      if (event.key.keysym.sym == SDLK_k) {
-        view.camera.start_moving_down();
-      }
-      if (event.key.keysym.sym == SDLK_j) {
-        view.camera.start_moving_left();
-      }
-      if (event.key.keysym.sym == SDLK_l) {
-        view.camera.start_moving_right();
-      }
     }
+    
     else if (event.type == SDL_KEYUP)
     { // Suelta una tecla
       switch (event.key.keysym.sym)
@@ -302,18 +300,6 @@ bool Client::execute_event(SDL_Event &event)
           handle_stop_aiming();
         }
         break;
-      }
-      if (event.key.keysym.sym == SDLK_i) {
-        view.camera.stop_moving_up();
-      }
-      if (event.key.keysym.sym == SDLK_k) {
-        view.camera.stop_moving_down();
-      }
-      if (event.key.keysym.sym == SDLK_j) {
-        view.camera.stop_moving_left();
-      }
-      if (event.key.keysym.sym == SDLK_l) {
-        view.camera.stop_moving_right();
       }
     }
   }

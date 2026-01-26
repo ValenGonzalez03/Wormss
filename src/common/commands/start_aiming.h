@@ -11,17 +11,17 @@ extern uint8_t START_AIMING;
 }
 
 class StartAiming : public Command {
-private:
+ private:
   uint8_t direction;
 
-public:
+ public:
   // Constructor from client side with direction passed by parameter
-  explicit StartAiming(uint8_t client_id, uint8_t dir)
-      : Command(CODE_PLAYER_COMM::START_AIMING, client_id), direction(dir) {}
+  explicit StartAiming(uint8_t client_id, uint8_t dir) :
+      Command(CODE_PLAYER_COMM::START_AIMING, client_id), direction(dir) {}
 
   // Constructor from server side with direction received by socket
-  explicit StartAiming(uint8_t clt_id, Socket &skt, bool *was_closed)
-      : Command(CODE_PLAYER_COMM::START_AIMING, clt_id) {
+  explicit StartAiming(uint8_t clt_id, Socket &skt, bool *was_closed) :
+      Command(CODE_PLAYER_COMM::START_AIMING, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
 
@@ -31,9 +31,7 @@ public:
     skt.sendall(&direction, sizeof(direction), was_closed);
   }
 
-  void receive(Socket &skt, bool *was_closed) override {
-    skt.recvall(&direction, sizeof(direction), was_closed);
-  }
+  void receive(Socket &skt, bool *was_closed) override { skt.recvall(&direction, sizeof(direction), was_closed); }
 
   // PROVISORIAS
   uint8_t get_client_id() override { return client_id; }

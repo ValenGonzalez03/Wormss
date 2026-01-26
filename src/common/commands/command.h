@@ -6,11 +6,11 @@
 #include <cstdint>
 
 class Command {
-protected:
+ protected:
   uint8_t code;
   uint8_t client_id;
 
-public:
+ public:
   Command(uint8_t cod, uint8_t clt_id) : code(cod), client_id(clt_id) {}
 
   // Debe enviar el codigo y los datos adicionales

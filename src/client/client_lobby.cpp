@@ -1,6 +1,6 @@
 #include "client_lobby.h"
 
-Lobby::Lobby(ClientProtocol &prot) : prot(prot), player_id(-1) {}
+Lobby::Lobby(ClientProtocol& prot) : prot(prot), player_id(-1) {}
 
 void Lobby::print_menu() {
   std::cout << "Ingrese 'c' si quiere crear una partida o 'j' si quiere unirse a una:" << std::endl;
@@ -16,7 +16,9 @@ uint8_t Lobby::select_world(std::map<uint8_t, std::string>& worlds_map) {
   int option;
   while (true) {
     std::cin >> option;
-    if (worlds_map.find(static_cast<uint8_t>(option)) != worlds_map.end()) { return option; }
+    if (worlds_map.find(static_cast<uint8_t>(option)) != worlds_map.end()) {
+      return option;
+    }
     std::cout << "Elija una opción válida" << std::endl;
   }
 }
@@ -30,10 +32,10 @@ void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_clos
 
   std::map<uint8_t, std::string> worlds_map = prot.recv_worlds_map(was_closed);
   show_worlds(worlds_map);
-  
+
   uint8_t world_id = select_world(worlds_map);
   std::cout << "WORLD_ID SELECCIONADO: " << static_cast<int>(world_id) << std::endl;
-  
+
   prot.send_world_id(world_id, was_closed);
 
   int game_id = prot.recv_byte(was_closed);
@@ -42,7 +44,7 @@ void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_clos
   wait_start_command(prot, game_id);
 }
 
-void Lobby::join_game(ClientProtocol& prot, uint8_t& player_id, bool *was_closed) {
+void Lobby::join_game(ClientProtocol& prot, uint8_t& player_id, bool* was_closed) {
   std::cout << "Ingrese el codigo de la partida para unirse:" << std::endl;
   int game_id = 0;
   std::cin >> game_id;
@@ -56,7 +58,7 @@ void Lobby::join_game(ClientProtocol& prot, uint8_t& player_id, bool *was_closed
 
 void Lobby::show_worlds(const std::map<uint8_t, std::string>& worlds_map) {
   std::cout << "Elige un numero de escenario:" << std::endl;
-  for (auto &world_pair : worlds_map) {
+  for (auto& world_pair : worlds_map) {
     std::cout << static_cast<int>(world_pair.first) << ": " << world_pair.second << std::endl;
   }
 }

@@ -11,10 +11,10 @@
 #include <vector>
 
 class WorldView {
-private:
+ private:
   ResourcePool &resource_pool;
   SDL2pp::Renderer &renderer;
-  Camera& camera;
+  Camera &camera;
   std::vector<Beam> beams;
   std::map<uint8_t, Worm> worms;
   std::map<uint8_t, Explodable> explodables;
@@ -27,34 +27,34 @@ private:
 
   // Muestra el estado del gusano
   std::string print_state(WormState state);
-  
+
   // Muestra el arma seleccionada del gusano
   std::string print_weapon_selected(WeaponType weapon);
-  
-  public:
+
+ public:
   // Crea una WorldView con una referencia a una resource pool
   // y a un renderer
-  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera& camera, uint8_t& player_id);
-  
+  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera &camera, uint8_t &player_id);
+
   // void add_worms(std::vector<std::vector<float>> spawn_points);
-  
+
   void add_worm(WormData data);
-  
+
   // Convierte la posicion pasada por parámetro de m a px,
   // crea la long_beam y la agrega al WorldView
   void add_beam(float pos_x, float pos_y, float width, float height, float angle);
-  
+
   Explodable add_explodable(ExplodableData data);
-  
+
   void add_explosion(ExplosionData data, int frame);
-  
+
   // Recibe el estado de juego y actualiza la world_view
   // con los nuevos datos
   void update(GameState &game_state, int frame);
-  
+
   // Renderiza la world_view
   void render(int frame);
-  
+
   void render_text(WormData &worm_data);
 
   // Setea un background al mundo

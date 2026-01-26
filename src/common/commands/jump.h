@@ -11,18 +11,17 @@ extern uint8_t JUMP;
 }
 
 class Jump : public Command {
-private:
+ private:
   uint8_t direction;
   uint8_t jump_type;
 
-public:
+ public:
   // Constructor from client side with direction passed by parameter
-  explicit Jump(uint8_t client_id, uint8_t dir, uint8_t jump_type)
-      : Command(CODE_PLAYER_COMM::JUMP, client_id), direction(dir), jump_type(jump_type) {}
+  explicit Jump(uint8_t client_id, uint8_t dir, uint8_t jump_type) :
+      Command(CODE_PLAYER_COMM::JUMP, client_id), direction(dir), jump_type(jump_type) {}
 
   // Constructor from server side with direction received by socket
-  explicit Jump(uint8_t clt_id, Socket &skt, bool *was_closed)
-      : Command(CODE_PLAYER_COMM::JUMP, clt_id) {
+  explicit Jump(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::JUMP, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
     skt.recvall(&jump_type, sizeof(jump_type), was_closed);
   }

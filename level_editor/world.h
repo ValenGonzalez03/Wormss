@@ -18,7 +18,7 @@
 #define WORM_WALKING_PATH "/Images/Worms/wwalk2.png"
 
 class World {
-private:
+ private:
   std::string name = "";
   std::string background_name = "";
   std::vector<Beam> beams;
@@ -38,14 +38,14 @@ private:
   // Agrega la textura del gusano
   void add_worm_texture(client_SDL& client_sdl);
 
-public:
+ public:
   World();
 
   void initialize(client_SDL& client_sdl);
 
   void set_name(std::string new_name);
 
-  void set_background_name (std::string new_backgorund_name);
+  void set_background_name(std::string new_backgorund_name);
 
   std::string get_name();
 
@@ -65,7 +65,7 @@ public:
 
   void delete_last_spawn();
 
-/*
+  /*
   // Devuelve un ptr a la textura del short_beam
   SDL2pp::Texture* get_short_beam_texture();
 

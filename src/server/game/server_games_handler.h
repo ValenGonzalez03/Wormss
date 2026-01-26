@@ -12,7 +12,7 @@
 class Command;
 
 class GamesHandler {
-private:
+ private:
   std::mutex m;
   std::list<Game *> games;
   int games_counter = 0;
@@ -22,7 +22,7 @@ private:
   //std::vector<std::string> world_names;
   GameConfig games_config = GameConfig(std::string(RESOURCES_PATH) + "/game_config.yml");
 
-  public:
+ public:
   GamesHandler();
 
   Game *get_game(const uint8_t &game_id);
@@ -31,11 +31,9 @@ private:
 
   void delete_game(const uint8_t &game_id);
 
-  Game *
-  create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id, uint8_t &world_id);
+  Game *create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id, uint8_t &world_id);
 
-  Game *
-  join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &game_id, uint8_t &player_id);
+  Game *join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &game_id, uint8_t &player_id);
 
   void start_game(const uint8_t &game_id, const uint8_t &player_id);
 

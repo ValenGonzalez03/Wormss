@@ -8,12 +8,12 @@
 #include <iostream>
 
 class Lobby {
-private:
-  ClientProtocol &prot;
+ private:
+  ClientProtocol& prot;
   uint8_t player_id;
 
-public:
-  explicit Lobby(ClientProtocol &prot);
+ public:
+  explicit Lobby(ClientProtocol& prot);
 
   void run_lobby();
 
@@ -27,12 +27,11 @@ public:
 
   uint8_t select_world(std::map<uint8_t, std::string>& worlds_map);
 
-  void join_game(ClientProtocol& prot, uint8_t& player_id, bool *was_closed);
+  void join_game(ClientProtocol& prot, uint8_t& player_id, bool* was_closed);
 
   void wait_start_command(ClientProtocol& prot, int game_id);
 
   uint8_t get_player_id();
-
 };
 
 #endif

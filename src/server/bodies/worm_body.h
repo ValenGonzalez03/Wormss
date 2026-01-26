@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 class WormBody : public DynamicBody {
-private:
+ private:
   // Atributos fijos del gusano
   int health;
   float vel;
@@ -27,12 +27,12 @@ private:
   int jump_timeout = 0;
 
   int frames_attacking = 0;
-  
+
 
   // Atributos para manejar la explosion sobre un gusano
   bool hit_by_explosion = false;
-  b2Vec2 impulse_dir = b2Vec2(0,0);
-  b2Vec2 apply_point = b2Vec2(0,0);
+  b2Vec2 impulse_dir = b2Vec2(0, 0);
+  b2Vec2 apply_point = b2Vec2(0, 0);
   int num_ray_contacts = 0;
   float fraction_force = 2.0f;
 
@@ -40,27 +40,30 @@ private:
 
   void apply_vertical_impulse(float jump_speed);
 
-public:
+ public:
   //explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
 
   explicit WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, float vel, b2World* world);
 
   void update();
-  
+
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// METODOS DE CONTROL DEL GUSANO /////////////////////////////////
 
-  void start_moving(const uint8_t &dir);
+  void start_moving(const uint8_t& dir);
   void move_left();
   void move_right();
   void stop_moving();
 
 
-  void jump(const uint8_t &dir, const uint8_t &jump_type);
+  void jump(const uint8_t& dir, const uint8_t& jump_type);
   void jump_forward();
   void jump_backward();
 
 
-  void start_aiming(const uint8_t &dir);
+  void start_aiming(const uint8_t& dir);
   void aim_up();
   void aim_down();
   void stop_aiming();
@@ -69,13 +72,17 @@ public:
   void change_weapon(WeaponType weapon);
 
   ///////////////////////////////// METODOS DE CONTROL DE GUSANO /////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
 
   // Calcula la posicion de lanzamiento de un proyectil en base a la del gusano, aplicando corrimientos opcionales
-  b2Vec2 calculate_projectile_launch_position(float proj_width, float proj_height, float offset_x = 0.0f, float offset_y = 0.0f);
-  
+  b2Vec2 calculate_projectile_launch_position(float proj_width, float proj_height, float offset_x = 0.0f,
+                                              float offset_y = 0.0f);
+
   // Devuelve los atributos del proyectil a lanzar
   ExplodableAttr attack_projectile(b2Vec2 proj_pos, uint8_t proj_id);
 
@@ -90,8 +97,11 @@ public:
   void teleport(float pos_x, float pos_y);
 
   ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// GETTERS ///////////////////////////////////////////
 
   BODY_TYPES get_type() override;
@@ -105,10 +115,13 @@ public:
   float get_aiming_angle();
 
   ///////////////////////////////////////// GETTERS ///////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////
 
-  
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// COLISIONES ///////////////////////////////////////////
-  
+
   void touch_worm(WormBody* worm) override;
   void touch_beam(BeamBody* beam) override;
   void touch_missile(MissileBody* missile) override;
@@ -124,10 +137,11 @@ public:
   void move_away_from_surface();
 
   ///////////////////////////////////////// COLISIONES ///////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
   ~WormBody();
-  
+
   WormBody(const WormBody&) = delete;
   WormBody& operator=(const WormBody&) = delete;
 };

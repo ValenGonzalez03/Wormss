@@ -4,7 +4,7 @@
 #include <cstdint>
 
 struct Message {
-    uint8_t command;
+  uint8_t command;
 };
 
 #endif

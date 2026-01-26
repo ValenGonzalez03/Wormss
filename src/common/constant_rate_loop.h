@@ -12,9 +12,8 @@ typedef time_point<steady_clock, milliseconds> time_p_ms;
 typedef duration<float> dur_f;
 
 class ConstantRateLoop {
-public:
+ public:
   void loop(dur_f rate) {
-
     auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     int it_frames = 0;
     bool was_closed = false;

@@ -10,7 +10,7 @@
 #include "../../common/lib/thread.h"
 
 class ClientReceiverThread : public Thread {
-private:
+ private:
   ClientProtocol &prot;
   Queue<GameState> &receiver_queue;
   bool &keep_playing;
@@ -19,12 +19,10 @@ private:
   ClientReceiverThread(const ClientReceiverThread &) = delete;
   ClientReceiverThread &operator=(const ClientReceiverThread &) = delete;
 
-public:
-  explicit ClientReceiverThread(ClientProtocol &protocol,
-                                Queue<GameState> &recv_queue, bool& keep_playing);
+ public:
+  explicit ClientReceiverThread(ClientProtocol &protocol, Queue<GameState> &recv_queue, bool &keep_playing);
 
   virtual void run() override;
-
 };
 
 #endif

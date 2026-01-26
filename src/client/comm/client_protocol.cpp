@@ -69,7 +69,7 @@ std::map<uint8_t, std::string> ClientProtocol::recv_worlds_map(bool *was_closed)
   uint16_t worlds_number;
   skt.recvall(&worlds_number, sizeof(worlds_number), was_closed);
   uint16_t worlds_number_be = ntohs(worlds_number);
-  
+
   for (int i = 0; i < worlds_number_be; i++) {
     uint8_t id = recv_byte(was_closed);
     std::string name = recv_string(was_closed);
@@ -78,8 +78,7 @@ std::map<uint8_t, std::string> ClientProtocol::recv_worlds_map(bool *was_closed)
   return worlds_map;
 }
 
-void ClientProtocol::send_world_name_selected(std::string &world_name,
-                                              bool *was_closed) {
+void ClientProtocol::send_world_name_selected(std::string &world_name, bool *was_closed) {
   send_string(world_name, was_closed);
 }
 
@@ -95,13 +94,12 @@ int ClientProtocol::recv_beams_number(bool *was_closed) {
 }
 
 BeamAttr ClientProtocol::recv_beam(bool *was_closed) {
-
   float pos_x = recv_float(was_closed);
   float pos_y = recv_float(was_closed);
   float angle = recv_float(was_closed);
   float width = recv_float(was_closed);
 
-  BeamAttr data {pos_x, pos_y, angle, width};
+  BeamAttr data{pos_x, pos_y, angle, width};
   return data;
 }
 

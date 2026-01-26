@@ -7,14 +7,14 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-WormBody::WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, float vel, b2World* world)
-    : DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
+WormBody::WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, float vel, b2World* world) :
+    DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
   body->SetFixedRotation(true);
 
   // // Sensor para detectar si el gusano esta tocando el suelo
   b2PolygonShape polygonShape;
   b2FixtureDef fixtureDef;
-  polygonShape.SetAsBox((WORM_WIDTH / 1.2) / 2 , 0.2 / 2, b2Vec2(0, -WORM_HEIGHT / 2), 0);
+  polygonShape.SetAsBox((WORM_WIDTH / 1.2) / 2, 0.2 / 2, b2Vec2(0, -WORM_HEIGHT / 2), 0);
   fixtureDef.shape = &polygonShape;
   fixtureDef.isSensor = true;
   body->CreateFixture(&fixtureDef);
@@ -65,10 +65,11 @@ void WormBody::apply_vertical_impulse(float jump_speed) {
 
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// METODOS DE CONTROL DEL GUSANO /////////////////////////////////
 
-void WormBody::start_moving(const uint8_t &dir) {
-  if (state == IDLE || JUMPING)  {
+void WormBody::start_moving(const uint8_t& dir) {
+  if (state == IDLE || JUMPING) {
     state = MOVING;
     direction = dir;
   }
@@ -81,7 +82,7 @@ void WormBody::move_right() { apply_horizontal_impulse(vel); }
 void WormBody::stop_moving() { state = IDLE; }
 
 
-void WormBody::jump(const uint8_t &dir, const uint8_t &jump_type) {
+void WormBody::jump(const uint8_t& dir, const uint8_t& jump_type) {
   if (num_foot_contacts <= 0 || jump_timeout > 0)
     return;
   state = JUMPING;
@@ -93,8 +94,8 @@ void WormBody::jump(const uint8_t &dir, const uint8_t &jump_type) {
   }
 }
 
-void WormBody::jump_forward() { 
-  apply_vertical_impulse(jump_vel_forward); 
+void WormBody::jump_forward() {
+  apply_vertical_impulse(jump_vel_forward);
   if (direction == LEFT) {
     apply_horizontal_impulse(-(vel + 0.1));
   } else {
@@ -103,16 +104,16 @@ void WormBody::jump_forward() {
 }
 
 void WormBody::jump_backward() {
-  apply_vertical_impulse(jump_vel_backward); 
+  apply_vertical_impulse(jump_vel_backward);
   if (direction == LEFT) {
-	  apply_horizontal_impulse(vel);
+    apply_horizontal_impulse(vel);
   } else {
-	  apply_horizontal_impulse(-vel);
+    apply_horizontal_impulse(-vel);
   }
 }
 
 
-void WormBody::start_aiming(const uint8_t &dir) {
+void WormBody::start_aiming(const uint8_t& dir) {
   if (state == IDLE) {
     state = AIMING;
     aim_direction = dir;
@@ -138,24 +139,25 @@ void WormBody::aim_down() {
 void WormBody::stop_aiming() { state = IDLE; }
 
 
-void WormBody::change_weapon(WeaponType weapon) {
-  current_weapon = weapon;
-}
+void WormBody::change_weapon(WeaponType weapon) { current_weapon = weapon; }
 
 ///////////////////////////////// METODOS DE CONTROL DEL GUSANO /////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
 
-b2Vec2 WormBody::calculate_projectile_launch_position(float proj_width, float proj_height, float offset_x, float offset_y) {
+b2Vec2 WormBody::calculate_projectile_launch_position(float proj_width, float proj_height, float offset_x,
+                                                      float offset_y) {
   b2Vec2 pos = body->GetPosition();
   uint8_t worm_dir = get_direction();
   float missile_dist_x = (worm_dir == RIGHT ? 1 : -1) * ((WORM_WIDTH / 2) + (proj_width / 2) + offset_x);
-  float adjusted_pos_x = pos.x  + missile_dist_x * cos(aiming_angle);
+  float adjusted_pos_x = pos.x + missile_dist_x * cos(aiming_angle);
 
   float missile_dist_y = ((WORM_HEIGHT / 2) + (proj_height / 2) + offset_y);
-  float adjusted_pos_y = pos.y  + missile_dist_y * sin(aiming_angle);
+  float adjusted_pos_y = pos.y + missile_dist_y * sin(aiming_angle);
 
   return b2Vec2(adjusted_pos_x, adjusted_pos_y);
 }
@@ -165,16 +167,12 @@ ExplodableAttr WormBody::attack_projectile(b2Vec2 proj_pos, uint8_t proj_id) {
   float final_angle = (worm_dir == RIGHT ? aiming_angle : -aiming_angle);
   float pos_x = proj_pos.x;
   float pos_y = proj_pos.y;
-  return ExplodableAttr {proj_id, WORM, pos_x, pos_y, final_angle, worm_dir};
+  return ExplodableAttr{proj_id, WORM, pos_x, pos_y, final_angle, worm_dir};
 }
 
-void WormBody::set_worm_to_attack() {
-  state = ATTACKING;
-}
+void WormBody::set_worm_to_attack() { state = ATTACKING; }
 
-float WormBody::explosion_intersect_value(float fraction) {
-  return 1;
-}
+float WormBody::explosion_intersect_value(float fraction) { return 1; }
 
 void WormBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& center_expl, float fraction) {
   num_ray_contacts++;
@@ -193,8 +191,8 @@ void WormBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& center_expl, 
 }
 
 BodyExplosionInfo WormBody::get_explosion_info() {
-  auto final_impulse_dir =  (1 / static_cast<float>(num_ray_contacts)) * impulse_dir;
-  auto final_apply_point =  (1 / static_cast<float>(num_ray_contacts)) * apply_point;
+  auto final_impulse_dir = (1 / static_cast<float>(num_ray_contacts)) * impulse_dir;
+  auto final_apply_point = (1 / static_cast<float>(num_ray_contacts)) * apply_point;
 
   std::cout << "num_ray_contacts: " << num_ray_contacts << std::endl;
   std::cout << "final_impulse_dir: (" << final_impulse_dir.x << ", " << final_impulse_dir.y << ")" << std::endl;
@@ -204,25 +202,27 @@ BodyExplosionInfo WormBody::get_explosion_info() {
     fraction_force = 0.01f;
   }
 
-  auto body_explosion_info = BodyExplosionInfo {final_apply_point, final_impulse_dir, fraction_force};
+  auto body_explosion_info = BodyExplosionInfo{final_apply_point, final_impulse_dir, fraction_force};
 
   num_ray_contacts = 0;
-  impulse_dir = b2Vec2(0,0);
-  apply_point = b2Vec2(0,0);
+  impulse_dir = b2Vec2(0, 0);
+  apply_point = b2Vec2(0, 0);
   fraction_force = 2.0f;
 
   return body_explosion_info;
 }
 
 void WormBody::teleport(float pos_x, float pos_y) {
-  body->SetTransform( b2Vec2(pos_x, pos_y), 0);
+  body->SetTransform(b2Vec2(pos_x, pos_y), 0);
   body->SetAwake(true);
 }
 
 ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// GETTERS ///////////////////////////////////////////
 
 BODY_TYPES WormBody::get_type() { return WORM; }
@@ -236,9 +236,11 @@ uint8_t WormBody::get_direction() { return direction; }
 float WormBody::get_aiming_angle() { return aiming_angle; }
 
 ////////////////////////////////////////// GETTERS ///////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// COLISIONES ///////////////////////////////////////////
 
 void WormBody::touch_worm(WormBody* worm) { /* NADA */ }
@@ -267,8 +269,8 @@ void WormBody::move_away_from_surface() {
 }
 
 ///////////////////////////////////////// COLISIONES ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 
-WormBody::~WormBody() {
-  free(reinterpret_cast<UserData*>(body->GetUserData().pointer));
-}
+
+WormBody::~WormBody() { free(reinterpret_cast<UserData*>(body->GetUserData().pointer)); }

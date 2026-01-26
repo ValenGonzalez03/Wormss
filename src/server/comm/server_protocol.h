@@ -19,10 +19,10 @@
 class RunnableCommandLobby;
 
 class ServerProtocol {
-private:
+ private:
   Socket skt;
 
-public:
+ public:
   explicit ServerProtocol(Socket &&socket);
 
   // Elimino posibilidad de copias y operador =
@@ -38,10 +38,10 @@ public:
   std::shared_ptr<RunnableCommandLobby> process_command_lobby();
 
   bool recv_client_ready(bool *was_closed);
-  
-  int recv_world_id(bool* was_closed);
-  
-  std::string recv_string(bool* was_closed);
+
+  int recv_world_id(bool *was_closed);
+
+  std::string recv_string(bool *was_closed);
 
   void send_byte(const uint8_t id, bool *was_closed);
 
@@ -67,8 +67,7 @@ public:
 
   // Recibe una lista de punteros a mundos y envía la cantidad de
   // mundos y sus nombres por socket
-  void send_worlds_map(const std::map<uint8_t, std::string>& worlds_map,
-                         bool *was_closed);
+  void send_worlds_map(const std::map<uint8_t, std::string> &worlds_map, bool *was_closed);
 
   ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
   //////////////////////////////////////////////////////////////////////

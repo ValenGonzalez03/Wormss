@@ -36,8 +36,7 @@ void GamesHandler::delete_game(const uint8_t &game_id) {
   games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Game *
-GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id, uint8_t &world_id) {
+Game *GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id, uint8_t &world_id) {
   std::lock_guard<std::mutex> lck(m);
   std::string world_name = worlds_map[world_id];
   World world = worlds_reader.generate_world(world_name);
@@ -49,12 +48,12 @@ GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_
   return game;
 }
 
-Game *
-GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &game_id, uint8_t &player_id) {
+Game *GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &game_id,
+                              uint8_t &player_id) {
   std::lock_guard<std::mutex> lck(m);
   Game *game = get_game(game_id);
   if (game == nullptr) {
-    return nullptr; // Habria que tirar una excepcion.
+    return nullptr;  // Habria que tirar una excepcion.
   }
 
   if (!game->is_started()) {
@@ -142,9 +141,7 @@ std::list<uint8_t> *GamesHandler::obtain_all_games_id() {
   return games_id;
 }
 
-std::map<uint8_t, std::string> GamesHandler::get_worlds_map() const {
-  return worlds_map;
-}
+std::map<uint8_t, std::string> GamesHandler::get_worlds_map() const { return worlds_map; }
 
 GamesHandler::~GamesHandler() {
   for (auto &current_game : games) {

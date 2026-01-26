@@ -11,16 +11,16 @@ extern uint8_t CHANGE_WEAPON;
 }
 
 class ChangeWeapon : public Command {
-private:
+ private:
   uint8_t weapon_type;
-public:
+ public:
   // Constructor from client side with direction passed by parameter
-  explicit ChangeWeapon(uint8_t client_id, uint8_t weapon_type) 
-      : Command(CODE_PLAYER_COMM::CHANGE_WEAPON, client_id), weapon_type(weapon_type) {}
+  explicit ChangeWeapon(uint8_t client_id, uint8_t weapon_type) :
+      Command(CODE_PLAYER_COMM::CHANGE_WEAPON, client_id), weapon_type(weapon_type) {}
 
   // Constructor from server side with direction received by socket
-  explicit ChangeWeapon(uint8_t clt_id, Socket &skt, bool *was_closed)
-      : Command(CODE_PLAYER_COMM::CHANGE_WEAPON, clt_id) {
+  explicit ChangeWeapon(uint8_t clt_id, Socket &skt, bool *was_closed) :
+      Command(CODE_PLAYER_COMM::CHANGE_WEAPON, clt_id) {
     skt.recvall(&weapon_type, sizeof(weapon_type), was_closed);
   }
 
@@ -30,9 +30,7 @@ public:
     skt.sendall(&weapon_type, sizeof(weapon_type), was_closed);
   }
 
-  void receive(Socket &skt, bool *was_closed) override {
-    skt.recvall(&weapon_type, sizeof(weapon_type), was_closed);
-  }
+  void receive(Socket &skt, bool *was_closed) override { skt.recvall(&weapon_type, sizeof(weapon_type), was_closed); }
 
   // PROVISORIAS
   uint8_t get_client_id() override { return client_id; }

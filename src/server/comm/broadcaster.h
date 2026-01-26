@@ -10,15 +10,14 @@
 #include "../../common/lib/queue.h"
 
 class Broadcaster {
-private:
+ private:
   std::mutex m;
   std::map<uint8_t, std::shared_ptr<Queue<GameState>>> queues_sender;
 
-public:
+ public:
   Broadcaster();
 
-  void add_queue(const std::shared_ptr<Queue<GameState>> sender_queue,
-                 const uint8_t &player_id);
+  void add_queue(const std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id);
 
   void delete_queue(const uint8_t &player_id);
 

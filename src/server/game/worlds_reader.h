@@ -8,21 +8,21 @@
 #include <fstream>
 #include <memory>
 
-class WorldsReader{
-private:
+class WorldsReader {
+ private:
   std::map<std::string, std::filesystem::path> world_paths;
 
   // void load_file_info(const YAML::Node file, std::vector<std::shared_ptr<World>>& worlds) {
   //   std::shared_ptr<World> world = std::make_shared<World>();
   //   std::string name = file["name"].as<std::string>();
   //   std::string background = file["background"].as<std::string>();
-    
+
   //   world->set_name(name);
   //   world->set_background(background);
 
   //   // Leo las vigas
   //   if (file["beams"]) {
-  //     for (const auto& beam : file["beams"]) {      
+  //     for (const auto& beam : file["beams"]) {
   //       float position_x = beam["position_x"].as<float>();
   //       float position_y = beam["position_y"].as<float>();
   //       float angle = beam["angle"].as<float>();
@@ -49,7 +49,7 @@ private:
 
   World read_world(std::filesystem::path& world_path);
 
-public:
+ public:
   explicit WorldsReader();
 
   World generate_world(std::string world_name);
@@ -68,7 +68,6 @@ public:
     }
     return worlds;
   }
-
 };
 
 #endif

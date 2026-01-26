@@ -11,7 +11,8 @@ Accept::Accept(Socket &skt) : skt(std::move(skt)) {}
 void Accept::run() {
   try {
     while (is_alive) {
-      std::shared_ptr<ClientManager> client = std::make_shared<ClientManager>(std::move(skt.accept()), games_handler, id_counter);
+      std::shared_ptr<ClientManager> client =
+          std::make_shared<ClientManager>(std::move(skt.accept()), games_handler, id_counter);
       client->start();
       id_counter++;
 

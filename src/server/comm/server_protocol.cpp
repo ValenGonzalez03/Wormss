@@ -18,8 +18,7 @@ class RunnableCommandLobby;
 
 ServerProtocol::ServerProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
-std::shared_ptr<RunnableCommandGame>
-ServerProtocol::process_command() {
+std::shared_ptr<RunnableCommandGame> ServerProtocol::process_command() {
   bool was_closed = false;
   uint8_t code;
   uint8_t client_id = 0;
@@ -83,7 +82,7 @@ bool ServerProtocol::recv_client_ready(bool *was_closed) {
   return (code == CODE_PLAYER_COMM::CLIENT_READY);
 }
 
-int ServerProtocol::recv_world_id(bool* was_closed) {
+int ServerProtocol::recv_world_id(bool *was_closed) {
   int id = 0;
   skt.recvall(&id, sizeof(id), was_closed);
   return id;
@@ -96,7 +95,7 @@ void ServerProtocol::send_string(std::string str, bool *was_closed) {
   skt.sendall(str.c_str(), str.size(), was_closed);
 }
 
-std::string ServerProtocol::recv_string(bool* was_closed) {
+std::string ServerProtocol::recv_string(bool *was_closed) {
   uint16_t string_length;
   skt.recvall(&string_length, sizeof(string_length), was_closed);
   uint16_t string_length_be = ntohs(string_length);
@@ -107,9 +106,7 @@ std::string ServerProtocol::recv_string(bool* was_closed) {
   return std::string(buffer);
 }
 
-void ServerProtocol::send_byte(const uint8_t n, bool *was_closed) {
-  skt.sendall(&n, sizeof(n), was_closed);
-}
+void ServerProtocol::send_byte(const uint8_t n, bool *was_closed) { skt.sendall(&n, sizeof(n), was_closed); }
 
 void ServerProtocol::send_float(float n, bool *was_closed) {
   int16_t number = int(n * 100);
@@ -117,9 +114,7 @@ void ServerProtocol::send_float(float n, bool *was_closed) {
   skt.sendall(&number_be, sizeof(number_be), was_closed);
 }
 
-void ServerProtocol::send_bool(bool b, bool *was_closed) {
-  skt.sendall(&b, sizeof(b), was_closed);
-}
+void ServerProtocol::send_bool(bool b, bool *was_closed) { skt.sendall(&b, sizeof(b), was_closed); }
 
 
 //////////////////////////////////////////////////////////////////////
@@ -137,13 +132,13 @@ void ServerProtocol::send_spawn_points(std::vector<float> spawn_point, bool *was
   send_float(spawn_point[1], was_closed);
 }
 
-void ServerProtocol::send_worlds_map(const std::map<uint8_t, std::string>& worlds_map, bool *was_closed) {
+void ServerProtocol::send_worlds_map(const std::map<uint8_t, std::string> &worlds_map, bool *was_closed) {
   uint16_t worlds_number = worlds_map.size();
   uint16_t worlds_number_be = htons(worlds_number);
   skt.sendall(&worlds_number_be, sizeof(worlds_number_be), was_closed);
   for (auto &pair : worlds_map) {
-    send_byte(pair.first, was_closed); // Envio id del mundo
-    send_string(pair.second, was_closed); // Envio nombre del mundo
+    send_byte(pair.first, was_closed);     // Envio id del mundo
+    send_string(pair.second, was_closed);  // Envio nombre del mundo
   }
 }
 

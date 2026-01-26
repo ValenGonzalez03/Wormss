@@ -7,7 +7,7 @@
 #include <list>
 
 class Accept : public Thread {
-private:
+ private:
   Socket skt;
   std::atomic<bool> is_alive{true};
   std::list<std::shared_ptr<ClientManager>> clients;
@@ -24,7 +24,7 @@ private:
    */
   void kill_all();
 
-public:
+ public:
   /*
    * Constructor de la clase.
    * */

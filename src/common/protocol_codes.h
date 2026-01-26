@@ -15,11 +15,11 @@ uint8_t JUMP = 0x07;
 uint8_t BACK_JUMP = 0x08;
 uint8_t START_AIMING = 0x09;
 uint8_t STOP_AIMING = 0x0A;
-uint8_t START_SHOOTING = 0x0B; // Por el momento involucra al uso de cualquier arma
+uint8_t START_SHOOTING = 0x0B;  // Por el momento involucra al uso de cualquier arma
 uint8_t STOP_SHOOTING = 0x0C;
 uint8_t CHANGE_WEAPON = 0x0D;
 uint8_t CLIENT_READY = 0x0E;
 uint8_t STOP_GAME = 0x0F;
-} // namespace CODE_PLAYER_COMM
+}  // namespace CODE_PLAYER_COMM
 
 #endif

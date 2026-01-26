@@ -37,13 +37,9 @@ void GameManager::delete_player(const uint8_t &player_id) {
 //   world = selected_world;
 // }
 
-World GameManager::get_world() {
-  return world;
-}
+World GameManager::get_world() { return world; }
 
-void GameManager::step() {
-  world.step(timeStep, velocityIterations, positionIterations);
-}
+void GameManager::step() { world.step(timeStep, velocityIterations, positionIterations); }
 
 void GameManager::update() {
   world.update_worms();
@@ -113,28 +109,28 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
   // }
   WormBody *worm = world.get_worm(player_id);
 
-  if (worm->get_state() == ATTACKING) return;
+  if (worm->get_state() == ATTACKING)
+    return;
 
   WeaponType weapon = worm->get_weapon_selected();
-  switch (weapon)
-  {
-  case BAZOOKA:
-    use_bazooka(worm, initial_force);
-    break;
-  case BAT:
-    use_bat(worm);
-    break;
-  case GRENADE:
-    use_grenade(worm, initial_force);
-    break;
-  default:
-    /* Ningun arma (?) */
-    break;
+  switch (weapon) {
+    case BAZOOKA:
+      use_bazooka(worm, initial_force);
+      break;
+    case BAT:
+      use_bat(worm);
+      break;
+    case GRENADE:
+      use_grenade(worm, initial_force);
+      break;
+    default:
+      /* Ningun arma (?) */
+      break;
   }
   worm->set_worm_to_attack();
 }
 
-void GameManager::use_bazooka(WormBody* worm, float initial_force) {
+void GameManager::use_bazooka(WormBody *worm, float initial_force) {
   b2Vec2 missile_pos = worm->calculate_projectile_launch_position(MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
   b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
   MissileCallback callback;
@@ -146,30 +142,32 @@ void GameManager::use_bazooka(WormBody* worm, float initial_force) {
   } else {
     ExplodableAttr proj_attr = worm->attack_projectile(missile_pos, projectiles_id_counter);
     projectiles_id_counter++;
-    world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);
+    world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction,
+                         initial_force);
   }
 }
 
-void GameManager::use_bat(WormBody* worm) {
+void GameManager::use_bat(WormBody *worm) {
   b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
-  UserData* data = worm->get_user_data();
+  UserData *data = worm->get_user_data();
   BaseballBatCallback bat_callback(worm_pos, data);
 
   float aim_angle = worm->get_aiming_angle();
   uint8_t worm_dir = worm->get_direction();
   float bat_end_x = (worm_dir == RIGHT ? 1 : -1) * cosf(aim_angle);
-  b2Vec2 bat_end_pos = worm_pos + (BAT_LENGTH * b2Vec2( bat_end_x, sinf(aim_angle)));
+  b2Vec2 bat_end_pos = worm_pos + (BAT_LENGTH * b2Vec2(bat_end_x, sinf(aim_angle)));
   b2Vec2 dir = bat_end_pos - worm_pos;
   dir.Normalize();
   std::cout << "Bat direction: (" << dir.x << ", " << dir.y << ")" << std::endl;
   world.ray_cast(&bat_callback, worm_pos, bat_end_pos);
 }
 
-void GameManager::use_grenade(WormBody* worm, float initial_force) {
+void GameManager::use_grenade(WormBody *worm, float initial_force) {
   b2Vec2 grenade_pos = worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT);
   ExplodableAttr proj_attr = worm->attack_projectile(grenade_pos, projectiles_id_counter);
   projectiles_id_counter++;
-  world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction, initial_force);
+  world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction,
+                       initial_force);
 }
 
 GameState GameManager::create_state() {
@@ -196,10 +194,6 @@ GameState GameManager::create_state() {
   return game_state;
 }
 
-void GameManager::set_game_finished(const bool is_finished) {
-  game_finished = is_finished;
-}
+void GameManager::set_game_finished(const bool is_finished) { game_finished = is_finished; }
 
-bool GameManager::is_game_finished() const {
-  return game_finished;
-}
+bool GameManager::is_game_finished() const { return game_finished; }

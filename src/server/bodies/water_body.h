@@ -13,15 +13,15 @@
 
 // 	public:
 // 	explicit WaterBody(b2World* world, float pos_x, float pos_y, float width, float height);
-	
+
 // 	//void start_contact_with(Body* another_body) override;
-	
+
 // 	void start_contact_with(WormBody* worm) ;
-	
+
 // 	void start_contact_with(WaterBody* water) ;
-	
+
 //     //void end_contact_with(Body* another_body) override;
-	
+
 // 	WaterBody(const WaterBody&) = delete;
 // 	WaterBody& operator=(const WaterBody&) = delete;
 
@@ -48,7 +48,7 @@
 // 	float get_width() {
 // 		return this->width;
 // 	}
-	
+
 // 	int get_type() override;
 // };
 

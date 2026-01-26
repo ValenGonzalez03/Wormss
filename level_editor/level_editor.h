@@ -5,7 +5,7 @@
 #include <sstream>
 
 class LevelEditor {
-private:
+ private:
   World& world;
   client_SDL client_sdl;
   bool placing_short_beam = false;
@@ -25,13 +25,13 @@ private:
 
   void render_text();
 
-public:
+ public:
 
   explicit LevelEditor(World& world);
 
   void run();
 
-  bool execute_event(SDL_Event &event);
+  bool execute_event(SDL_Event& event);
 
   void print_beams();
 

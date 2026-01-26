@@ -25,7 +25,7 @@
 #include "liberror.h"
 
 LibError::LibError(int error_code, const char* fmt, ...) noexcept {
-    /* Aquí empieza la magia arcana proveniente de C.
+  /* Aquí empieza la magia arcana proveniente de C.
      *
      * En C (y en C++) las funciones y métodos pueden recibir un número
      * arbitrario de argumentos. Esto se especifica con las elipsis
@@ -39,10 +39,10 @@ LibError::LibError(int error_code, const char* fmt, ...) noexcept {
      * con el nombre del ultimó parámetro formal conocido, `fmt` en
      * este caso.
      * */
-    va_list args;
-    va_start(args, fmt);
+  va_list args;
+  va_start(args, fmt);
 
-    /*
+  /*
      * `vsnprintf` es una función similar a `printf` que guarda en
      * un buffer `msg_error` el string `fmt` formateado con los
      * argumentos variadicos `args`.
@@ -51,16 +51,16 @@ LibError::LibError(int error_code, const char* fmt, ...) noexcept {
      * La documentación oficial indica que `vsnprintf` escribirá
      * a lo sumo esa cantidad de bytes incluyendo el `\0`.
      * */
-    int s = vsnprintf(msg_error, sizeof(msg_error), fmt, args);
+  int s = vsnprintf(msg_error, sizeof(msg_error), fmt, args);
 
-    /* Una vez que hemos usado los argumentos variadicos hay que liberarlos.
+  /* Una vez que hemos usado los argumentos variadicos hay que liberarlos.
      * Conceptualmente es como si estuvieran guardados en una lista
      * aunque internamente están en el stack del programa.
      * */
-    va_end(args);
+  va_end(args);
 
-    if (s < 0) {
-        /* Algo falló al llamar a `vsnprintf` pero no podemos hacer nada.
+  if (s < 0) {
+    /* Algo falló al llamar a `vsnprintf` pero no podemos hacer nada.
          *
          * Lanzar una excepción no es una opción: `LibError` es una excepción
          * en sí y es altamente probable que este constructor se este llamando
@@ -74,27 +74,27 @@ LibError::LibError(int error_code, const char* fmt, ...) noexcept {
          * Pero en C++ no es así. Prefiero entonces simplemente ignorar el error
          * poniendo algún mensaje dummy.
          * */
-        msg_error[0] = msg_error[1] = msg_error[2] = '?';
-        msg_error[3] = ' ';
-        msg_error[4] = '\0';
+    msg_error[0] = msg_error[1] = msg_error[2] = '?';
+    msg_error[3] = ' ';
+    msg_error[4] = '\0';
 
-        /*
+    /*
          * `vsnprintf` retorna la cantidad de bytes escritos sin incluir el `\0`
          * Por lo tanto, si nosotros escribimos artificialmente `"??? \0"`
          * debemos indicar 4 bytes y no 5 ya que no debemos contar el `\0`
          * */
-        s = 4;
-    } else if (s == sizeof(msg_error)) {
-        /* Esto también técnicamente es un error ya que el mensaje formateado
+    s = 4;
+  } else if (s == sizeof(msg_error)) {
+    /* Esto también técnicamente es un error ya que el mensaje formateado
          * fue más grande que el buffer `msg_error`.
          * No hubo un overflow pero el mensaje en `msg_error` esta truncado.
          *
          * En otros contextos yo lanzaría una excepción pero por lo mencionado
          * anteriormente simplemente ignorare el error.
          * */
-    }
+  }
 
-    /*
+  /*
      * `strerror_r` toma el `error_code` y lo traduce a un mensaje entendible
      * por el humano y lo escribe en el buffer. A diferencia de `strerror`,
      * `strerror_r` es thread safe ya que usa un buffer local (`msg_error`)
@@ -104,18 +104,16 @@ LibError::LibError(int error_code, const char* fmt, ...) noexcept {
      * y es exactamente lo que queremos: queremos escribir a continuación
      * de lo escrito por `vsnprintf` pisándole el `\0`.
      * */
-    strerror_r(error_code, msg_error+s, sizeof(msg_error)-s);
+  strerror_r(error_code, msg_error + s, sizeof(msg_error) - s);
 
-    /*
+  /*
      * `strerror_r` garantiza que el string termina siempre en un `\0`
      * sin embargo permitime ser un poco paranoico y asegurarme que
      * realmente hay un `\0` al final.
      * */
-    msg_error[sizeof(msg_error)-1] = 0;
+  msg_error[sizeof(msg_error) - 1] = 0;
 }
 
-const char* LibError::what() const noexcept {
-    return msg_error;
-}
+const char* LibError::what() const noexcept { return msg_error; }
 
 LibError::~LibError() {}

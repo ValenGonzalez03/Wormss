@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 class GameManager {
-private:
+ private:
   World world;
   bool game_finished = false;
   int current_players = 0;
@@ -23,13 +23,13 @@ private:
   int32 velocityIterations = 6;
   int32 positionIterations = 2;
 
-  void use_bazooka(WormBody* worm, float initial_force);
+  void use_bazooka(WormBody *worm, float initial_force);
 
-  void use_bat(WormBody* worm);
+  void use_bat(WormBody *worm);
 
-  void use_grenade(WormBody* worm, float initial_force);
+  void use_grenade(WormBody *worm, float initial_force);
 
-public:
+ public:
   explicit GameManager(World world);
 
   void initialize_game(GameConfig &game_config);

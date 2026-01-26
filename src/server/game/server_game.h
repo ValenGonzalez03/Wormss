@@ -30,7 +30,7 @@ typedef time_point<steady_clock, milliseconds> time_p_ms;
 typedef duration<float> dur_f;
 
 class Game : public Thread {
-private:
+ private:
   std::mutex m;
   Broadcaster broadcaster;
   Queue<std::shared_ptr<RunnableCommandGame>> commands;
@@ -44,7 +44,7 @@ private:
 
   GameConfig &config;
 
-public:
+ public:
   explicit Game(uint8_t game_id, GameConfig &game_config, World world);
 
   void add_player(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id);

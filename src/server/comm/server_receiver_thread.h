@@ -9,7 +9,7 @@
 #include <condition_variable>
 
 class ServerReceiver : public Thread {
-private:
+ private:
   Socket &skt;
   ServerProtocol &protocol;
   uint8_t client_id;
@@ -17,17 +17,17 @@ private:
   Queue<std::shared_ptr<RunnableCommandGame>> *game_commands = nullptr;
   bool &keep_playing;
   bool &in_game;
-  std::mutex& m;
-  std::condition_variable& is_empty;
+  std::mutex &m;
+  std::condition_variable &is_empty;
 
-public:
+ public:
   /*
    * Constructor de la clase.
    * */
-  explicit ServerReceiver(Socket &skt, ServerProtocol &protocol, Queue<std::shared_ptr<RunnableCommandLobby>> &lobby_commands,
-                          bool &keep_playing, bool &in_game, std::mutex& m, std::condition_variable& is_empty, 
-                          uint8_t client_id);
-  
+  explicit ServerReceiver(Socket &skt, ServerProtocol &protocol,
+                          Queue<std::shared_ptr<RunnableCommandLobby>> &lobby_commands, bool &keep_playing,
+                          bool &in_game, std::mutex &m, std::condition_variable &is_empty, uint8_t client_id);
+
   /*
    * Ejecuta el loop del ClientHandler.
    * */

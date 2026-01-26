@@ -2,12 +2,10 @@
 #include <string>
 
 ServerReceiver::ServerReceiver(Socket &skt, ServerProtocol &protocol,
-                             Queue<std::shared_ptr<RunnableCommandLobby>> &lobby_commands,
-                             bool &keep_playing, bool &in_game, 
-                             std::mutex& m, std::condition_variable& is_empty, uint8_t client_id)
-    : skt(skt), protocol(protocol), keep_playing(keep_playing), in_game(in_game), 
-      lobby_commands(lobby_commands), m(m), is_empty(is_empty), client_id(client_id)
-    {}
+                               Queue<std::shared_ptr<RunnableCommandLobby>> &lobby_commands, bool &keep_playing,
+                               bool &in_game, std::mutex &m, std::condition_variable &is_empty, uint8_t client_id) :
+    skt(skt), protocol(protocol), keep_playing(keep_playing), in_game(in_game), lobby_commands(lobby_commands), m(m),
+    is_empty(is_empty), client_id(client_id) {}
 
 void ServerReceiver::run() {
   bool was_closed = false;
@@ -15,7 +13,7 @@ void ServerReceiver::run() {
     while (keep_playing) {
       std::unique_lock<std::mutex> lck(m);
       is_empty.wait(lck);
-      if (not in_game) { 
+      if (not in_game) {
         std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby();
         lobby_commands.try_push(runnable_command);
       } else {
@@ -23,10 +21,10 @@ void ServerReceiver::run() {
         game_commands->try_push(runnable_command);
       }
     }
-    
-  } catch (const LibError &libError) { // Si se cierra el skt
+
+  } catch (const LibError &libError) {  // Si se cierra el skt
     keep_playing = false;
-  } catch (const std::runtime_error &runtimeError) { // Si se procesa mal un cmd
+  } catch (const std::runtime_error &runtimeError) {  // Si se procesa mal un cmd
     keep_playing = false;
     std::cerr << "RuntimeError: " << runtimeError.what() << std::endl;
   }

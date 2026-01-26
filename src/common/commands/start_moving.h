@@ -11,17 +11,17 @@ extern uint8_t START_MOVING;
 }
 
 class StartMoving : public Command {
-private:
+ private:
   uint8_t direction;
 
-public:
+ public:
   // Constructor from client side with direction passed by parameter
-  explicit StartMoving(uint8_t client_id, uint8_t dir)
-      : Command(CODE_PLAYER_COMM::START_MOVING, client_id), direction(dir) {}
+  explicit StartMoving(uint8_t client_id, uint8_t dir) :
+      Command(CODE_PLAYER_COMM::START_MOVING, client_id), direction(dir) {}
 
   // Constructor from server side with direction received by socket
-  explicit StartMoving(uint8_t clt_id, Socket &skt, bool *was_closed)
-      : Command(CODE_PLAYER_COMM::START_MOVING, clt_id) {
+  explicit StartMoving(uint8_t clt_id, Socket &skt, bool *was_closed) :
+      Command(CODE_PLAYER_COMM::START_MOVING, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
 
@@ -31,9 +31,7 @@ public:
     skt.sendall(&direction, sizeof(direction), was_closed);
   }
 
-  void receive(Socket &skt, bool *was_closed) override {
-    skt.recvall(&direction, sizeof(direction), was_closed);
-  }
+  void receive(Socket &skt, bool *was_closed) override { skt.recvall(&direction, sizeof(direction), was_closed); }
 
   // PROVISORIAS
   uint8_t get_client_id() override { return client_id; }

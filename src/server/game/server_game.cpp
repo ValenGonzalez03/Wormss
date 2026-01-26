@@ -2,12 +2,10 @@
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(uint8_t game_id, GameConfig &game_config, World world) : 
-game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config), game_manager(world) {}
+Game::Game(uint8_t game_id, GameConfig &game_config, World world) :
+    game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config), game_manager(world) {}
 
-void
-Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue,
-                uint8_t &player_id) {
+void Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id) {
   //player_id = players_counter;
   //players_counter++;
   broadcaster.add_queue(sender_queue, player_id);
@@ -26,8 +24,8 @@ void Game::charge_world() {
 
 void Game::run() {
   try {
-    std::cout << "Game of id: " << (int) game_id << " started." << std::endl;
-	  
+    std::cout << "Game of id: " << (int)game_id << " started." << std::endl;
+
     bool was_closed = false;
     int it = 0;
     auto t1 = time_point_cast<milliseconds>(steady_clock::now());
@@ -79,7 +77,7 @@ void Game::run() {
       t1 += rate_ms;
       it += 1;
     }
-    std::cout << "Game of id: " << (int) game_id << " ended." << std::endl;
+    std::cout << "Game of id: " << (int)game_id << " ended." << std::endl;
   } catch (const std::exception &err) {
   }
 }
@@ -94,17 +92,13 @@ void Game::update() {
 
 void Game::stop_playing() { keep_playing = false; }
 
-bool Game::compare_id(const uint8_t &another_game_id) {
-  return (game_id == another_game_id);
-}
+bool Game::compare_id(const uint8_t &another_game_id) { return (game_id == another_game_id); }
 
 // void Game::set_world(World& world) {
 //   game_manager.set_world(world);
 // }
 
-World Game::get_world(){
-  return game_manager.get_world();
-}
+World Game::get_world() { return game_manager.get_world(); }
 
 void Game::push_game_state() {
   GameState game_state = game_manager.create_state();
@@ -117,9 +111,7 @@ void Game::check_game_finished() {
   }
 }
 
-void Game::turn_to_started() {
-  started = true;
-}
+void Game::turn_to_started() { started = true; }
 
 bool Game::is_started() { return started; }
 
@@ -127,10 +119,6 @@ bool Game::is_dead() { return not keep_playing; }
 
 uint8_t Game::get_game_id() { return game_id; }
 
-Queue<std::shared_ptr<RunnableCommandGame>>& Game::get_commands_queue() {
-  return commands;
-}
+Queue<std::shared_ptr<RunnableCommandGame>> &Game::get_commands_queue() { return commands; }
 
-GameManager &Game::get_game_manager() {
-  return game_manager;
-}
+GameManager &Game::get_game_manager() { return game_manager; }

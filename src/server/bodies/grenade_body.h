@@ -10,14 +10,14 @@
 #define TIME_DETONATION 5 * 60  // 5 segundos a 60 FPS
 
 class GrenadeBody : public Explodable {
-private:
+ private:
   bool m_contacting = false;
   bool started_countdown = false;
   int frames_counted = 0;
 
   void check_grenade_in_movement();
 
-public:
+ public:
 
   explicit GrenadeBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world);
 
@@ -36,11 +36,11 @@ public:
   void stop_touching_beam(BeamBody* beam) override;
   void stop_touching_missile(MissileBody* missile) override;
   void stop_touching_grenade(GrenadeBody* grenade) override;
-  
+
   BODY_TYPES get_type() override;
 
   ~GrenadeBody();
-  
+
   GrenadeBody(const GrenadeBody&) = delete;
   GrenadeBody& operator=(const GrenadeBody&) = delete;
 };

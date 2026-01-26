@@ -9,22 +9,20 @@
 #include "server_protocol.h"
 
 class PlayerSender : public Thread {
-private:
+ private:
   ServerProtocol &protocol;
   std::shared_ptr<Queue<GameState>> sender_queue;
   bool &keep_playing;
 
-public:
+ public:
   /*
    * Constructor de la clase.
    * */
-  explicit PlayerSender(ServerProtocol &protocol,
-                        std::shared_ptr<Queue<GameState>> sender_queue,
-                        bool &keep_playing);
+  explicit PlayerSender(ServerProtocol &protocol, std::shared_ptr<Queue<GameState>> sender_queue, bool &keep_playing);
 
   void send_id(const uint8_t id);
 
-  void send_worlds_map(const std::map<uint8_t, std::string>& world_names);
+  void send_worlds_map(const std::map<uint8_t, std::string> &world_names);
 
   void send_beams_number();
 

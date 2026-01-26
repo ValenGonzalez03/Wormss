@@ -11,13 +11,13 @@ extern uint8_t STOP_GAME;
 }
 
 class StopGame : public Command {
-public:
+ public:
   // Constructor from client side
   explicit StopGame(uint8_t client_id) : Command(CODE_PLAYER_COMM::STOP_GAME, client_id) {}
 
   // Constructor from server side for code consistency but doesn't do anything
   // different from the other
-  explicit StopGame(uint8_t clt_id, Socket &skt, bool *was_closed): Command(CODE_PLAYER_COMM::STOP_GAME, clt_id) {
+  explicit StopGame(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::STOP_GAME, clt_id) {
     // receive(skt, was_closed);
   }
 

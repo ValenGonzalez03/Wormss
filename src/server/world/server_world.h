@@ -16,7 +16,7 @@
 #include <memory>
 
 class World {
-private:
+ private:
   std::shared_ptr<b2World> world;
   std::list<WormBody*> worms;
   std::list<BeamBody*> beams;
@@ -31,27 +31,29 @@ private:
   void destroy_body(Body* body);
 
   void delete_worms();
-  
+
   void delete_beams();
-  
+
   void delete_explodables();
 
-public:
+ public:
   explicit World();
-	
+
   WormBody* create_worm(const uint8_t player_id, const float spawn_x, const float spawn_y, GameConfig& config);
 
   BeamBody* create_beam(float pos_x, float pos_y, float angle, float length);
 
-  MissileBody* create_missile(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction, float initial_force);
+  MissileBody* create_missile(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction,
+                              float initial_force);
 
-  GrenadeBody* create_grenade(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction, float initial_force);
+  GrenadeBody* create_grenade(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction,
+                              float initial_force);
 
   void create_explosion(float center_x, float center_y);
 
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 
-  WormBody* get_worm(const uint8_t &player_id);
+  WormBody* get_worm(const uint8_t& player_id);
 
   void update_worms();
 
@@ -63,17 +65,13 @@ public:
 
   int get_explodables_number();
 
-  void ray_cast(b2RayCastCallback *callback, const b2Vec2 &point1, const b2Vec2 &point2);
-	
+  void ray_cast(b2RayCastCallback* callback, const b2Vec2& point1, const b2Vec2& point2);
+
   ~World();
 
-  std::string get_name() {
-    return this->name;
-  }
+  std::string get_name() { return this->name; }
 
-  std::string get_background() {
-    return this->background;
-  }
+  std::string get_background() { return this->background; }
 
   std::list<WormAttr> get_worms_attr();
 
@@ -81,21 +79,13 @@ public:
 
   std::list<ExplosionAttr> get_explosions_attr();
 
-  std::list<BeamBody*> get_beams() {
-    return this->beams;
-  }
+  std::list<BeamBody*> get_beams() { return this->beams; }
 
-  void set_name(std::string new_name) {
-    this->name = new_name;
-  }
+  void set_name(std::string new_name) { this->name = new_name; }
 
-  void set_background(std::string new_background) {
-    this->background = new_background;
-  }
+  void set_background(std::string new_background) { this->background = new_background; }
 
-  std::vector<std::vector<float>> get_spawn_points() {
-    return spawn_points;
-  }
+  std::vector<std::vector<float>> get_spawn_points() { return spawn_points; }
 
   void add_spawn_point(float pos_x, float pos_y) {
     std::vector<float> spawn_point;
@@ -103,25 +93,22 @@ public:
     spawn_point.push_back(pos_y);
     spawn_points.push_back(spawn_point);
   }
-	
-  World(const World& other)
-        : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f))),
-          worms(other.worms),
-          name(other.name),
-          background(other.background),
-          contact_listener(other.contact_listener) {
-        world->SetContactListener(&contact_listener);
-        for (const auto& beam : other.beams) {
-          create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
-        }
-        for (const auto& spawn_point : other.spawn_points) {
-          add_spawn_point(spawn_point[0], spawn_point[1]);
-        }
+
+  World(const World& other) :
+      world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f))), worms(other.worms), name(other.name),
+      background(other.background), contact_listener(other.contact_listener) {
+    world->SetContactListener(&contact_listener);
+    for (const auto& beam : other.beams) {
+      create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
+    }
+    for (const auto& spawn_point : other.spawn_points) {
+      add_spawn_point(spawn_point[0], spawn_point[1]);
+    }
   }
 
-  World &operator=(const World& other) {
+  World& operator=(const World& other) {
     if (this == &other) {
-        return *this;
+      return *this;
     }
 
     this->name = other.name;

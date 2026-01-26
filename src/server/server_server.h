@@ -12,8 +12,8 @@
 
 class Server {
   const std::string &servname;
-  
-public:
+
+ public:
   /*
    * Constructor de la clase.
    * */

@@ -6,9 +6,9 @@
 
 class RunnableChangeWeapon : public RunnableCommandGame {
 
-public:
-  explicit RunnableChangeWeapon(uint8_t clt_id, Socket &skt, bool *was_closed)
-      : RunnableCommandGame(std::make_shared<ChangeWeapon>(clt_id, skt, was_closed)) {}
+ public:
+  explicit RunnableChangeWeapon(uint8_t clt_id, Socket &skt, bool *was_closed) :
+      RunnableCommandGame(std::make_shared<ChangeWeapon>(clt_id, skt, was_closed)) {}
 
   void run(GameManager &game_manager) override {
     game_manager.change_weapon(command->get_client_id(), ((ChangeWeapon *)command.get())->get_weapon_type());

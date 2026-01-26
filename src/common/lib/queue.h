@@ -24,8 +24,9 @@ struct ClosedQueue : public std::runtime_error {
  * On a closed queue, any method will raise ClosedQueue.
  *
  * */
-template <typename T, class C = std::deque<T>> class Queue {
-private:
+template <typename T, class C = std::deque<T>>
+class Queue {
+ private:
   std::queue<T, C> q;
   const unsigned int max_size;
 
@@ -35,10 +36,9 @@ private:
   std::condition_variable is_not_full;
   std::condition_variable is_not_empty;
 
-public:
+ public:
   Queue() : max_size(UINT_MAX - 1), closed(false) {}
-  explicit Queue(const unsigned int max_size)
-      : max_size(max_size), closed(false) {}
+  explicit Queue(const unsigned int max_size) : max_size(max_size), closed(false) {}
 
   bool try_push(T const &val) {
     std::unique_lock<std::mutex> lck(mtx);
@@ -150,13 +150,14 @@ public:
     is_not_empty.notify_all();
   }
 
-private:
+ private:
   Queue(const Queue &) = delete;
   Queue &operator=(const Queue &) = delete;
 };
 
-template <> class Queue<void *> {
-private:
+template <>
+class Queue<void *> {
+ private:
   std::queue<void *> q;
   const unsigned int max_size;
 
@@ -166,9 +167,8 @@ private:
   std::condition_variable is_not_full;
   std::condition_variable is_not_empty;
 
-public:
-  explicit Queue(const unsigned int max_size)
-      : max_size(max_size), closed(false) {}
+ public:
+  explicit Queue(const unsigned int max_size) : max_size(max_size), closed(false) {}
 
   bool try_push(void *const &val) {
     std::unique_lock<std::mutex> lck(mtx);
@@ -281,22 +281,21 @@ public:
     is_not_empty.notify_all();
   }
 
-private:
+ private:
   Queue(const Queue &) = delete;
   Queue &operator=(const Queue &) = delete;
 };
 
-template <typename T> class Queue<T *> : private Queue<void *> {
-public:
+template <typename T>
+class Queue<T *> : private Queue<void *> {
+ public:
   explicit Queue(const unsigned int max_size) : Queue<void *>(max_size) {}
 
   bool try_push(T *const &val) { return Queue<void *>::try_push(val); }
 
   bool try_pop(T *&val) { return Queue<void *>::try_pop((void *&)val); }
 
-  bool pop_last_one(T *&val) {
-    return Queue<void *>::pop_last_one((void *&)val);
-  }
+  bool pop_last_one(T *&val) { return Queue<void *>::pop_last_one((void *&)val); }
 
   void push(T *const &val) { return Queue<void *>::push(val); }
 
@@ -304,7 +303,7 @@ public:
 
   void close() { return Queue<void *>::close(); }
 
-private:
+ private:
   Queue(const Queue &) = delete;
   Queue &operator=(const Queue &) = delete;
 };

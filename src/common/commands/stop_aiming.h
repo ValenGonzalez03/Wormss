@@ -11,14 +11,13 @@ extern uint8_t STOP_AIMING;
 }
 
 class StopAiming : public Command {
-private:
-public:
+ private:
+ public:
   // Constructor from client side with direction passed by parameter
   explicit StopAiming(uint8_t client_id) : Command(CODE_PLAYER_COMM::STOP_AIMING, client_id) {}
 
   // Constructor from server side with direction received by socket
-  explicit StopAiming(uint8_t clt_id, Socket &skt, bool *was_closed)
-      : Command(CODE_PLAYER_COMM::STOP_AIMING, clt_id) {
+  explicit StopAiming(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::STOP_AIMING, clt_id) {
     // skt.recvall(&angle, sizeof(angle), was_closed);
   }
 

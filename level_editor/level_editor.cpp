@@ -15,10 +15,10 @@ void LevelEditor::run() {
 
   SDL_Event event;
 
-  while (true){
-    if (execute_event(event)) // Si execute_event devuelve true, se
-      return;                 // cierra el editor
-      
+  while (true) {
+    if (execute_event(event))  // Si execute_event devuelve true, se
+      return;                  // cierra el editor
+
     client_sdl.renderer.Clear();
     world.render(client_sdl);
 
@@ -28,7 +28,6 @@ void LevelEditor::run() {
 
     SDL_Delay(16);
   }
-
 }
 
 bool LevelEditor::execute_event(SDL_Event& event) {
@@ -37,15 +36,14 @@ bool LevelEditor::execute_event(SDL_Event& event) {
   int mouse_y;
   SDL_GetMouseState(&mouse_x, &mouse_y);
   while (SDL_PollEvent(&event)) {
-    if (event.type == SDL_QUIT) { // Cierra el juego
+    if (event.type == SDL_QUIT) {  // Cierra el juego
       return true;
-    } 
-    else if (event.type == SDL_KEYDOWN) { // Aprieta una tecla
+    } else if (event.type == SDL_KEYDOWN) {  // Aprieta una tecla
       switch (event.key.keysym.sym) {
         case SDLK_ESCAPE:
         case SDLK_q:
           return true;
-        case SDLK_SPACE: // Barra espaciadora
+        case SDLK_SPACE:  // Barra espaciadora
           rotate_beam();
           break;
         case SDLK_s:
@@ -64,8 +62,7 @@ bool LevelEditor::execute_event(SDL_Event& event) {
           handle_delete_spawn();
           break;
       }
-    } 
-    else if (event.type == SDL_KEYUP) { // Suelta una tecla
+    } else if (event.type == SDL_KEYUP) {  // Suelta una tecla
       switch (event.key.keysym.sym) {
         case SDLK_s:
           if (placing_short_beam) {
@@ -83,15 +80,12 @@ bool LevelEditor::execute_event(SDL_Event& event) {
           }
           break;
       }
-    }
-    else if (event.type == SDL_MOUSEBUTTONDOWN) { // Hacer clic en el ratón
+    } else if (event.type == SDL_MOUSEBUTTONDOWN) {  // Hacer clic en el ratón
       if (placing_short_beam && event.button.button == SDL_BUTTON_LEFT) {
         handle_add_short_beam(mouse_x, mouse_y);
-      }
-      else if (placing_long_beam && event.button.button == SDL_BUTTON_LEFT) {
+      } else if (placing_long_beam && event.button.button == SDL_BUTTON_LEFT) {
         handle_add_long_beam(mouse_x, mouse_y);
-      }
-      else if (placing_spawn_point && event.button.button == SDL_BUTTON_LEFT) {
+      } else if (placing_spawn_point && event.button.button == SDL_BUTTON_LEFT) {
         handle_add_spawn_point(mouse_x, mouse_y);
       }
     }
@@ -121,19 +115,15 @@ void LevelEditor::handle_add_spawn_point(int pos_x, int pos_y) {
   world.add_spawn_point(SpawnPoint(pos_x_m, pos_y_m));
 }
 
-void LevelEditor::handle_delete_beam() {
-  world.delete_last_beam();
-}
+void LevelEditor::handle_delete_beam() { world.delete_last_beam(); }
 
-void LevelEditor::handle_delete_spawn() {
-  world.delete_last_spawn();
-}
+void LevelEditor::handle_delete_spawn() { world.delete_last_spawn(); }
 
 
 void LevelEditor::print_beams() {
   std::vector<Beam> beams = world.get_beams();
   int counter = 0;
-  for (auto &beam : beams) {
+  for (auto& beam : beams) {
     std::cout << counter << "beam: " << beam.get_length() << std::endl;
     counter++;
   }
@@ -147,13 +137,15 @@ void LevelEditor::rotate_beam() {
 }
 
 void LevelEditor::render_text() {
-  std::string text = "Viga corta: s + click izquierdo\n"
-                     "Viga larga: l + click izquierdo\n"
-                     "Spawn: w + click izquierdo\n"
-                     "Cambiar angulo: tecla de espacio\n"
-                     "Eliminar viga: z\n"
-                     "Eliminar spawn: x\n"
-                     "Angulo viga: " + std::to_string(beam_angle);
+  std::string text =
+      "Viga corta: s + click izquierdo\n"
+      "Viga larga: l + click izquierdo\n"
+      "Spawn: w + click izquierdo\n"
+      "Cambiar angulo: tecla de espacio\n"
+      "Eliminar viga: z\n"
+      "Eliminar spawn: x\n"
+      "Angulo viga: " +
+      std::to_string(beam_angle);
 
   Font font(RESOURCES_PATH "/Vera.ttf", 15);
 
@@ -162,13 +154,9 @@ void LevelEditor::render_text() {
   int yOffset = 0;
 
   while (std::getline(textStream, line, '\n')) {
-    Texture text_sprite(
-        client_sdl.renderer,
-        (font).RenderText_Blended(line, SDL_Color{255, 255, 255, 255}));
+    Texture text_sprite(client_sdl.renderer, (font).RenderText_Blended(line, SDL_Color{255, 255, 255, 255}));
 
-    client_sdl.renderer.Copy(
-        text_sprite, NullOpt,
-        Rect(0, yOffset, text_sprite.GetWidth(), text_sprite.GetHeight()));
+    client_sdl.renderer.Copy(text_sprite, NullOpt, Rect(0, yOffset, text_sprite.GetWidth(), text_sprite.GetHeight()));
 
     yOffset += text_sprite.GetHeight();
   }

@@ -14,14 +14,11 @@
 
 #include <stdexcept>
 
-Resolver::Resolver(
-        const char* hostname,
-        const char* servname,
-        bool is_passive) {
-    struct addrinfo hints;
-    this->result = this->_next = nullptr;
+Resolver::Resolver(const char* hostname, const char* servname, bool is_passive) {
+  struct addrinfo hints;
+  this->result = this->_next = nullptr;
 
-    /*
+  /*
      * `getaddrinfo` nos resuelve el nombre de una máquina (host) y de un
      * servicio a una dirección.
      * Nos puede retornar múltiples direcciones incluso de
@@ -33,12 +30,12 @@ Resolver::Resolver(
      * Para nuestros fines queremos direcciones de internet IPv4
      * y para servicios de TCP.
      * */
-    memset(&hints, 0, sizeof(struct addrinfo));
-    hints.ai_family = AF_INET;       /* IPv4 (or AF_INET6 for IPv6)     */
-    hints.ai_socktype = SOCK_STREAM; /* TCP  (or SOCK_DGRAM for UDP)    */
-    hints.ai_flags = is_passive ? AI_PASSIVE : 0;
+  memset(&hints, 0, sizeof(struct addrinfo));
+  hints.ai_family = AF_INET;       /* IPv4 (or AF_INET6 for IPv6)     */
+  hints.ai_socktype = SOCK_STREAM; /* TCP  (or SOCK_DGRAM for UDP)    */
+  hints.ai_flags = is_passive ? AI_PASSIVE : 0;
 
-    /* Obtengo la (o las) direcciones según el nombre de host y servicio que
+  /* Obtengo la (o las) direcciones según el nombre de host y servicio que
      * busco
      *
      * De todas las direcciones posibles, solo me interesan aquellas que sean
@@ -47,9 +44,9 @@ Resolver::Resolver(
      * El resultado lo guarda en result que es un puntero al primer nodo
      * de una lista simplemente enlazada.
      * */
-    int s = getaddrinfo(hostname, servname, &hints, &this->result);
+  int s = getaddrinfo(hostname, servname, &hints, &this->result);
 
-    /* Es muy importante chequear los errores.
+  /* Es muy importante chequear los errores.
      *
      * En C, Golang, Rust, la forma de comunicar errores al caller (a quien
      * nos llamó) es retornando un código de error.
@@ -63,38 +60,35 @@ Resolver::Resolver(
      * Si `s != EAI_SYSTEM`, entonces el valor de retorno debe ser
      * inspeccionado con `gai_strerror`.
      * */
-    if (s != 0) {
-        if (s == EAI_SYSTEM) {
-            /*
+  if (s != 0) {
+    if (s == EAI_SYSTEM) {
+      /*
              * Como `errno` es global y puede ser modificada por *cualquier* otra
              * función, es *importantísimo* copiarla apenas detectemos el error.
              *
              * En este caso, `LibError` lo hara por nosotros.
              */
-            throw LibError(
-                    errno,
-                    "Name resolution failed for hostname '%s' y servname '%s'",
-                    (hostname ? hostname : ""),
-                    (servname ? servname : ""));
+      throw LibError(errno, "Name resolution failed for hostname '%s' y servname '%s'", (hostname ? hostname : ""),
+                     (servname ? servname : ""));
 
-        } else {
-            /*
+    } else {
+      /*
              * La documentación de `getaddrinfo` dice que en este caso
              * debemos usar `gai_strerror` para obtener el mensaje de error.
              * */
-            throw ResolverError(s);
-        }
+      throw ResolverError(s);
     }
+  }
 
-    this->_next = this->result;
+  this->_next = this->result;
 }
 
 Resolver::Resolver(Resolver&& other) {
-    /* Nos copiamos del otro resolver... */
-    this->result = other.result;
-    this->_next = other._next;
+  /* Nos copiamos del otro resolver... */
+  this->result = other.result;
+  this->_next = other._next;
 
-    /* ...pero luego le sacamos al otro resolver
+  /* ...pero luego le sacamos al otro resolver
      * el ownership del recurso.
      * Efectivamente el ownership pasó de él
      * a nosotros: el ownership se movió.
@@ -104,49 +98,49 @@ Resolver::Resolver(Resolver&& other) {
      * Tendremos que chequear en el destructor `~Resolver`
      * este caso y evitar llamar a `freeaddrinfo` si es `nullptr`.
      * */
-    other.result = nullptr;
-    other._next = nullptr;
+  other.result = nullptr;
+  other._next = nullptr;
 }
 
 Resolver& Resolver::operator=(Resolver&& other) {
-    /* Si el usuario hace algo como tratar de moverse
+  /* Si el usuario hace algo como tratar de moverse
      * a si mismo (`resolver = resolver;`) simplemente no hacemos
      * nada.
      * */
-    if (this == &other)
-        return *this;
+  if (this == &other)
+    return *this;
 
-    /* A diferencia del constructor por movimiento,
+  /* A diferencia del constructor por movimiento,
      * `this` (nosotros) es un resolver completamente creado
      * y debemos desinicializarlo primero antes de pisarle
      * el recurso con el que le robaremos al otro resolver (`other`)
      * */
-    if (this->result)
-        freeaddrinfo(this->result);
+  if (this->result)
+    freeaddrinfo(this->result);
 
-    /* Ahora hacemos los mismos pasos que en el move constructor */
-    this->result = other.result;
-    this->_next = other._next;
-    other.result = nullptr;
-    other._next = nullptr;
+  /* Ahora hacemos los mismos pasos que en el move constructor */
+  this->result = other.result;
+  this->_next = other._next;
+  other.result = nullptr;
+  other._next = nullptr;
 
-    return *this;
+  return *this;
 }
 
 bool Resolver::has_next() {
-    chk_addr_or_fail();
-    return this->_next != NULL;
+  chk_addr_or_fail();
+  return this->_next != NULL;
 }
 
 struct addrinfo* Resolver::next() {
-    chk_addr_or_fail();
-    struct addrinfo *ret = this->_next;
-    this->_next = ret->ai_next;
-    return ret;
+  chk_addr_or_fail();
+  struct addrinfo* ret = this->_next;
+  this->_next = ret->ai_next;
+  return ret;
 }
 
 Resolver::~Resolver() {
-    /*
+  /*
      * `getaddrinfo` reservó recursos en algún lado (posiblemente el heap).
      * Es nuestra obligación liberar dichos recursos cuando no los necesitamos
      * más.
@@ -154,17 +148,16 @@ Resolver::~Resolver() {
      * La manpage dice q debemos usar `freeaddrinfo` para ello y
      * así lo hacemos.
      * */
-    if (this->result)
-        freeaddrinfo(this->result);
+  if (this->result)
+    freeaddrinfo(this->result);
 }
 
 
 void Resolver::chk_addr_or_fail() const {
-    if (result == nullptr) {
-        throw std::runtime_error(
-                "addresses list is invalid (null), "
-                "perhaps you are using a *previously moved* "
-                "resolver (and therefore invalid)."
-                );
-    }
+  if (result == nullptr) {
+    throw std::runtime_error(
+        "addresses list is invalid (null), "
+        "perhaps you are using a *previously moved* "
+        "resolver (and therefore invalid).");
+  }
 }

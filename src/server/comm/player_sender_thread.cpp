@@ -1,11 +1,9 @@
 #include "player_sender_thread.h"
 #include <arpa/inet.h>
 
-PlayerSender::PlayerSender(ServerProtocol &protocol,
-                           std::shared_ptr<Queue<GameState>> sender_queue,
-                           bool &keep_playing)
-    : protocol(protocol), sender_queue(sender_queue),
-      keep_playing(keep_playing) {}
+PlayerSender::PlayerSender(ServerProtocol &protocol, std::shared_ptr<Queue<GameState>> sender_queue,
+                           bool &keep_playing) :
+    protocol(protocol), sender_queue(sender_queue), keep_playing(keep_playing) {}
 
 void PlayerSender::run() {
   bool was_closed = false;
@@ -32,7 +30,7 @@ void PlayerSender::send_id(const uint8_t id) {
   protocol.send_byte(id, &was_closed);
 }
 
-void PlayerSender::send_worlds_map(const std::map<uint8_t, std::string>& worlds_map) {
+void PlayerSender::send_worlds_map(const std::map<uint8_t, std::string> &worlds_map) {
   bool was_closed = false;
   protocol.send_worlds_map(worlds_map, &was_closed);
 }
@@ -42,7 +40,7 @@ void PlayerSender::send_world(World world) {
   protocol.send_string(world.get_name(), &was_closed);
   protocol.send_string(world.get_background(), &was_closed);
 
-  std::list<BeamBody*> beams = world.get_beams();
+  std::list<BeamBody *> beams = world.get_beams();
   uint8_t beams_number = beams.size();
   protocol.send_byte(beams_number, &was_closed);
 
@@ -54,10 +52,6 @@ void PlayerSender::send_world(World world) {
   //protocol.send_world(world);
 }
 
-bool PlayerSender::has_started() {
-  return is_alive();
-}
+bool PlayerSender::has_started() { return is_alive(); }
 
-PlayerSender::~PlayerSender() {
-  keep_playing = false;
-}
+PlayerSender::~PlayerSender() { keep_playing = false; }

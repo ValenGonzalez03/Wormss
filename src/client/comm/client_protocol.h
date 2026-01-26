@@ -14,10 +14,10 @@
 #include "../../common/lib/socket.h"
 
 class ClientProtocol {
-private:
+ private:
   Socket skt;
 
-public:
+ public:
   explicit ClientProtocol(Socket &&socket);
 
   // Elimino posibilidad de copias y operador =

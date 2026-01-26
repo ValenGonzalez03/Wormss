@@ -11,7 +11,7 @@
 #include "../game/server_games_handler.h"
 
 class Player {
-private:
+ private:
   uint8_t player_id;
   Game* game;
   GamesHandler& games_handler;
@@ -20,13 +20,14 @@ private:
   ServerProtocol& protocol;
   bool has_game_assigned = false;
 
-public:
-  
+ public:
+
   //explicit Player();
   /*
    * Constructor de la clase.
    * */
-  explicit Player(uint8_t player_id, Game* game, GamesHandler& games_handler, PlayerSender& sender, std::shared_ptr<Queue<GameState>> sender_queue, ServerProtocol& protocol);
+  explicit Player(uint8_t player_id, Game* game, GamesHandler& games_handler, PlayerSender& sender,
+                  std::shared_ptr<Queue<GameState>> sender_queue, ServerProtocol& protocol);
 
   void initialize_game();
 
@@ -63,7 +64,7 @@ public:
 
   void manage_start_game();
 
-  Player(const Player &) = delete;
+  Player(const Player&) = delete;
 };
 
 #endif

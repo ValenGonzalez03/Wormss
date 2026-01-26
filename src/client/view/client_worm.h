@@ -9,12 +9,12 @@
 
 
 class Worm {
-private:
+ private:
   int id;
-  int pos_x; // En pixeles
-  int pos_y; // En pixeles
-  int width; // En pixeles
-  int height; // En pixeles
+  int pos_x;   // En pixeles
+  int pos_y;   // En pixeles
+  int width;   // En pixeles
+  int height;  // En pixeles
   float aim_angle;
   uint8_t direction;
   WormState worm_state;
@@ -44,13 +44,13 @@ private:
   // Renderiza el worm cuando se encuentra en estado "attacking" en funcion del arma seleccionada
   void render_worm_attacking(int frame, int camera_x, int camera_y);
 
-public:
+ public:
 
   explicit Worm();
 
   // Crea un Worm con un renderer y las texturas correspondientes
-  explicit Worm(int id, int pos_x, int pos_y, int width, int heigth, float aim_angle, uint8_t direction, 
-    WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool);
+  explicit Worm(int id, int pos_x, int pos_y, int width, int heigth, float aim_angle, uint8_t direction,
+                WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool);
 
   int get_id();
 
@@ -66,7 +66,6 @@ public:
   int get_height();
 
   ~Worm();
-
 };
 
 

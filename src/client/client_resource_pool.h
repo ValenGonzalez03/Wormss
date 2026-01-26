@@ -9,34 +9,27 @@
 #include <vector>
 #include "../common/game_constants.h"
 
-enum BACKGROUND_COLOR {
-  LIGHT_BLUE,
-  YELLOW
-};
+enum BACKGROUND_COLOR { LIGHT_BLUE, YELLOW };
 
 class ResourcePool {
-private:
+ private:
   SDL2pp::Renderer &renderer;
   std::map<std::string, std::vector<SDL2pp::Texture *>> texture_arrays;
   std::map<std::string, std::shared_ptr<SDL2pp::Font>> fonts;
   std::map<std::string, Mix_Chunk *> sounds;
   std::shared_ptr<SDL2pp::Texture> background;
-  Mix_Music* gMusic = NULL;
+  Mix_Music *gMusic = NULL;
   unsigned int music_volume = 20;
 
-  void add_texture(const std::string &texture_name,
-                   const std::string &image_path, int width, int height,
-                   int amount_frames, BACKGROUND_COLOR back_color, int offset_x = 0, int offset_y = 0, 
-                   int offset_width = 0, int offset_height = 0, 
-                   bool textures_not_centered = false);
-  
-  void add_texture_walking(const std::string &texture_name,
-                    const std::string &image_path, int width, int height,
-                    int amount_frames);
+  void add_texture(const std::string &texture_name, const std::string &image_path, int width, int height,
+                   int amount_frames, BACKGROUND_COLOR back_color, int offset_x = 0, int offset_y = 0,
+                   int offset_width = 0, int offset_height = 0, bool textures_not_centered = false);
 
-  void add_texture_aiming(const std::string &texture_name,
-    const std::string &image_path, int width, int height,
-    int amount_frames);
+  void add_texture_walking(const std::string &texture_name, const std::string &image_path, int width, int height,
+                           int amount_frames);
+
+  void add_texture_aiming(const std::string &texture_name, const std::string &image_path, int width, int height,
+                          int amount_frames);
 
   // Devuelve la textura guardada en el map de texturas
   // relacionada con el texture_name
@@ -63,12 +56,12 @@ private:
   // Agrega la textura de los explodables al map de texturas
   void add_explodables_textures();
 
-public:
+ public:
   // Crea la Resource pool y le carga las texturas
   explicit ResourcePool(SDL2pp::Renderer &rend);
 
   // Inicializa la resource pool (carga las texturas)
-  void initialize ();
+  void initialize();
 
   // Devuelve un ptr a la textura del short_beam
   std::vector<SDL2pp::Texture *> get_short_beam_texture();
@@ -100,8 +93,7 @@ public:
   */
 
   // Ver inicialización (NO USAR)
-  void add_font(const std::string &font_name, const std::string &font_path,
-                int font_size);
+  void add_font(const std::string &font_name, const std::string &font_path, int font_size);
 
   // Ver inicialización (NO USAR)
   std::shared_ptr<SDL2pp::Font> get_font(const std::string &font_name);
@@ -120,7 +112,6 @@ public:
   void turn_music_volume_up();
 
   ~ResourcePool();
-
 };
 
 #endif

@@ -12,21 +12,21 @@ extern uint8_t START_SHOOTING;
 }
 
 class StartShooting : public Command {
-private:
+ private:
   float initial_force;
 
-public:
+ public:
   // Constructor from client side with direction passed by parameter
-  explicit StartShooting(uint8_t client_id, float initial_force)
-      : Command(CODE_PLAYER_COMM::START_SHOOTING, client_id), initial_force(initial_force) {}
+  explicit StartShooting(uint8_t client_id, float initial_force) :
+      Command(CODE_PLAYER_COMM::START_SHOOTING, client_id), initial_force(initial_force) {}
 
   // Constructor from server side with direction received by socket
-  explicit StartShooting(uint8_t clt_id, Socket &skt, bool *was_closed)
-      : Command(CODE_PLAYER_COMM::START_SHOOTING, clt_id) {
-      int initial_force_int_net;
-      skt.recvall(&initial_force_int_net, sizeof(initial_force_int_net), was_closed);
-      int initial_force_int = ntohl(initial_force_int_net);
-      initial_force = float(initial_force_int) / float(100.0);
+  explicit StartShooting(uint8_t clt_id, Socket &skt, bool *was_closed) :
+      Command(CODE_PLAYER_COMM::START_SHOOTING, clt_id) {
+    int initial_force_int_net;
+    skt.recvall(&initial_force_int_net, sizeof(initial_force_int_net), was_closed);
+    int initial_force_int = ntohl(initial_force_int_net);
+    initial_force = float(initial_force_int) / float(100.0);
   }
 
   void send(Socket &skt, bool *was_closed) override {

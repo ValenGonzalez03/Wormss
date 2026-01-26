@@ -18,7 +18,7 @@ void start();
 void join();
 
 class ClientManager : public Thread {
-private:
+ private:
   Socket skt;
   uint8_t client_id;
   std::shared_ptr<Queue<GameState>> sender_queue;
@@ -36,7 +36,7 @@ private:
   bool threads_have_finished();
 
   bool has_ended();
-public:
+ public:
 
   // Constructor de la clase.
   explicit ClientManager(Socket &&peer, GamesHandler &games_handler, uint8_t client_id);
@@ -57,7 +57,6 @@ public:
 
   ClientManager(const ClientManager &) = delete;
   ClientManager &operator=(const ClientManager &) = delete;
-
 };
 
 #endif

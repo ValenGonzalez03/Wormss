@@ -9,21 +9,20 @@
 #include "client_protocol.h"
 
 class ClientSenderThread : public Thread {
-private:
+ private:
   ClientProtocol &prot;
   Queue<std::shared_ptr<Command>> &sender_queue;
-  bool& keep_playing;
+  bool &keep_playing;
 
   // Elimino posibilidad de copias y operador =
   ClientSenderThread(const ClientSenderThread &) = delete;
   ClientSenderThread &operator=(const ClientSenderThread &) = delete;
 
-public:
-  explicit ClientSenderThread(ClientProtocol &protocol, Queue<std::shared_ptr<Command>> &send_queue, 
-                              bool& keep_playing);
+ public:
+  explicit ClientSenderThread(ClientProtocol &protocol, Queue<std::shared_ptr<Command>> &send_queue,
+                              bool &keep_playing);
 
   virtual void run() override;
-
 };
 
 #endif

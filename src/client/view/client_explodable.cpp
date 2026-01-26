@@ -4,11 +4,9 @@
 #include <box2d/b2_common.h>
 
 Explodable::Explodable(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t dir, uint8_t id,
-  SDL2pp::Texture* texture, SDL2pp::Renderer &rend) 
-  :
-  pos_x(pos_x), pos_y(pos_y), width(width), height(heigth), angle(angle), direction(dir), id(id),
-  texture(texture), renderer(rend)
-  {}
+                       SDL2pp::Texture* texture, SDL2pp::Renderer& rend) :
+    pos_x(pos_x), pos_y(pos_y), width(width), height(heigth), angle(angle), direction(dir), id(id), texture(texture),
+    renderer(rend) {}
 
 void Explodable::update(ExplodableData data) {
   pos_x = convert_meters_to_pixels_x(data.get_pos_x()) - width / 2;
@@ -17,22 +15,21 @@ void Explodable::update(ExplodableData data) {
 }
 
 void Explodable::render(int frame, int camera_x, int camera_y) {
-
   texture->SetAlphaMod(255);
-  float angle_deg =  angle * (180.0f / b2_pi);
+  float angle_deg = angle * (180.0f / b2_pi);
   SDL_RendererFlip flip = (direction == RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-  renderer.Copy(*texture, SDL2pp::NullOpt, SDL2pp::Rect(pos_x - camera_x, pos_y - camera_y, width, height), -angle_deg, SDL2pp::NullOpt, flip);
+  renderer.Copy(*texture, SDL2pp::NullOpt, SDL2pp::Rect(pos_x - camera_x, pos_y - camera_y, width, height), -angle_deg,
+                SDL2pp::NullOpt, flip);
 
   if (std::getenv("DEBUG") != NULL) {
-    SDL2pp::Rect box(pos_x- camera_x, pos_y - camera_y, width, height);
-  
+    SDL2pp::Rect box(pos_x - camera_x, pos_y - camera_y, width, height);
+
     SDL2pp::Color c(0, 255, 0);
     renderer.SetDrawColor(c);
 
     DrawRotatedRect(renderer, width, height, pos_x - camera_x, pos_y - camera_y, -angle);
     //renderer.DrawRect(box);
   }
-
 }
 
 void Explodable::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height, int pos_x, int pos_y, float angle) {
@@ -46,37 +43,23 @@ void Explodable::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int heig
   float sin_A = std::sin(angle);
 
   // Coordenadas locales de los 4 vértices (sentido antihorario)
-  SDL2pp::Point verts[4] = {
-      {-hw, -hh},
-      { hw, -hh},
-      { hw,  hh},
-      {-hw,  hh}
-  };
+  SDL2pp::Point verts[4] = {{-hw, -hh}, {hw, -hh}, {hw, hh}, {-hw, hh}};
 
   SDL2pp::Point worldVerts[4];
-    for (int i = 0; i < 4; ++i) {
-        worldVerts[i].x = center_x + verts[i].x * cos_A - verts[i].y * sin_A;
-        worldVerts[i].y = center_y + verts[i].x * sin_A + verts[i].y * cos_A;
-    }
+  for (int i = 0; i < 4; ++i) {
+    worldVerts[i].x = center_x + verts[i].x * cos_A - verts[i].y * sin_A;
+    worldVerts[i].y = center_y + verts[i].x * sin_A + verts[i].y * cos_A;
+  }
 
-    for (int i = 0; i < 4; ++i) {
-      int j = (i + 1) % 4;
-      renderer.DrawLine(
-          static_cast<int>(worldVerts[i].x),
-          static_cast<int>(worldVerts[i].y),
-          static_cast<int>(worldVerts[j].x),
-          static_cast<int>(worldVerts[j].y));
+  for (int i = 0; i < 4; ++i) {
+    int j = (i + 1) % 4;
+    renderer.DrawLine(static_cast<int>(worldVerts[i].x), static_cast<int>(worldVerts[i].y),
+                      static_cast<int>(worldVerts[j].x), static_cast<int>(worldVerts[j].y));
   }
 }
 
-int Explodable::get_pos_x() {
-  return pos_x;
-}
+int Explodable::get_pos_x() { return pos_x; }
 
-int Explodable::get_pos_y() {
-  return pos_y;
-}
+int Explodable::get_pos_y() { return pos_y; }
 
-uint8_t Explodable::get_id() {
-  return id;
-}
+uint8_t Explodable::get_id() { return id; }

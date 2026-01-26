@@ -8,10 +8,10 @@
 #include <stdio.h>
 
 class MissileBody : public Explodable {
-private:
+ private:
   bool m_contacting = false;
 
-public:
+ public:
 
   explicit MissileBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world);
 
@@ -30,11 +30,11 @@ public:
   void stop_touching_beam(BeamBody* beam) override;
   void stop_touching_missile(MissileBody* missile) override;
   void stop_touching_grenade(GrenadeBody* grenade) override;
-  
+
   BODY_TYPES get_type() override;
 
   ~MissileBody();
-  
+
   MissileBody(const MissileBody&) = delete;
   MissileBody& operator=(const MissileBody&) = delete;
 };

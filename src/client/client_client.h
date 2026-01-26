@@ -18,7 +18,7 @@
 #include "comm/client_sender_thread.h"
 
 class Client : public ConstantRateLoop {
-private:
+ private:
   ClientProtocol prot;
 
   Queue<GameState> receiver_queue;
@@ -77,7 +77,7 @@ private:
   // Muestra el estado del gusano
   std::string print_state(WormState state);
 
-public:
+ public:
   explicit Client(ClientProtocol &&prot, uint8_t player_id);
 
   void start_threads();

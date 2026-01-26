@@ -11,13 +11,13 @@
 namespace fs = std::filesystem;
 
 class Lobby {
-public:
+ public:
 
-  Lobby(){}
+  Lobby() {}
 
   void run();
 
-private:
+ private:
   void show_menu() const;
 
   void create_new_level();

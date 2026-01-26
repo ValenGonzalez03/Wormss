@@ -6,7 +6,7 @@
 #include "body.h"
 
 class StaticBody : public Body {
-public:
+ public:
   StaticBody(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2World* world);
 
   virtual void touch_worm(WormBody* worm) = 0;
@@ -19,7 +19,7 @@ public:
   virtual void stop_touching_missile(MissileBody* missile) = 0;
   virtual void stop_touching_grenade(GrenadeBody* grenade) = 0;
 
-  void apply_impulse(const b2Vec2 &impulse, const b2Vec2 &point);
+  void apply_impulse(const b2Vec2& impulse, const b2Vec2& point);
 
   virtual float explosion_intersect_value(float fraction) = 0;
 
@@ -30,9 +30,9 @@ public:
   virtual BODY_TYPES get_type() = 0;
 
   bool is_affected_by_explosions();
-	
-  StaticBody(const StaticBody &) = delete;
-  StaticBody &operator=(const StaticBody &) = delete;
+
+  StaticBody(const StaticBody&) = delete;
+  StaticBody& operator=(const StaticBody&) = delete;
 };
 
 #endif

@@ -3,12 +3,10 @@
 #include "../../common/game_constants.h"
 #include <stdio.h>
 
-MissileBody::MissileBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world)
-    : Explodable(basic_data, dir, adv_data, MISSILE, world) {}
+MissileBody::MissileBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world) :
+    Explodable(basic_data, dir, adv_data, MISSILE, world) {}
 
-void MissileBody::update() {
-  check_boundaries();
-}
+void MissileBody::update() { check_boundaries(); }
 
 bool MissileBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
@@ -26,6 +24,4 @@ void MissileBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
 
 BODY_TYPES MissileBody::get_type() { return MISSILE; }
 
-MissileBody::~MissileBody() {
-  free(reinterpret_cast<UserData*>(body->GetUserData().pointer));
-}
+MissileBody::~MissileBody() { free(reinterpret_cast<UserData*>(body->GetUserData().pointer)); }

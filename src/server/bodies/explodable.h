@@ -8,14 +8,15 @@
 #include <stdio.h>
 
 class Explodable : public DynamicBody {
-private:
+ private:
   uint8_t direction;
   bool m_contacting = false;
   bool exploded = false;
 
-public:
+ public:
 
-  explicit Explodable(BodyBasicData basic_data, uint8_t direction, BodyAdvData adv_data, BODY_TYPES type, b2World* world);
+  explicit Explodable(BodyBasicData basic_data, uint8_t direction, BodyAdvData adv_data, BODY_TYPES type,
+                      b2World* world);
 
   void apply_initial_impulse(float intial_force, float shooting_angle);
 
@@ -44,11 +45,11 @@ public:
   void explode();
 
   bool has_exploded();
-  
+
   virtual BODY_TYPES get_type() = 0;
 
   ~Explodable();
-  
+
   Explodable(const Explodable&) = delete;
   Explodable& operator=(const Explodable&) = delete;
 };

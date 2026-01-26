@@ -45,7 +45,7 @@ void Lobby::create_new_level() {
 
   LevelEditor level_editor(new_world);
   level_editor.run();
-  
+
 
   file_editor.create_yaml_file(file_name, new_world);
 }
@@ -53,7 +53,7 @@ void Lobby::create_new_level() {
 
 std::string Lobby::get_lvl_name_from_usr() {
   std::string levelName;
-  
+
   while (true) {
     std::cout << "Ingrese el nombre del nivel: ";
     std::cin >> levelName;
@@ -94,13 +94,13 @@ void Lobby::edit_existing_level() {
   if (selectedLevel > 0 && selectedLevel <= static_cast<int>(levelFiles.size())) {
     std::cout << "Abriendo y editando el nivel: " << levelFiles[selectedLevel - 1] << '\n';
     // Leo el archivo y lo cargo en un World
-    World existing_world = file_editor.read_existing_level(levelFiles[selectedLevel -1]);
+    World existing_world = file_editor.read_existing_level(levelFiles[selectedLevel - 1]);
     // Edito el World
     LevelEditor level_editor(existing_world);
     level_editor.run();
 
     //Lo guardo con el mismo nombre
-    file_editor.create_yaml_file(levelFiles[selectedLevel-1], existing_world);
+    file_editor.create_yaml_file(levelFiles[selectedLevel - 1], existing_world);
   } else {
     std::cout << "Selección no válida. Volviendo al lobby.\n";
   }

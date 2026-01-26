@@ -1,0 +1,17 @@
+BasedOnStyle: Google
+IndentWidth: 2
+ColumnLimit: 120
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: false
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+BinPackArguments: true
+BinPackParameters: true
+PackConstructorInitializers: BinPack
+BreakConstructorInitializers: AfterColon
+EmptyLineAfterAccessModifier: Leave
+EmptyLineBeforeAccessModifier: Leave
+MaxEmptyLinesToKeep: 5
+ReflowComments: false
+SortIncludes: false

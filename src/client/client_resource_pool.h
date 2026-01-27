@@ -33,7 +33,7 @@ class ResourcePool {
 
   // Devuelve la textura guardada en el map de texturas
   // relacionada con el texture_name
-  std::vector<SDL2pp::Texture *> get_texture(const std::string &texture_name);
+  std::vector<SDL2pp::Texture *> get_texture(const std::string &texture_name) const;
 
   // Agrega la textura de short_beam al map de texturas
   void add_short_beam();
@@ -58,34 +58,34 @@ class ResourcePool {
 
  public:
   // Crea la Resource pool y le carga las texturas
-  explicit ResourcePool(SDL2pp::Renderer &rend);
+  explicit ResourcePool(SDL2pp::Renderer &rend);  // NOLINT(runtime/references)
 
   // Inicializa la resource pool (carga las texturas)
   void initialize();
 
   // Devuelve un ptr a la textura del short_beam
-  std::vector<SDL2pp::Texture *> get_short_beam_texture();
+  std::vector<SDL2pp::Texture *> get_short_beam_texture() const;
 
   // Devuelve un ptr a la textura del long_beam
-  std::vector<SDL2pp::Texture *> get_long_beam_texture();
+  std::vector<SDL2pp::Texture *> get_long_beam_texture() const;
 
   // Devuelve un ptr a la textura del worm caminando
-  std::vector<SDL2pp::Texture *> get_worm_walking();
+  std::vector<SDL2pp::Texture *> get_worm_walking() const;
 
   // Devuelve un ptr a la textura del worm saltando
-  std::vector<SDL2pp::Texture *> get_worm_jumping();
+  std::vector<SDL2pp::Texture *> get_worm_jumping() const;
 
   // Devuelve un ptr a la textura del worm apuntando dependiendo del arma que este utilizando en ese momento
-  std::vector<SDL2pp::Texture *> get_worm_aiming(WeaponType type);
+  std::vector<SDL2pp::Texture *> get_worm_aiming(WeaponType type) const;
 
   // Devuelve un ptr a la textura del worm atacando dependiendo del arma que este utilizando en ese momento
-  std::vector<SDL2pp::Texture *> get_worm_attacking(WeaponType type);
+  std::vector<SDL2pp::Texture *> get_worm_attacking(WeaponType type) const;
 
   // Devuelve un ptr a la textura del misil de la bazooka
-  std::vector<SDL2pp::Texture *> get_missile_texture();
+  std::vector<SDL2pp::Texture *> get_missile_texture() const;
 
   // Devuelve un ptr a la textura de la granada
-  std::vector<SDL2pp::Texture *> get_grenade_texture();
+  std::vector<SDL2pp::Texture *> get_grenade_texture() const;
   /*
     void add_sound(const std::string sound_name, const std::string &sound_path)
     { Mix_Chunk *
@@ -100,9 +100,9 @@ class ResourcePool {
 
   void add_background(const std::string &image_path);
 
-  std::shared_ptr<SDL2pp::Texture> get_background();
+  std::shared_ptr<SDL2pp::Texture> get_background() const;
 
-  //Load music
+  // Load music
   void add_music(std::string absolute_path);
 
   void play_music();

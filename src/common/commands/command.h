@@ -15,12 +15,12 @@ class Command {
 
   // Debe enviar el codigo y los datos adicionales
   // de ser necesario
-  virtual void send(Socket &skt, bool *was_closed) = 0;
+  virtual void send(Socket &skt, bool *was_closed) const = 0;  // NOLINT(runtime/references)
 
   // El código lo recibe el protocolo para decidir
   // el comando a crear. Este receive solo recibe los datos
   // adicionales del comando en caso de ser necesario.
-  virtual void receive(Socket &skt, bool *was_closed) = 0;
+  virtual void receive(Socket &skt, bool *was_closed) = 0;  // NOLINT(runtime/references)
 
   // PROVISORIAS
   virtual uint8_t get_client_id() = 0;

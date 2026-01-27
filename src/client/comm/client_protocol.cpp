@@ -6,7 +6,7 @@
 
 ClientProtocol::ClientProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
-void ClientProtocol::send_command(Command &cmd) {
+void ClientProtocol::send_command(const Command &cmd) {
   bool was_closed = false;
   cmd.send(skt, &was_closed);
 }
@@ -28,11 +28,13 @@ uint8_t ClientProtocol::recv_byte(bool *was_closed) {
   return b;
 }
 
+#define MAX_BUFFER 1000
+
 std::string ClientProtocol::recv_string(bool *was_closed) {
   uint16_t string_length;
   skt.recvall(&string_length, sizeof(string_length), was_closed);
   uint16_t string_length_be = ntohs(string_length);
-  char buffer[string_length_be + 1];
+  char buffer[MAX_BUFFER];
   skt.recvall(buffer, string_length_be, was_closed);
   buffer[string_length] = '\0';
   return std::string(buffer);
@@ -60,7 +62,7 @@ bool ClientProtocol::recv_bool(bool *was_closed) {
 }
 
 //////////////////////////////////////////////////////////////////////
-///////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
+/////////// FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET ///////////////
 //////////////////////////////////////////////////////////////////////
 
 std::map<uint8_t, std::string> ClientProtocol::recv_worlds_map(bool *was_closed) {
@@ -78,7 +80,7 @@ std::map<uint8_t, std::string> ClientProtocol::recv_worlds_map(bool *was_closed)
   return worlds_map;
 }
 
-void ClientProtocol::send_world_name_selected(std::string &world_name, bool *was_closed) {
+void ClientProtocol::send_world_name_selected(const std::string &world_name, bool *was_closed) {
   send_string(world_name, was_closed);
 }
 

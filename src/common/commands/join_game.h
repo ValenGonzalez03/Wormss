@@ -2,8 +2,6 @@
 #define JOIN_GAME_H_
 
 #include "command.h"
-//#include "protocol.h"
-//#include "../server/server_games_handler.h"
 
 // Forward declaration de CODE_PLAYER_COMM
 namespace CODE_PLAYER_COMM {
@@ -23,7 +21,7 @@ class JoinGame : public Command {
     skt.recvall(&game_id, sizeof(game_id), was_closed);
   }
 
-  void send(Socket &skt, bool *was_closed) override {
+  void send(Socket &skt, bool *was_closed) const override {
     skt.sendall(&code, sizeof(code), was_closed);
     skt.sendall(&game_id, sizeof(game_id), was_closed);
   }

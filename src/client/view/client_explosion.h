@@ -1,6 +1,7 @@
 #ifndef CLIENT_EXPLOSION_H_
 #define CLIENT_EXPLOSION_H_
 
+#include <vector>
 #include "../../common/game_state.h"
 #include "../../common/game_constants.h"
 #include "../client_resource_pool.h"
@@ -13,16 +14,15 @@ class Explosion {
   std::vector<float> ray_fractions;
   int frame_where_started;
   bool finished = false;
-  //std::vector<SDL2pp::Texture *> texture; // Vector de texturas
+  // std::vector<SDL2pp::Texture *> texture; // Vector de texturas
   SDL2pp::Renderer &renderer;
 
  public:
-
-  explicit Explosion();
+  Explosion();
 
   // Crea un Missile con un renderer y las texturas correspondientes
   explicit Explosion(int pos_x, int pos_y, int radius, std::vector<float> fractions, int start_frame,
-                     SDL2pp::Renderer &rend);
+                     SDL2pp::Renderer &rend);  // NOLINT(runtime/references)
 
   void update(int frame);
 

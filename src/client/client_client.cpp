@@ -15,9 +15,13 @@
 #include "../common/commands/change_weapon.h"
 #include "../common/game_constants.h"
 
-using namespace SDL2pp;
+using SDL2pp::Renderer;
+using SDL2pp::SDL;
+using SDL2pp::SDLMixer;
+using SDL2pp::SDLTTF;
+using SDL2pp::Texture;
 
-const float RATE = (float)(1.0 / 60.0);
+const float RATE = static_cast<float>(1.0 / 60.0);
 
 Client::Client(ClientProtocol &&prot, uint8_t player_id) :
     prot(std::move(prot)), receiver_queue(), sender_queue(), receiver(this->prot, receiver_queue, keep_playing),
@@ -60,7 +64,7 @@ int Client::run() {
   int worms_amount = 0;
   // Esto claramente es una mala solucion pero por ahora sirve
   last_game_state = receiver_queue.pop();
-  std::cout << "Cantidad worms: " << (int)last_game_state.get_worms().size() << std::endl;
+  std::cout << "Cantidad worms: " << static_cast<int>(last_game_state.get_worms().size()) << std::endl;
   for (auto worm_data : last_game_state.get_worms()) {
     view.world_view.add_worm(worm_data.second);
   }
@@ -74,7 +78,7 @@ int Client::run() {
   // cuantos frames se renderizan en un segundo
 
   // Ejecuta func_to_execute en cada iteracion
-  loop(std::chrono::duration<float>((float)RATE));
+  loop(std::chrono::duration<float>(static_cast<float>(RATE)));
 
   return 0;
 }
@@ -89,7 +93,7 @@ void Client::recv_world() {
   uint8_t beams_number = prot.recv_byte(&was_closed);
   // int beams_number = prot.recv_beams_number(&was_closed);
 
-  std::cout << "Nombre mundo: " << world_name << ", Cantidad vigas: " << (int)beams_number << std::endl;
+  std::cout << "Nombre mundo: " << world_name << ", Cantidad vigas: " << static_cast<int>(beams_number) << std::endl;
   for (int i = 0; i < beams_number; i++) {
     BeamAttr beam_attr = prot.recv_beam(&was_closed);
 
@@ -183,16 +187,12 @@ bool Client::execute_event(SDL_Event &event) {
     if (event.type == SDL_QUIT) {  // Cierra el juego
       handle_quit_game();
       return true;
-    }
-
-    else if (event.type == SDL_MOUSEMOTION) {  // Mouse en movimiento
+    } else if (event.type == SDL_MOUSEMOTION) {  // Mouse en movimiento
       int mouse_x;
       int mouse_y;
       SDL_GetMouseState(&mouse_x, &mouse_y);
       view.camera.check_mouse_position(mouse_x, mouse_y);
-    }
-
-    else if (event.type == SDL_KEYDOWN) {  // Aprieta una tecla
+    } else if (event.type == SDL_KEYDOWN) {  // Aprieta una tecla
       int key_mov_dir;
       int key_aim_dir;
       switch (event.key.keysym.sym) {
@@ -249,10 +249,7 @@ bool Client::execute_event(SDL_Event &event) {
           view.camera.alternate_camera_type();
           break;
       }
-
-    }
-
-    else if (event.type == SDL_KEYUP) {  // Suelta una tecla
+    } else if (event.type == SDL_KEYUP) {  // Suelta una tecla
       switch (event.key.keysym.sym) {
         case SDLK_RIGHT:
         case SDLK_LEFT:

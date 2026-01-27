@@ -13,7 +13,7 @@ void ClientSenderThread::run() {
       // Envio el msj al server
       prot.send_command(*cmd);
     } catch (const std::exception& err) {
-      //sender_queue.close(); // Cierro la cola para que no se queden esperando mensajes
+      // sender_queue.close(); // Cierro la cola para que no se queden esperando mensajes
       _keep_running = false;
       // Si la cola está cerrada o el socket está cerrado termino
       break;

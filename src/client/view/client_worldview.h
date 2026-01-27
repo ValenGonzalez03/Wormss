@@ -8,7 +8,10 @@
 #include "client_worm.h"
 #include "client_explodable.h"
 #include "client_explosion.h"
+#include <utility>
+#include <string>
 #include <vector>
+#include <map>
 
 class WorldView {
  private:
@@ -19,7 +22,7 @@ class WorldView {
   std::map<uint8_t, Worm> worms;
   std::map<uint8_t, Explodable> explodables;
   std::vector<Explosion> explosions;
-  uint8_t player_id;
+  const uint8_t &player_id;
 
   void render_background();
 
@@ -32,30 +35,27 @@ class WorldView {
   std::string print_weapon_selected(WeaponType weapon);
 
  public:
-  // Crea una WorldView con una referencia a una resource pool
-  // y a un renderer
-  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera &camera, uint8_t &player_id);
-
+  // Crea una WorldView con una referencia a una resource pool y a un renderer
+  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera &camera,  // NOLINT(runtime/references)
+            const uint8_t &player_id);
   // void add_worms(std::vector<std::vector<float>> spawn_points);
 
   void add_worm(WormData data);
 
-  // Convierte la posicion pasada por parámetro de m a px,
-  // crea la long_beam y la agrega al WorldView
+  // Convierte la posicion pasada por parámetro de m a px, crea la long_beam y la agrega al WorldView
   void add_beam(float pos_x, float pos_y, float width, float height, float angle);
 
   Explodable add_explodable(ExplodableData data);
 
   void add_explosion(ExplosionData data, int frame);
 
-  // Recibe el estado de juego y actualiza la world_view
-  // con los nuevos datos
-  void update(GameState &game_state, int frame);
+  // Recibe el estado de juego y actualiza la world_view con los nuevos datos
+  void update(const GameState &game_state, int frame);
 
   // Renderiza la world_view
   void render(int frame);
 
-  void render_text(WormData &worm_data);
+  void render_text(const WormData &worm_data);
 
   // Setea un background al mundo
   void set_background(const std::string &path);

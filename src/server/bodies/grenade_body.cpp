@@ -1,7 +1,9 @@
 #include "grenade_body.h"
-#include "box2d/box2d.h"
-#include "../../common/game_constants.h"
+
 #include <stdio.h>
+
+#include "../../common/game_constants.h"
+#include "box2d/box2d.h"
 
 GrenadeBody::GrenadeBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world) :
     Explodable(basic_data, dir, adv_data, GRENADE_BODY, world) {}

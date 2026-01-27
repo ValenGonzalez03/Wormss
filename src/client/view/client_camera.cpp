@@ -34,13 +34,13 @@ void Camera::update(int worm_x, int worm_y, int worm_width, int worm_height) {
 bool Camera::is_up_corner(int mouse_x, int mouse_y) { return mouse_y < camera_box.h / PORTION_SCROLLABLE; }
 
 bool Camera::is_down_corner(int mouse_x, int mouse_y) {
-  return mouse_y > camera_box.h * (1 - 1.0f / float(PORTION_SCROLLABLE)) && mouse_y < camera_box.h;
+  return mouse_y > camera_box.h * (1 - 1.0f / static_cast<float>(PORTION_SCROLLABLE)) && mouse_y < camera_box.h;
 }
 
 bool Camera::is_left_corner(int mouse_x, int mouse_y) { return mouse_x < camera_box.w / PORTION_SCROLLABLE; }
 
 bool Camera::is_right_corner(int mouse_x, int mouse_y) {
-  return mouse_x > camera_box.w * (1 - 1.0f / float(PORTION_SCROLLABLE)) && mouse_x < camera_box.w;
+  return mouse_x > camera_box.w * (1 - 1.0f / static_cast<float>(PORTION_SCROLLABLE)) && mouse_x < camera_box.w;
 }
 
 void Camera::check_mouse_position(int mouse_x, int mouse_y) {

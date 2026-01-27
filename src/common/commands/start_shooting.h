@@ -3,8 +3,6 @@
 
 #include "command.h"
 #include <arpa/inet.h>
-//#include "protocol.h"
-//#include "../server/server_games_handler.h"
 
 // Forward declaration de CODE_PLAYER_COMM
 namespace CODE_PLAYER_COMM {
@@ -21,18 +19,18 @@ class StartShooting : public Command {
       Command(CODE_PLAYER_COMM::START_SHOOTING, client_id), initial_force(initial_force) {}
 
   // Constructor from server side with direction received by socket
-  explicit StartShooting(uint8_t clt_id, Socket &skt, bool *was_closed) :
+  explicit StartShooting(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
       Command(CODE_PLAYER_COMM::START_SHOOTING, clt_id) {
     int initial_force_int_net;
     skt.recvall(&initial_force_int_net, sizeof(initial_force_int_net), was_closed);
     int initial_force_int = ntohl(initial_force_int_net);
-    initial_force = float(initial_force_int) / float(100.0);
+    initial_force = static_cast<float>(initial_force_int) / static_cast<float>(100.0);
   }
 
-  void send(Socket &skt, bool *was_closed) override {
+  void send(Socket &skt, bool *was_closed) const override {
     skt.sendall(&client_id, sizeof(client_id), was_closed);
     skt.sendall(&code, sizeof(code), was_closed);
-    int initial_force_int = int(initial_force * 100);
+    int initial_force_int = static_cast<int>(initial_force * 100);
     int initial_force_int_net = htonl(initial_force_int);
     skt.sendall(&initial_force_int_net, sizeof(initial_force_int_net), was_closed);
   }
@@ -41,7 +39,7 @@ class StartShooting : public Command {
     int initial_force_int_net;
     skt.recvall(&initial_force_int_net, sizeof(initial_force_int_net), was_closed);
     int initial_force_int = ntohl(initial_force_int_net);
-    initial_force = float(initial_force_int) / float(100.0);
+    initial_force = static_cast<float>(initial_force_int) / static_cast<float>(100.0);
   }
 
   // PROVISORIAS

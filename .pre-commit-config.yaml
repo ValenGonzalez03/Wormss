@@ -1,7 +1,9 @@
 repos:
   - repo: https://github.com/pocc/pre-commit-hooks
-    rev: 9a9bbc00895bbdb7670231c2565d4f1309c42905  # SHA of v1.3.5
+    rev: v1.3.5  # SHA of v1.3.5
     hooks:
       - id: cpplint
+        args: ["--filter=-legal/copyright,-build/header_guard,-whitespace/line_length"]
       - id: cppcheck
+        args: [--enable=all, -I /usr/include/box2d]
       - id: clang-format

@@ -2,8 +2,9 @@
 #define BEAM_H_
 
 #include <SDL2pp/SDL2pp.hh>
-#include "position_converter.h"
+
 #include "client_SDL.h"
+#include "position_converter.h"
 
 class Beam {
  private:

@@ -1,9 +1,11 @@
 #include "client_bazooka.h"
 
 
-std::vector<SDL2pp::Texture *> Bazooka::get_aim_textures(ResourcePool &pool) { return pool.get_worm_aiming(BAZOOKA); }
+std::vector<SDL2pp::Texture *> Bazooka::get_aim_textures(const ResourcePool &pool) {
+  return pool.get_worm_aiming(BAZOOKA);
+}
 
-std::vector<SDL2pp::Texture *> Bazooka::get_attack_textures(ResourcePool &pool) {
+std::vector<SDL2pp::Texture *> Bazooka::get_attack_textures(const ResourcePool &pool) {
   return pool.get_worm_attacking(BAZOOKA);
 }
 

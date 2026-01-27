@@ -1,6 +1,7 @@
 #ifndef CLIENT_BEAM_H_
 #define CLIENT_BEAM_H_
 
+#include <vector>
 #include "../../common/position.h"
 #include <SDL2pp/SDL2pp.hh>
 
@@ -18,8 +19,9 @@ class Beam {
 
  public:
   // Crea una Beam en la posicion en px pasada por parámetro
-  Beam(int width, int height, int pos_x, int pos_y, float angle, std::vector<SDL2pp::Texture *> &beam_texture,
-       SDL2pp::Renderer &rend);
+  Beam(int width, int height, int pos_x, int pos_y, float angle,
+       std::vector<SDL2pp::Texture *> &beam_texture,  // NOLINT(runtime/references)
+       SDL2pp::Renderer &rend);                       // NOLINT(runtime/references)
 
   // Renderiza la Beam en su posición
   void render(int frame, int camera_x, int camera_y);

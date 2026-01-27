@@ -28,7 +28,7 @@ void Explodable::render(int frame, int camera_x, int camera_y) {
     renderer.SetDrawColor(c);
 
     DrawRotatedRect(renderer, width, height, pos_x - camera_x, pos_y - camera_y, -angle);
-    //renderer.DrawRect(box);
+    // renderer.DrawRect(box);
   }
 }
 

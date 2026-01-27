@@ -218,7 +218,7 @@ Socket &Socket::operator=(Socket &&other) {
      * y debemos desinicializarlo primero antes de pisarle
      * el recurso con el que le robaremos al otro socket (`other`)
      * */
-  if (not this->closed) {
+  if (!this->closed) {
     ::shutdown(this->skt, 2);
     ::close(this->skt);
   }
@@ -235,7 +235,7 @@ Socket &Socket::operator=(Socket &&other) {
 int Socket::recvsome(void *data, unsigned int sz, bool *was_closed) {
   chk_skt_or_fail();
   *was_closed = false;
-  int s = recv(this->skt, (char *)data, sz, 0);
+  int s = recv(this->skt, (char *)data, sz, 0);  // NOLINT(readability/casting)
   if (s == 0) {
     /*
          * Puede ser o no un error, dependerá del protocolo.
@@ -275,7 +275,7 @@ int Socket::sendsome(const void *data, unsigned int sz, bool *was_closed) {
      * Esta en nosotros luego hace el chequeo correspondiente
      * (ver más abajo).
      * */
-  int s = send(this->skt, (char *)data, sz, MSG_NOSIGNAL);
+  int s = send(this->skt, (char *)data, sz, MSG_NOSIGNAL);  // NOLINT(readability/casting)
   if (s == -1) {
     /*
          * Este es un caso especial: cuando enviamos algo pero en el medio
@@ -312,7 +312,7 @@ int Socket::recvall(void *data, unsigned int sz, bool *was_closed) {
   *was_closed = false;
 
   while (received < sz) {
-    int s = recvsome((char *)data + received, sz - received, was_closed);
+    int s = recvsome((char *)data + received, sz - received, was_closed);  // NOLINT(readability/casting)
 
     if (s <= 0) {
       /*
@@ -348,7 +348,7 @@ int Socket::sendall(const void *data, unsigned int sz, bool *was_closed) {
   *was_closed = false;
 
   while (sent < sz) {
-    int s = sendsome((char *)data + sent, sz - sent, was_closed);
+    int s = sendsome((char *)data + sent, sz - sent, was_closed);  // NOLINT(readability/casting)
 
     /* Véase los comentarios de `Socket::recvall` */
     if (s <= 0) {
@@ -412,7 +412,7 @@ int Socket::close() {
 }
 
 Socket::~Socket() {
-  if (not this->closed) {
+  if (!this->closed) {
     ::shutdown(this->skt, 2);
     ::close(this->skt);
   }

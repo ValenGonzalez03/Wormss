@@ -45,12 +45,11 @@ class Worm {
   void render_worm_attacking(int frame, int camera_x, int camera_y);
 
  public:
-
-  explicit Worm();
+  Worm();
 
   // Crea un Worm con un renderer y las texturas correspondientes
   explicit Worm(int id, int pos_x, int pos_y, int width, int heigth, float aim_angle, uint8_t direction,
-                WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool);
+                WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool);  // NOLINT(runtime/references)
 
   int get_id();
 

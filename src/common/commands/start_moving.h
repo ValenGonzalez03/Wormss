@@ -2,8 +2,6 @@
 #define START_MOVING_H_
 
 #include "command.h"
-//#include "protocol.h"
-//#include "../server/server_games_handler.h"
 
 // Forward declaration de CODE_PLAYER_COMM
 namespace CODE_PLAYER_COMM {
@@ -20,12 +18,12 @@ class StartMoving : public Command {
       Command(CODE_PLAYER_COMM::START_MOVING, client_id), direction(dir) {}
 
   // Constructor from server side with direction received by socket
-  explicit StartMoving(uint8_t clt_id, Socket &skt, bool *was_closed) :
+  explicit StartMoving(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
       Command(CODE_PLAYER_COMM::START_MOVING, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
 
-  void send(Socket &skt, bool *was_closed) override {
+  void send(Socket &skt, bool *was_closed) const override {
     skt.sendall(&client_id, sizeof(client_id), was_closed);
     skt.sendall(&code, sizeof(code), was_closed);
     skt.sendall(&direction, sizeof(direction), was_closed);

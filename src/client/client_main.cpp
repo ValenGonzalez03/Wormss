@@ -30,7 +30,6 @@ int main(int argc, char *argv[]) {
     std::cout << "Cliente se desconectó exitosamente" << std::endl;
 
     return SUCCESS;
-
   } catch (const std::exception &err) {
     std::cerr << "Something went wrong and an exception was caught: " << err.what() << "\n";
     return ERROR;

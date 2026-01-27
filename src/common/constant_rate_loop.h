@@ -1,11 +1,16 @@
 #ifndef CONSTANT_RATE_LOOP_H_
 #define CONSTANT_RATE_LOOP_H_
 
-#include <chrono>
+#include <chrono>  // NOLINT(build/c++11)
 #include <cmath>
-#include <thread>
+#include <thread>  // NOLINT(build/c++11)
 
-using namespace std::chrono;
+using std::chrono::duration;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using std::chrono::steady_clock;
+using std::chrono::time_point;
+using std::chrono::time_point_cast;
 
 typedef duration<float, duration<float>> dur_ms;
 typedef time_point<steady_clock, milliseconds> time_p_ms;

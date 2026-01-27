@@ -2,6 +2,7 @@
 #define CLIENT_SENDER_THREAD_H_
 
 #include <string>
+#include <memory>
 
 #include "../../common/message.h"
 #include "../../common/lib/queue.h"
@@ -19,10 +20,11 @@ class ClientSenderThread : public Thread {
   ClientSenderThread &operator=(const ClientSenderThread &) = delete;
 
  public:
-  explicit ClientSenderThread(ClientProtocol &protocol, Queue<std::shared_ptr<Command>> &send_queue,
-                              bool &keep_playing);
+  explicit ClientSenderThread(ClientProtocol &protocol,                     // NOLINT(runtime/references)
+                              Queue<std::shared_ptr<Command>> &send_queue,  // NOLINT(runtime/references)
+                              bool &keep_playing);                          // NOLINT(runtime/references)
 
-  virtual void run() override;
+  void run() override;
 };
 
 #endif

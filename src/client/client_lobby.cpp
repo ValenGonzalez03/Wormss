@@ -12,7 +12,7 @@ char Lobby::get_option() {
   return option;
 }
 
-uint8_t Lobby::select_world(std::map<uint8_t, std::string>& worlds_map) {
+uint8_t Lobby::select_world(const std::map<uint8_t, std::string>& worlds_map) {
   int option;
   while (true) {
     std::cin >> option;

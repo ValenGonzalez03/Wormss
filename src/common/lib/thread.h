@@ -1,7 +1,7 @@
 #ifndef THREAD_H_
 #define THREAD_H_
 
-#include <thread>
+#include <thread>  // NOLINT(build/c++11)
 #include <iostream>
 #include <atomic>
 

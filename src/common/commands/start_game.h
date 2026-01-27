@@ -2,7 +2,6 @@
 #define START_GAME_H_
 
 #include "command.h"
-//#include "protocol.h"
 
 namespace CODE_PLAYER_COMM {
 extern uint8_t START_GAME;
@@ -21,7 +20,7 @@ class StartGame : public Command {
     receive(skt, was_closed);
   }
 
-  void send(Socket &skt, bool *was_closed) override {
+  void send(Socket &skt, bool *was_closed) const override {
     skt.sendall(&code, sizeof(code), was_closed);
     skt.sendall(&game_id, sizeof(game_id), was_closed);
   }

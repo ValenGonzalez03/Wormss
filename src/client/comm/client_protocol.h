@@ -2,6 +2,7 @@
 #define CLIENT_PROTOCOL_H_
 
 #include <cstdint>
+#include <string>
 #include <cstring>
 #include <iostream>
 #include <memory>
@@ -30,9 +31,9 @@ class ClientProtocol {
 
   uint8_t recv_byte(bool *was_closed);
 
-  void send_command(Command &cmd);
+  void send_command(const Command &cmd);
 
-  //GameState process_game_state();
+  // GameState process_game_state();
 
   void send_client_ready();
 
@@ -49,13 +50,13 @@ class ClientProtocol {
   bool recv_bool(bool *was_closed);
 
   ////////////////////////////////////////////////////////////////////////
-  ///////////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET///////////////
+  /////////////// FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET ////////////
 
   // Recibe la cantidad y los nombres de los mundos y los retorna.
   std::map<uint8_t, std::string> recv_worlds_map(bool *was_closed);
 
   // Envía el nombre 'world_name' del mundo elegido.
-  void send_world_name_selected(std::string &world_name, bool *was_closed);
+  void send_world_name_selected(const std::string &world_name, bool *was_closed);
 
   // Envía el 'world_id'.
   void send_world_id(int world_id, bool *was_closed);
@@ -66,7 +67,7 @@ class ClientProtocol {
   // Recibe los datos de una viga y los retorna.
   BeamAttr recv_beam(bool *was_closed);
 
-  ///////////////FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET/////////////////
+  /////////////// FUNCIONES DE RECEPCIÓN DE MUNDO POR SOCKET ///////////////
   /////////////////////////////////////////////////////////////////////////
 
   void close_socket();

@@ -1,4 +1,5 @@
 #include "client_resource_pool.h"
+#include <utility>
 
 #define SHORT_BEAM "short_beam"
 #define SHORT_BEAM_PATH "/Images/Weapons/grds4.png"
@@ -41,8 +42,8 @@ void ResourcePool::initialize() {
   add_worm_attacking();
   add_explodables_textures();
   add_music(std::string(RESOURCES_PATH) + "/Sounds/music.wav");
-  //add_font("Vera20", "/Vera.ttf", 20);
-  //add_font("Vera12", "/Vera.ttf", 12);
+  // add_font("Vera20", "/Vera.ttf", 20);
+  // add_font("Vera12", "/Vera.ttf", 12);
 }
 
 void ResourcePool::add_texture(const std::string &texture_name, const std::string &image_path, int width, int height,
@@ -56,14 +57,14 @@ void ResourcePool::add_texture(const std::string &texture_name, const std::strin
     SDL2pp::Surface int_surface(0, src_rect.GetW(), src_rect.GetH(), 32, 0, 0, 0, 0);
     src_surface.BlitScaled(src_rect, int_surface, SDL2pp::NullOpt);
 
-    //if (!(offset_x == 0 && offset_y == 0 && offset_width == 0 && offset_height == 0)) {
+    // if (!(offset_x == 0 && offset_y == 0 && offset_width == 0 && offset_height == 0)) {
     textures_not_centered = static_cast<int>(textures_not_centered);
 
     SDL2pp::Rect dst_rect(offset_x - textures_not_centered * (i / 3), offset_y,
                           width + offset_width + textures_not_centered * (i / 3), height + offset_height);
     SDL2pp::Surface dst_surface(0, dst_rect.GetW(), dst_rect.GetH(), 32, 0, 0, 0, 0);
     int_surface.BlitScaled(dst_rect, dst_surface, SDL2pp::NullOpt);
-    //}
+    // }
 
     Uint32 color_key;
     if (back_color == LIGHT_BLUE)
@@ -77,7 +78,7 @@ void ResourcePool::add_texture(const std::string &texture_name, const std::strin
   texture_arrays[texture_name] = textures;
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_texture(const std::string &texture_name) {
+std::vector<SDL2pp::Texture *> ResourcePool::get_texture(const std::string &texture_name) const {
   try {
     return texture_arrays.at(texture_name);
   } catch (const std::out_of_range &e) {
@@ -127,7 +128,7 @@ void ResourcePool::add_explodables_textures() {
 // ======================================= GET DE TEXTURAS ==================================== //
 // ============================================================================================ //
 
-std::shared_ptr<SDL2pp::Texture> ResourcePool::get_background() {
+std::shared_ptr<SDL2pp::Texture> ResourcePool::get_background() const {
   try {
     return background;
   } catch (const std::exception &e) {
@@ -135,15 +136,15 @@ std::shared_ptr<SDL2pp::Texture> ResourcePool::get_background() {
   }
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_short_beam_texture() { return get_texture(SHORT_BEAM); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_short_beam_texture() const { return get_texture(SHORT_BEAM); }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() { return get_texture(LONG_BEAM); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() const { return get_texture(LONG_BEAM); }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() { return get_texture(WORM_WALKING); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() const { return get_texture(WORM_WALKING); }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() { return get_texture(WORM_JUMPING); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() const { return get_texture(WORM_JUMPING); }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming(WeaponType type) {
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming(WeaponType type) const {
   switch (type) {
     case BAZOOKA:
       return get_texture(WORM_AIMING_BAZ);
@@ -157,7 +158,7 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming(WeaponType type) {
   }
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_attacking(WeaponType type) {
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_attacking(WeaponType type) const {
   switch (type) {
     case BAZOOKA:
       return get_texture(WORM_AIMING_BAZ);
@@ -169,9 +170,9 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_attacking(WeaponType type)
   }
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_missile_texture() { return get_texture(MISSILE); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_missile_texture() const { return get_texture(MISSILE); }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_grenade_texture() { return get_texture(GRENADE_TX); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_grenade_texture() const { return get_texture(GRENADE_TX); }
 // ============================================================================================== //
 // ============================================================================================== //
 

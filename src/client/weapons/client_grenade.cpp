@@ -1,9 +1,11 @@
 #include "client_grenade.h"
 
 
-std::vector<SDL2pp::Texture *> Grenade::get_aim_textures(ResourcePool &pool) { return pool.get_worm_aiming(GRENADE); }
+std::vector<SDL2pp::Texture *> Grenade::get_aim_textures(const ResourcePool &pool) {
+  return pool.get_worm_aiming(GRENADE);
+}
 
-std::vector<SDL2pp::Texture *> Grenade::get_attack_textures(ResourcePool &pool) {
+std::vector<SDL2pp::Texture *> Grenade::get_attack_textures(const ResourcePool &pool) {
   return pool.get_worm_aiming(GRENADE);
 }
 

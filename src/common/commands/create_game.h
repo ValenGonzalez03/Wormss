@@ -2,8 +2,6 @@
 #define CREATE_GAME_H_
 
 #include "command.h"
-//#include "protocol.h"
-//#include "../server/server_games_handler.h"
 
 // Forward declaration de CODE_PLAYER_COMM
 namespace CODE_PLAYER_COMM {
@@ -13,14 +11,17 @@ extern uint8_t CREATE_GAME;
 class CreateGame : public Command {
  public:
   // Constructor from client side
-  explicit CreateGame() : Command(CODE_PLAYER_COMM::CREATE_GAME, 0) {}
+  CreateGame() : Command(CODE_PLAYER_COMM::CREATE_GAME, 0) {}
 
   // Constructor from server side
-  explicit CreateGame(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::CREATE_GAME, clt_id) {
+  explicit CreateGame(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
+      Command(CODE_PLAYER_COMM::CREATE_GAME, clt_id) {
     // receive(skt, was_closed);
   }
 
-  void send(Socket &skt, bool *was_closed) override { skt.sendall(&code, sizeof(code), was_closed); }
+  void send(Socket &skt, bool *was_closed) const override {
+    skt.sendall(&code, sizeof(code), was_closed);
+  }  // NOLINT(runtime/references)
 
   void receive(Socket &skt, bool *was_closed) override {}
 

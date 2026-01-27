@@ -6,6 +6,7 @@
 #include <list>
 #include <map>
 #include <vector>
+#include <utility>
 
 #include "position.h"
 #include "game_constants.h"
@@ -25,7 +26,7 @@ struct WormData {
 
  public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
-  explicit WormData() :
+  WormData() :
       player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE), current_weapon(BAZOOKA), aim_angle(0) {}
 
   explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st, WeaponType wp, float angle) :
@@ -37,7 +38,7 @@ struct WormData {
   }
 
   // Recibe la pos, la direccion, el state, etc del gusano (Lado cliente)
-  void deserialize(ClientProtocol &prot, bool *was_closed) {
+  void deserialize(ClientProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
     // Recibo el player_id
     this->player_id = prot.recv_byte(was_closed);
 
@@ -59,7 +60,7 @@ struct WormData {
   }
 
   // Envia los datos del gusano (Lado servidor)
-  void serialize(ServerProtocol &prot, bool *was_closed) {
+  void serialize(ServerProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
     // Envio el player_id
     prot.send_byte(this->player_id, was_closed);
 
@@ -81,19 +82,19 @@ struct WormData {
     prot.send_float(this->aim_angle, was_closed);
   }
 
-  uint8_t get_player_id() { return player_id; }
+  uint8_t get_player_id() const { return player_id; }
 
-  float get_pos_x() { return pos_x; }
+  float get_pos_x() const { return pos_x; }
 
-  float get_pos_y() { return pos_y; }
+  float get_pos_y() const { return pos_y; }
 
-  uint8_t get_direction() { return direction; }
+  uint8_t get_direction() const { return direction; }
 
-  WormState get_state() { return state; }
+  WormState get_state() const { return state; }
 
-  WeaponType get_weapon_selected() { return current_weapon; }
+  WeaponType get_weapon_selected() const { return current_weapon; }
 
-  float get_aim_angle() { return aim_angle; }
+  float get_aim_angle() const { return aim_angle; }
 };
 
 struct ExplodableData {
@@ -106,9 +107,8 @@ struct ExplodableData {
   uint8_t id;
 
  public:
-
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
-  explicit ExplodableData() : pos_x(0), pos_y(0), angle(0), type(WATER), direction(0), id(0) {}
+  ExplodableData() : pos_x(0), pos_y(0), angle(0), type(WATER), direction(0), id(0) {}
 
   explicit ExplodableData(float pos_x, float pos_y, float angle, BODY_TYPES type, uint8_t dir, uint8_t id) :
       pos_x(pos_x), pos_y(pos_y), angle(angle), type(type), direction(dir), id(id) {}
@@ -118,7 +118,7 @@ struct ExplodableData {
     deserialize(prot, &was_closed);
   }
 
-  void deserialize(ClientProtocol &prot, bool *was_closed) {
+  void deserialize(ClientProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
     // Recibo el id del proyectil
     this->id = prot.recv_byte(was_closed);
 
@@ -136,7 +136,7 @@ struct ExplodableData {
     this->direction = prot.recv_byte(was_closed);
   }
 
-  void serialize(ServerProtocol &prot, bool *was_closed) {
+  void serialize(ServerProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
     // Envio el id del proyectil
     prot.send_byte(id, was_closed);
 
@@ -175,9 +175,8 @@ struct ExplosionData {
   std::vector<float> rays_fraction = std::vector<float>(NUM_RAYS);
 
  public:
-
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
-  explicit ExplosionData() : pos_x(0), pos_y(0), radius(0) {}
+  ExplosionData() : pos_x(0), pos_y(0), radius(0) {}
 
   explicit ExplosionData(float pos_x, float pos_y, float radius, std::vector<float> rays) :
       pos_x(pos_x), pos_y(pos_y), radius(radius), rays_fraction(rays) {}
@@ -187,7 +186,7 @@ struct ExplosionData {
     deserialize(prot, &was_closed);
   }
 
-  void deserialize(ClientProtocol &prot, bool *was_closed) {
+  void deserialize(ClientProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
     // Recibo la position
     this->pos_x = prot.recv_float(was_closed);
     this->pos_y = prot.recv_float(was_closed);
@@ -202,7 +201,7 @@ struct ExplosionData {
     }
   }
 
-  void serialize(ServerProtocol &prot, bool *was_closed) {
+  void serialize(ServerProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
     // Envio la posicion
     prot.send_float(pos_x, was_closed);
     prot.send_float(pos_y, was_closed);
@@ -259,7 +258,7 @@ struct GameState {
     this->game_finished = static_cast<bool>(prot.recv_byte(was_closed));
   }
 
-  void serialize(ServerProtocol &prot, bool *was_closed) {
+  void serialize(ServerProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
     prot.send_byte(worms_list.size(), was_closed);
     prot.send_byte(explodables_list.size(), was_closed);
     prot.send_byte(explosions_list.size(), was_closed);
@@ -278,24 +277,24 @@ struct GameState {
     prot.send_byte(game_finished, was_closed);
   }
 
-  std::map<uint8_t, WormData> get_worms() { return worms_list; }
+  std::map<uint8_t, WormData> get_worms() const { return worms_list; }
 
-  void add_worm(WormAttr &attr) {
+  void add_worm(const WormAttr &attr) {
     WormData worm(attr.player_id, attr.pos_x, attr.pos_y, attr.direction, attr.state, attr.current_weapon,
                   attr.aim_angle);
     worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
   }
 
-  std::map<uint8_t, ExplodableData> get_explodables() { return explodables_list; }
+  std::map<uint8_t, ExplodableData> get_explodables() const { return explodables_list; }
 
-  void add_explodable(ExplodableAttr &attr) {
+  void add_explodable(const ExplodableAttr &attr) {
     ExplodableData explodable(attr.pos_x, attr.pos_y, attr.angle, attr.type, attr.direction, attr.id);
     explodables_list.insert(std::pair<uint8_t, ExplodableData>(explodable.get_id(), explodable));
   }
 
-  std::list<ExplosionData> get_explosions() { return explosions_list; }
+  std::list<ExplosionData> get_explosions() const { return explosions_list; }
 
-  void add_explosion(ExplosionAttr &attr) {
+  void add_explosion(const ExplosionAttr &attr) {
     ExplosionData explosion(attr.pos_x, attr.pos_y, attr.radius, attr.ray_fractions);
     explosions_list.push_back(explosion);
   }

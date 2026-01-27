@@ -28,7 +28,6 @@ class Camera {
   bool is_right_corner(int mouse_x, int mouse_y);
 
  public:
-
   explicit Camera(int width, int height);
 
   // Para camara libre: Verifica en cada frame si la camara se esta moviendo en alguna/s direccion/es,

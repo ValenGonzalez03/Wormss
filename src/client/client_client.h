@@ -6,6 +6,7 @@
 #include <string>
 #include <utility>
 #include <set>
+#include <memory>
 
 #include "../common/commands/command.h"
 #include "../common/constant_rate_loop.h"
@@ -39,7 +40,7 @@ class Client : public ConstantRateLoop {
   void recv_world();
 
   // Ejecuta un evento y devuelve true si se quiere cerrar el juego o false en caso contrario
-  bool execute_event(SDL_Event &event);
+  bool execute_event(SDL_Event &event);  // NOLINT(runtime/references)
 
   // Maneja el evento de comenzar a moverse al apretar alguna tecla de movimiento
   void handle_start_moving(int direction);

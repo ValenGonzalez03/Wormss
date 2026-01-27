@@ -2,8 +2,6 @@
 #define JUMP_H_
 
 #include "command.h"
-//#include "protocol.h"
-//#include "../server/server_games_handler.h"
 
 // Forward declaration de CODE_PLAYER_COMM
 namespace CODE_PLAYER_COMM {
@@ -26,7 +24,7 @@ class Jump : public Command {
     skt.recvall(&jump_type, sizeof(jump_type), was_closed);
   }
 
-  void send(Socket &skt, bool *was_closed) override {
+  void send(Socket &skt, bool *was_closed) const override {
     skt.sendall(&client_id, sizeof(client_id), was_closed);
     skt.sendall(&code, sizeof(code), was_closed);
     skt.sendall(&direction, sizeof(direction), was_closed);

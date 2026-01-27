@@ -1,7 +1,8 @@
 #include "client_worldview.h"
 #include "../../common/game_constants.h"
+#include <memory>
 
-WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera &camera, uint8_t &id) :
+WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera &camera, const uint8_t &id) :
     resource_pool(res_pool), renderer(rend), worms(), camera(camera), player_id(id) {}
 
 void WorldView::add_beam(float pos_x, float pos_y, float width, float height, float angle) {
@@ -105,7 +106,6 @@ void WorldView::add_explosion(ExplosionData data, int frame) {
 }
 
 void WorldView::render(int frame) {
-  //int cam_y = 0;
   // Renderizar fondo
   render_background();
 
@@ -135,7 +135,7 @@ void WorldView::render(int frame) {
   //       0);
 }
 
-void WorldView::update(GameState &game_state, int frame) {
+void WorldView::update(const GameState &game_state, int frame) {
   // Actualizo el estado de los gusanos
   auto worms_data = game_state.get_worms();
   for (auto &worm : worms) {
@@ -194,7 +194,7 @@ void WorldView::render_background() {
   }
 }
 
-void WorldView::render_text(WormData &worm_data) {
+void WorldView::render_text(const WormData &worm_data) {
   SDL2pp::Font font(RESOURCES_PATH "/Vera.ttf", 12);
 
   std::string text = "Pos x: " + std::to_string(worm_data.get_pos_x()) +

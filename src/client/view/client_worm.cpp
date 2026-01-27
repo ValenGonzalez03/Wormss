@@ -51,9 +51,9 @@ void Worm::assign_new_weapon(WeaponType type) {
 }
 
 void Worm::render(int frame, int camera_x, int camera_y) {
-  if (this->worm_state == MOVING)
+  if (this->worm_state == MOVING) {
     render_worm_running(frame, camera_x, camera_y);
-  else if (this->worm_state == AIMING) {
+  } else if (this->worm_state == AIMING) {
     render_worm_aiming(frame, camera_x, camera_y);
   } else if (this->worm_state == ATTACKING) {
     render_worm_attacking(frame, camera_x, camera_y);
@@ -74,16 +74,13 @@ void Worm::render_worm_idle(int frame, int camera_x, int camera_y) {
   SDL_RendererFlip flip = choose_flip_direction();
 
   auto walk_texture = resource_pool.get_worm_walking();
-  //std::cout << "LLEGO?" << std::endl;
+  // std::cout << "LLEGO?" << std::endl;
   walk_texture.front()->SetAlphaMod(255);
   walk_texture.front()->SetBlendMode(SDL_BLENDMODE_BLEND);
 
-  renderer.Copy(*walk_texture.front(), SDL2pp::NullOpt,                                       // Size
-                SDL2pp::Rect(pos_x - camera_x, pos_y - 3 - camera_y, width + 2, height + 4),  // Destination
-                0.0,                                                                          // don't rotate
-                SDL2pp::NullOpt,  // rotation center - not needed
-                flip              // horizontal flip
-  );
+  renderer.Copy(*walk_texture.front(), SDL2pp::NullOpt,
+                SDL2pp::Rect(pos_x - camera_x, pos_y - 3 - camera_y, width + 2, height + 4), 0.0, SDL2pp::NullOpt,
+                flip);
 }
 
 void Worm::render_worm_running(int frame, int camera_x, int camera_y) {
@@ -108,7 +105,7 @@ void Worm::render_worm_aiming(int frame, int camera_x, int camera_y) {
   auto aim_texture = weapon->get_aim_textures(resource_pool);
 
   auto normalized_angle = (aim_angle / M_PI_2);
-  auto frame_position = 16 + (int)(normalized_angle * ((aim_texture.size() / 2)));
+  auto frame_position = 16 + static_cast<int>(normalized_angle * ((aim_texture.size() / 2)));
   aim_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
   aim_texture[frame_position]->SetAlphaMod(255);
 
@@ -125,7 +122,7 @@ void Worm::render_worm_attacking(int frame, int camera_x, int camera_y) {
   auto attack_texture = weapon->get_attack_textures(resource_pool);
 
   auto normalized_angle = (aim_angle / M_PI_2);
-  auto frame_position = 16 + (int)(normalized_angle * ((attack_texture.size() / 2)));
+  auto frame_position = 16 + static_cast<int>(normalized_angle * ((attack_texture.size() / 2)));
   attack_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
   attack_texture[frame_position]->SetAlphaMod(255);
 
@@ -146,5 +143,5 @@ int Worm::get_width() { return width; }
 int Worm::get_height() { return height; }
 
 Worm::~Worm() {
-  //delete weapon;
+  // delete weapon;
 }

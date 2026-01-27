@@ -2,9 +2,9 @@
 #define QUEUE_H_
 
 #include <climits>
-#include <condition_variable>
+#include <condition_variable>  // NOLINT(build/c++11)
 #include <deque>
-#include <mutex>
+#include <mutex>  // NOLINT(build/c++11)
 #include <queue>
 #include <stdexcept>
 
@@ -59,7 +59,7 @@ class Queue {
     return true;
   }
 
-  bool try_pop(T &val) {
+  bool try_pop(T &val) {  // NOLINT(runtime/references)
     std::unique_lock<std::mutex> lck(mtx);
 
     if (q.empty()) {
@@ -78,7 +78,7 @@ class Queue {
     return true;
   }
 
-  bool pop_last_one(T &val) {
+  bool pop_last_one(T &val) {  // NOLINT(runtime/references)
     std::unique_lock<std::mutex> lck(mtx);
 
     if (q.empty()) {
@@ -189,7 +189,7 @@ class Queue<void *> {
     return true;
   }
 
-  bool try_pop(void *&val) {
+  bool try_pop(void *&val) {  // NOLINT(runtime/references)
     std::unique_lock<std::mutex> lck(mtx);
 
     if (q.empty()) {
@@ -208,7 +208,7 @@ class Queue<void *> {
     return true;
   }
 
-  bool pop_last_one(void *&val) {
+  bool pop_last_one(void *&val) {  // NOLINT(runtime/references)
     std::unique_lock<std::mutex> lck(mtx);
 
     if (q.empty()) {
@@ -293,13 +293,13 @@ class Queue<T *> : private Queue<void *> {
 
   bool try_push(T *const &val) { return Queue<void *>::try_push(val); }
 
-  bool try_pop(T *&val) { return Queue<void *>::try_pop((void *&)val); }
+  bool try_pop(T *&val) { return Queue<void *>::try_pop((void *&)val); }  // NOLINT(runtime/references)
 
-  bool pop_last_one(T *&val) { return Queue<void *>::pop_last_one((void *&)val); }
+  bool pop_last_one(T *&val) { return Queue<void *>::pop_last_one((void *&)val); }  // NOLINT(runtime/references)
 
   void push(T *const &val) { return Queue<void *>::push(val); }
 
-  T *pop() { return (T *)Queue<void *>::pop(); }
+  T *pop() { return (T *)Queue<void *>::pop(); }  // NOLINT(readability/casting)
 
   void close() { return Queue<void *>::close(); }
 

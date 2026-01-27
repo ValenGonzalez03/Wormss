@@ -22,15 +22,15 @@ void Explosion::render(int frame, int camera_x, int camera_y) {
   renderer.SetDrawColor(c);
   if (std::getenv("DEBUG") != NULL) {
     for (int i = 0; i < NUM_RAYS; i++) {
-      float angle_rad = (i / (float)NUM_RAYS) * 2.0f * b2_pi;
-      //std::cout << "fraction n° " << i << ": " << ray_fractions[i] << std::endl;
+      float angle_rad = (i / static_cast<float>(NUM_RAYS)) * 2.0f * b2_pi;
+      // std::cout << "fraction n° " << i << ": " << ray_fractions[i] << std::endl;
       float radius_fraction = ray_fractions[i] * radius;
       SDL2pp::Point center(pos_x - camera_x, pos_y - camera_y);
       SDL2pp::Point ray_dir(radius_fraction * sinf(angle_rad), -radius_fraction * cosf(angle_rad));
       SDL2pp::Point ray_end = (center + ray_dir);
       renderer.DrawLine(center, ray_end);
     }
-    //std::cout << std::endl;
+    // std::cout << std::endl;
   }
 }
 

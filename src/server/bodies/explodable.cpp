@@ -19,7 +19,7 @@ void Explodable::apply_initial_impulse(float initial_force, float aim_angle) {
 
 float Explodable::explosion_intersect_value(float fraction) { return fraction; }
 
-void Explodable::update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) { /* NADA */ }
+void Explodable::update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) { /* NADA */ }
 
 BodyExplosionInfo Explodable::get_explosion_info() { return BodyExplosionInfo{b2Vec2(0, 0), b2Vec2(0, 0), 0}; }
 

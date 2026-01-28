@@ -23,7 +23,7 @@ class StaticBody : public Body {
 
   virtual float explosion_intersect_value(float fraction) = 0;
 
-  virtual void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) = 0;
+  virtual void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) = 0;
 
   virtual BodyExplosionInfo get_explosion_info() = 0;
 

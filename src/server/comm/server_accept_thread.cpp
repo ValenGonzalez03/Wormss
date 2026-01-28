@@ -21,7 +21,6 @@ void Accept::run() {
       std::cout << "Pasa por el reap_dead" << std::endl;
       clients.push_back(client);
     }
-
   } catch (const std::exception &err) {
     if (is_alive) {
       std::cerr << "Something went wrong and an exception was caught: " << err.what() << "\n";
@@ -40,7 +39,7 @@ void Accept::reap_dead() {
     return false;
   };
 
-  //std::cout << "Paso por aca" << std::endl;
+  // std::cout << "Paso por aca" << std::endl;
 
   clients.erase(std::remove_if(clients.begin(), clients.end(), dead), clients.end());
 }

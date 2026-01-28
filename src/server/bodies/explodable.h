@@ -14,15 +14,14 @@ class Explodable : public DynamicBody {
   bool exploded = false;
 
  public:
-
   explicit Explodable(BodyBasicData basic_data, uint8_t direction, BodyAdvData adv_data, BODY_TYPES type,
                       b2World* world);
 
   void apply_initial_impulse(float intial_force, float shooting_angle);
 
-  float explosion_intersect_value(float fraction);
+  float explosion_intersect_value(float fraction) override;
 
-  void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction);
+  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) override;
 
   BodyExplosionInfo get_explosion_info() override;
 

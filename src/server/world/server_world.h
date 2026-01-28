@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <memory>
+#include <string>
 
 class World {
  private:
@@ -37,9 +38,9 @@ class World {
   void delete_explodables();
 
  public:
-  explicit World();
+  World();
 
-  WormBody* create_worm(const uint8_t player_id, const float spawn_x, const float spawn_y, GameConfig& config);
+  WormBody* create_worm(const uint8_t player_id, const float spawn_x, const float spawn_y, const GameConfig& config);
 
   BeamBody* create_beam(float pos_x, float pos_y, float angle, float length);
 

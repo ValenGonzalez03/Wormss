@@ -14,12 +14,12 @@ BeamBody::BeamBody(BodyBasicData basic_data, BodyAdvData adv_data, b2World* worl
 }
 
 // void BeamBody::start_contact_with(Body* another_body) {
-// 	if (another_body->get_type() == WORM) {}
+//  if (another_body->get_type() == WORM) {}
 // }
 
 float BeamBody::explosion_intersect_value(float fraction) { return fraction; }
 
-void BeamBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) { /* NADA */ }
+void BeamBody::update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) { /* NADA */ }
 
 BodyExplosionInfo BeamBody::get_explosion_info() { return BodyExplosionInfo{b2Vec2(0, 0), b2Vec2(0, 0), 0}; }
 

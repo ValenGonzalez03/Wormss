@@ -11,6 +11,7 @@
 #include <cmath>
 #include <iostream>
 #include <unistd.h>
+#include <memory>
 
 #include "../../common/commands/command.h"
 #include "../../common/constant_rate_loop.h"
@@ -40,14 +41,14 @@ class Game : public Thread {
   bool keep_playing = true;
   bool started = false;
   GameManager game_manager;
-  std::chrono::duration<float> rate = std::chrono::duration<float>((float)RATE);
+  std::chrono::duration<float> rate = std::chrono::duration<float>((float)RATE);  // NOLINT(readability/casting)
 
-  GameConfig &config;
+  const GameConfig &config;
 
  public:
-  explicit Game(uint8_t game_id, GameConfig &game_config, World world);
+  explicit Game(uint8_t game_id, const GameConfig &game_config, World world);
 
-  void add_player(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id);
+  void add_player(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id);
 
   void delete_player(const uint8_t &player_id);
 

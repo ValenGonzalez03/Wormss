@@ -7,12 +7,10 @@
 #include <stdio.h>
 #include <iostream>
 
-//class WormBody;
-
 class BeamBody : public StaticBody {
  public:
-  //explicit BeamBody(b2World* world, float pos_x, float pos_y);
-  //explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
+  // explicit BeamBody(b2World* world, float pos_x, float pos_y);
+  // explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
 
   explicit BeamBody(BodyBasicData basic_data, BodyAdvData adv_data, b2World* world);
 
@@ -28,7 +26,7 @@ class BeamBody : public StaticBody {
 
   float explosion_intersect_value(float fraction) override;
 
-  void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) override;
+  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) override;
 
   BodyExplosionInfo get_explosion_info() override;
 

@@ -7,15 +7,17 @@
 #include "worlds_reader.h"
 #include "game_config.h"
 #include <stdio.h>
+#include <list>
+#include <utility>
 
 class GameManager {
  private:
   World world;
   bool game_finished = false;
   int current_players = 0;
-  //int current_player_id;
-  //int current_worm_id;
-  //uint8_t current_turn_id = 0;
+  // int current_player_id;
+  // int current_worm_id;
+  // uint8_t current_turn_id = 0;
   int projectiles_id_counter = 0;
   std::list<uint8_t> players;
 
@@ -32,13 +34,13 @@ class GameManager {
  public:
   explicit GameManager(World world);
 
-  void initialize_game(GameConfig &game_config);
+  void initialize_game(const GameConfig &game_config);
 
   void add_player(const uint8_t &player_id);
 
   void delete_player(const uint8_t &player_id);
 
-  //void set_current_turn_id(const uint8_t &id);
+  // void set_current_turn_id(const uint8_t &id);
 
   World get_world();
 

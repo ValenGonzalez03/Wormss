@@ -5,6 +5,7 @@
 #include "../../common/game_constants.h"
 #include "../bodies/body.h"
 #include <map>
+#include <vector>
 
 struct BodyRayInfo {
   Body* body;
@@ -23,6 +24,7 @@ class Explosion {
   std::map<Body*, BodyExplosionInfo> affected_bodies;
 
   void apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_info, float blast_power);
+
  public:
   Explosion(float pos_x, float pos_y, float radius);
 
@@ -42,9 +44,9 @@ class Explosion {
 
   std::vector<float> get_fraction_rays();
 
-  //void simulate_explosion(b2Vec2 center, float blastRadius, float blastPower);
+  // void simulate_explosion(b2Vec2 center, float blastRadius, float blastPower);
 
-  //void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
+  // void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 };
 
 #endif

@@ -3,12 +3,12 @@
 
 #include "../../common/commands/create_game.h"
 #include "command_runnable_lobby.h"
+#include <memory>
 
 
 class RunnableCreateGame : public RunnableCommandLobby {
-
  public:
-  RunnableCreateGame(int clt_id, Socket &skt, bool *was_closed) :
+  RunnableCreateGame(int clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
       RunnableCommandLobby(std::make_shared<CreateGame>(clt_id, skt, was_closed)) {}
 
   void run(std::shared_ptr<Player> player) override { player->manage_create_game(); }

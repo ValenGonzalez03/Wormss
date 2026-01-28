@@ -6,7 +6,7 @@ Body::Body(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2Bo
   b2BodyDef bodyDef;
   bodyDef.type = body_type;
   bodyDef.position.Set(basic_data.pos_x, basic_data.pos_y);
-  //std::cout << "Creating body of type " << type << " with angle " << angle << std::endl;
+  // std::cout << "Creating body of type " << type << " with angle " << angle << std::endl;
   bodyDef.angle = basic_data.angle;
   body = world->CreateBody(&bodyDef);
 
@@ -25,7 +25,7 @@ Body::Body(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2Bo
 
   UserData* data = new UserData{type, this};
   body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
-};
+}
 
 void Body::start_contact_with(Body* another_body) { touch(another_body); }
 

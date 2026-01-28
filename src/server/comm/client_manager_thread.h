@@ -4,6 +4,7 @@
 #include "../../common/lib/socket.h"
 #include <atomic>
 #include <vector>
+#include <memory>
 
 #include "server_receiver_thread.h"
 #include "player_sender_thread.h"
@@ -36,13 +37,13 @@ class ClientManager : public Thread {
   bool threads_have_finished();
 
   bool has_ended();
- public:
 
+ public:
   // Constructor de la clase.
-  explicit ClientManager(Socket &&peer, GamesHandler &games_handler, uint8_t client_id);
+  explicit ClientManager(Socket &&peer, GamesHandler &games_handler, uint8_t client_id);  // NOLINT(runtime/references)
 
   // Ejecuta los hilos.
-  virtual void run() override;
+  void run() override;
 
   // Si siguen vivos, cierra los hilos.
   void kill();
@@ -50,7 +51,7 @@ class ClientManager : public Thread {
   // Joinea los hilos y cierra el socket.
   void finish();
 
-  //Devuelve true si sus hilos estan muertos. False en caso contrario.
+  // Devuelve true si sus hilos estan muertos. False en caso contrario.
   bool is_dead();
 
   void set_commands_queue_to_receiver(Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue);

@@ -17,11 +17,11 @@ void ClientManager::run() {
   try {
     receiver->start();
 
-    while (not in_game) {
+    while (!in_game) {
       if (keep_playing) {
         std::shared_ptr<RunnableCommandLobby> runnable_lobby_command;
         if (lobby_commands_queue.try_pop(runnable_lobby_command)) {
-          //std::cout << "Se ejecuto un comando de lobby" << std::endl;
+          // std::cout << "Se ejecuto un comando de lobby" << std::endl;
           std::lock_guard<std::mutex> lck(m);
           runnable_lobby_command->run(player);
           in_game = player->has_game_started();
@@ -66,11 +66,11 @@ void ClientManager::kill() {
     std::cout << "ClientHandler muere" << std::endl;
     finish();
     keep_playing = false;
-    //protocol.close_socket();
+    // protocol.close_socket();
   }
 }
 
-bool ClientManager::is_dead() { return not keep_playing; }
+bool ClientManager::is_dead() { return !keep_playing; }
 
 void ClientManager::set_commands_queue_to_receiver(Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue) {
   receiver->set_commands_queue(commands_queue);

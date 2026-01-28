@@ -5,6 +5,7 @@
 #include "../game/server_games_handler.h"
 #include "client_manager_thread.h"
 #include <list>
+#include <memory>
 
 class Accept : public Thread {
  private:
@@ -28,7 +29,7 @@ class Accept : public Thread {
   /*
    * Constructor de la clase.
    * */
-  explicit Accept(Socket &skt);
+  explicit Accept(Socket &skt);  // NOLINT(runtime/references)
 
   /*
    * Ejecuta el hilo Aceptador.

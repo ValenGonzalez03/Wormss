@@ -3,6 +3,8 @@
 
 #include <yaml-cpp/yaml.h>
 #include <iostream>
+#include <string>
+#include <vector>
 
 class GameConfig {
  private:
@@ -15,7 +17,7 @@ class GameConfig {
   }
 
  public:
-  GameConfig(const std::string& filename) {
+  explicit GameConfig(const std::string& filename) {
     try {
       YAML::Node file = YAML::LoadFile(filename);
       load_info(file);
@@ -24,9 +26,9 @@ class GameConfig {
     }
   }
 
-  float get_worm_speed() { return worm_speed; }
+  float get_worm_speed() const { return worm_speed; }
 
-  int get_worm_life() { return worm_life; }
+  int get_worm_life() const { return worm_life; }
 };
 
 #endif

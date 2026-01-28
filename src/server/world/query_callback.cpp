@@ -1,4 +1,4 @@
-//Fuente: https://www.iforce2d.net/b2dtut/world-querying
+// Fuente: https://www.iforce2d.net/b2dtut/world-querying
 
 #include "query_callback.h"
 

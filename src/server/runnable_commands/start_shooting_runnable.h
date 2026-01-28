@@ -3,15 +3,16 @@
 
 #include "../../common/commands/start_shooting.h"
 #include "command_runnable_game.h"
+#include <memory>
 
 class RunnableStartShooting : public RunnableCommandGame {
-
  public:
-  explicit RunnableStartShooting(uint8_t clt_id, Socket &skt, bool *was_closed) :
+  explicit RunnableStartShooting(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
       RunnableCommandGame(std::make_shared<StartShooting>(clt_id, skt, was_closed)) {}
 
   void run(GameManager &game_manager) override {
-    game_manager.attack(command->get_client_id(), ((StartShooting *)command.get())->get_initial_force());
+    game_manager.attack(command->get_client_id(),
+                        (reinterpret_cast<StartShooting *>(command.get()))->get_initial_force());
   }
 };
 

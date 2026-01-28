@@ -13,7 +13,7 @@ void ServerReceiver::run() {
     while (keep_playing) {
       std::unique_lock<std::mutex> lck(m);
       is_empty.wait(lck);
-      if (not in_game) {
+      if (!in_game) {
         std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby();
         lobby_commands.try_push(runnable_command);
       } else {
@@ -21,7 +21,6 @@ void ServerReceiver::run() {
         game_commands->try_push(runnable_command);
       }
     }
-
   } catch (const LibError &libError) {  // Si se cierra el skt
     keep_playing = false;
   } catch (const std::runtime_error &runtimeError) {  // Si se procesa mal un cmd

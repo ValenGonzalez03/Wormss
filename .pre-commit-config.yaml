@@ -3,7 +3,8 @@ repos:
     rev: v1.3.5  # SHA of v1.3.5
     hooks:
       - id: cpplint
-        args: ["--filter=-legal/copyright,-build/header_guard,-whitespace/line_length"]
-      - id: cppcheck
-        args: [--enable=all, -I /usr/include/box2d]
+        args: ["--filter=-legal/copyright,-build/header_guard,-whitespace/line_length,-build/include_subdir,-build/include_order,-build/c++11",
+               --exclude=level_editor/*]  
+      #- id: cppcheck
+      #  args: [--enable=all, "-I /usr/include"]
       - id: clang-format

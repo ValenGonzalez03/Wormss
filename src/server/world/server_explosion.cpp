@@ -1,4 +1,4 @@
-//Fuente: https://www.iforce2d.net/b2dtut/explosions
+// Fuente: https://www.iforce2d.net/b2dtut/explosions
 
 #include "server_explosion.h"
 #include <iostream>

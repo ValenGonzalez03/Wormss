@@ -36,20 +36,22 @@ void GamesHandler::delete_game(const uint8_t &game_id) {
   games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Game *GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id, uint8_t &world_id) {
+Game *GamesHandler::create_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id,
+                                const uint8_t &world_id) {
   std::lock_guard<std::mutex> lck(m);
   std::string world_name = worlds_map[world_id];
   World world = worlds_reader.generate_world(world_name);
-  //auto world = worlds[world_id];
+
   Game *game = new Game(games_counter, games_config, world);
   games_counter++;
   add_game(game);
+
   game->add_player(sender_queue, player_id);
   return game;
 }
 
 Game *GamesHandler::join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &game_id,
-                              uint8_t &player_id) {
+                              const uint8_t &player_id) {
   std::lock_guard<std::mutex> lck(m);
   Game *game = get_game(game_id);
   if (game == nullptr) {

@@ -18,7 +18,6 @@ class GrenadeBody : public Explodable {
   void check_grenade_in_movement();
 
  public:
-
   explicit GrenadeBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world);
 
   void update() override;

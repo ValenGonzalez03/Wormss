@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <map>
 #include <mutex>
+#include <memory>
 
 #include "../../common/commands/command.h"
 #include "../../common/game_state.h"

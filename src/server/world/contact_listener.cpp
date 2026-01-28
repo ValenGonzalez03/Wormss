@@ -2,7 +2,6 @@
 #include "../bodies/body.h"
 #include "../bodies/worm_body.h"
 #include "../bodies/beam_body.h"
-#include "../bodies/water_body.h"
 
 #include <iostream>
 
@@ -15,11 +14,11 @@ void ContactListener::BeginContact(b2Contact* contact) {
 
   if (data_A && data_B) {
     if ((!(fixt_A->IsSensor()) && data_A->type == WORM)) {
-      //std::cout << "Ignoring contact for worm A" << std::endl;
+      // std::cout << "Ignoring contact for worm A" << std::endl;
       return;
     }
     if ((!(fixt_B->IsSensor()) && data_B->type == WORM)) {
-      //std::cout << "Ignoring contact for worm B" << std::endl;
+      // std::cout << "Ignoring contact for worm B" << std::endl;
       return;
     }
     auto* body_A = reinterpret_cast<Body*>(data_A->pointer);

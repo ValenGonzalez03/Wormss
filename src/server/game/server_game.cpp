@@ -2,12 +2,12 @@
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(uint8_t game_id, GameConfig &game_config, World world) :
+Game::Game(uint8_t game_id, const GameConfig &game_config, World world) :
     game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config), game_manager(world) {}
 
-void Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, uint8_t &player_id) {
-  //player_id = players_counter;
-  //players_counter++;
+void Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id) {
+  // player_id = players_counter;
+  // players_counter++;
   broadcaster.add_queue(sender_queue, player_id);
   game_manager.add_player(player_id);
 }
@@ -24,7 +24,7 @@ void Game::charge_world() {
 
 void Game::run() {
   try {
-    std::cout << "Game of id: " << (int)game_id << " started." << std::endl;
+    std::cout << "Game of id: " << static_cast<int>(game_id) << " started." << std::endl;
 
     bool was_closed = false;
     int it = 0;
@@ -77,7 +77,7 @@ void Game::run() {
       t1 += rate_ms;
       it += 1;
     }
-    std::cout << "Game of id: " << (int)game_id << " ended." << std::endl;
+    std::cout << "Game of id: " << static_cast<int>(game_id) << " ended." << std::endl;
   } catch (const std::exception &err) {
   }
 }
@@ -115,7 +115,7 @@ void Game::turn_to_started() { started = true; }
 
 bool Game::is_started() { return started; }
 
-bool Game::is_dead() { return not keep_playing; }
+bool Game::is_dead() { return !keep_playing; }
 
 uint8_t Game::get_game_id() { return game_id; }
 

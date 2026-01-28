@@ -7,6 +7,9 @@
 #include <filesystem>
 #include <fstream>
 #include <memory>
+#include <map>
+#include <vector>
+#include <string>
 
 class WorldsReader {
  private:
@@ -47,10 +50,10 @@ class WorldsReader {
   //   worlds.push_back(world);
   // }
 
-  World read_world(std::filesystem::path& world_path);
+  World read_world(const std::filesystem::path& world_path);
 
  public:
-  explicit WorldsReader();
+  WorldsReader();
 
   World generate_world(std::string world_name);
 
@@ -61,7 +64,7 @@ class WorldsReader {
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
       try {
         YAML::Node file = YAML::LoadFile(entry.path().string());
-        //load_file_info(file, worlds);
+        // load_file_info(file, worlds);
       } catch (const std::exception& e) {
         std::cerr << "Error al cargar el archivo YAML - " << e.what() << std::endl;
       }

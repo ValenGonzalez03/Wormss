@@ -4,12 +4,13 @@
 #include "box2d/box2d.h"
 #include <algorithm>
 #include <stdio.h>
+#include <vector>
 
 #define BAT_LENGTH 3
 
 GameManager::GameManager(World world) : world(world) {}
 
-void GameManager::initialize_game(GameConfig &game_config) {
+void GameManager::initialize_game(const GameConfig &game_config) {
   int i = 0;
   std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
   for (uint8_t player_id : players) {

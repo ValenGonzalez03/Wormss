@@ -23,7 +23,7 @@ WormBody::WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, f
 void WormBody::update() {
   check_boundaries();
 
-  //std::cout << "jump_timeout: " << jump_timeout << std::endl;
+  // std::cout << "jump_timeout: " << jump_timeout << std::endl;
   if (jump_timeout > 0) {
     jump_timeout--;
   }
@@ -34,7 +34,7 @@ void WormBody::update() {
       move_right();
     }
   } else if (state == AIMING) {
-    //std::cout << aiming_angle << std::endl;
+    // std::cout << aiming_angle << std::endl;
     if (aim_direction == UP) {
       aim_up();
     } else {
@@ -86,7 +86,7 @@ void WormBody::jump(const uint8_t& dir, const uint8_t& jump_type) {
   if (num_foot_contacts <= 0 || jump_timeout > 0)
     return;
   state = JUMPING;
-  //direction = dir;
+  // direction = dir;
   if (jump_type == JUMP_BACKWARD) {
     jump_backward();
   } else {
@@ -174,7 +174,7 @@ void WormBody::set_worm_to_attack() { state = ATTACKING; }
 
 float WormBody::explosion_intersect_value(float fraction) { return 1; }
 
-void WormBody::update_explosion_ray_contact(b2Vec2& point, b2Vec2& center_expl, float fraction) {
+void WormBody::update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& center_expl, float fraction) {
   num_ray_contacts++;
   b2Vec2 ray_direction = point - center_expl;
   ray_direction.Normalize();

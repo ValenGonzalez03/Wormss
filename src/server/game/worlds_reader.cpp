@@ -20,7 +20,7 @@ WorldsReader::WorldsReader() {
   }
 }
 
-World WorldsReader::read_world(std::filesystem::path& world_path) {
+World WorldsReader::read_world(const std::filesystem::path& world_path) {
   World world;
 
   YAML::Node file = YAML::LoadFile(world_path.string());

@@ -55,7 +55,7 @@ std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
   uint8_t code;
   uint8_t client_id = 0;
   skt.recvall(&code, sizeof(code), &was_closed);
-  //std::cout << "Codigo leido: " << (int)code << std::endl;
+  // std::cout << "Codigo leido: " << (int)code << std::endl;
   if (was_closed) {
     throw LibError(errno, "Socket is closed.");
   }
@@ -95,12 +95,14 @@ void ServerProtocol::send_string(std::string str, bool *was_closed) {
   skt.sendall(str.c_str(), str.size(), was_closed);
 }
 
+#define MAX_BUFFER 1000
+
 std::string ServerProtocol::recv_string(bool *was_closed) {
   uint16_t string_length;
   skt.recvall(&string_length, sizeof(string_length), was_closed);
   uint16_t string_length_be = ntohs(string_length);
   std::cout << "str_length: " << string_length_be << std::endl;
-  char buffer[string_length_be + 1];
+  char buffer[string_length_be + 1];  // NOLINT(runtime/arrays)
   skt.recvall(buffer, string_length_be, was_closed);
   buffer[string_length] = '\0';
   return std::string(buffer);
@@ -109,7 +111,7 @@ std::string ServerProtocol::recv_string(bool *was_closed) {
 void ServerProtocol::send_byte(const uint8_t n, bool *was_closed) { skt.sendall(&n, sizeof(n), was_closed); }
 
 void ServerProtocol::send_float(float n, bool *was_closed) {
-  int16_t number = int(n * 100);
+  int16_t number = static_cast<int>(n * 100);
   int16_t number_be = htons(number);
   skt.sendall(&number_be, sizeof(number_be), was_closed);
 }
@@ -118,7 +120,7 @@ void ServerProtocol::send_bool(bool b, bool *was_closed) { skt.sendall(&b, sizeo
 
 
 //////////////////////////////////////////////////////////////////////
-///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
+/////////// FUNCIONES DE ENVÍO DE MUNDO POR SOCKET //////////////////
 
 void ServerProtocol::send_beam(BeamAttr beam_attr, bool *was_closed) {
   send_float(beam_attr.pos_x, was_closed);
@@ -142,5 +144,5 @@ void ServerProtocol::send_worlds_map(const std::map<uint8_t, std::string> &world
   }
 }
 
-///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
+/////////// FUNCIONES DE ENVÍO DE MUNDO POR SOCKET ////////////////////
 //////////////////////////////////////////////////////////////////////

@@ -10,7 +10,7 @@ Player::Player(uint8_t player_id, Game* game, GamesHandler& games_handler, Playe
 
 void Player::initialize_game() {
   if (!game) {
-    //Deberia lanzar una excepcion.
+    // Deberia lanzar una excepcion.
     std::cout << "No existe juego" << std::endl;
     return;
   }
@@ -59,11 +59,12 @@ void Player::manage_create_game() {
   this->game = game;
   has_game_assigned = true;
 
-  //std::cout << "Cantidad Worms en juego: " << this->game->get_world().get_worms().size() << std::endl;
+  // std::cout << "Cantidad Worms en juego: " << this->game->get_world().get_worms().size() << std::endl;
 
   sender.send_id(game->get_game_id());  // Ahora mando el game_id despues (Para tener en cuenta en el cliente)
   sender.send_world(game->get_world());
-  std::cout << "Client of id: " << (int)player_id << " created game id: " << int(game->get_game_id()) << std::endl;
+  std::cout << "Client of id: " << static_cast<int>(player_id)
+            << " created game id: " << static_cast<int>(game->get_game_id()) << std::endl;
 }
 
 void Player::manage_join_game(uint8_t game_id) {
@@ -71,21 +72,22 @@ void Player::manage_join_game(uint8_t game_id) {
   protocol.send_byte(player_id, &was_closed);
 
   Game* game = games_handler.join_game(sender_queue, game_id, player_id);
-  std::cout << "Client of id: " << (int)player_id << " joined game id: " << int(game_id) << std::endl;
+  std::cout << "Client of id: " << static_cast<int>(player_id) << " joined game id: " << static_cast<int>(game_id)
+            << std::endl;
   sender.send_world(game->get_world());
 
   this->game = game;
-  //in_game = true;
-  //sender.start();
+  // in_game = true;
+  // sender.start();
 }
 
 void Player::manage_start_game() {
   bool was_closed = false;
   initialize_game();
   sender.start();
-  while (not protocol.recv_client_ready(&was_closed)) {
-    ;
+  while (!protocol.recv_client_ready(&was_closed)) {
   }
   games_handler.start_game(get_game_id(), player_id);
-  std::cout << "Client of id: " << (int)player_id << " started game of id: " << (int)get_game_id() << std::endl;
+  std::cout << "Client of id: " << static_cast<int>(player_id)
+            << " started game of id: " << static_cast<int>(get_game_id()) << std::endl;
 }

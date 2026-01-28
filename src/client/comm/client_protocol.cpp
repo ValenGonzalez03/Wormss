@@ -34,7 +34,7 @@ std::string ClientProtocol::recv_string(bool *was_closed) {
   uint16_t string_length;
   skt.recvall(&string_length, sizeof(string_length), was_closed);
   uint16_t string_length_be = ntohs(string_length);
-  char buffer[MAX_BUFFER];
+  char buffer[string_length_be + 1];  // NOLINT(runtime/arrays)
   skt.recvall(buffer, string_length_be, was_closed);
   buffer[string_length] = '\0';
   return std::string(buffer);

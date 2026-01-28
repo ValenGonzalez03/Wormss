@@ -1,5 +1,6 @@
 #include "player_sender_thread.h"
 #include <arpa/inet.h>
+#include <list>
 
 PlayerSender::PlayerSender(ServerProtocol &protocol, std::shared_ptr<Queue<GameState>> sender_queue,
                            bool &keep_playing) :
@@ -12,13 +13,13 @@ void PlayerSender::run() {
       GameState game_state;
       if (sender_queue->try_pop(game_state)) {
         game_state.serialize(protocol, &was_closed);
-        //protocol.send_game_state(game_state);
+        // protocol.send_game_state(game_state);
       }
     }
     GameState game_state;
     while (sender_queue->try_pop(game_state)) {
       game_state.serialize(protocol, &was_closed);
-      //protocol.send_game_state(game_state);
+      // protocol.send_game_state(game_state);
     }
   } catch (const std::exception &err) {
   }
@@ -46,10 +47,10 @@ void PlayerSender::send_world(World world) {
 
   for (auto &beam : beams) {
     BeamAttr attr = beam->get_attr();
-    //std::cout << "Sending beam with angle: " << attr.angle << std::endl;
+    // std::cout << "Sending beam with angle: " << attr.angle << std::endl;
     protocol.send_beam(attr, &was_closed);
   }
-  //protocol.send_world(world);
+  // protocol.send_world(world);
 }
 
 bool PlayerSender::has_started() { return is_alive(); }

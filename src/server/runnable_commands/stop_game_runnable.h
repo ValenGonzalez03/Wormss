@@ -3,11 +3,11 @@
 
 #include "../../common/commands/stop_game.h"
 #include "command_runnable_game.h"
+#include <memory>
 
 class RunnableStopGame : public RunnableCommandGame {
-
  public:
-  RunnableStopGame(uint8_t clt_id, Socket &skt, bool *was_closed) :
+  RunnableStopGame(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
       RunnableCommandGame(std::make_shared<StopGame>(clt_id, skt, was_closed)) {}
 
   void run(GameManager &game_manager) override { game_manager.set_game_finished(true); }

@@ -2,15 +2,15 @@
 #define RUNNABLE_COMMAND_GAME_H_
 
 #include "command_runnable.h"
+#include <memory>
 
 class GameManager;
 
 class RunnableCommandGame : public RunnableCommand {
-
  public:
-  RunnableCommandGame(std::shared_ptr<Command> command) : RunnableCommand(command) {}
+  explicit RunnableCommandGame(std::shared_ptr<Command> command) : RunnableCommand(command) {}
 
-  virtual void run(GameManager &game_manager) = 0;
+  virtual void run(GameManager &game_manager) = 0;  // NOLINT(runtime/references)
 };
 
 #endif

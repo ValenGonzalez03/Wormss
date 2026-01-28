@@ -56,11 +56,11 @@ class Body {
 
   virtual float explosion_intersect_value(float fraction) = 0;
 
-  virtual void update_explosion_ray_contact(b2Vec2& point, b2Vec2& normal, float fraction) = 0;
+  virtual void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) = 0;
 
   virtual BodyExplosionInfo get_explosion_info() = 0;
 
-  //b2Body* get_body();
+  // b2Body* get_body();
 
   uint8_t get_id();
 
@@ -79,7 +79,7 @@ class Body {
   virtual BODY_TYPES get_type() = 0;
 
   bool is_affected_by_explosions();
-  //virtual void start_contact_with(Weapon* weamon) = 0;
+  // virtual void start_contact_with(Weapon* weamon) = 0;
 
   Body(const Body&) = delete;
   Body& operator=(const Body&) = delete;

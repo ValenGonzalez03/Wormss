@@ -16,11 +16,11 @@ BeamBody* World::create_beam(float pos_x, float pos_y, float angle, float length
   BeamBody* beam = new BeamBody(basic_data, adv_data, world.get());
 
   beams.push_back(beam);
-  //beam->print_beam();
+  // beam->print_beam();
   return beam;
 }
 
-WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn_y, GameConfig& config) {
+WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn_y, const GameConfig& config) {
   BodyBasicData basic_data{player_id, spawn_x, spawn_y, 0.0f, WORM_WIDTH, WORM_HEIGHT};
   BodyAdvData adv_data{1.0f, 0.2f, WORM_CATEGORY, BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY};
   WormBody* worm = new WormBody(basic_data, adv_data, config.get_worm_life(), config.get_worm_speed(), world.get());
@@ -38,7 +38,7 @@ MissileBody* World::create_missile(uint8_t id, float pos_x, float pos_y, float a
 
   missile->apply_initial_impulse(initial_force, angle);
   explodables.push_back(missile);
-  //std::cout << "Angle: " << angle << "  Direction: " << (int)direction << "  Initial force: " << initial_force << std::endl;
+  // std::cout << "Angle: " << angle << "  Direction: " << (int)direction << "  Initial force: " << initial_force << std::endl;
   return missile;
 }
 
@@ -55,7 +55,7 @@ GrenadeBody* World::create_grenade(uint8_t id, float pos_x, float pos_y, float a
 void World::create_explosion(float pos_x, float pos_y) {
   Explosion explosion(pos_x, pos_y, EXPLOSION_RADIUS);
   for (int i = 0; i < NUM_RAYS; i++) {
-    float angle_rad = (i / (float)NUM_RAYS) * 2.0f * b2_pi;
+    float angle_rad = (i / static_cast<float>(NUM_RAYS)) * 2.0f * b2_pi;
     b2Vec2 center(pos_x, pos_y);
     b2Vec2 ray_dir(EXPLOSION_RADIUS * sinf(angle_rad), EXPLOSION_RADIUS * cosf(angle_rad));
     b2Vec2 ray_end = center + ray_dir;
@@ -63,7 +63,7 @@ void World::create_explosion(float pos_x, float pos_y) {
     ExplosionCallback callback(i, explosion);
     world->RayCast(&callback, center, ray_end);
 
-    //std::cout << "Ray fraction n° " << i << ": " << callback.get_ray_fraction() << std::endl;
+    // std::cout << "Ray fraction n° " << i << ": " << callback.get_ray_fraction() << std::endl;
     explosion.update_ray_fraction(i, callback.get_ray_fraction());
     callback.evaluate_contact_for_bodies();
   }

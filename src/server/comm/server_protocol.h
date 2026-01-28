@@ -7,6 +7,8 @@
 #include <memory>
 #include <utility>
 #include <map>
+#include <vector>
+#include <string>
 
 #include "../../common/commands/command.h"
 #include "../../common/game_constants.h"
@@ -14,7 +16,6 @@
 #include "../../common/lib/socket.h"
 
 #include "../runnable_commands/command_runnable_game.h"
-//#include "runnable_commands/command_runnable_lobby.h"
 
 class RunnableCommandLobby;
 
@@ -56,7 +57,7 @@ class ServerProtocol {
   void send_bool(bool b, bool *was_closed);
 
   //////////////////////////////////////////////////////////////////////
-  ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
+  /////////// FUNCIONES DE ENVÍO DE MUNDO POR SOCKET /////////////////////
 
   // Envía las características de una viga
   // (pos_x, pos_y, angle, width)
@@ -69,7 +70,7 @@ class ServerProtocol {
   // mundos y sus nombres por socket
   void send_worlds_map(const std::map<uint8_t, std::string> &worlds_map, bool *was_closed);
 
-  ///////////FUNCIONES DE ENVÍO DE MUNDO POR SOCKET/////////////////////
+  /////////// FUNCIONES DE ENVÍO DE MUNDO POR SOCKET /////////////////////
   //////////////////////////////////////////////////////////////////////
 
   void close_socket();

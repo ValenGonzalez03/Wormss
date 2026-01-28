@@ -7,6 +7,9 @@
 #include "../../common/lib/thread.h"
 #include "../world/server_world.h"
 #include "server_protocol.h"
+#include <map>
+#include <memory>
+#include <string>
 
 class PlayerSender : public Thread {
  private:
@@ -15,10 +18,10 @@ class PlayerSender : public Thread {
   bool &keep_playing;
 
  public:
-  /*
-   * Constructor de la clase.
-   * */
-  explicit PlayerSender(ServerProtocol &protocol, std::shared_ptr<Queue<GameState>> sender_queue, bool &keep_playing);
+  // Constructor de la clase.
+  explicit PlayerSender(ServerProtocol &protocol,                        // NOLINT(runtime/references)
+                        std::shared_ptr<Queue<GameState>> sender_queue,  // NOLINT(runtime/references)
+                        bool &keep_playing);                             // NOLINT(runtime/references)
 
   void send_id(const uint8_t id);
 
@@ -30,10 +33,8 @@ class PlayerSender : public Thread {
 
   bool has_started();
 
-  /*
-   * Ejecuta el loop del hilo Sender.
-   * */
-  virtual void run() override;
+  // Ejecuta el loop del hilo Sender.
+  void run() override;
 
   ~PlayerSender();
 

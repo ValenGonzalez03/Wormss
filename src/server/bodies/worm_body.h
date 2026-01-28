@@ -41,7 +41,7 @@ class WormBody : public DynamicBody {
   void apply_vertical_impulse(float jump_speed);
 
  public:
-  //explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
+  // explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
 
   explicit WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, float vel, b2World* world);
 
@@ -90,7 +90,7 @@ class WormBody : public DynamicBody {
 
   float explosion_intersect_value(float fraction) override;
 
-  void update_explosion_ray_contact(b2Vec2& point, b2Vec2& center_expl, float fraction) override;
+  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& center_expl, float fraction) override;
 
   BodyExplosionInfo get_explosion_info() override;
 

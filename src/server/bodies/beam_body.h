@@ -12,7 +12,7 @@ class BeamBody : public StaticBody {
   // explicit BeamBody(b2World* world, float pos_x, float pos_y);
   // explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
 
-  explicit BeamBody(BodyBasicData basic_data, BodyAdvData adv_data, b2World* world);
+  explicit BeamBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, b2World* world);
 
   void touch_worm(WormBody* worm) override;
   void touch_beam(BeamBody* beam) override;

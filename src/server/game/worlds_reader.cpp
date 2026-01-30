@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <memory>
+#include <algorithm>
 
 WorldsReader::WorldsReader() {
   std::filesystem::path root_directory = std::filesystem::path(RESOURCES_PATH) / "Worlds";
@@ -54,7 +55,7 @@ World WorldsReader::read_world(const std::filesystem::path& world_path) {
   return world;
 }
 
-World WorldsReader::generate_world(std::string world_name) {
+World WorldsReader::generate_world(const std::string& world_name) {
   World world;
   auto world_path = world_paths[world_name];
   try {
@@ -68,8 +69,7 @@ World WorldsReader::generate_world(std::string world_name) {
 
 std::vector<std::string> WorldsReader::get_world_names() {
   std::vector<std::string> world_names;
-  for (auto pair : world_paths) {
-    world_names.push_back(pair.first);
-  }
+  std::transform(world_paths.begin(), world_paths.end(), std::back_inserter(world_names),
+                 [](const auto& pair) { return pair.first; });
   return world_names;
 }

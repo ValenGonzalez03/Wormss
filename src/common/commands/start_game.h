@@ -17,7 +17,7 @@ class StartGame : public Command {
 
   // Constructor from server side
   explicit StartGame(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::START_GAME, clt_id) {
-    receive(skt, was_closed);
+    skt.recvall(&game_id, sizeof(game_id), was_closed);
   }
 
   void send(Socket &skt, bool *was_closed) const override {

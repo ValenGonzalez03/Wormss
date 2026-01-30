@@ -103,7 +103,7 @@ class ResourcePool {
   std::shared_ptr<SDL2pp::Texture> get_background() const;
 
   // Load music
-  void add_music(std::string absolute_path);
+  void add_music(const std::string &absolute_path);
 
   void play_music();
 

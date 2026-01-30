@@ -13,7 +13,7 @@ void WorldView::add_beam(float pos_x, float pos_y, float width, float height, fl
 
   float angle_deg = angle * (180.0f / M_PI);
 
-  std::vector<SDL2pp::Texture *> beam_texture = resource_pool.get_long_beam_texture();
+  std::vector<SDL2pp::Texture *> beam_texture;
   if (width == 6) {
     beam_texture = resource_pool.get_long_beam_texture();
   } else {
@@ -141,7 +141,12 @@ void WorldView::update(const GameState &game_state, int frame) {
   for (auto &worm : worms) {
     worm.second.update(worms_data[worm.second.get_id()]);
   }
+
   // Actualizo el estado de la camara
+  auto worm_result = worms.find(player_id);
+  if (worm_result == worms.end()) {
+    throw std::runtime_error("Id del jugador no encontrado en los gusanos");
+  }
   auto player_worm = (worms.find(player_id))->second;
   camera.update(player_worm.get_pos_x(), player_worm.get_pos_y(), player_worm.get_width(), player_worm.get_height());
 
@@ -171,7 +176,7 @@ void WorldView::update(const GameState &game_state, int frame) {
   // Actualizo el estado de las explosiones
   explosions.clear();
   auto explosions_data = game_state.get_explosions();
-  for (auto data : explosions_data) {
+  for (const auto &data : explosions_data) {
     add_explosion(data, frame);
   }
 }

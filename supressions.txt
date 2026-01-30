@@ -1,0 +1,5 @@
+*:src/common/lib/liberror.cpp
+*:src/common/lib/resolver.cpp
+*:src/common/lib/resolvererror.cpp
+*:src/common/lib/socket.cpp
+

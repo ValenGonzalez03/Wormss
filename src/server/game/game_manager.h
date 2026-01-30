@@ -32,7 +32,7 @@ class GameManager {
   void use_grenade(WormBody *worm, float initial_force);
 
  public:
-  explicit GameManager(World world);
+  explicit GameManager(const World &world);
 
   void initialize_game(const GameConfig &game_config);
 

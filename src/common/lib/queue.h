@@ -119,6 +119,7 @@ class Queue {
     q.push(val);
   }
 
+  // cppcheck-suppress [duplInheritedMember]
   T pop() {
     std::unique_lock<std::mutex> lck(mtx);
 
@@ -139,6 +140,7 @@ class Queue {
     return val;
   }
 
+  // cppcheck-suppress [duplInheritedMember]
   void close() {
     std::unique_lock<std::mutex> lck(mtx);
 
@@ -250,6 +252,7 @@ class Queue<void *> {
     q.push(val);
   }
 
+  // cppcheck-suppress [duplInheritedMember]
   void *pop() {
     std::unique_lock<std::mutex> lck(mtx);
 
@@ -293,14 +296,20 @@ class Queue<T *> : private Queue<void *> {
 
   bool try_push(T *const &val) { return Queue<void *>::try_push(val); }
 
-  bool try_pop(T *&val) { return Queue<void *>::try_pop((void *&)val); }  // NOLINT(runtime/references)
+  bool try_pop(T *&val) {  // NOLINT(runtime/references)
+    return Queue<void *>::try_pop(reinterpret_cast<void *&>(val));
+  }
 
-  bool pop_last_one(T *&val) { return Queue<void *>::pop_last_one((void *&)val); }  // NOLINT(runtime/references)
+  bool pop_last_one(T *&val) {  // NOLINT(runtime/references)
+    return Queue<void *>::pop_last_one(reinterpret_cast<void *&>(val));
+  }
 
   void push(T *const &val) { return Queue<void *>::push(val); }
 
+  // cppcheck-suppress [duplInheritedMember]
   T *pop() { return (T *)Queue<void *>::pop(); }  // NOLINT(readability/casting)
 
+  // cppcheck-suppress [duplInheritedMember]
   void close() { return Queue<void *>::close(); }
 
  private:

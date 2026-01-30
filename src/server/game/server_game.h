@@ -46,7 +46,7 @@ class Game : public Thread {
   const GameConfig &config;
 
  public:
-  explicit Game(uint8_t game_id, const GameConfig &game_config, World world);
+  explicit Game(uint8_t game_id, const GameConfig &game_config, const World &world);
 
   void add_player(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id);
 

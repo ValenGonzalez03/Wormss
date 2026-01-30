@@ -2,7 +2,7 @@
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(uint8_t game_id, const GameConfig &game_config, World world) :
+Game::Game(uint8_t game_id, const GameConfig &game_config, const World &world) :
     game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config), game_manager(world) {}
 
 void Game::add_player(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id) {
@@ -26,7 +26,7 @@ void Game::run() {
   try {
     std::cout << "Game of id: " << static_cast<int>(game_id) << " started." << std::endl;
 
-    bool was_closed = false;
+    // bool was_closed = false;
     int it = 0;
     auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     auto start_turn_time = std::chrono::steady_clock::now();

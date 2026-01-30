@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     client.join_threads();
     std::cout << "Cliente se desconectó exitosamente" << std::endl;
 
-    return SUCCESS;
+    return result;
   } catch (const std::exception &err) {
     std::cerr << "Something went wrong and an exception was caught: " << err.what() << "\n";
     return ERROR;

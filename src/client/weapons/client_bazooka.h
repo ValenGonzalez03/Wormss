@@ -5,9 +5,6 @@
 #include <vector>
 
 class Bazooka : public Weapon {
- private:
-  WeaponType type;
-
  public:
   explicit Bazooka(WeaponType type) : Weapon(type) {}
 

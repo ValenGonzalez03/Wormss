@@ -178,7 +178,7 @@ struct ExplosionData {
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   ExplosionData() : pos_x(0), pos_y(0), radius(0) {}
 
-  explicit ExplosionData(float pos_x, float pos_y, float radius, std::vector<float> rays) :
+  explicit ExplosionData(float pos_x, float pos_y, float radius, const std::vector<float> &rays) :
       pos_x(pos_x), pos_y(pos_y), radius(radius), rays_fraction(rays) {}
 
   explicit ExplosionData(ClientProtocol &prot) : pos_x(0), pos_y(0), radius(0) {
@@ -274,7 +274,7 @@ struct GameState {
     }
 
     uint8_t finished = static_cast<uint8_t>(this->game_finished);
-    prot.send_byte(game_finished, was_closed);
+    prot.send_byte(finished, was_closed);
   }
 
   std::map<uint8_t, WormData> get_worms() const { return worms_list; }

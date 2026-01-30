@@ -14,7 +14,7 @@ class Explodable : public DynamicBody {
   bool exploded = false;
 
  public:
-  explicit Explodable(BodyBasicData basic_data, uint8_t direction, BodyAdvData adv_data, BODY_TYPES type,
+  explicit Explodable(const BodyBasicData& basic_data, uint8_t direction, const BodyAdvData& adv_data, BODY_TYPES type,
                       b2World* world);
 
   void apply_initial_impulse(float intial_force, float shooting_angle);
@@ -27,25 +27,23 @@ class Explodable : public DynamicBody {
 
   uint8_t get_direction();
 
-  uint8_t get_id();
-
   virtual void update() = 0;
 
-  virtual void touch_worm(WormBody* worm) = 0;
-  virtual void touch_beam(BeamBody* beam) = 0;
-  virtual void touch_missile(MissileBody* missile) = 0;
-  virtual void touch_grenade(GrenadeBody* grenade) = 0;
+  void touch_worm(WormBody* worm) override = 0;
+  void touch_beam(BeamBody* beam) override = 0;
+  void touch_missile(MissileBody* missile) override = 0;
+  void touch_grenade(GrenadeBody* grenade) override = 0;
 
-  virtual void stop_touching_worm(WormBody* worm) = 0;
-  virtual void stop_touching_beam(BeamBody* beam) = 0;
-  virtual void stop_touching_missile(MissileBody* missile) = 0;
-  virtual void stop_touching_grenade(GrenadeBody* grenade) = 0;
+  void stop_touching_worm(WormBody* worm) override = 0;
+  void stop_touching_beam(BeamBody* beam) override = 0;
+  void stop_touching_missile(MissileBody* missile) override = 0;
+  void stop_touching_grenade(GrenadeBody* grenade) override = 0;
 
   void explode();
 
   bool has_exploded();
 
-  virtual BODY_TYPES get_type() = 0;
+  BODY_TYPES get_type() override = 0;
 
   ~Explodable();
 

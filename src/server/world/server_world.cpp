@@ -81,10 +81,11 @@ void World::step(float timeStep, int32 velocityIterations, int32 positionIterati
 }
 
 WormBody* World::get_worm(const uint8_t& player_id) {
-  for (auto it = worms.begin(); it != worms.end(); ++it) {
-    if ((*it)->get_id() == player_id) {
-      return (*it);
-    }
+  auto it =
+      std::find_if(worms.begin(), worms.end(), [player_id](WormBody* worm) { return worm->get_id() == player_id; });
+
+  if (it != worms.end()) {
+    return *it;
   }
   return nullptr;
 }
@@ -104,7 +105,7 @@ void World::update_explodables() {
       std::cout << "KABOOM" << std::endl;
     } else {
       (*it)->update();
-      it++;
+      ++it;
     }
   }
 }
@@ -115,7 +116,7 @@ void World::update_explosions() {
       it = explosions.erase(it);
     } else {
       (it)->update();
-      it++;
+      ++it;
     }
   }
 }

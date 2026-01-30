@@ -20,7 +20,7 @@ class WormBody : public DynamicBody {
   WeaponType current_weapon = BAZOOKA;
   uint8_t direction = RIGHT;
 
-  uint8_t aim_direction;
+  uint8_t aim_direction = UP;
   float aiming_angle = 0;
 
   int num_foot_contacts = 0;
@@ -43,7 +43,8 @@ class WormBody : public DynamicBody {
  public:
   // explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
 
-  explicit WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, float vel, b2World* world);
+  explicit WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, int health, float vel,
+                    b2World* world);
 
   void update();
 

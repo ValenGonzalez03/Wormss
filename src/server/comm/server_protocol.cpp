@@ -18,54 +18,52 @@ class RunnableCommandLobby;
 
 ServerProtocol::ServerProtocol(Socket &&socket) : skt(std::move(socket)) {}
 
-std::shared_ptr<RunnableCommandGame> ServerProtocol::process_command() {
-  bool was_closed = false;
+std::shared_ptr<RunnableCommandGame> ServerProtocol::process_command(bool *was_closed) {
   uint8_t code;
   uint8_t client_id = 0;
-  skt.recvall(&client_id, sizeof(client_id), &was_closed);
-  skt.recvall(&code, sizeof(code), &was_closed);
+  skt.recvall(&client_id, sizeof(client_id), was_closed);
+  skt.recvall(&code, sizeof(code), was_closed);
 
-  if (was_closed) {
+  if (*was_closed) {
     throw LibError(errno, "Socket is closed.");
   }
 
   if (code == CODE_PLAYER_COMM::START_MOVING) {
-    return std::make_shared<RunnableStartMoving>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableStartMoving>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_MOVING) {
-    return std::make_shared<RunnableStopMoving>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableStopMoving>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::JUMP) {
-    return std::make_shared<RunnableJump>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableJump>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::START_AIMING) {
-    return std::make_shared<RunnableStartAiming>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableStartAiming>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_AIMING) {
-    return std::make_shared<RunnableStopAiming>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableStopAiming>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::CHANGE_WEAPON) {
-    return std::make_shared<RunnableChangeWeapon>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableChangeWeapon>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::START_SHOOTING) {
-    return std::make_shared<RunnableStartShooting>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableStartShooting>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_GAME) {
-    return std::make_shared<RunnableStopGame>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableStopGame>(client_id, skt, was_closed);
   } else {
     throw std::runtime_error("Error de comando de juego");
   }
 }
 
-std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby() {
-  bool was_closed = false;
+std::shared_ptr<RunnableCommandLobby> ServerProtocol::process_command_lobby(bool *was_closed) {
   uint8_t code;
   uint8_t client_id = 0;
-  skt.recvall(&code, sizeof(code), &was_closed);
+  skt.recvall(&code, sizeof(code), was_closed);
   // std::cout << "Codigo leido: " << (int)code << std::endl;
-  if (was_closed) {
+  if (*was_closed) {
     throw LibError(errno, "Socket is closed.");
   }
 
   if (code == CODE_PLAYER_COMM::CREATE_GAME) {
-    return std::make_shared<RunnableCreateGame>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableCreateGame>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::JOIN_GAME) {
-    return std::make_shared<RunnableJoinGame>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableJoinGame>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::START_GAME) {
-    return std::make_shared<RunnableStartGame>(client_id, skt, &was_closed);
+    return std::make_shared<RunnableStartGame>(client_id, skt, was_closed);
   } else {
     throw std::runtime_error("Error de comando de lobby");
   }
@@ -88,7 +86,7 @@ int ServerProtocol::recv_world_id(bool *was_closed) {
   return id;
 }
 
-void ServerProtocol::send_string(std::string str, bool *was_closed) {
+void ServerProtocol::send_string(const std::string &str, bool *was_closed) {
   uint16_t string_length = str.size();
   uint16_t string_length_be = ntohs(string_length);
   skt.sendall(&string_length_be, sizeof(string_length_be), was_closed);
@@ -129,7 +127,7 @@ void ServerProtocol::send_beam(BeamAttr beam_attr, bool *was_closed) {
   send_float(beam_attr.width, was_closed);
 }
 
-void ServerProtocol::send_spawn_points(std::vector<float> spawn_point, bool *was_closed) {
+void ServerProtocol::send_spawn_points(const std::vector<float> &spawn_point, bool *was_closed) {
   send_float(spawn_point[0], was_closed);
   send_float(spawn_point[1], was_closed);
 }
@@ -138,7 +136,7 @@ void ServerProtocol::send_worlds_map(const std::map<uint8_t, std::string> &world
   uint16_t worlds_number = worlds_map.size();
   uint16_t worlds_number_be = htons(worlds_number);
   skt.sendall(&worlds_number_be, sizeof(worlds_number_be), was_closed);
-  for (auto &pair : worlds_map) {
+  for (const auto &pair : worlds_map) {
     send_byte(pair.first, was_closed);     // Envio id del mundo
     send_string(pair.second, was_closed);  // Envio nombre del mundo
   }

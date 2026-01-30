@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-Worm::Worm(int id, int pos_x, int pos_y, int width, int height, float aim_angle, uint8_t direction,
+Worm::Worm(uint8_t id, int pos_x, int pos_y, int width, int height, float aim_angle, uint8_t direction,
            WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool) :
     id(id), pos_x(pos_x), pos_y(pos_y), width(width), height(height), aim_angle(aim_angle), direction(direction),
     worm_state(worm_state), resource_pool(res_pool), renderer(rend) {
@@ -33,7 +33,9 @@ void Worm::update_weapon_selected(WeaponType type) {
 }
 
 void Worm::assign_new_weapon(WeaponType type) {
-  delete weapon;
+  if (weapon) {
+    delete weapon;
+  }
 
   switch (type) {
     case BAZOOKA:

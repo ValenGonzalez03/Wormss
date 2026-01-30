@@ -197,7 +197,7 @@ std::shared_ptr<SDL2pp::Font> ResourcePool::get_font(const std::string &font_nam
   return it->second;
 }
 
-void ResourcePool::add_music(std::string absolute_path) {
+void ResourcePool::add_music(const std::string &absolute_path) {
   gMusic = Mix_LoadMUS((absolute_path).c_str());
   if (gMusic == NULL) {
     throw std::runtime_error("Failed to load music!: Incorrect path");

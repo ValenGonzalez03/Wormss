@@ -25,7 +25,7 @@ const float RATE = static_cast<float>(1.0 / 60.0);
 
 Client::Client(ClientProtocol &&prot, uint8_t player_id) :
     prot(std::move(prot)), receiver_queue(), sender_queue(), receiver(this->prot, receiver_queue, keep_playing),
-    sender(this->prot, sender_queue, keep_playing), view(player_id), player_id(player_id), last_game_state() {}
+    sender(this->prot, sender_queue, keep_playing), player_id(player_id), view(this->player_id), last_game_state() {}
 
 void Client::start_threads() {
   sender.start();
@@ -38,47 +38,50 @@ void Client::join_threads() {
 }
 
 int Client::run() {
-  // Initialize SDL library
-  SDL2pp::SDL sdl(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
+  try {
+    // Initialize SDL library
+    SDL2pp::SDL sdl(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
 
-  // Initialize SDL_ttf library
-  SDLTTF ttf;
+    // Initialize SDL_ttf library
+    SDLTTF ttf;
 
-  // Initialize SDLMIXER library
-  SDLMixer mixer;
-  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-    throw std::runtime_error("SDL_mixer could not initialize!");
+    // Initialize SDLMIXER library
+    SDLMixer mixer;
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+      throw std::runtime_error("SDL_mixer could not initialize!");
+    }
+
+    // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS, MUSICA, ETC)
+    view.resource_pool.initialize();
+    view.resource_pool.play_music();
+
+    // INICIALIZACION DEL MUNDO
+    // ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
+    recv_world();
+
+    start_threads();
+
+    // Esto claramente es una mala solucion pero por ahora sirve
+    last_game_state = receiver_queue.pop();
+    std::cout << "Cantidad worms: " << static_cast<int>(last_game_state.get_worms().size()) << std::endl;
+    for (auto worm_data : last_game_state.get_worms()) {
+      view.world_view.add_worm(worm_data.second);
+    }
+    prot.send_client_ready();
+
+    // ---------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
+    // INICIALIZACION DEL MUNDO
+
+    // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
+    // cuantos frames se renderizan en un segundo
+
+    // Ejecuta func_to_execute en cada iteracion
+    loop(std::chrono::duration<float>(static_cast<float>(RATE)));
+  } catch (const std::exception &e) {
+    std::cerr << "Ha ocurrido un error: " << e.what() << '\n';
   }
-
-  // INICIALIZO LA RESOURCE POOL (LAS TEXTURAS, MUSICA, ETC)
-  view.resource_pool.initialize();
-  view.resource_pool.play_music();
-
-  // INICIALIZACION DEL MUNDO
-  // ---------------------------------------------------------------------------
-  // ---------------------------------------------------------------------------
-  recv_world();
-
-  start_threads();
-
-  int worms_amount = 0;
-  // Esto claramente es una mala solucion pero por ahora sirve
-  last_game_state = receiver_queue.pop();
-  std::cout << "Cantidad worms: " << static_cast<int>(last_game_state.get_worms().size()) << std::endl;
-  for (auto worm_data : last_game_state.get_worms()) {
-    view.world_view.add_worm(worm_data.second);
-  }
-  prot.send_client_ready();
-
-  // ---------------------------------------------------------------------------
-  // ---------------------------------------------------------------------------
-  // INICIALIZACION DEL MUNDO
-
-  // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
-  // cuantos frames se renderizan en un segundo
-
-  // Ejecuta func_to_execute en cada iteracion
-  loop(std::chrono::duration<float>(static_cast<float>(RATE)));
 
   return 0;
 }
@@ -205,9 +208,8 @@ bool Client::execute_event(SDL_Event &event) {
           break;
         case SDLK_RIGHT:
         case SDLK_LEFT:
-          if (mov_keys_pressed.count(event.key.keysym.sym) == 0) {
-            mov_keys_pressed.insert(event.key.keysym.sym);
-          }
+          mov_keys_pressed.insert(event.key.keysym.sym);
+
           key_mov_dir = (event.key.keysym.sym == SDLK_RIGHT ? RIGHT : LEFT);
           handle_start_moving(key_mov_dir);
           break;
@@ -221,9 +223,8 @@ bool Client::execute_event(SDL_Event &event) {
           break;
         case SDLK_UP:
         case SDLK_DOWN:
-          if (aim_keys_pressed.count(event.key.keysym.sym) == 0) {
-            aim_keys_pressed.insert(event.key.keysym.sym);
-          }
+          aim_keys_pressed.insert(event.key.keysym.sym);
+
           key_aim_dir = (event.key.keysym.sym == SDLK_UP ? UP : DOWN);
           handle_start_aiming(key_aim_dir);
           break;

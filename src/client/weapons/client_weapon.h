@@ -21,6 +21,10 @@ class Weapon {
   virtual texture_vals get_fixed_vals_attack(uint8_t worm_dir, texture_vals vals) = 0;
 
   bool is_same_weapon(WeaponType other_type) { return type == other_type; }
+
+  WeaponType get_type() const { return type; }
+
+  virtual ~Weapon() = default;
 };
 
 #endif

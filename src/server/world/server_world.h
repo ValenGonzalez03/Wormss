@@ -82,9 +82,9 @@ class World {
 
   std::list<BeamBody*> get_beams() { return this->beams; }
 
-  void set_name(std::string new_name) { this->name = new_name; }
+  void set_name(const std::string& new_name) { this->name = new_name; }
 
-  void set_background(std::string new_background) { this->background = new_background; }
+  void set_background(const std::string& new_background) { this->background = new_background; }
 
   std::vector<std::vector<float>> get_spawn_points() { return spawn_points; }
 

@@ -34,7 +34,8 @@ class Body {
   friend class World;
 
  public:
-  Body(BodyBasicData basic_data, BodyAdvData adv_data, BODY_TYPES type, b2BodyType body_type, b2World* world);
+  Body(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TYPES type, b2BodyType body_type,
+       b2World* world);
 
   void start_contact_with(Body* another_body);
   void touch(Body* other);

@@ -40,7 +40,7 @@ std::string ClientProtocol::recv_string(bool *was_closed) {
   return std::string(buffer);
 }
 
-void ClientProtocol::send_string(std::string str, bool *was_closed) {
+void ClientProtocol::send_string(const std::string &str, bool *was_closed) {
   uint16_t string_length = str.size();
   uint16_t string_length_be = ntohs(string_length);
   skt.sendall(&string_length_be, sizeof(string_length_be), was_closed);

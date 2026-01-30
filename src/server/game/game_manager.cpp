@@ -8,13 +8,13 @@
 
 #define BAT_LENGTH 3
 
-GameManager::GameManager(World world) : world(world) {}
+GameManager::GameManager(const World &world) : world(world) {}
 
 void GameManager::initialize_game(const GameConfig &game_config) {
   int i = 0;
   std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
   for (uint8_t player_id : players) {
-    WormBody *worm = world.create_worm(player_id, spawn_points[i][0], spawn_points[i][1], game_config);
+    world.create_worm(player_id, spawn_points[i][0], spawn_points[i][1], game_config);
     std::cout << "worm created" << std::endl;
     i++;
   }
@@ -178,17 +178,17 @@ GameState GameManager::create_state() {
   }
 
   auto worms_attr = world.get_worms_attr();
-  for (auto attr : worms_attr) {
+  for (const auto &attr : worms_attr) {
     game_state.add_worm(attr);
   }
 
   auto explodables_attr = world.get_explodables_attr();
-  for (auto attr : explodables_attr) {
+  for (const auto &attr : explodables_attr) {
     game_state.add_explodable(attr);
   }
 
   auto explosions_attr = world.get_explosions_attr();
-  for (auto attr : explosions_attr) {
+  for (const auto &attr : explosions_attr) {
     game_state.add_explosion(attr);
   }
 

@@ -10,7 +10,7 @@ ClientManager::ClientManager(Socket &&peer, GamesHandler &games_handler, uint8_t
     games_handler(games_handler), protocol(std::move(skt)), sender(protocol, sender_queue, keep_playing),
     client_id(client_id), receiver(std::make_unique<ServerReceiver>(skt, protocol, lobby_commands_queue, keep_playing,
                                                                     in_game, m, is_empty, client_id)),
-    player(std::make_shared<Player>(client_id, nullptr, games_handler, sender, sender_queue, protocol)),
+    player(std::make_shared<Player>(client_id, games_handler, sender, sender_queue, protocol)),
     lobby_commands_queue(QUEUE_MAX_SIZE) {}
 
 void ClientManager::run() {

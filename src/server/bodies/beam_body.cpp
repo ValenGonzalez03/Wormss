@@ -4,7 +4,7 @@
 #include "missile_body.h"
 #include <stdio.h>
 
-BeamBody::BeamBody(BodyBasicData basic_data, BodyAdvData adv_data, b2World* world) :
+BeamBody::BeamBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, b2World* world) :
     StaticBody(basic_data, adv_data, BEAM, world) {
   /*polygonShape.SetAsBox(width, width, b2Vec2(0, 0), angleInRadians);
     fixtureDef.isSensor = true;

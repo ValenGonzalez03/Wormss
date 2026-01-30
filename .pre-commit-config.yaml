@@ -5,6 +5,9 @@ repos:
       - id: cpplint
         args: ["--filter=-legal/copyright,-build/header_guard,-whitespace/line_length,-build/include_subdir,-build/include_order,-build/c++11",
                --exclude=level_editor/*]  
-      #- id: cppcheck
-      #  args: [--enable=all, "-I /usr/include"]
+      - id: cppcheck
+        args: ["--enable=warning,performance,portability,style",
+                --suppress=missingIncludeSystem, --suppress=missingInclude, --suppress=unusedStructMember, 
+                --inline-suppr, --language=c++, --force]
+        exclude: ^(level_editor/|src/common/lib/)
       - id: clang-format

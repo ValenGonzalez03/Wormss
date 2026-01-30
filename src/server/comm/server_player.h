@@ -14,7 +14,7 @@
 class Player {
  private:
   uint8_t player_id;
-  Game* game;
+  Game* game = nullptr;
   GamesHandler& games_handler;
   PlayerSender& sender;
   std::shared_ptr<Queue<GameState>> sender_queue;
@@ -26,8 +26,8 @@ class Player {
   /*
    * Constructor de la clase.
    * */
-  explicit Player(uint8_t player_id, Game* game, GamesHandler& games_handler,  // NOLINT(runtime/references)
-                  PlayerSender& sender,                                        // NOLINT(runtime/references)
+  explicit Player(uint8_t player_id, GamesHandler& games_handler,  // NOLINT(runtime/references)
+                  PlayerSender& sender,                            // NOLINT(runtime/references)
                   std::shared_ptr<Queue<GameState>> sender_queue,
                   ServerProtocol& protocol);  // NOLINT(runtime/references)
 

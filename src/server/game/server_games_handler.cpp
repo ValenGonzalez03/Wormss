@@ -3,7 +3,7 @@
 GamesHandler::GamesHandler() {
   auto world_names = worlds_reader.get_world_names();
   uint8_t counter = 1;
-  for (auto name : world_names) {
+  for (const auto &name : world_names) {
     worlds_map[counter] = name;
     counter++;
   }
@@ -102,22 +102,25 @@ void GamesHandler::start_game(const uint8_t &game_id, const uint8_t &player_id) 
 }
 
 Game *GamesHandler::get_game(const uint8_t &game_id) {
-  for (auto &current_game : games) {
-    if (current_game->compare_id(game_id)) {
-      return current_game;
-    }
+  auto it = std::find_if(games.begin(), games.end(), [game_id](Game *game) { return game->compare_id(game_id); });
+
+  if (it != games.end()) {
+    return *it;
   }
   return nullptr;
 }
 
 bool GamesHandler::game_exist(uint8_t game_id) {
   std::lock_guard<std::mutex> lck(m);
-  for (auto &current_game : games) {
-    if (current_game->compare_id(game_id)) {
-      return true;
-    }
-  }
-  return false;
+
+  auto exists = std::any_of(games.begin(), games.end(), [game_id](Game *game) { return game->compare_id(game_id); });
+  return exists;
+  // for (auto &current_game : games) {
+  //   if (current_game->compare_id(game_id)) {
+  //     return true;
+  //   }
+  // }
+  // return false;
 }
 
 void GamesHandler::reap_dead() {
@@ -135,13 +138,13 @@ void GamesHandler::reap_dead() {
   games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-std::list<uint8_t> *GamesHandler::obtain_all_games_id() {
-  std::list<uint8_t> *games_id;
-  for (auto &current_game : games) {
-    games_id->push_back(current_game->get_game_id());
-  }
-  return games_id;
-}
+// std::list<uint8_t> *GamesHandler::obtain_all_games_id() {
+//   std::list<uint8_t> *games_id;
+//   for (auto &current_game : games) {
+//     games_id->push_back(current_game->get_game_id());
+//   }
+//   return games_id;
+// }
 
 std::map<uint8_t, std::string> GamesHandler::get_worlds_map() const { return worlds_map; }
 

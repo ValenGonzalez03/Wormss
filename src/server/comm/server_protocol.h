@@ -34,9 +34,9 @@ class ServerProtocol {
   ServerProtocol(ServerProtocol &&) = default;
   ServerProtocol &operator=(ServerProtocol &&) = default;
 
-  std::shared_ptr<RunnableCommandGame> process_command();
+  std::shared_ptr<RunnableCommandGame> process_command(bool *was_closed);
 
-  std::shared_ptr<RunnableCommandLobby> process_command_lobby();
+  std::shared_ptr<RunnableCommandLobby> process_command_lobby(bool *was_closed);
 
   bool recv_client_ready(bool *was_closed);
 
@@ -47,7 +47,7 @@ class ServerProtocol {
   void send_byte(const uint8_t id, bool *was_closed);
 
   // Envía el tamaño de una cadena y luego la cadena
-  void send_string(std::string str, bool *was_closed);
+  void send_string(const std::string &str, bool *was_closed);
 
   // Multiplica un número flotante por 100 para mandarlo
   // como uint por el socket, al recibirlo hay que
@@ -64,7 +64,7 @@ class ServerProtocol {
   void send_beam(BeamAttr beam_attr, bool *was_closed);
 
   // Envía las carac de un spawn_point del mundo
-  void send_spawn_points(std::vector<float> spawn_point, bool *was_closed);
+  void send_spawn_points(const std::vector<float> &spawn_point, bool *was_closed);
 
   // Recibe una lista de punteros a mundos y envía la cantidad de
   // mundos y sus nombres por socket

@@ -48,7 +48,7 @@ class GamesHandler {
 
   void reap_dead();
 
-  std::list<uint8_t> *obtain_all_games_id();
+  // std::list<uint8_t> *obtain_all_games_id();
 
   std::map<uint8_t, std::string> get_worlds_map() const;
 

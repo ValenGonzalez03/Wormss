@@ -7,8 +7,8 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-WormBody::WormBody(BodyBasicData basic_data, BodyAdvData adv_data, int health, float vel, b2World* world) :
-    DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
+WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, int health, float vel,
+                   b2World* world) : DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
   body->SetFixedRotation(true);
 
   // // Sensor para detectar si el gusano esta tocando el suelo

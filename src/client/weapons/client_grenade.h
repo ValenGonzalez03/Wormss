@@ -5,9 +5,6 @@
 #include <vector>
 
 class Grenade : public Weapon {
- private:
-  WeaponType type;
-
  public:
   explicit Grenade(WeaponType type) : Weapon(type) {}
 

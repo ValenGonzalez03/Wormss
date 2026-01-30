@@ -55,7 +55,7 @@ class WorldsReader {
  public:
   WorldsReader();
 
-  World generate_world(std::string world_name);
+  World generate_world(const std::string& world_name);
 
   std::vector<std::string> get_world_names();
 

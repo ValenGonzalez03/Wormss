@@ -14,10 +14,10 @@ void ServerReceiver::run() {
       std::unique_lock<std::mutex> lck(m);
       is_empty.wait(lck);
       if (!in_game) {
-        std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby();
+        std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby(&was_closed);
         lobby_commands.try_push(runnable_command);
       } else {
-        std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command();
+        std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command(&was_closed);
         game_commands->try_push(runnable_command);
       }
     }

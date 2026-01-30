@@ -3,10 +3,10 @@
 #include <utility>
 #include <vector>
 
-Player::Player(uint8_t player_id, Game* game, GamesHandler& games_handler, PlayerSender& sender,
+Player::Player(uint8_t player_id, GamesHandler& games_handler, PlayerSender& sender,
                std::shared_ptr<Queue<GameState>> sender_queue, ServerProtocol& protocol) :
-    player_id(player_id), game(game), games_handler(games_handler), sender(sender), sender_queue(sender_queue),
-    protocol(protocol) {}
+    player_id(player_id), games_handler(games_handler), sender(sender), sender_queue(sender_queue), protocol(protocol) {
+}
 
 void Player::initialize_game() {
   if (!game) {
@@ -55,8 +55,7 @@ void Player::manage_create_game() {
   sender.send_worlds_map(worlds_map);
   uint8_t world_id = protocol.recv_world_id(&was_closed);
 
-  Game* game = games_handler.create_game(sender_queue, player_id, world_id);  // Asigno sender_queue al broadcaseter.
-  this->game = game;
+  this->game = games_handler.create_game(sender_queue, player_id, world_id);  // Asigno sender_queue al broadcaseter.
   has_game_assigned = true;
 
   // std::cout << "Cantidad Worms en juego: " << this->game->get_world().get_worms().size() << std::endl;
@@ -71,12 +70,11 @@ void Player::manage_join_game(uint8_t game_id) {
   bool was_closed = false;
   protocol.send_byte(player_id, &was_closed);
 
-  Game* game = games_handler.join_game(sender_queue, game_id, player_id);
+  this->game = games_handler.join_game(sender_queue, game_id, player_id);
   std::cout << "Client of id: " << static_cast<int>(player_id) << " joined game id: " << static_cast<int>(game_id)
             << std::endl;
-  sender.send_world(game->get_world());
+  sender.send_world(this->game->get_world());
 
-  this->game = game;
   // in_game = true;
   // sender.start();
 }

@@ -5,7 +5,7 @@
 #include "../../common/game_constants.h"
 #include "box2d/box2d.h"
 
-GrenadeBody::GrenadeBody(BodyBasicData basic_data, uint8_t dir, BodyAdvData adv_data, b2World* world) :
+GrenadeBody::GrenadeBody(const BodyBasicData& basic_data, uint8_t dir, const BodyAdvData& adv_data, b2World* world) :
     Explodable(basic_data, dir, adv_data, GRENADE_BODY, world) {}
 
 void GrenadeBody::update() {

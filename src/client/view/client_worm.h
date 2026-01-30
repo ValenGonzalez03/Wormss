@@ -10,7 +10,7 @@
 
 class Worm {
  private:
-  int id;
+  uint8_t id;
   int pos_x;   // En pixeles
   int pos_y;   // En pixeles
   int width;   // En pixeles
@@ -48,7 +48,7 @@ class Worm {
   Worm();
 
   // Crea un Worm con un renderer y las texturas correspondientes
-  explicit Worm(int id, int pos_x, int pos_y, int width, int heigth, float aim_angle, uint8_t direction,
+  explicit Worm(uint8_t id, int pos_x, int pos_y, int width, int heigth, float aim_angle, uint8_t direction,
                 WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool);  // NOLINT(runtime/references)
 
   int get_id();
@@ -65,6 +65,32 @@ class Worm {
   int get_height();
 
   ~Worm();
+
+  Worm(const Worm &other) :
+      id(other.id), pos_x(other.pos_x), pos_y(other.pos_y), width(other.width), height(other.height),
+      aim_angle(other.aim_angle), direction(other.direction), worm_state(other.worm_state), weapon(nullptr),
+      resource_pool(other.resource_pool), renderer(other.renderer) {
+    assign_new_weapon(other.weapon->get_type());
+  }
+
+  Worm &operator=(const Worm &other) = delete;
+  // Worm &operator=(const Worm &other) {
+  //   if (this == &other) {
+  //     return *this;
+  //   }
+
+  //   this->id = other.id;
+  //   this->pos_x = other.pos_x;
+  //   this->pos_y = other.pos_y;
+  //   this->width = other.width;
+  //   this->height = other.height;
+  //   this->aim_angle = other.aim_angle;
+  //   this->direction = other.direction;
+  //   this->worm_state = other.worm_state;
+  //   this->weapon = other.weapon;
+
+  //   return *this;
+  // }
 };
 
 

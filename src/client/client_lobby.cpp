@@ -23,11 +23,11 @@ uint8_t Lobby::select_world(const std::map<uint8_t, std::string>& worlds_map) {
   }
 }
 
-void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_closed) {
+void Lobby::create_game(ClientProtocol& prot, bool* was_closed) {
   CreateGame create_comm = CreateGame();
   prot.send_command(create_comm);
 
-  player_id = prot.recv_byte(was_closed);
+  this->player_id = prot.recv_byte(was_closed);
   std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 
   std::map<uint8_t, std::string> worlds_map = prot.recv_worlds_map(was_closed);
@@ -44,7 +44,7 @@ void Lobby::create_game(ClientProtocol& prot, uint8_t& player_id, bool* was_clos
   wait_start_command(prot, game_id);
 }
 
-void Lobby::join_game(ClientProtocol& prot, uint8_t& player_id, bool* was_closed) {
+void Lobby::join_game(ClientProtocol& prot, bool* was_closed) {
   std::cout << "Ingrese el codigo de la partida para unirse:" << std::endl;
   int game_id = 0;
   std::cin >> game_id;
@@ -52,13 +52,13 @@ void Lobby::join_game(ClientProtocol& prot, uint8_t& player_id, bool* was_closed
   JoinGame join_comm(game_id);
   prot.send_command(join_comm);
 
-  player_id = prot.recv_byte(was_closed);
+  this->player_id = prot.recv_byte(was_closed);
   std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 }
 
 void Lobby::show_worlds(const std::map<uint8_t, std::string>& worlds_map) {
   std::cout << "Elige un numero de escenario:" << std::endl;
-  for (auto& world_pair : worlds_map) {
+  for (const auto& world_pair : worlds_map) {
     std::cout << static_cast<int>(world_pair.first) << ": " << world_pair.second << std::endl;
   }
 }
@@ -83,9 +83,9 @@ void Lobby::run_lobby() {
   bool was_closed = false;
 
   if (option_selected == 'c') {
-    create_game(prot, player_id, &was_closed);
+    create_game(prot, &was_closed);
   } else if (option_selected == 'j') {
-    join_game(prot, player_id, &was_closed);
+    join_game(prot, &was_closed);
   }
 }
 

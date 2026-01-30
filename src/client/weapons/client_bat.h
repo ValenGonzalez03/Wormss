@@ -5,9 +5,6 @@
 #include <vector>
 
 class Bat : public Weapon {
- private:
-  WeaponType type;
-
  public:
   explicit Bat(WeaponType type) : Weapon(type) {}
 

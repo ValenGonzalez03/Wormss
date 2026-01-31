@@ -10,6 +10,19 @@ ServerReceiver::ServerReceiver(Socket &skt, ServerProtocol &protocol,
 void ServerReceiver::run() {
   bool was_closed = false;
   try {
+    // while (keep_playing) {
+    //   std::unique_lock<std::mutex> lck(m);
+    //   is_empty.wait(lck);
+    //   if (!in_game) {
+    //     std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby(&was_closed);
+    //     lobby_commands.try_push(runnable_command);
+    //   } else {
+    //     std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command(&was_closed);
+    //     game_commands->try_push(runnable_command);
+    //   }
+    // }
+
+    // Loop en el lobby
     while (keep_playing) {
       std::unique_lock<std::mutex> lck(m);
       is_empty.wait(lck);
@@ -17,12 +30,22 @@ void ServerReceiver::run() {
         std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby(&was_closed);
         lobby_commands.try_push(runnable_command);
       } else {
-        std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command(&was_closed);
-        game_commands->try_push(runnable_command);
+        break;
       }
+    }
+    if (!keep_playing) {
+      throw std::runtime_error("El receiver del cliente " + std::to_string(client_id) +
+                               " terminó antes de entrar al juego.");
+    }
+
+    // Loop en el juego
+    while (true) {
+      std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command(&was_closed);
+      game_commands->try_push(runnable_command);
     }
   } catch (const LibError &libError) {  // Si se cierra el skt
     keep_playing = false;
+    std::cerr << "LibError: " << libError.what() << std::endl;
   } catch (const std::runtime_error &runtimeError) {  // Si se procesa mal un cmd
     keep_playing = false;
     std::cerr << "RuntimeError: " << runtimeError.what() << std::endl;

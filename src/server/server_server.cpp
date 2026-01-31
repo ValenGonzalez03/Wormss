@@ -12,6 +12,7 @@ void Server::run() {
   accept_thread.start();
 
   while (std::cin.get() != 'q') {
+    sleep(1);
   }
 
   accept_thread.kill();

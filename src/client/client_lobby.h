@@ -31,7 +31,9 @@ class Lobby {
 
   void join_game(ClientProtocol& prot, bool* was_closed);  // NOLINT(runtime/references)
 
-  void wait_start_command(ClientProtocol& prot, int game_id);  // NOLINT(runtime/references)
+  void send_start_game(ClientProtocol& prot, int game_id);  // NOLINT(runtime/references)
+
+  void wait_start_game(ClientProtocol& prot);  // NOLINT(runtime/references)
 
   uint8_t get_player_id();
 };

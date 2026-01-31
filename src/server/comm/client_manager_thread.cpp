@@ -17,11 +17,11 @@ void ClientManager::run() {
   try {
     receiver->start();
 
+    // Loop en el lobby
     while (!in_game) {
       if (keep_playing) {
         std::shared_ptr<RunnableCommandLobby> runnable_lobby_command;
         if (lobby_commands_queue.try_pop(runnable_lobby_command)) {
-          // std::cout << "Se ejecuto un comando de lobby" << std::endl;
           std::lock_guard<std::mutex> lck(m);
           runnable_lobby_command->run(player);
           in_game = player->has_game_started();
@@ -38,13 +38,14 @@ void ClientManager::run() {
     auto &commands_queue_game = player->get_commands_queue_game();
     set_commands_queue_to_receiver(&commands_queue_game);
     if (!sender.has_started()) {
-      sender
-          .start();  // Hago esto para asegurarme de que el resto de senders, ademas del que comenzó la partida, empiecen.
+      sender.start();  // Para asegurarme de que el resto de senders, ademas del que comenzó la partida, empiecen.
     }
 
-    while (keep_playing) {
-      is_empty.notify_all();
-      keep_playing = !has_ended();
+    // Loop en el juego
+    while (!has_ended()) {
+      sleep(1);
+      // is_empty.notify_all();
+      // keep_playing = !has_ended();
     }
     finish();
   } catch (const std::exception &e) {
@@ -56,6 +57,7 @@ bool ClientManager::has_ended() { return threads_have_finished() || (player->has
 bool ClientManager::threads_have_finished() { return !(receiver->is_alive()) || !(sender.is_alive()); }
 
 void ClientManager::finish() {
+  keep_playing = false;
   sender.join();
   receiver->join();
   protocol.close_socket();

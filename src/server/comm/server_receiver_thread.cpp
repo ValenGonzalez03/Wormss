@@ -1,33 +1,22 @@
 #include "server_receiver_thread.h"
 #include <string>
 
-ServerReceiver::ServerReceiver(Socket &skt, ServerProtocol &protocol,
-                               Queue<std::shared_ptr<RunnableCommandLobby>> &lobby_commands, bool &keep_playing,
-                               bool &in_game, std::mutex &m, std::condition_variable &is_empty, uint8_t client_id) :
-    skt(skt), protocol(protocol), keep_playing(keep_playing), in_game(in_game), lobby_commands(lobby_commands), m(m),
-    is_empty(is_empty), client_id(client_id) {}
+#define QUEUE_MAX_SIZE 20
+
+ServerReceiver::ServerReceiver(uint8_t client_id, ServerProtocol &protocol, bool &keep_playing, bool &in_game,
+                               std::mutex &m, std::condition_variable &is_empty) :
+    client_id(client_id), protocol(protocol), lobby_commands(QUEUE_MAX_SIZE), game_commands(QUEUE_MAX_SIZE),
+    is_empty(is_empty), keep_playing(keep_playing), in_game(in_game), m(m) {}
 
 void ServerReceiver::run() {
   bool was_closed = false;
   try {
-    // while (keep_playing) {
-    //   std::unique_lock<std::mutex> lck(m);
-    //   is_empty.wait(lck);
-    //   if (!in_game) {
-    //     std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby(&was_closed);
-    //     lobby_commands.try_push(runnable_command);
-    //   } else {
-    //     std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command(&was_closed);
-    //     game_commands->try_push(runnable_command);
-    //   }
-    // }
-
     // Loop en el lobby
     while (keep_playing) {
       std::unique_lock<std::mutex> lck(m);
       is_empty.wait(lck);
       if (!in_game) {
-        std::shared_ptr<RunnableCommandLobby> runnable_command = protocol.process_command_lobby(&was_closed);
+        lobby_command_ptr runnable_command = protocol.process_command_lobby(&was_closed);
         lobby_commands.try_push(runnable_command);
       } else {
         break;
@@ -40,8 +29,8 @@ void ServerReceiver::run() {
 
     // Loop en el juego
     while (true) {
-      std::shared_ptr<RunnableCommandGame> runnable_command = protocol.process_command(&was_closed);
-      game_commands->try_push(runnable_command);
+      game_command_ptr runnable_command = protocol.process_command(&was_closed);
+      game_commands.try_push(runnable_command);
     }
   } catch (const LibError &libError) {  // Si se cierra el skt
     keep_playing = false;
@@ -53,8 +42,14 @@ void ServerReceiver::run() {
   std::cout << "RECEIVER TERMINO ";
 }
 
-void ServerReceiver::set_commands_queue(Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue) {
-  this->game_commands = commands_queue;
+void ServerReceiver::wait_for_client_ready() {
+  bool was_closed = false;
+  while (!protocol.recv_client_ready(&was_closed)) {
+  }
 }
+
+Queue<lobby_command_ptr> &ServerReceiver::get_lobby_commands_queue() { return lobby_commands; }
+
+Queue<game_command_ptr> &ServerReceiver::get_game_commands_queue() { return game_commands; }
 
 ServerReceiver::~ServerReceiver() { keep_playing = false; }

@@ -6,65 +6,36 @@
 #include <vector>
 #include <memory>
 
-#include "server_receiver_thread.h"
-#include "player_sender_thread.h"
-#include "../../common/game_state.h"
-#include "../game/server_games_handler.h"
+// #include "server_receiver_thread.h"
+// #include "player_sender_thread.h"
+// #include "../../common/game_state.h"
+#include "../game/server_game.h"
 
 class Player {
  private:
   uint8_t player_id;
   Game* game = nullptr;
-  GamesHandler& games_handler;
-  PlayerSender& sender;
-  std::shared_ptr<Queue<GameState>> sender_queue;
-  ServerProtocol& protocol;
   bool has_game_assigned = false;
 
  public:
-  // explicit Player();
-  /*
-   * Constructor de la clase.
-   * */
-  explicit Player(uint8_t player_id, GamesHandler& games_handler,  // NOLINT(runtime/references)
-                  PlayerSender& sender,                            // NOLINT(runtime/references)
-                  std::shared_ptr<Queue<GameState>> sender_queue,
-                  ServerProtocol& protocol);  // NOLINT(runtime/references)
+  explicit Player(uint8_t player_id);  // NOLINT(runtime/references)
 
-  void initialize_game();
+  Game* create_game(uint8_t game_id, const World& world, const GameConfig& game_config,
+                    Queue<GameState>& sender_queue,            // NOLINT(runtime/references)
+                    Queue<game_command_ptr>& receiver_queue);  // NOLINT(runtime/references)
+
+  void join_game(Game* game, Queue<GameState>& sender_queue);  // NOLINT(runtime/references)
+
+  void start_game();
 
   uint8_t get_game_id() const;
 
   bool has_game_started();
 
   bool has_game_finished();
-  /*
-   * Ejecuta los hilos.
-   * */
-  void start();
 
-  /*
-   * Si siguen vivos, cierra los hilos.
-   * */
-  void kill();
+  uint8_t get_id() const;
 
-  /*
-   * Joinea los hilos.
-   * */
-  void join();
-
-  /*
-   * Devuelve true si sus hilos estan muertos. False en caso contrario.
-   * */
-  bool is_dead();
-
-  Queue<std::shared_ptr<RunnableCommandGame>>& get_commands_queue_game();
-
-  void manage_create_game();
-
-  void manage_join_game(uint8_t game_id);
-
-  void manage_start_game();
 
   Player(const Player&) = delete;
 };

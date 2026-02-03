@@ -11,6 +11,8 @@
 
 #include "../runnable_commands/command_runnable_game.h"
 #include "server_game.h"
+#include "game_manager.h"
+#include "../comm/server_player.h"
 
 class Command;
 
@@ -28,27 +30,22 @@ class GamesHandler {
  public:
   GamesHandler();
 
-  Game *get_game(const uint8_t &game_id);
+  Game *create_game(Player &player, const uint8_t &world_id,   // NOLINT(runtime/references)
+                    Queue<GameState> &sender_queue,            // NOLINT(runtime/references)
+                    Queue<game_command_ptr> &receiver_queue);  // NOLINT(runtime/references)
 
-  void add_game(Game *game);
+  Game *join_game(Player &player, const uint8_t &game_id,  // NOLINT(runtime/references)
+                  Queue<GameState> &sender_queue);         // NOLINT(runtime/references)
+
+  void start_game(Player &player, const uint8_t &game_id);  // NOLINT(runtime/references)
 
   void delete_game(const uint8_t &game_id);
 
-  Game *create_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id, const uint8_t &world_id);
-
-  Game *join_game(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &game_id, const uint8_t &player_id);
-
-  void start_game(const uint8_t &game_id, const uint8_t &player_id);
-
-  // World select_world(int world_id, const uint8_t& game_id);
-
-  // World get_game_world(const uint8_t& game_id);
+  Game *get_game(const uint8_t &game_id) const;
 
   bool game_exist(uint8_t game_id);
 
   void reap_dead();
-
-  // std::list<uint8_t> *obtain_all_games_id();
 
   std::map<uint8_t, std::string> get_worlds_map() const;
 

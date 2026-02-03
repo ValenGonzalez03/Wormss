@@ -12,7 +12,6 @@
 #include "../game/server_games_handler.h"
 #include "server_player.h"
 
-class ServerReceiver;
 class Player;
 
 void start();
@@ -20,22 +19,23 @@ void join();
 
 class ClientManager : public Thread {
  private:
-  Socket skt;
   uint8_t client_id;
-  std::shared_ptr<Queue<GameState>> sender_queue;
-  Queue<std::shared_ptr<RunnableCommandLobby>> lobby_commands_queue;
-  std::mutex m;
-  std::condition_variable is_empty;
   GamesHandler &games_handler;
-  bool keep_playing = true;
-  bool in_game = false;
+  Player player;
+
   ServerProtocol protocol;
   PlayerSender sender;
-  std::unique_ptr<ServerReceiver> receiver;
-  std::shared_ptr<Player> player;
+  ServerReceiver receiver;
+  Queue<lobby_command_ptr> &lobby_commands_queue;
+
+  std::mutex m;
+  std::condition_variable is_empty;
+  bool keep_playing = true;
+  bool in_game = false;
 
   bool threads_have_finished();
 
+  // Devuelve true si el cliente terminó el juego.
   bool has_ended();
 
  public:
@@ -45,6 +45,12 @@ class ClientManager : public Thread {
   // Ejecuta los hilos.
   void run() override;
 
+  void manage_create_game();
+
+  void manage_join_game(const uint8_t &game_id);
+
+  void manage_start_game(const uint8_t &game_id);
+
   // Si siguen vivos, cierra los hilos.
   void kill();
 
@@ -53,8 +59,6 @@ class ClientManager : public Thread {
 
   // Devuelve true si sus hilos estan muertos. False en caso contrario.
   bool is_dead();
-
-  void set_commands_queue_to_receiver(Queue<std::shared_ptr<RunnableCommandGame>> *commands_queue);
 
   ClientManager(const ClientManager &) = delete;
   ClientManager &operator=(const ClientManager &) = delete;

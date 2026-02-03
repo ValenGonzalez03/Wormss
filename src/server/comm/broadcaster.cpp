@@ -2,7 +2,7 @@
 
 Broadcaster::Broadcaster() {}
 
-void Broadcaster::add_queue(const std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t& player_id) {
+void Broadcaster::add_queue(Queue<GameState>* sender_queue, const uint8_t& player_id) {
   std::lock_guard<std::mutex> lck(m);
   queues_sender[player_id] = sender_queue;
 }

@@ -32,23 +32,25 @@ typedef duration<float> dur_f;
 
 class Game : public Thread {
  private:
-  std::mutex m;
-  Broadcaster broadcaster;
-  Queue<std::shared_ptr<RunnableCommandGame>> commands;
   uint8_t game_id;
+  GameManager game_manager;
+  const GameConfig &config;
+  Queue<game_command_ptr> &commands;
+  Broadcaster broadcaster;
+
   uint8_t players_counter = 0;
   uint8_t current_turn_id = 0;
   bool keep_playing = true;
   bool started = false;
-  GameManager game_manager;
+
+  std::mutex m;
   std::chrono::duration<float> rate = std::chrono::duration<float>((float)RATE);  // NOLINT(readability/casting)
 
-  const GameConfig &config;
-
  public:
-  explicit Game(uint8_t game_id, const GameConfig &game_config, const World &world);
+  explicit Game(const uint8_t &game_id, const World &world, const GameConfig &game_config,
+                Queue<game_command_ptr> &receiver_queue);  // NOLINT(runtime/references)
 
-  void add_player(std::shared_ptr<Queue<GameState>> sender_queue, const uint8_t &player_id);
+  void add_player(Queue<GameState> &sender_queue, const uint8_t &player_id);  // NOLINT(runtime/references)
 
   void delete_player(const uint8_t &player_id);
 
@@ -78,7 +80,7 @@ class Game : public Thread {
 
   uint8_t get_game_id();
 
-  Queue<std::shared_ptr<RunnableCommandGame>> &get_commands_queue();
+  Queue<game_command_ptr> &get_commands_queue();
 
   GameManager &get_game_manager();
 

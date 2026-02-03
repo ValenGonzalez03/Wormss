@@ -13,4 +13,6 @@ class RunnableCommandGame : public RunnableCommand {
   virtual void run(GameManager &game_manager) = 0;  // NOLINT(runtime/references)
 };
 
+typedef std::shared_ptr<RunnableCommandGame> game_command_ptr;
+
 #endif

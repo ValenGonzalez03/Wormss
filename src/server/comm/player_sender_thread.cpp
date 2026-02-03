@@ -2,28 +2,42 @@
 #include <arpa/inet.h>
 #include <list>
 
-PlayerSender::PlayerSender(ServerProtocol &protocol, std::shared_ptr<Queue<GameState>> sender_queue,
-                           bool &keep_playing) :
-    protocol(protocol), sender_queue(sender_queue), keep_playing(keep_playing) {}
+#define QUEUE_MAX_SIZE 20
+
+PlayerSender::PlayerSender(ServerProtocol &protocol, bool &keep_playing) :
+    protocol(protocol), sender_queue(QUEUE_MAX_SIZE), keep_playing(keep_playing) {}
 
 void PlayerSender::run() {
   bool was_closed = false;
   try {
     while (keep_playing) {
       GameState game_state;
-      if (sender_queue->try_pop(game_state)) {
+      if (sender_queue.try_pop(game_state)) {
         game_state.serialize(protocol, &was_closed);
         // protocol.send_game_state(game_state);
       }
     }
     GameState game_state;
-    while (sender_queue->try_pop(game_state)) {
+    while (sender_queue.try_pop(game_state)) {
       game_state.serialize(protocol, &was_closed);
       // protocol.send_game_state(game_state);
     }
   } catch (const std::exception &err) {
   }
   std::cout << "SENDER TERMINO ";
+}
+
+uint8_t PlayerSender::send_create_info(const uint8_t &player_id, const std::map<uint8_t, std::string> &worlds_map) {
+  send_id(player_id);
+  send_worlds_map(worlds_map);
+
+  bool was_closed = false;
+  return protocol.recv_world_id(&was_closed);
+}
+
+void PlayerSender::send_join_info(const uint8_t &player_id, const World &world) {
+  send_id(player_id);
+  send_world(world);
 }
 
 void PlayerSender::send_id(const uint8_t id) {
@@ -54,5 +68,7 @@ void PlayerSender::send_world(World world) {
 }
 
 bool PlayerSender::has_started() { return is_alive(); }
+
+Queue<GameState> &PlayerSender::get_queue() { return sender_queue; }
 
 PlayerSender::~PlayerSender() { keep_playing = false; }

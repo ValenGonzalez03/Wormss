@@ -2,18 +2,19 @@
 #define RUNNABLE_COMMAND_LOBBY_H_
 
 #include "command_runnable.h"
-#include "../comm/server_player.h"
-#include "../comm/client_manager_thread.h"
+// #include "../comm/client_manager_thread.h"
 #include <memory>
 
-class ClientHandler;
-class GamesHandler;
+
+class ClientManager;
 
 class RunnableCommandLobby : public RunnableCommand {
  public:
   explicit RunnableCommandLobby(std::shared_ptr<Command> command) : RunnableCommand(command) {}
 
-  virtual void run(std::shared_ptr<Player> player) = 0;
+  virtual void run(ClientManager& client_manager) = 0;  // NOLINT(runtime/references)
 };
+
+typedef std::shared_ptr<RunnableCommandLobby> lobby_command_ptr;
 
 #endif

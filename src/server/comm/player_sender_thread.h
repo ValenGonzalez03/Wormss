@@ -14,14 +14,17 @@
 class PlayerSender : public Thread {
  private:
   ServerProtocol &protocol;
-  std::shared_ptr<Queue<GameState>> sender_queue;
+  Queue<GameState> sender_queue;
   bool &keep_playing;
 
  public:
-  // Constructor de la clase.
-  explicit PlayerSender(ServerProtocol &protocol,                        // NOLINT(runtime/references)
-                        std::shared_ptr<Queue<GameState>> sender_queue,  // NOLINT(runtime/references)
-                        bool &keep_playing);                             // NOLINT(runtime/references)
+  explicit PlayerSender(ServerProtocol &protocol, bool &keep_playing);  // NOLINT(runtime/references)
+
+  // Envia al cliente su id y la lista de mundos disponibles para elegir. Devuelve el id del mundo elegido.
+  uint8_t send_create_info(const uint8_t &player_id, const std::map<uint8_t, std::string> &worlds_map);
+
+  // Envia al cliente su id y la informacion del mundo del juego al que se unio.
+  void send_join_info(const uint8_t &player_id, const World &world);
 
   void send_id(const uint8_t id);
 
@@ -32,6 +35,8 @@ class PlayerSender : public Thread {
   void send_world(World world);
 
   bool has_started();
+
+  Queue<GameState> &get_queue();
 
   // Ejecuta el loop del hilo Sender.
   void run() override;

@@ -2,19 +2,41 @@
 
 #include <utility>
 #include <vector>
+#include <string>
 
-Player::Player(uint8_t player_id, GamesHandler& games_handler, PlayerSender& sender,
-               std::shared_ptr<Queue<GameState>> sender_queue, ServerProtocol& protocol) :
-    player_id(player_id), games_handler(games_handler), sender(sender), sender_queue(sender_queue), protocol(protocol) {
+Player::Player(uint8_t player_id) : player_id(player_id) {}
+
+Game* Player::create_game(uint8_t game_id, const World& world, const GameConfig& game_config,
+                          Queue<GameState>& sender_queue, Queue<game_command_ptr>& receiver_queue) {
+  this->game = new Game(game_id, world, game_config, receiver_queue);
+  game->add_player(sender_queue, player_id);
+  has_game_assigned = true;
+
+  std::string str = "Client of id: " + std::to_string(static_cast<int>(player_id)) +
+                    " created game id: " + std::to_string(static_cast<int>(game->get_game_id())) + "\n";
+  std::cout << str;
+
+  return game;
 }
 
-void Player::initialize_game() {
-  if (!game) {
-    // Deberia lanzar una excepcion.
-    std::cout << "No existe juego" << std::endl;
-    return;
+void Player::join_game(Game* game, Queue<GameState>& sender_queue) {
+  if (!game->is_started()) {
+    game->add_player(sender_queue, player_id);
+    this->game = game;
+    // Nuevamente, si la partida ya esta empezada habria que tirar una excepcion o avisar de alguna manera.
   }
-  game->charge_world();
+  std::cout << "Client of id: " << static_cast<int>(player_id)
+            << " joined game id: " << static_cast<int>(game->get_game_id()) << std::endl;
+}
+
+void Player::start_game() {
+  if (!game->is_started()) {
+    game->turn_to_started();
+    game->start();
+    game->charge_world();
+  } else {
+    std::cout << "No hago nada porque el juego ya empezó." << std::endl;
+  }
 }
 
 uint8_t Player::get_game_id() const {
@@ -40,52 +62,4 @@ bool Player::has_game_finished() {
   return game->is_dead();
 }
 
-Queue<std::shared_ptr<RunnableCommandGame>>& Player::get_commands_queue_game() {
-  if (!game) {
-    throw std::runtime_error("No commands queue in game.");  // (?)
-  }
-  return game->get_commands_queue();
-}
-
-void Player::manage_create_game() {
-  bool was_closed = false;
-  protocol.send_byte(player_id, &was_closed);
-
-  auto worlds_map = games_handler.get_worlds_map();
-  sender.send_worlds_map(worlds_map);
-  uint8_t world_id = protocol.recv_world_id(&was_closed);
-
-  this->game = games_handler.create_game(sender_queue, player_id, world_id);  // Asigno sender_queue al broadcaseter.
-  has_game_assigned = true;
-
-  // std::cout << "Cantidad Worms en juego: " << this->game->get_world().get_worms().size() << std::endl;
-
-  sender.send_id(game->get_game_id());  // Ahora mando el game_id despues (Para tener en cuenta en el cliente)
-  sender.send_world(game->get_world());
-  std::cout << "Client of id: " << static_cast<int>(player_id)
-            << " created game id: " << static_cast<int>(game->get_game_id()) << std::endl;
-}
-
-void Player::manage_join_game(uint8_t game_id) {
-  bool was_closed = false;
-  protocol.send_byte(player_id, &was_closed);
-
-  this->game = games_handler.join_game(sender_queue, game_id, player_id);
-  std::cout << "Client of id: " << static_cast<int>(player_id) << " joined game id: " << static_cast<int>(game_id)
-            << std::endl;
-  sender.send_world(this->game->get_world());
-
-  // in_game = true;
-  // sender.start();
-}
-
-void Player::manage_start_game() {
-  bool was_closed = false;
-  initialize_game();
-  sender.start();
-  while (!protocol.recv_client_ready(&was_closed)) {
-  }
-  games_handler.start_game(get_game_id(), player_id);
-  std::cout << "Client of id: " << static_cast<int>(player_id)
-            << " started game of id: " << static_cast<int>(get_game_id()) << std::endl;
-}
+uint8_t Player::get_id() const { return player_id; }

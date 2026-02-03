@@ -15,6 +15,7 @@
 #include "../../common/lib/liberror.h"
 #include "../../common/lib/socket.h"
 
+#include "../runnable_commands/command_runnable_lobby.h"
 #include "../runnable_commands/command_runnable_game.h"
 
 class RunnableCommandLobby;
@@ -34,9 +35,9 @@ class ServerProtocol {
   ServerProtocol(ServerProtocol &&) = default;
   ServerProtocol &operator=(ServerProtocol &&) = default;
 
-  std::shared_ptr<RunnableCommandGame> process_command(bool *was_closed);
+  game_command_ptr process_command(bool *was_closed);
 
-  std::shared_ptr<RunnableCommandLobby> process_command_lobby(bool *was_closed);
+  lobby_command_ptr process_command_lobby(bool *was_closed);
 
   bool recv_client_ready(bool *was_closed);
 
@@ -49,8 +50,7 @@ class ServerProtocol {
   // Envía el tamaño de una cadena y luego la cadena
   void send_string(const std::string &str, bool *was_closed);
 
-  // Multiplica un número flotante por 100 para mandarlo
-  // como uint por el socket, al recibirlo hay que
+  // Multiplica un número flotante por 100 para mandarlo como uint por el socket, al recibirlo hay que
   // dividirlo por 100 para obtener otra vez el num original
   void send_float(float n, bool *was_closed);
 
@@ -59,15 +59,13 @@ class ServerProtocol {
   //////////////////////////////////////////////////////////////////////
   /////////// FUNCIONES DE ENVÍO DE MUNDO POR SOCKET /////////////////////
 
-  // Envía las características de una viga
-  // (pos_x, pos_y, angle, width)
+  // Envía las características de una viga (pos_x, pos_y, angle, width)
   void send_beam(BeamAttr beam_attr, bool *was_closed);
 
   // Envía las carac de un spawn_point del mundo
   void send_spawn_points(const std::vector<float> &spawn_point, bool *was_closed);
 
-  // Recibe una lista de punteros a mundos y envía la cantidad de
-  // mundos y sus nombres por socket
+  // Recibe una lista de punteros a mundos y envía la cantidad de mundos y sus nombres por socket
   void send_worlds_map(const std::map<uint8_t, std::string> &worlds_map, bool *was_closed);
 
   /////////// FUNCIONES DE ENVÍO DE MUNDO POR SOCKET /////////////////////

@@ -22,6 +22,7 @@ class ClientManager : public Thread {
   uint8_t client_id;
   GamesHandler &games_handler;
   Player player;
+  bool is_host = false;
 
   ServerProtocol protocol;
   PlayerSender sender;
@@ -32,6 +33,7 @@ class ClientManager : public Thread {
   std::condition_variable is_empty;
   bool keep_playing = true;
   bool in_game = false;
+  bool in_game_lobby = false;
 
   bool threads_have_finished();
 
@@ -50,6 +52,10 @@ class ClientManager : public Thread {
   void manage_join_game(const uint8_t &game_id);
 
   void manage_start_game(const uint8_t &game_id);
+
+  void manage_game_started();
+
+  void set_to_host();
 
   // Si siguen vivos, cierra los hilos.
   void kill();

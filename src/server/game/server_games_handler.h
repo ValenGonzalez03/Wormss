@@ -31,13 +31,13 @@ class GamesHandler {
   GamesHandler();
 
   Game *create_game(Player &player, const uint8_t &world_id,   // NOLINT(runtime/references)
-                    Queue<GameState> &sender_queue,            // NOLINT(runtime/references)
+                    PlayerSender &sender,            // NOLINT(runtime/references)
                     Queue<game_command_ptr> &receiver_queue);  // NOLINT(runtime/references)
 
   Game *join_game(Player &player, const uint8_t &game_id,  // NOLINT(runtime/references)
-                  Queue<GameState> &sender_queue);         // NOLINT(runtime/references)
+                  PlayerSender &sender);         // NOLINT(runtime/references)
 
-  void start_game(Player &player, const uint8_t &game_id);  // NOLINT(runtime/references)
+  Game *start_game(Player &player, const uint8_t &game_id);  // NOLINT(runtime/references)
 
   void delete_game(const uint8_t &game_id);
 

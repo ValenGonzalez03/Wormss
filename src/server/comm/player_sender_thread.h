@@ -23,8 +23,7 @@ class PlayerSender : public Thread {
   // Envia al cliente su id y la lista de mundos disponibles para elegir. Devuelve el id del mundo elegido.
   uint8_t send_create_info(const uint8_t &player_id, const std::map<uint8_t, std::string> &worlds_map);
 
-  // Envia al cliente su id y la informacion del mundo del juego al que se unio.
-  void send_join_info(const uint8_t &player_id, const World &world);
+  void send_game_started();
 
   void send_id(const uint8_t id);
 
@@ -32,7 +31,7 @@ class PlayerSender : public Thread {
 
   void send_beams_number();
 
-  void send_world(World world);
+  void send_world(World* world);
 
   bool has_started();
 

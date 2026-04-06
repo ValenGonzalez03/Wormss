@@ -15,7 +15,8 @@ void GameManager::initialize_game(const GameConfig &game_config) {
   std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
   for (uint8_t player_id : players) {
     world.create_worm(player_id, spawn_points[i][0], spawn_points[i][1], game_config);
-    std::cout << "worm created" << std::endl;
+    auto string = "Worm of id: " + std::to_string(static_cast<int>(player_id)) + " created.\n";
+    std::cout << string;
     i++;
   }
 }
@@ -38,7 +39,7 @@ void GameManager::delete_player(const uint8_t &player_id) {
 //   world = selected_world;
 // }
 
-World GameManager::get_world() { return world; }
+World* GameManager::get_world() { return &world; }
 
 void GameManager::step() { world.step(timeStep, velocityIterations, positionIterations); }
 

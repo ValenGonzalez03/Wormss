@@ -42,7 +42,7 @@ class GameManager {
 
   // void set_current_turn_id(const uint8_t &id);
 
-  World get_world();
+  World* get_world();
 
   void step();
 

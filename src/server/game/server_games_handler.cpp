@@ -24,39 +24,40 @@ void GamesHandler::delete_game(const uint8_t &game_id) {
   games.erase(std::remove_if(games.begin(), games.end(), dead), games.end());
 }
 
-Game *GamesHandler::create_game(Player &player, const uint8_t &world_id, Queue<GameState> &sender_queue,
+Game *GamesHandler::create_game(Player &player, const uint8_t &world_id, PlayerSender &sender,
                                 Queue<game_command_ptr> &receiver_queue) {
   std::lock_guard<std::mutex> lck(m);
   std::string world_name = worlds_map[world_id];
   World world = worlds_reader.generate_world(world_name);
 
-  Game *game = player.create_game(games_counter, world, games_config, sender_queue, receiver_queue);
+  Game *game = player.create_game(games_counter, world, games_config, sender, receiver_queue);
   games_counter++;
   games.push_back(game);
 
   return game;
 }
 
-Game *GamesHandler::join_game(Player &player, const uint8_t &game_id, Queue<GameState> &sender_queue) {
+Game *GamesHandler::join_game(Player &player, const uint8_t &game_id, PlayerSender &sender) {
   std::lock_guard<std::mutex> lck(m);
   Game *game = get_game(game_id);
   if (game == nullptr) {
     throw std::runtime_error("Error: No se encontró el juego al que se quiso unir.");
   }
 
-  player.join_game(game, sender_queue);
+  player.join_game(game, sender);
 
   return game;
 }
 
-void GamesHandler::start_game(Player &player, const uint8_t &game_id) {
+Game *GamesHandler::start_game(Player &player, const uint8_t &game_id) {
   std::lock_guard<std::mutex> lck(m);
-  const Game *game = get_game(game_id);
+  Game *game = get_game(game_id);
   if (game == nullptr) {
     throw std::runtime_error("Error: No se encontró el juego que se quiso iniciar.");
   }
 
   player.start_game();
+  return game;
 }
 
 Game *GamesHandler::get_game(const uint8_t &game_id) const {

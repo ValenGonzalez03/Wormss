@@ -39,6 +39,8 @@ class ServerProtocol {
 
   lobby_command_ptr process_command_lobby(bool *was_closed);
 
+  void send_game_started(bool *was_closed);
+
   bool recv_client_ready(bool *was_closed);
 
   int recv_world_id(bool *was_closed);

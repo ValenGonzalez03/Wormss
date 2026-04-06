@@ -16,6 +16,13 @@ void ClientProtocol::send_command(const Command &cmd) {
 //   return GameState(*this, &was_closed);
 // }
 
+bool ClientProtocol::recv_game_started() {
+  bool was_closed = false;
+  uint8_t code;
+  skt.recvall(&code, sizeof(code), &was_closed);
+  return (code == CODE_PLAYER_COMM::HOST_STARTED_GAME);
+}
+
 void ClientProtocol::send_client_ready() {
   bool was_closed = false;
   uint8_t code = CODE_PLAYER_COMM::CLIENT_READY;

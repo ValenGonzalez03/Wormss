@@ -6,10 +6,11 @@ Game::Game(const uint8_t &game_id, const World &world, const GameConfig &game_co
            Queue<game_command_ptr> &receiver_queue) :
     game_id(game_id), commands(receiver_queue), config(game_config), game_manager(world) {}
 
-void Game::add_player(Queue<GameState> &sender_queue, const uint8_t &player_id) {
+void Game::add_player(PlayerSender& sender, const uint8_t &player_id) {
   // player_id = players_counter;
   // players_counter++;
-  broadcaster.add_queue(&sender_queue, player_id);
+  broadcaster.add_queue(&sender.get_queue(), player_id);
+  player_senders.emplace_back(&sender);
   game_manager.add_player(player_id);
 }
 
@@ -25,7 +26,8 @@ void Game::charge_world() {
 
 void Game::run() {
   try {
-    std::cout << "Game of id: " << static_cast<int>(game_id) << " started." << std::endl;
+    std::string str = "Game of id: " + std::to_string(static_cast<int>(game_id)) + " started.\n";
+    std::cout << str;
 
     // bool was_closed = false;
     int it = 0;
@@ -91,6 +93,13 @@ void Game::update() {
   }
 }
 
+void Game::send_info_to_start_to_players() {
+  for (auto &sender : player_senders) {
+    sender->send_game_started();
+    sender->send_world(game_manager.get_world());
+  }
+}
+
 void Game::stop_playing() { keep_playing = false; }
 
 bool Game::compare_id(const uint8_t &another_game_id) { return (game_id == another_game_id); }
@@ -99,7 +108,7 @@ bool Game::compare_id(const uint8_t &another_game_id) { return (game_id == anoth
 //   game_manager.set_world(world);
 // }
 
-World Game::get_world() { return game_manager.get_world(); }
+World* Game::get_world() { return game_manager.get_world(); }
 
 void Game::push_game_state() {
   GameState game_state = game_manager.create_state();

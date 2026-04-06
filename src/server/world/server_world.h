@@ -70,9 +70,9 @@ class World {
 
   ~World();
 
-  std::string get_name() { return this->name; }
+  std::string get_name() const { return this->name; }
 
-  std::string get_background() { return this->background; }
+  std::string get_background() const { return this->background; }
 
   std::list<WormAttr> get_worms_attr();
 
@@ -80,7 +80,7 @@ class World {
 
   std::list<ExplosionAttr> get_explosions_attr();
 
-  std::list<BeamBody*> get_beams() { return this->beams; }
+  std::list<BeamBody*> get_beams() const { return this->beams; }
 
   void set_name(const std::string& new_name) { this->name = new_name; }
 

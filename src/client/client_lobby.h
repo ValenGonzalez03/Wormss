@@ -23,17 +23,17 @@ class Lobby {
 
   char get_option();
 
-  void create_game(ClientProtocol& prot, bool* was_closed);  // NOLINT(runtime/references)
+  void create_game(bool* was_closed);
+
+  void join_game(bool* was_closed);
 
   void show_worlds(const std::map<uint8_t, std::string>& world_names);
 
   uint8_t select_world(const std::map<uint8_t, std::string>& worlds_map);
 
-  void join_game(ClientProtocol& prot, bool* was_closed);  // NOLINT(runtime/references)
+  void send_start_game(int game_id);
 
-  void send_start_game(ClientProtocol& prot, int game_id);  // NOLINT(runtime/references)
-
-  void wait_start_game(ClientProtocol& prot);  // NOLINT(runtime/references)
+  void wait_start_game(char option_selected);
 
   uint8_t get_player_id();
 };

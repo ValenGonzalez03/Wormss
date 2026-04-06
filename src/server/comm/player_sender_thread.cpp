@@ -23,8 +23,9 @@ void PlayerSender::run() {
       // protocol.send_game_state(game_state);
     }
   } catch (const std::exception &err) {
+    std::cerr << "Error en el sender: " << err.what() << "\n";
   }
-  std::cout << "SENDER TERMINO ";
+  std::cout << "SENDER TERMINO\n";
 }
 
 uint8_t PlayerSender::send_create_info(const uint8_t &player_id, const std::map<uint8_t, std::string> &worlds_map) {
@@ -35,9 +36,9 @@ uint8_t PlayerSender::send_create_info(const uint8_t &player_id, const std::map<
   return protocol.recv_world_id(&was_closed);
 }
 
-void PlayerSender::send_join_info(const uint8_t &player_id, const World &world) {
-  send_id(player_id);
-  send_world(world);
+void PlayerSender::send_game_started() {
+  bool was_closed = false;
+  protocol.send_game_started(&was_closed);
 }
 
 void PlayerSender::send_id(const uint8_t id) {
@@ -50,21 +51,19 @@ void PlayerSender::send_worlds_map(const std::map<uint8_t, std::string> &worlds_
   protocol.send_worlds_map(worlds_map, &was_closed);
 }
 
-void PlayerSender::send_world(World world) {
+void PlayerSender::send_world(World* world) {
   bool was_closed = false;
-  protocol.send_string(world.get_name(), &was_closed);
-  protocol.send_string(world.get_background(), &was_closed);
+  protocol.send_string(world->get_name(), &was_closed);
+  protocol.send_string(world->get_background(), &was_closed);
 
-  std::list<BeamBody *> beams = world.get_beams();
+  std::list<BeamBody *> beams = world->get_beams();
   uint8_t beams_number = beams.size();
   protocol.send_byte(beams_number, &was_closed);
-
+  
   for (auto &beam : beams) {
     BeamAttr attr = beam->get_attr();
-    // std::cout << "Sending beam with angle: " << attr.angle << std::endl;
     protocol.send_beam(attr, &was_closed);
   }
-  // protocol.send_world(world);
 }
 
 bool PlayerSender::has_started() { return is_alive(); }

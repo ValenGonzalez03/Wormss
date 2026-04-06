@@ -14,10 +14,10 @@ void ServerReceiver::run() {
     // Loop en el lobby
     while (keep_playing) {
       std::unique_lock<std::mutex> lck(m);
-      is_empty.wait(lck);
       if (!in_game) {
         lobby_command_ptr runnable_command = protocol.process_command_lobby(&was_closed);
         lobby_commands.try_push(runnable_command);
+        is_empty.wait(lck);
       } else {
         break;
       }
@@ -34,17 +34,20 @@ void ServerReceiver::run() {
     }
   } catch (const LibError &libError) {  // Si se cierra el skt
     keep_playing = false;
-    std::cerr << "LibError: " << libError.what() << std::endl;
+    std::string str ("Se Cerro el Socket: ");
+    str.append(libError.what() + '\n');
+    std::cout << str;
   } catch (const std::runtime_error &runtimeError) {  // Si se procesa mal un cmd
     keep_playing = false;
-    std::cerr << "RuntimeError: " << runtimeError.what() << std::endl;
+    std::cerr << "Error en el Receiver: " << runtimeError.what() << std::endl;
   }
-  std::cout << "RECEIVER TERMINO ";
+  std::cout << "RECEIVER TERMINO\n";
 }
 
 void ServerReceiver::wait_for_client_ready() {
   bool was_closed = false;
-  while (!protocol.recv_client_ready(&was_closed)) {
+  if (!protocol.recv_client_ready(&was_closed)) {
+    std::cerr << "No se recibió el comando de cliente listo para comenzar el juego.\n";
   }
 }
 

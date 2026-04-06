@@ -1,4 +1,5 @@
 #include "client_lobby.h"
+#include "../common/commands/game_started.h"
 
 Lobby::Lobby(ClientProtocol& prot) : prot(prot), player_id(-1) {}
 
@@ -23,7 +24,7 @@ uint8_t Lobby::select_world(const std::map<uint8_t, std::string>& worlds_map) {
   }
 }
 
-void Lobby::create_game(ClientProtocol& prot, bool* was_closed) {
+void Lobby::create_game(bool* was_closed) {
   CreateGame create_comm = CreateGame();
   prot.send_command(create_comm);
 
@@ -39,12 +40,12 @@ void Lobby::create_game(ClientProtocol& prot, bool* was_closed) {
   prot.send_world_id(world_id, was_closed);
 
   int game_id = prot.recv_byte(was_closed);
-  std::cout << "GAME ID SELECCIONADO: " << game_id << std::endl;
+  std::cout << "GAME ID: " << game_id << std::endl;
 
-  send_start_game(prot, game_id);
+  send_start_game(game_id);
 }
 
-void Lobby::join_game(ClientProtocol& prot, bool* was_closed) {
+void Lobby::join_game(bool* was_closed) {
   std::cout << "Ingrese el codigo de la partida para unirse:" << std::endl;
   int game_id = 0;
   std::cin >> game_id;
@@ -55,7 +56,6 @@ void Lobby::join_game(ClientProtocol& prot, bool* was_closed) {
   this->player_id = prot.recv_byte(was_closed);
   std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
 
-  wait_start_game(prot);
 }
 
 void Lobby::show_worlds(const std::map<uint8_t, std::string>& worlds_map) {
@@ -65,7 +65,7 @@ void Lobby::show_worlds(const std::map<uint8_t, std::string>& worlds_map) {
   }
 }
 
-void Lobby::send_start_game(ClientProtocol& prot, int game_id) {
+void Lobby::send_start_game(int game_id) {
   char command_lobby = '\0';
   while (command_lobby != 's') {
     std::cout << "El creador de la partida cuando quiere empezarla debe ingresar 's'" << std::endl;
@@ -75,7 +75,18 @@ void Lobby::send_start_game(ClientProtocol& prot, int game_id) {
   prot.send_command(start);
 }
 
-void Lobby::wait_start_game(ClientProtocol& prot) {}
+void Lobby::wait_start_game(char option_selected) {
+  if (prot.recv_game_started()) {
+    std::cout << "Cliente de id " << static_cast<int>(player_id) << " espero para comenzar." << std::endl;
+    if (option_selected == 'j') {
+      // Envio el comando para desbloquear al Receiver del Server
+      GameStarted game_started (-1);
+      prot.send_command(game_started);
+    }
+  } else {
+    std::cerr << "Error para comenzar el juego" << std::endl;
+  }
+}
 
 void Lobby::run_lobby() {
   char option_selected = '\0';
@@ -87,10 +98,11 @@ void Lobby::run_lobby() {
   bool was_closed = false;
 
   if (option_selected == 'c') {
-    create_game(prot, &was_closed);
+    create_game(&was_closed);
   } else if (option_selected == 'j') {
-    join_game(prot, &was_closed);
+    join_game(&was_closed);
   }
+  wait_start_game(option_selected);
 }
 
 uint8_t Lobby::get_player_id() { return player_id; }

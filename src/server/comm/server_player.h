@@ -9,6 +9,7 @@
 // #include "server_receiver_thread.h"
 // #include "player_sender_thread.h"
 // #include "../../common/game_state.h"
+#include "player_sender_thread.h"
 #include "../game/server_game.h"
 
 class Player {
@@ -21,12 +22,14 @@ class Player {
   explicit Player(uint8_t player_id);  // NOLINT(runtime/references)
 
   Game* create_game(uint8_t game_id, const World& world, const GameConfig& game_config,
-                    Queue<GameState>& sender_queue,            // NOLINT(runtime/references)
+                    PlayerSender& sender,            // NOLINT(runtime/references)
                     Queue<game_command_ptr>& receiver_queue);  // NOLINT(runtime/references)
 
-  void join_game(Game* game, Queue<GameState>& sender_queue);  // NOLINT(runtime/references)
+  void join_game(Game* game, PlayerSender& sender);  // NOLINT(runtime/references)
 
   void start_game();
+
+  World* get_world();
 
   uint8_t get_game_id() const;
 

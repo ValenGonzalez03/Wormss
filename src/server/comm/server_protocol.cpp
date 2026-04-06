@@ -4,6 +4,7 @@
 
 #include "../runnable_commands/create_game_runnable.h"
 #include "../runnable_commands/join_game_runnable.h"
+#include "../runnable_commands/game_started_runnable.h"
 #include "../runnable_commands/jump_runnable.h"
 #include "../runnable_commands/start_aiming_runnable.h"
 #include "../runnable_commands/start_game_runnable.h"
@@ -64,6 +65,8 @@ lobby_command_ptr ServerProtocol::process_command_lobby(bool *was_closed) {
     return std::make_shared<RunnableJoinGame>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::START_GAME) {
     return std::make_shared<RunnableStartGame>(client_id, skt, was_closed);
+  } else if (code == CODE_PLAYER_COMM::GAME_STARTED) {
+    return std::make_shared<RunnableGameStarted>(client_id, skt, was_closed);
   } else {
     throw std::runtime_error("Error de comando de lobby");
   }
@@ -72,6 +75,11 @@ lobby_command_ptr ServerProtocol::process_command_lobby(bool *was_closed) {
 void ServerProtocol::close_socket() {
   skt.shutdown(2);
   skt.close();
+}
+
+void ServerProtocol::send_game_started(bool *was_closed) {
+  uint8_t code = CODE_PLAYER_COMM::HOST_STARTED_GAME;
+  skt.sendall(&code, sizeof(code), was_closed);
 }
 
 bool ServerProtocol::recv_client_ready(bool *was_closed) {

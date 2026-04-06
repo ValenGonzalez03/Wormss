@@ -20,6 +20,7 @@ uint8_t STOP_SHOOTING = 0x0C;
 uint8_t CHANGE_WEAPON = 0x0D;
 uint8_t CLIENT_READY = 0x0E;
 uint8_t STOP_GAME = 0x0F;
+uint8_t HOST_STARTED_GAME = 0x10;
 }  // namespace CODE_PLAYER_COMM
 
 #endif

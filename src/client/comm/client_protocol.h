@@ -35,6 +35,8 @@ class ClientProtocol {
 
   // GameState process_game_state();
 
+  bool recv_game_started();
+
   void send_client_ready();
 
   // Recibe una cadena por socket y la devuelve

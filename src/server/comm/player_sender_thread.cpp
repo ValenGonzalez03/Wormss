@@ -4,8 +4,8 @@
 
 #define QUEUE_MAX_SIZE 20
 
-PlayerSender::PlayerSender(ServerProtocol &protocol, bool &keep_playing) :
-    protocol(protocol), sender_queue(QUEUE_MAX_SIZE), keep_playing(keep_playing) {}
+PlayerSender::PlayerSender(ServerProtocol &protocol, bool &keep_playing, uint8_t player_id) :
+    protocol(protocol), sender_queue(QUEUE_MAX_SIZE), keep_playing(keep_playing), player_id(player_id) {}
 
 void PlayerSender::run() {
   bool was_closed = false;
@@ -25,7 +25,8 @@ void PlayerSender::run() {
   } catch (const std::exception &err) {
     std::cerr << "Error en el sender: " << err.what() << "\n";
   }
-  std::cout << "SENDER TERMINO\n";
+  auto str = "Sender de cliente: " + std::to_string(player_id) + " termino.\n";
+  std::cout << str;
 }
 
 uint8_t PlayerSender::send_create_info(const uint8_t &player_id, const std::map<uint8_t, std::string> &worlds_map) {
@@ -51,7 +52,7 @@ void PlayerSender::send_worlds_map(const std::map<uint8_t, std::string> &worlds_
   protocol.send_worlds_map(worlds_map, &was_closed);
 }
 
-void PlayerSender::send_world(World* world) {
+void PlayerSender::send_world(const World *world) {
   bool was_closed = false;
   protocol.send_string(world->get_name(), &was_closed);
   protocol.send_string(world->get_background(), &was_closed);
@@ -59,7 +60,7 @@ void PlayerSender::send_world(World* world) {
   std::list<BeamBody *> beams = world->get_beams();
   uint8_t beams_number = beams.size();
   protocol.send_byte(beams_number, &was_closed);
-  
+
   for (auto &beam : beams) {
     BeamAttr attr = beam->get_attr();
     protocol.send_beam(attr, &was_closed);

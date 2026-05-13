@@ -8,7 +8,7 @@
 
 class RunnableGameStarted : public RunnableCommandLobby {
  public:
-    RunnableGameStarted(int clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
+  RunnableGameStarted(int clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
       RunnableCommandLobby(std::make_shared<GameStarted>(clt_id, skt, was_closed)) {}
 
   // Comando creado con el fin de desbloquear el Receiver del Server.

@@ -2,13 +2,14 @@
 
 #include <utility>
 #include <vector>
+#include <string>
 
 #define QUEUE_MAX_SIZE 20
 
 ClientManager::ClientManager(Socket &&peer, GamesHandler &games_handler, uint8_t client_id) :
-    games_handler(games_handler), protocol(std::move(peer)), sender(protocol, keep_playing), client_id(client_id),
-    receiver(client_id, protocol, keep_playing, in_game, m, is_empty), player(client_id),
-    lobby_commands_queue(receiver.get_lobby_commands_queue()) {}
+    games_handler(games_handler), protocol(std::move(peer)), client_id(client_id),
+    sender(protocol, keep_playing, client_id), receiver(client_id, protocol, keep_playing, in_game, m, is_empty),
+    player(client_id), lobby_commands_queue(receiver.get_lobby_commands_queue()) {}
 
 void ClientManager::run() {
   try {
@@ -17,14 +18,17 @@ void ClientManager::run() {
     // Loop en el lobby
     while (!in_game) {
       if (keep_playing) {
+        if (client_id == 1) {
+          // std::cout << "Pasa una vuelta por client 1\n";
+        }
         std::shared_ptr<RunnableCommandLobby> runnable_lobby_command;
         if (lobby_commands_queue.try_pop(runnable_lobby_command)) {
           std::lock_guard<std::mutex> lck(m);
           runnable_lobby_command->run(*this);
+          in_game = player.has_game_started();
         }
         is_empty.notify_all();
-        
-        in_game = player.has_game_started();
+
         keep_playing = !(player.has_game_finished());
       } else {
         std::cout << "Terminó en el Lobby.\n";
@@ -40,17 +44,18 @@ void ClientManager::run() {
     if (!is_host) {
       // Para asegurarme de que el resto de senders, ademas del que comenzó la partida, empiecen.
     }
-    
     // Loop en el juego
     while (!has_ended()) {
       sleep(1);
-      is_empty.notify_all();
+      // is_empty.notify_all();
       // keep_playing = !has_ended();
     }
     finish();
     std::cout << "ClientManager llego al final.\n";
   } catch (const std::exception &e) {
-    std::cerr << "Error en ClientManager: " << e.what() << '\n';
+    std::string str =
+        "Error en ClientManager de cliente " + std::to_string(client_id) + ": " + std::string(e.what()) + '\n';
+    std::cerr << str;
   }
 }
 
@@ -59,21 +64,29 @@ void ClientManager::manage_create_game() {
   uint8_t world_id = sender.send_create_info(player.get_id(), worlds_map);
 
   set_to_host();
-  Game *game = games_handler.create_game(player, world_id, sender, receiver.get_game_commands_queue());
+  Game *game = games_handler.create_game(player, world_id, sender, receiver);
 
   sender.send_id(game->get_game_id());
 }
 
 void ClientManager::manage_join_game(const uint8_t &game_id) {
+  try {
+    std::cout << "lol\n";
+    games_handler.join_game(player, game_id, sender, receiver);
+  } catch (std::exception &e) {
+    sender.send_id(255);
+    return;
+  }
   sender.send_id(player.get_id());
-  Game *game = games_handler.join_game(player, game_id, sender);
+
+
   // sender.send_id(game->get_game_id());
   // sender.send_world(game->get_world());
   // sender.send_join_info(player.get_id(), game->get_world());
 }
 
 void ClientManager::manage_start_game(const uint8_t &game_id) {
-  Game *game = games_handler.start_game(player, game_id);
+  games_handler.start_game(player, game_id);
   // sender.send_world(game->get_world());
   sender.start();
   receiver.wait_for_client_ready();
@@ -82,13 +95,21 @@ void ClientManager::manage_start_game(const uint8_t &game_id) {
 void ClientManager::manage_game_started() {
   sender.start();
   receiver.wait_for_client_ready();
+  std::cout << "Se recibio el game started\n";
 }
 
 void ClientManager::set_to_host() { is_host = true; }
 
 bool ClientManager::has_ended() { return threads_have_finished() || (player.has_game_finished()); }
 
-bool ClientManager::threads_have_finished() { return !(receiver.is_alive()) || !(sender.is_alive()); }
+bool ClientManager::threads_have_finished() {
+  // bool a = !(sender.is_alive());
+  // bool b = !(receiver.is_alive());
+  if (client_id == 1) {
+    // std::cout << a << " y " << b << std::endl;
+  }
+  return !(receiver.is_alive()) || !(sender.is_alive());
+}
 
 void ClientManager::finish() {
   keep_playing = false;

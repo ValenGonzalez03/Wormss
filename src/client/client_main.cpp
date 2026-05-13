@@ -20,16 +20,19 @@ int main(int argc, char *argv[]) {
 
     // Ejecucion del Lobby del cliente
     Lobby lobby(protocol);
-    lobby.run_lobby();
-
-    // Ejecucion de una partida desde el lado del cliente
-    Client client(std::move(protocol), lobby.get_player_id());
-    // client.start_threads();
-    int result = client.run();  // Como manejo los errores? return result?
-    client.join_threads();
-    std::cout << "Cliente se desconectó exitosamente" << std::endl;
-
-    return result;
+    int result_lobby = lobby.run_lobby();
+    if (result_lobby == 0) {
+      // Ejecucion de una partida desde el lado del cliente
+      Client client(std::move(protocol), lobby.get_player_id());
+      // client.start_threads();
+      int result = client.run();  // Como manejo los errores? return result?
+      client.join_threads();
+      std::cout << "Cliente se desconectó exitosamente" << std::endl;
+      return result;
+    } else {
+      std::cout << "Hubo un error en el lobby. El cliente se cerrará" << std::endl;
+      return 0;
+    }
   } catch (const std::exception &err) {
     std::cerr << "Something went wrong and an exception was caught: " << err.what() << "\n";
     return ERROR;

@@ -25,26 +25,26 @@ void GamesHandler::delete_game(const uint8_t &game_id) {
 }
 
 Game *GamesHandler::create_game(Player &player, const uint8_t &world_id, PlayerSender &sender,
-                                Queue<game_command_ptr> &receiver_queue) {
+                                ServerReceiver &receiver) {
   std::lock_guard<std::mutex> lck(m);
   std::string world_name = worlds_map[world_id];
   World world = worlds_reader.generate_world(world_name);
 
-  Game *game = player.create_game(games_counter, world, games_config, sender, receiver_queue);
+  Game *game = player.create_game(games_counter, world, games_config, sender, receiver);
   games_counter++;
   games.push_back(game);
 
   return game;
 }
 
-Game *GamesHandler::join_game(Player &player, const uint8_t &game_id, PlayerSender &sender) {
+Game *GamesHandler::join_game(Player &player, const uint8_t &game_id, PlayerSender &sender, ServerReceiver &receiver) {
   std::lock_guard<std::mutex> lck(m);
   Game *game = get_game(game_id);
   if (game == nullptr) {
     throw std::runtime_error("Error: No se encontró el juego al que se quiso unir.");
   }
 
-  player.join_game(game, sender);
+  player.join_game(game, sender, receiver);
 
   return game;
 }

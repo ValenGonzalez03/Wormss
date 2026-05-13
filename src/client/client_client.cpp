@@ -14,6 +14,7 @@
 #include "../common/commands/stop_game.h"
 #include "../common/commands/change_weapon.h"
 #include "../common/game_constants.h"
+#include <SDL2/SDL_mixer.h>
 
 using SDL2pp::Renderer;
 using SDL2pp::SDL;

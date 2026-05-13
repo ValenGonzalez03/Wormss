@@ -14,7 +14,7 @@ class ServerReceiver : public Thread {
   uint8_t client_id;
   ServerProtocol &protocol;
   Queue<lobby_command_ptr> lobby_commands;
-  Queue<game_command_ptr> game_commands;
+  Queue<game_command_ptr> *game_commands;
 
   std::condition_variable &is_empty;
   bool &keep_playing;
@@ -35,7 +35,7 @@ class ServerReceiver : public Thread {
 
   Queue<lobby_command_ptr> &get_lobby_commands_queue();
 
-  Queue<game_command_ptr> &get_game_commands_queue();
+  void set_game_commands_queue(Queue<game_command_ptr> *queue);
 
   ~ServerReceiver();
 

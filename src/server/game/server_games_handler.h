@@ -30,12 +30,13 @@ class GamesHandler {
  public:
   GamesHandler();
 
-  Game *create_game(Player &player, const uint8_t &world_id,   // NOLINT(runtime/references)
-                    PlayerSender &sender,            // NOLINT(runtime/references)
-                    Queue<game_command_ptr> &receiver_queue);  // NOLINT(runtime/references)
+  Game *create_game(Player &player, const uint8_t &world_id,  // NOLINT(runtime/references)
+                    PlayerSender &sender,                     // NOLINT(runtime/references)
+                    ServerReceiver &receiver);                // NOLINT(runtime/references)
 
   Game *join_game(Player &player, const uint8_t &game_id,  // NOLINT(runtime/references)
-                  PlayerSender &sender);         // NOLINT(runtime/references)
+                  PlayerSender &sender,                    // NOLINT(runtime/references)
+                  ServerReceiver &receiver);               // NOLINT(runtime/references)
 
   Game *start_game(Player &player, const uint8_t &game_id);  // NOLINT(runtime/references)
 

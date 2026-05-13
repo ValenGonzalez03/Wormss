@@ -5,7 +5,7 @@
 
 ServerReceiver::ServerReceiver(uint8_t client_id, ServerProtocol &protocol, bool &keep_playing, bool &in_game,
                                std::mutex &m, std::condition_variable &is_empty) :
-    client_id(client_id), protocol(protocol), lobby_commands(QUEUE_MAX_SIZE), game_commands(QUEUE_MAX_SIZE),
+    client_id(client_id), protocol(protocol), lobby_commands(QUEUE_MAX_SIZE), game_commands(nullptr),
     is_empty(is_empty), keep_playing(keep_playing), in_game(in_game), m(m) {}
 
 void ServerReceiver::run() {
@@ -26,22 +26,22 @@ void ServerReceiver::run() {
       throw std::runtime_error("El receiver del cliente " + std::to_string(client_id) +
                                " terminó antes de entrar al juego.");
     }
-
     // Loop en el juego
     while (true) {
       game_command_ptr runnable_command = protocol.process_command(&was_closed);
-      game_commands.try_push(runnable_command);
+      game_commands->try_push(runnable_command);
     }
   } catch (const LibError &libError) {  // Si se cierra el skt
     keep_playing = false;
-    std::string str ("Se Cerro el Socket: ");
+    std::string str("Se Cerro el Socket: ");
     str.append(libError.what() + '\n');
     std::cout << str;
   } catch (const std::runtime_error &runtimeError) {  // Si se procesa mal un cmd
     keep_playing = false;
     std::cerr << "Error en el Receiver: " << runtimeError.what() << std::endl;
   }
-  std::cout << "RECEIVER TERMINO\n";
+  auto str = "Receiver de cliente: " + std::to_string(client_id) + " termino.\n";
+  std::cout << str;
 }
 
 void ServerReceiver::wait_for_client_ready() {
@@ -53,6 +53,6 @@ void ServerReceiver::wait_for_client_ready() {
 
 Queue<lobby_command_ptr> &ServerReceiver::get_lobby_commands_queue() { return lobby_commands; }
 
-Queue<game_command_ptr> &ServerReceiver::get_game_commands_queue() { return game_commands; }
+void ServerReceiver::set_game_commands_queue(Queue<game_command_ptr> *queue) { game_commands = queue; }
 
 ServerReceiver::~ServerReceiver() { keep_playing = false; }

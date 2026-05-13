@@ -16,5 +16,6 @@ void Broadcaster::broadcast(const GameState& game_state) {
   std::lock_guard<std::mutex> lck(m);
   for (auto& current_queue : queues_sender) {
     current_queue.second->try_push(game_state);
+    // std::cout << "GS a cliente " << std::to_string(current_queue.first) << " fue pusheado: " << a << std::endl;
   }
 }

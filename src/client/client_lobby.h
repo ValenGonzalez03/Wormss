@@ -17,7 +17,7 @@ class Lobby {
  public:
   explicit Lobby(ClientProtocol& prot);  // NOLINT(runtime/references)
 
-  void run_lobby();
+  int run_lobby();
 
   void print_menu();
 
@@ -25,7 +25,7 @@ class Lobby {
 
   void create_game(bool* was_closed);
 
-  void join_game(bool* was_closed);
+  bool join_game(bool* was_closed);
 
   void show_worlds(const std::map<uint8_t, std::string>& world_names);
 

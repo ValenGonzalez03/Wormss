@@ -1,12 +1,12 @@
 #include "server_game.h"
+#include <string>
 
 #define QUEUE_MAX_SIZE 20
 
-Game::Game(const uint8_t &game_id, const World &world, const GameConfig &game_config,
-           Queue<game_command_ptr> &receiver_queue) :
-    game_id(game_id), commands(receiver_queue), config(game_config), game_manager(world) {}
+Game::Game(const uint8_t &game_id, const World &world, const GameConfig &game_config) :
+    game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config), game_manager(world) {}
 
-void Game::add_player(PlayerSender& sender, const uint8_t &player_id) {
+void Game::add_player(PlayerSender &sender, const uint8_t &player_id) {
   // player_id = players_counter;
   // players_counter++;
   broadcaster.add_queue(&sender.get_queue(), player_id);
@@ -108,7 +108,7 @@ bool Game::compare_id(const uint8_t &another_game_id) { return (game_id == anoth
 //   game_manager.set_world(world);
 // }
 
-World* Game::get_world() { return game_manager.get_world(); }
+World *Game::get_world() { return game_manager.get_world(); }
 
 void Game::push_game_state() {
   GameState game_state = game_manager.create_state();
@@ -129,6 +129,6 @@ bool Game::is_dead() { return !keep_playing; }
 
 uint8_t Game::get_game_id() { return game_id; }
 
-Queue<game_command_ptr> &Game::get_commands_queue() { return commands; }
+Queue<game_command_ptr> *Game::get_commands_queue() { return &commands; }
 
 GameManager &Game::get_game_manager() { return game_manager; }

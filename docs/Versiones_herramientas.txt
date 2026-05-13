@@ -1,0 +1,8 @@
+Versiones para SDL:
+- SDL2
+- SDL2-image 2.6.3
+- SDL2-mixer 2.6.3
+- SDL2-ttf 2.20.2
+
+Version para Box2D:
+- box2d	2.4.2

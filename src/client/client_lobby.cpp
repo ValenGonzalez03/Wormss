@@ -45,7 +45,7 @@ void Lobby::create_game(bool* was_closed) {
   send_start_game(game_id);
 }
 
-void Lobby::join_game(bool* was_closed) {
+bool Lobby::join_game(bool* was_closed) {
   std::cout << "Ingrese el codigo de la partida para unirse:" << std::endl;
   int game_id = 0;
   std::cin >> game_id;
@@ -54,8 +54,13 @@ void Lobby::join_game(bool* was_closed) {
   prot.send_command(join_comm);
 
   this->player_id = prot.recv_byte(was_closed);
-  std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
-
+  if (player_id == 255) {
+    std::cerr << "Juego no encontrado." << std::endl;
+    return false;
+  } else {
+    std::cout << "Tu player_id es: " << std::to_string(player_id) << std::endl;
+    return true;
+  }
 }
 
 void Lobby::show_worlds(const std::map<uint8_t, std::string>& worlds_map) {
@@ -80,7 +85,7 @@ void Lobby::wait_start_game(char option_selected) {
     std::cout << "Cliente de id " << static_cast<int>(player_id) << " espero para comenzar." << std::endl;
     if (option_selected == 'j') {
       // Envio el comando para desbloquear al Receiver del Server
-      GameStarted game_started (-1);
+      GameStarted game_started(-1);
       prot.send_command(game_started);
     }
   } else {
@@ -88,7 +93,7 @@ void Lobby::wait_start_game(char option_selected) {
   }
 }
 
-void Lobby::run_lobby() {
+int Lobby::run_lobby() {
   char option_selected = '\0';
   do {
     print_menu();
@@ -100,9 +105,12 @@ void Lobby::run_lobby() {
   if (option_selected == 'c') {
     create_game(&was_closed);
   } else if (option_selected == 'j') {
-    join_game(&was_closed);
+    if (!join_game(&was_closed)) {
+      return 1;
+    }
   }
   wait_start_game(option_selected);
+  return 0;
 }
 
 uint8_t Lobby::get_player_id() { return player_id; }

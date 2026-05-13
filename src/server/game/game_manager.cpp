@@ -4,6 +4,7 @@
 #include "box2d/box2d.h"
 #include <algorithm>
 #include <stdio.h>
+#include <string>
 #include <vector>
 
 #define BAT_LENGTH 3
@@ -14,7 +15,11 @@ void GameManager::initialize_game(const GameConfig &game_config) {
   int i = 0;
   std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
   for (uint8_t player_id : players) {
-    world.create_worm(player_id, spawn_points[i][0], spawn_points[i][1], game_config);
+    int num_sp = i;
+    if (i >= spawn_points.size()) {
+      num_sp = spawn_points.size() - 1;
+    }
+    world.create_worm(player_id, spawn_points[num_sp][0], spawn_points[num_sp][1], game_config);
     auto string = "Worm of id: " + std::to_string(static_cast<int>(player_id)) + " created.\n";
     std::cout << string;
     i++;
@@ -39,7 +44,7 @@ void GameManager::delete_player(const uint8_t &player_id) {
 //   world = selected_world;
 // }
 
-World* GameManager::get_world() { return &world; }
+World *GameManager::get_world() { return &world; }
 
 void GameManager::step() { world.step(timeStep, velocityIterations, positionIterations); }
 

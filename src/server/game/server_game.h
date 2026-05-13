@@ -36,9 +36,9 @@ class Game : public Thread {
   uint8_t game_id;
   GameManager game_manager;
   const GameConfig &config;
-  Queue<game_command_ptr> &commands;
+  Queue<game_command_ptr> commands;
   Broadcaster broadcaster;
-  std::list<PlayerSender*> player_senders;
+  std::list<PlayerSender *> player_senders;
 
   uint8_t players_counter = 0;
   uint8_t current_turn_id = 0;
@@ -49,10 +49,9 @@ class Game : public Thread {
   std::chrono::duration<float> rate = std::chrono::duration<float>((float)RATE);  // NOLINT(readability/casting)
 
  public:
-  explicit Game(const uint8_t &game_id, const World &world, const GameConfig &game_config,
-                Queue<game_command_ptr> &receiver_queue);  // NOLINT(runtime/references)
+  explicit Game(const uint8_t &game_id, const World &world, const GameConfig &game_config);
 
-  void add_player(PlayerSender& sender, const uint8_t &player_id);  // NOLINT(runtime/references)
+  void add_player(PlayerSender &sender, const uint8_t &player_id);  // NOLINT(runtime/references)
 
   void delete_player(const uint8_t &player_id);
 
@@ -70,7 +69,7 @@ class Game : public Thread {
 
   bool compare_id(const uint8_t &another_game_id);
 
-  World* get_world();
+  World *get_world();
 
   void push_game_state();
 
@@ -84,7 +83,7 @@ class Game : public Thread {
 
   uint8_t get_game_id();
 
-  Queue<game_command_ptr> &get_commands_queue();
+  Queue<game_command_ptr> *get_commands_queue();
 
   GameManager &get_game_manager();
 

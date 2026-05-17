@@ -12,7 +12,8 @@ World::World() : world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f))) {
 
 BeamBody* World::create_beam(float pos_x, float pos_y, float angle, float length) {
   BodyBasicData basic_data{0, pos_x, pos_y, angle, length, BEAM_HEIGHT};
-  BodyAdvData adv_data{1.0f, 0.5f, BEAM_CATEGORY, BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
+  BodyAdvData adv_data{1.0f, 0.5f, BEAM_CATEGORY,
+                       BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
   BeamBody* beam = new BeamBody(basic_data, adv_data, world.get());
 
   beams.push_back(beam);
@@ -20,17 +21,19 @@ BeamBody* World::create_beam(float pos_x, float pos_y, float angle, float length
   return beam;
 }
 
-WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn_y, const GameConfig& config) {
+WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn_y,
+                             const GameConfig& config) {
   BodyBasicData basic_data{player_id, spawn_x, spawn_y, 0.0f, WORM_WIDTH, WORM_HEIGHT};
   BodyAdvData adv_data{1.0f, 0.2f, WORM_CATEGORY, BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY};
-  WormBody* worm = new WormBody(basic_data, adv_data, config.get_worm_life(), config.get_worm_speed(), world.get());
+  WormBody* worm = new WormBody(basic_data, adv_data, config.get_worm_life(),
+                                config.get_worm_speed(), world.get());
 
   worms.push_back(worm);
   return worm;
 }
 
-MissileBody* World::create_missile(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction,
-                                   float initial_force) {
+MissileBody* World::create_missile(uint8_t id, float pos_x, float pos_y, float angle,
+                                   uint8_t direction, float initial_force) {
   BodyBasicData basic_data{id, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT};
   BodyAdvData adv_data{1.0f, 0.3f, MISSILE_CATEGORY,
                        BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
@@ -42,10 +45,11 @@ MissileBody* World::create_missile(uint8_t id, float pos_x, float pos_y, float a
   return missile;
 }
 
-GrenadeBody* World::create_grenade(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction,
-                                   float initial_force) {
+GrenadeBody* World::create_grenade(uint8_t id, float pos_x, float pos_y, float angle,
+                                   uint8_t direction, float initial_force) {
   BodyBasicData basic_data{id, pos_x, pos_y, angle, GRENADE_WIDTH, GRENADE_HEIGHT};
-  BodyAdvData adv_data{1.0f, 0.3f, GRENADE_CATEGORY, BEAM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
+  BodyAdvData adv_data{1.0f, 0.3f, GRENADE_CATEGORY,
+                       BEAM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
   GrenadeBody* grenade = new GrenadeBody(basic_data, direction, adv_data, world.get());
   grenade->apply_initial_impulse(initial_force, angle);
   explodables.push_back(grenade);
@@ -81,8 +85,8 @@ void World::step(float timeStep, int32 velocityIterations, int32 positionIterati
 }
 
 WormBody* World::get_worm(const uint8_t& player_id) {
-  auto it =
-      std::find_if(worms.begin(), worms.end(), [player_id](WormBody* worm) { return worm->get_id() == player_id; });
+  auto it = std::find_if(worms.begin(), worms.end(),
+                         [player_id](WormBody* worm) { return worm->get_id() == player_id; });
 
   if (it != worms.end()) {
     return *it;
@@ -132,8 +136,8 @@ void World::ray_cast(b2RayCastCallback* callback, const b2Vec2& point1, const b2
 std::list<WormAttr> World::get_worms_attr() {
   std::list<WormAttr> worms_attr;
   for (auto worm : worms) {
-    WormAttr attr({worm->get_id(), worm->get_pos_x(), worm->get_pos_y(), worm->get_direction(), worm->get_state(),
-                   worm->get_weapon_selected(), worm->get_aiming_angle()});
+    WormAttr attr({worm->get_id(), worm->get_pos_x(), worm->get_pos_y(), worm->get_direction(),
+                   worm->get_state(), worm->get_weapon_selected(), worm->get_aiming_angle()});
     worms_attr.emplace_back(attr);
   }
   return worms_attr;
@@ -142,8 +146,9 @@ std::list<WormAttr> World::get_worms_attr() {
 std::list<ExplodableAttr> World::get_explodables_attr() {
   std::list<ExplodableAttr> expl_attr;
   for (auto explodable : explodables) {
-    ExplodableAttr attr{explodable->get_id(),    explodable->get_type(),  explodable->get_pos_x(),
-                        explodable->get_pos_y(), explodable->get_angle(), explodable->get_direction()};
+    ExplodableAttr attr{explodable->get_id(),    explodable->get_type(),
+                        explodable->get_pos_x(), explodable->get_pos_y(),
+                        explodable->get_angle(), explodable->get_direction()};
     expl_attr.emplace_back(attr);
   }
   return expl_attr;

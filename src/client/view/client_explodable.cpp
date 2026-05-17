@@ -3,10 +3,10 @@
 #include <cmath>
 #include <box2d/b2_common.h>
 
-Explodable::Explodable(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t dir, uint8_t id,
-                       SDL2pp::Texture* texture, SDL2pp::Renderer& rend) :
-    pos_x(pos_x), pos_y(pos_y), width(width), height(heigth), angle(angle), direction(dir), id(id), texture(texture),
-    renderer(rend) {}
+Explodable::Explodable(int pos_x, int pos_y, int width, int heigth, float angle, uint8_t dir,
+                       uint8_t id, SDL2pp::Texture* texture, SDL2pp::Renderer& rend) :
+    pos_x(pos_x), pos_y(pos_y), width(width), height(heigth), angle(angle), direction(dir), id(id),
+    texture(texture), renderer(rend) {}
 
 void Explodable::update(ExplodableData data) {
   pos_x = convert_meters_to_pixels_x(data.get_pos_x()) - width / 2;
@@ -18,7 +18,8 @@ void Explodable::render(int frame, int camera_x, int camera_y) {
   texture->SetAlphaMod(255);
   float angle_deg = angle * (180.0f / b2_pi);
   SDL_RendererFlip flip = (direction == RIGHT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-  renderer.Copy(*texture, SDL2pp::NullOpt, SDL2pp::Rect(pos_x - camera_x, pos_y - camera_y, width, height), -angle_deg,
+  renderer.Copy(*texture, SDL2pp::NullOpt,
+                SDL2pp::Rect(pos_x - camera_x, pos_y - camera_y, width, height), -angle_deg,
                 SDL2pp::NullOpt, flip);
 
   if (std::getenv("DEBUG") != NULL) {
@@ -32,7 +33,8 @@ void Explodable::render(int frame, int camera_x, int camera_y) {
   }
 }
 
-void Explodable::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height, int pos_x, int pos_y, float angle) {
+void Explodable::DrawRotatedRect(SDL2pp::Renderer& renderer, int width, int height, int pos_x,
+                                 int pos_y, float angle) {
   int hw = (width * 0.5f);
   int hh = (height * 0.5f);
 

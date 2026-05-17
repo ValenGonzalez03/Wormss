@@ -11,7 +11,9 @@ class RunnableJoinGame : public RunnableCommandLobby {
   RunnableJoinGame(int clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
       RunnableCommandLobby(std::make_shared<JoinGame>(clt_id, skt, was_closed)) {}
 
-  void run(ClientManager &client_manager) override { client_manager.manage_join_game(command->get_game_id()); }
+  void run(ClientManager &client_manager) override {
+    client_manager.manage_join_game(command->get_game_id());
+  }
 };
 
 #endif

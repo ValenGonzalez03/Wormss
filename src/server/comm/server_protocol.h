@@ -73,7 +73,7 @@ class ServerProtocol {
   /////////// FUNCIONES DE ENVÍO DE MUNDO POR SOCKET /////////////////////
   //////////////////////////////////////////////////////////////////////
 
-  void close_socket();
+  void close_socket(bool was_closed);
 };
 
 #endif

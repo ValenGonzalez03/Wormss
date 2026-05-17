@@ -2,7 +2,8 @@
 #include "../../common/game_constants.h"
 #include <memory>
 
-WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera &camera, const uint8_t &id) :
+WorldView::WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera &camera,
+                     const uint8_t &id) :
     resource_pool(res_pool), renderer(rend), worms(), camera(camera), player_id(id) {}
 
 void WorldView::add_beam(float pos_x, float pos_y, float width, float height, float angle) {
@@ -40,8 +41,8 @@ void WorldView::add_worm(WormData data) {
   int width_px = convert_meters_to_pixels_x(width);
   int heigth_px = convert_meters_to_pixels_x(heigth);
 
-  Worm worm(data.get_player_id(), pos_x_px, pos_y_px, width_px, heigth_px, data.get_aim_angle(), data.get_direction(),
-            data.get_state(), renderer, resource_pool);
+  Worm worm(data.get_player_id(), pos_x_px, pos_y_px, width_px, heigth_px, data.get_aim_angle(),
+            data.get_direction(), data.get_state(), renderer, resource_pool);
   worms.insert({worm.get_id(), worm});
 }
 
@@ -68,8 +69,9 @@ Explodable WorldView::add_explodable(ExplodableData data) {
   int heigth_px = convert_meters_to_pixels_x(heigth);
 
 
-  Explodable explodable(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(), data.get_direction(), data.get_id(),
-                        std::move(explodable_texture), renderer);
+  Explodable explodable(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(),
+                        data.get_direction(), data.get_id(), std::move(explodable_texture),
+                        renderer);
   return explodable;
 }
 
@@ -148,7 +150,8 @@ void WorldView::update(const GameState &game_state, int frame) {
     throw std::runtime_error("Id del jugador no encontrado en los gusanos");
   }
   auto player_worm = (worms.find(player_id))->second;
-  camera.update(player_worm.get_pos_x(), player_worm.get_pos_y(), player_worm.get_width(), player_worm.get_height());
+  camera.update(player_worm.get_pos_x(), player_worm.get_pos_y(), player_worm.get_width(),
+                player_worm.get_height());
 
   // Actualizo el estado de los explotables
   auto explodables_data = game_state.get_explodables();
@@ -207,18 +210,23 @@ void WorldView::render_text(const WormData &worm_data) {
                      ", state: " + (print_state(worm_data.get_state())) +
                      ", weapon: " + (print_weapon_selected(worm_data.get_weapon_selected()));
 
-  SDL2pp::Texture text_sprite(renderer, (font).RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+  SDL2pp::Texture text_sprite(renderer,
+                              (font).RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
 
-  renderer.Copy(text_sprite, SDL2pp::NullOpt, SDL2pp::Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
+  renderer.Copy(text_sprite, SDL2pp::NullOpt,
+                SDL2pp::Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
 
 
   std::string dir = (worm_data.get_direction() == LEFT ? "left" : "right");
-  std::string text_2 = "direction: " + dir + ", player_id: " + std::to_string(worm_data.get_player_id());
+  std::string text_2 =
+      "direction: " + dir + ", player_id: " + std::to_string(worm_data.get_player_id());
 
-  SDL2pp::Texture text_sprite_2(renderer, (font).RenderText_Blended(text_2, SDL_Color{255, 255, 255, 255}));
+  SDL2pp::Texture text_sprite_2(renderer,
+                                (font).RenderText_Blended(text_2, SDL_Color{255, 255, 255, 255}));
 
   renderer.Copy(text_sprite_2, SDL2pp::NullOpt,
-                SDL2pp::Rect(0, text_sprite.GetHeight(), text_sprite_2.GetWidth(), text_sprite_2.GetHeight()));
+                SDL2pp::Rect(0, text_sprite.GetHeight(), text_sprite_2.GetWidth(),
+                             text_sprite_2.GetHeight()));
 }
 
 std::string WorldView::print_state(WormState state) {

@@ -21,7 +21,8 @@ class Explosion {
   Explosion();
 
   // Crea un Missile con un renderer y las texturas correspondientes
-  explicit Explosion(int pos_x, int pos_y, int radius, std::vector<float> fractions, int start_frame,
+  explicit Explosion(int pos_x, int pos_y, int radius, std::vector<float> fractions,
+                     int start_frame,
                      SDL2pp::Renderer &rend);  // NOLINT(runtime/references)
 
   void update(int frame);

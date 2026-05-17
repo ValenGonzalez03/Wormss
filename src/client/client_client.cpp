@@ -25,8 +25,10 @@ using SDL2pp::Texture;
 const float RATE = static_cast<float>(1.0 / 60.0);
 
 Client::Client(ClientProtocol &&prot, uint8_t player_id) :
-    prot(std::move(prot)), receiver_queue(), sender_queue(), receiver(this->prot, receiver_queue, keep_playing),
-    sender(this->prot, sender_queue, keep_playing), player_id(player_id), view(this->player_id), last_game_state() {}
+    prot(std::move(prot)), receiver_queue(), sender_queue(),
+    receiver(this->prot, receiver_queue, keep_playing),
+    sender(this->prot, sender_queue, keep_playing), player_id(player_id), view(this->player_id),
+    last_game_state() {}
 
 void Client::start_threads() {
   sender.start();
@@ -65,7 +67,8 @@ int Client::run() {
 
     // Esto claramente es una mala solucion pero por ahora sirve
     last_game_state = receiver_queue.pop();
-    std::cout << "Cantidad worms: " << static_cast<int>(last_game_state.get_worms().size()) << std::endl;
+    std::cout << "Cantidad worms: " << static_cast<int>(last_game_state.get_worms().size())
+              << std::endl;
     for (auto worm_data : last_game_state.get_worms()) {
       view.world_view.add_worm(worm_data.second);
     }
@@ -90,19 +93,22 @@ int Client::run() {
 void Client::recv_world() {
   bool was_closed = false;
 
-  std::string world_name = prot.recv_string(&was_closed);  // Por ahora no se hace nada con el nombre
+  std::string world_name =
+      prot.recv_string(&was_closed);  // Por ahora no se hace nada con el nombre
   std::string background_name = prot.recv_string(&was_closed);
   view.world_view.set_background(background_name);
 
   uint8_t beams_number = prot.recv_byte(&was_closed);
   // int beams_number = prot.recv_beams_number(&was_closed);
 
-  std::cout << "Nombre mundo: " << world_name << ", Cantidad vigas: " << static_cast<int>(beams_number) << std::endl;
+  std::cout << "Nombre mundo: " << world_name
+            << ", Cantidad vigas: " << static_cast<int>(beams_number) << std::endl;
   for (int i = 0; i < beams_number; i++) {
     BeamAttr beam_attr = prot.recv_beam(&was_closed);
 
     if (beam_attr.width == 6.0f || beam_attr.width == 3.0f) {
-      view.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width, BEAM_HEIGHT, beam_attr.angle);
+      view.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width, BEAM_HEIGHT,
+                               beam_attr.angle);
     } else {
       std::cout << "Error tamanio viga" << std::endl;
     }
@@ -150,8 +156,9 @@ bool Client::func_to_execute() {
 
   if (game_state.is_game_finished()) {
     std::cout << "El juego ha terminado" << std::endl;
-    prot.close_socket();
-    sender_queue.close();
+    handle_quit_game();
+    // prot.close_socket();
+    // sender_queue.close();
     return true;  // Se cierra el juego
   }
   // ---------------------------------------------------------------------------

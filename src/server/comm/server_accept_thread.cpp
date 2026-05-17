@@ -47,7 +47,7 @@ void Accept::reap_dead() {
 void Accept::kill_all() {
   for (auto &client : clients) {
     client->kill();
-    client->finish();
+    client->finish(false);
   }
   clients.clear();
 }

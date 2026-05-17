@@ -17,7 +17,8 @@ class JoinGame : public Command {
   explicit JoinGame(uint8_t game_id) : Command(CODE_PLAYER_COMM::JOIN_GAME, 0), game_id(game_id) {}
 
   // Constructor from server side
-  explicit JoinGame(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::JOIN_GAME, clt_id) {
+  explicit JoinGame(uint8_t clt_id, Socket &skt, bool *was_closed) :
+      Command(CODE_PLAYER_COMM::JOIN_GAME, clt_id) {
     skt.recvall(&game_id, sizeof(game_id), was_closed);
   }
 
@@ -26,7 +27,9 @@ class JoinGame : public Command {
     skt.sendall(&game_id, sizeof(game_id), was_closed);
   }
 
-  void receive(Socket &skt, bool *was_closed) override { skt.recvall(&game_id, sizeof(game_id), was_closed); }
+  void receive(Socket &skt, bool *was_closed) override {
+    skt.recvall(&game_id, sizeof(game_id), was_closed);
+  }
   // PROVISORIAS
   uint8_t get_client_id() override { return client_id; }
 

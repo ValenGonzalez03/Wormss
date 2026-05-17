@@ -42,7 +42,8 @@ class ClientManager : public Thread {
 
  public:
   // Constructor de la clase.
-  explicit ClientManager(Socket &&peer, GamesHandler &games_handler, uint8_t client_id);  // NOLINT(runtime/references)
+  explicit ClientManager(Socket &&peer, GamesHandler &games_handler,  // NOLINT(runtime/references)
+                         uint8_t client_id);
 
   // Ejecuta los hilos.
   void run() override;
@@ -61,7 +62,7 @@ class ClientManager : public Thread {
   void kill();
 
   // Joinea los hilos y cierra el socket.
-  void finish();
+  void finish(bool was_closed);
 
   // Devuelve true si sus hilos estan muertos. False en caso contrario.
   bool is_dead();

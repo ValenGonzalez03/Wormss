@@ -68,8 +68,8 @@ Resolver::Resolver(const char* hostname, const char* servname, bool is_passive) 
              *
              * En este caso, `LibError` lo hara por nosotros.
              */
-      throw LibError(errno, "Name resolution failed for hostname '%s' y servname '%s'", (hostname ? hostname : ""),
-                     (servname ? servname : ""));
+      throw LibError(errno, "Name resolution failed for hostname '%s' y servname '%s'",
+                     (hostname ? hostname : ""), (servname ? servname : ""));
 
     } else {
       /*

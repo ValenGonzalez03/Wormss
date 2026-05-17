@@ -27,10 +27,13 @@ struct WormData {
  public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   WormData() :
-      player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE), current_weapon(BAZOOKA), aim_angle(0) {}
+      player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE), current_weapon(BAZOOKA),
+      aim_angle(0) {}
 
-  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st, WeaponType wp, float angle) :
-      player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st), current_weapon(wp), aim_angle(angle) {}
+  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st, WeaponType wp,
+                    float angle) :
+      player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st), current_weapon(wp),
+      aim_angle(angle) {}
 
   explicit WormData(ClientProtocol &prot) : pos_x(0), pos_y(0) {
     bool was_closed = false;
@@ -69,8 +72,9 @@ struct WormData {
     prot.send_float(pos_y, was_closed);
 
     // Envio la direccion
-    prot.send_byte(this->direction,
-                   was_closed);  // Si bien pone send_id, es un uint8_t. Luego debo cambiarle el nombre a la funcion
+    prot.send_byte(
+        this->direction,
+        was_closed);  // Si bien pone send_id, es un uint8_t. Luego debo cambiarle el nombre a la funcion
 
     // Envio el estado
     prot.send_byte(this->state, was_closed);
@@ -110,10 +114,12 @@ struct ExplodableData {
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   ExplodableData() : pos_x(0), pos_y(0), angle(0), type(WATER), direction(0), id(0) {}
 
-  explicit ExplodableData(float pos_x, float pos_y, float angle, BODY_TYPES type, uint8_t dir, uint8_t id) :
+  explicit ExplodableData(float pos_x, float pos_y, float angle, BODY_TYPES type, uint8_t dir,
+                          uint8_t id) :
       pos_x(pos_x), pos_y(pos_y), angle(angle), type(type), direction(dir), id(id) {}
 
-  explicit ExplodableData(ClientProtocol &prot) : pos_x(0), pos_y(0), angle(0), type(WATER), direction(0), id(0) {
+  explicit ExplodableData(ClientProtocol &prot) :  // NOLINT(runtime/references)
+      pos_x(0), pos_y(0), angle(0), type(WATER), direction(0), id(0) {
     bool was_closed = false;
     deserialize(prot, &was_closed);
   }
@@ -280,15 +286,16 @@ struct GameState {
   std::map<uint8_t, WormData> get_worms() const { return worms_list; }
 
   void add_worm(const WormAttr &attr) {
-    WormData worm(attr.player_id, attr.pos_x, attr.pos_y, attr.direction, attr.state, attr.current_weapon,
-                  attr.aim_angle);
+    WormData worm(attr.player_id, attr.pos_x, attr.pos_y, attr.direction, attr.state,
+                  attr.current_weapon, attr.aim_angle);
     worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
   }
 
   std::map<uint8_t, ExplodableData> get_explodables() const { return explodables_list; }
 
   void add_explodable(const ExplodableAttr &attr) {
-    ExplodableData explodable(attr.pos_x, attr.pos_y, attr.angle, attr.type, attr.direction, attr.id);
+    ExplodableData explodable(attr.pos_x, attr.pos_y, attr.angle, attr.type, attr.direction,
+                              attr.id);
     explodables_list.insert(std::pair<uint8_t, ExplodableData>(explodable.get_id(), explodable));
   }
 

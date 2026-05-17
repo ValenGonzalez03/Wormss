@@ -18,7 +18,8 @@ class ExplosionCallback : public b2RayCastCallback {
  public:
   ExplosionCallback(int ray_number, Explosion& explosion);  // NOLINT(runtime/references)
 
-  float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
+  float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal,
+                      float fraction) override;
 
   void evaluate_contact_for_bodies();
 

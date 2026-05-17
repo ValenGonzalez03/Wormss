@@ -46,8 +46,9 @@ void ResourcePool::initialize() {
   // add_font("Vera12", "/Vera.ttf", 12);
 }
 
-void ResourcePool::add_texture(const std::string &texture_name, const std::string &image_path, int width, int height,
-                               int amount_frames, BACKGROUND_COLOR back_color, int offset_x, int offset_y,
+void ResourcePool::add_texture(const std::string &texture_name, const std::string &image_path,
+                               int width, int height, int amount_frames,
+                               BACKGROUND_COLOR back_color, int offset_x, int offset_y,
                                int offset_width, int offset_height, bool textures_not_centered) {
   SDL2pp::Surface src_surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
   std::vector<SDL2pp::Texture *> textures(amount_frames);
@@ -61,7 +62,8 @@ void ResourcePool::add_texture(const std::string &texture_name, const std::strin
     textures_not_centered = static_cast<int>(textures_not_centered);
 
     SDL2pp::Rect dst_rect(offset_x - textures_not_centered * (i / 3), offset_y,
-                          width + offset_width + textures_not_centered * (i / 3), height + offset_height);
+                          width + offset_width + textures_not_centered * (i / 3),
+                          height + offset_height);
     SDL2pp::Surface dst_surface(0, dst_rect.GetW(), dst_rect.GetH(), 32, 0, 0, 0, 0);
     int_surface.BlitScaled(dst_rect, dst_surface, SDL2pp::NullOpt);
     // }
@@ -72,7 +74,8 @@ void ResourcePool::add_texture(const std::string &texture_name, const std::strin
     else if (back_color == YELLOW)
       color_key = SDL_MapRGB(dst_surface.Get()->format, 192, 192, 128);
 
-    SDL2pp::Texture *texture(new SDL2pp::Texture(renderer, dst_surface.SetColorKey(true, color_key)));
+    SDL2pp::Texture *texture(
+        new SDL2pp::Texture(renderer, dst_surface.SetColorKey(true, color_key)));
     textures[i] = texture;
   }
   texture_arrays[texture_name] = textures;
@@ -90,26 +93,35 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_texture(const std::string &text
 // ============================================================================================== //
 
 void ResourcePool::add_background(const std::string &image_path) {
-  SDL2pp::Surface surface = SDL2pp::Surface(std::string(RESOURCES_PATH) + "/Images/Backgrounds/" + image_path);
+  SDL2pp::Surface surface =
+      SDL2pp::Surface(std::string(RESOURCES_PATH) + "/Images/Backgrounds/" + image_path);
   Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
 
   background = std::make_shared<SDL2pp::Texture>(renderer, surface.SetColorKey(true, color_key));
 }
 
-void ResourcePool::add_short_beam() { add_texture(SHORT_BEAM, SHORT_BEAM_PATH, 72, 20, 1, LIGHT_BLUE); }
+void ResourcePool::add_short_beam() {
+  add_texture(SHORT_BEAM, SHORT_BEAM_PATH, 72, 20, 1, LIGHT_BLUE);
+}
 
-void ResourcePool::add_long_beam() { add_texture(LONG_BEAM, LONG_BEAM_PATH, 140, 20, 1, LIGHT_BLUE); }
+void ResourcePool::add_long_beam() {
+  add_texture(LONG_BEAM, LONG_BEAM_PATH, 140, 20, 1, LIGHT_BLUE);
+}
 
 void ResourcePool::add_worm_walking() {
   add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, LIGHT_BLUE, 19, 13, -38, -30, true);
 }
 
-void ResourcePool::add_worm_jumping() { add_texture(WORM_JUMPING, WORM_JUMPING_PATH, 60, 60, 10, LIGHT_BLUE); }
+void ResourcePool::add_worm_jumping() {
+  add_texture(WORM_JUMPING, WORM_JUMPING_PATH, 60, 60, 10, LIGHT_BLUE);
+}
 
 void ResourcePool::add_worm_aiming() {
-  add_texture(WORM_AIMING_BAZ, WORM_AIMING_BAZ_PATH, 60, 60, 32, LIGHT_BLUE, 16, 14, -29, -31, false);
+  add_texture(WORM_AIMING_BAZ, WORM_AIMING_BAZ_PATH, 60, 60, 32, LIGHT_BLUE, 16, 14, -29, -31,
+              false);
   add_texture(WORM_AIMING_BAT, WORM_AIMING_BAT_PATH, 60, 60, 32, YELLOW, 15, 0, -15, 0, false);
-  add_texture(WORM_AIMING_GRN, WORM_AIMING_GRN_PATH, 60, 60, 32, LIGHT_BLUE, 16, 12, -29, -28, false);
+  add_texture(WORM_AIMING_GRN, WORM_AIMING_GRN_PATH, 60, 60, 32, LIGHT_BLUE, 16, 12, -29, -28,
+              false);
 }
 
 void ResourcePool::add_worm_attacking() {
@@ -136,13 +148,21 @@ std::shared_ptr<SDL2pp::Texture> ResourcePool::get_background() const {
   }
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_short_beam_texture() const { return get_texture(SHORT_BEAM); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_short_beam_texture() const {
+  return get_texture(SHORT_BEAM);
+}
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() const { return get_texture(LONG_BEAM); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_long_beam_texture() const {
+  return get_texture(LONG_BEAM);
+}
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() const { return get_texture(WORM_WALKING); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_walking() const {
+  return get_texture(WORM_WALKING);
+}
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() const { return get_texture(WORM_JUMPING); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_worm_jumping() const {
+  return get_texture(WORM_JUMPING);
+}
 
 std::vector<SDL2pp::Texture *> ResourcePool::get_worm_aiming(WeaponType type) const {
   switch (type) {
@@ -170,9 +190,13 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_worm_attacking(WeaponType type)
   }
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_missile_texture() const { return get_texture(MISSILE); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_missile_texture() const {
+  return get_texture(MISSILE);
+}
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_grenade_texture() const { return get_texture(GRENADE_TX); }
+std::vector<SDL2pp::Texture *> ResourcePool::get_grenade_texture() const {
+  return get_texture(GRENADE_TX);
+}
 // ============================================================================================== //
 // ============================================================================================== //
 
@@ -180,7 +204,8 @@ std::vector<SDL2pp::Texture *> ResourcePool::get_grenade_texture() const { retur
 // ======================================= OTROS ==================================== //
 // ================================================================================== //
 
-void ResourcePool::add_font(const std::string &font_name, const std::string &font_path, int font_size) {
+void ResourcePool::add_font(const std::string &font_name, const std::string &font_path,
+                            int font_size) {
   try {
     SDL2pp::Font font(RESOURCES_PATH + font_path, font_size);
     this->fonts[font_name] = std::make_shared<SDL2pp::Font>(std::move(font));

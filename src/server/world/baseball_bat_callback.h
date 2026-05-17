@@ -11,7 +11,8 @@ class BaseballBatCallback : public b2RayCastCallback {
  public:
   explicit BaseballBatCallback(b2Vec2 batter_pos, UserData* attacker);
 
-  float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
+  float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal,
+                      float fraction) override;
 };
 
 #endif

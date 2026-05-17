@@ -7,8 +7,9 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, int health, float vel,
-                   b2World* world) : DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
+WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, int health,
+                   float vel, b2World* world) :
+    DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
   body->SetFixedRotation(true);
 
   // // Sensor para detectar si el gusano esta tocando el suelo
@@ -149,11 +150,12 @@ void WormBody::change_weapon(WeaponType weapon) { current_weapon = weapon; }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
 
-b2Vec2 WormBody::calculate_projectile_launch_position(float proj_width, float proj_height, float offset_x,
-                                                      float offset_y) {
+b2Vec2 WormBody::calculate_projectile_launch_position(float proj_width, float proj_height,
+                                                      float offset_x, float offset_y) {
   b2Vec2 pos = body->GetPosition();
   uint8_t worm_dir = get_direction();
-  float missile_dist_x = (worm_dir == RIGHT ? 1 : -1) * ((WORM_WIDTH / 2) + (proj_width / 2) + offset_x);
+  float missile_dist_x =
+      (worm_dir == RIGHT ? 1 : -1) * ((WORM_WIDTH / 2) + (proj_width / 2) + offset_x);
   float adjusted_pos_x = pos.x + missile_dist_x * cos(aiming_angle);
 
   float missile_dist_y = ((WORM_HEIGHT / 2) + (proj_height / 2) + offset_y);
@@ -174,7 +176,8 @@ void WormBody::set_worm_to_attack() { state = ATTACKING; }
 
 float WormBody::explosion_intersect_value(float fraction) { return 1; }
 
-void WormBody::update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& center_expl, float fraction) {
+void WormBody::update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& center_expl,
+                                            float fraction) {
   num_ray_contacts++;
   b2Vec2 ray_direction = point - center_expl;
   ray_direction.Normalize();
@@ -195,14 +198,16 @@ BodyExplosionInfo WormBody::get_explosion_info() {
   auto final_apply_point = (1 / static_cast<float>(num_ray_contacts)) * apply_point;
 
   std::cout << "num_ray_contacts: " << num_ray_contacts << std::endl;
-  std::cout << "final_impulse_dir: (" << final_impulse_dir.x << ", " << final_impulse_dir.y << ")" << std::endl;
+  std::cout << "final_impulse_dir: (" << final_impulse_dir.x << ", " << final_impulse_dir.y << ")"
+            << std::endl;
   std::cout << std::endl;
 
   if (fraction_force <= 0.0f) {
     fraction_force = 0.01f;
   }
 
-  auto body_explosion_info = BodyExplosionInfo{final_apply_point, final_impulse_dir, fraction_force};
+  auto body_explosion_info =
+      BodyExplosionInfo{final_apply_point, final_impulse_dir, fraction_force};
 
   num_ray_contacts = 0;
   impulse_dir = b2Vec2(0, 0);

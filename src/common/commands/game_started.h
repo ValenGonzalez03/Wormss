@@ -13,11 +13,12 @@ class GameStarted : public Command {
 
  public:
   // Constructor from client side
-  explicit GameStarted(int game_id) : game_id(game_id), Command(CODE_PLAYER_COMM::GAME_STARTED, 0) {}
+  explicit GameStarted(int game_id) :
+      game_id(game_id), Command(CODE_PLAYER_COMM::GAME_STARTED, 0) {}
 
   // Constructor from server side
-  explicit GameStarted(uint8_t clt_id, Socket &skt, bool *was_closed) :
-      Command(CODE_PLAYER_COMM::GAME_STARTED, clt_id) {
+  explicit GameStarted(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
+                       bool *was_closed) : Command(CODE_PLAYER_COMM::GAME_STARTED, clt_id) {
     skt.recvall(&game_id, sizeof(game_id), was_closed);
   }
 
@@ -25,7 +26,9 @@ class GameStarted : public Command {
     skt.sendall(&code, sizeof(code), was_closed);
     skt.sendall(&game_id, sizeof(game_id), was_closed);
   }
-  void receive(Socket &skt, bool *was_closed) override { skt.recvall(&game_id, sizeof(game_id), was_closed); }
+  void receive(Socket &skt, bool *was_closed) override {
+    skt.recvall(&game_id, sizeof(game_id), was_closed);
+  }
 
   // PROVISORIAS
   uint8_t get_client_id() override { return client_id; }

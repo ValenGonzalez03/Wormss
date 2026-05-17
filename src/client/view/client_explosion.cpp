@@ -5,10 +5,10 @@
 
 #define EXPLOSION_DURATION_MS 3 * 1000
 
-Explosion::Explosion(int pos_x, int pos_y, int radius, std::vector<float> ray_fractions, int start_frame,
-                     SDL2pp::Renderer &rend) :
-    pos_x(pos_x), pos_y(pos_y), radius(radius), ray_fractions(ray_fractions), frame_where_started(start_frame),
-    renderer(rend) {}
+Explosion::Explosion(int pos_x, int pos_y, int radius, std::vector<float> ray_fractions,
+                     int start_frame, SDL2pp::Renderer &rend) :
+    pos_x(pos_x), pos_y(pos_y), radius(radius), ray_fractions(ray_fractions),
+    frame_where_started(start_frame), renderer(rend) {}
 
 void Explosion::update(int frame) {
   int delta_frames = frame - frame_where_started;

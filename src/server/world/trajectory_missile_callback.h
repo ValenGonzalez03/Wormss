@@ -12,7 +12,8 @@ class MissileCallback : public b2RayCastCallback {
  public:
   MissileCallback();
 
-  float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
+  float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal,
+                      float fraction) override;
 
   bool did_hit_wall();
 

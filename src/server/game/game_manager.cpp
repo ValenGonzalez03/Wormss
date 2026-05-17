@@ -74,7 +74,8 @@ void GameManager::stop_moving(const uint8_t &player_id) {
   worm->stop_moving();
 }
 
-void GameManager::jump(const uint8_t &player_id, const uint8_t &direction, const uint8_t &jump_type) {
+void GameManager::jump(const uint8_t &player_id, const uint8_t &direction,
+                       const uint8_t &jump_type) {
   // if (player_id != current_turn_id) {
   //   return;
   // }
@@ -138,7 +139,8 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
 }
 
 void GameManager::use_bazooka(WormBody *worm, float initial_force) {
-  b2Vec2 missile_pos = worm->calculate_projectile_launch_position(MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
+  b2Vec2 missile_pos =
+      worm->calculate_projectile_launch_position(MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
   b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
   MissileCallback callback;
   world.ray_cast(&callback, worm_pos, missile_pos);
@@ -149,8 +151,8 @@ void GameManager::use_bazooka(WormBody *worm, float initial_force) {
   } else {
     ExplodableAttr proj_attr = worm->attack_projectile(missile_pos, projectiles_id_counter);
     projectiles_id_counter++;
-    world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction,
-                         initial_force);
+    world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
+                         proj_attr.direction, initial_force);
   }
 }
 
@@ -173,8 +175,8 @@ void GameManager::use_grenade(WormBody *worm, float initial_force) {
   b2Vec2 grenade_pos = worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT);
   ExplodableAttr proj_attr = worm->attack_projectile(grenade_pos, projectiles_id_counter);
   projectiles_id_counter++;
-  world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle, proj_attr.direction,
-                       initial_force);
+  world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
+                       proj_attr.direction, initial_force);
 }
 
 GameState GameManager::create_state() {

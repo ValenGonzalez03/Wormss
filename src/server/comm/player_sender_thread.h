@@ -16,13 +16,16 @@ class PlayerSender : public Thread {
   ServerProtocol &protocol;
   Queue<GameState> sender_queue;
   bool &keep_playing;
+  bool closed = false;
   uint8_t player_id;
 
  public:
-  explicit PlayerSender(ServerProtocol &protocol, bool &keep_playing, uint8_t player_id);  // NOLINT(runtime/references)
+  explicit PlayerSender(ServerProtocol &protocol, bool &keep_playing,  // NOLINT(runtime/references)
+                        uint8_t player_id);
 
   // Envia al cliente su id y la lista de mundos disponibles para elegir. Devuelve el id del mundo elegido.
-  uint8_t send_create_info(const uint8_t &player_id, const std::map<uint8_t, std::string> &worlds_map);
+  uint8_t send_create_info(const uint8_t &player_id,
+                           const std::map<uint8_t, std::string> &worlds_map);
 
   void send_game_started();
 
@@ -35,6 +38,8 @@ class PlayerSender : public Thread {
   void send_world(const World *world);
 
   bool has_started();
+
+  bool is_closed();
 
   Queue<GameState> &get_queue();
 

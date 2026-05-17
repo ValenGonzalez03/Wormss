@@ -6,15 +6,16 @@
 
 Player::Player(uint8_t player_id) : player_id(player_id) {}
 
-Game* Player::create_game(uint8_t game_id, const World& world, const GameConfig& game_config, PlayerSender& sender,
-                          ServerReceiver& receiver) {
+Game* Player::create_game(uint8_t game_id, const World& world, const GameConfig& game_config,
+                          PlayerSender& sender, ServerReceiver& receiver) {
   this->game = new Game(game_id, world, game_config);
   game->add_player(sender, player_id);
   receiver.set_game_commands_queue(game->get_commands_queue());
   has_game_assigned = true;
 
   std::string str = "Client of id: " + std::to_string(static_cast<int>(player_id)) +
-                    " created game id: " + std::to_string(static_cast<int>(game->get_game_id())) + "\n";
+                    " created game id: " + std::to_string(static_cast<int>(game->get_game_id())) +
+                    "\n";
   std::cout << str;
 
   return game;
@@ -28,20 +29,19 @@ void Player::join_game(Game* game, PlayerSender& sender, ServerReceiver& receive
     has_game_assigned = true;
     std::cout << "Client of id: " << static_cast<int>(player_id)
               << " joined game id: " << static_cast<int>(game->get_game_id()) << std::endl;
-    // Nuevamente, si la partida ya esta empezada habria que tirar una excepcion o avisar de alguna manera.
   } else {
-    std::cout << "Nose, ya empezo el juego" << std::endl;
+    throw std::runtime_error("El juego ya ha sido iniciado.");
   }
 }
 
 void Player::start_game() {
   if (!game->is_started()) {
+    game->charge_world();
     game->turn_to_started();
     game->start();
-    game->charge_world();
     game->send_info_to_start_to_players();
   } else {
-    std::cout << "No hago nada porque el juego ya empezó." << std::endl;
+    throw std::runtime_error("El juego ya ha sido iniciado.");
   }
 }
 
@@ -69,5 +69,7 @@ bool Player::has_game_finished() {
   }
   return game->is_dead();
 }
+
+void Player::push_last_game_state() { game->push_game_state(); }
 
 uint8_t Player::get_id() const { return player_id; }

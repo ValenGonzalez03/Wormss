@@ -25,7 +25,8 @@ class Player {
                     PlayerSender& sender,       // NOLINT(runtime/references)
                     ServerReceiver& receiver);  // NOLINT(runtime/references)
 
-  void join_game(Game* game, PlayerSender& sender, ServerReceiver& receiver);  // NOLINT(runtime/references)
+  void join_game(Game* game, PlayerSender& sender,  // NOLINT(runtime/references)
+                 ServerReceiver& receiver);         // NOLINT(runtime/references)
 
   void start_game();
 
@@ -36,6 +37,8 @@ class Player {
   bool has_game_started();
 
   bool has_game_finished();
+
+  void push_last_game_state();
 
   uint8_t get_id() const;
 

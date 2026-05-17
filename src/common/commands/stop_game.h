@@ -15,7 +15,8 @@ class StopGame : public Command {
 
   // Constructor from server side for code consistency but doesn't do anything
   // different from the other
-  explicit StopGame(uint8_t clt_id, Socket &skt, bool *was_closed) : Command(CODE_PLAYER_COMM::STOP_GAME, clt_id) {
+  explicit StopGame(uint8_t clt_id, Socket &skt, bool *was_closed) :
+      Command(CODE_PLAYER_COMM::STOP_GAME, clt_id) {
     // receive(skt, was_closed);
   }
 

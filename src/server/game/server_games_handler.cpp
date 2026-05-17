@@ -37,7 +37,8 @@ Game *GamesHandler::create_game(Player &player, const uint8_t &world_id, PlayerS
   return game;
 }
 
-Game *GamesHandler::join_game(Player &player, const uint8_t &game_id, PlayerSender &sender, ServerReceiver &receiver) {
+Game *GamesHandler::join_game(Player &player, const uint8_t &game_id, PlayerSender &sender,
+                              ServerReceiver &receiver) {
   std::lock_guard<std::mutex> lck(m);
   Game *game = get_game(game_id);
   if (game == nullptr) {
@@ -61,7 +62,8 @@ Game *GamesHandler::start_game(Player &player, const uint8_t &game_id) {
 }
 
 Game *GamesHandler::get_game(const uint8_t &game_id) const {
-  auto it = std::find_if(games.begin(), games.end(), [game_id](Game *game) { return game->compare_id(game_id); });
+  auto it = std::find_if(games.begin(), games.end(),
+                         [game_id](Game *game) { return game->compare_id(game_id); });
 
   if (it != games.end()) {
     return *it;
@@ -72,7 +74,8 @@ Game *GamesHandler::get_game(const uint8_t &game_id) const {
 bool GamesHandler::game_exist(uint8_t game_id) {
   std::lock_guard<std::mutex> lck(m);
 
-  auto exists = std::any_of(games.begin(), games.end(), [game_id](Game *game) { return game->compare_id(game_id); });
+  auto exists = std::any_of(games.begin(), games.end(),
+                            [game_id](Game *game) { return game->compare_id(game_id); });
   return exists;
 }
 

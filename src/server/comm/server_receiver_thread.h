@@ -22,10 +22,11 @@ class ServerReceiver : public Thread {
   std::mutex &m;
 
  public:
-  explicit ServerReceiver(uint8_t client_id, ServerProtocol &protocol,  // NOLINT(runtime/references)
-                          bool &keep_playing,                           // NOLINT(runtime/references)
-                          bool &in_game, std::mutex &m,                 // NOLINT(runtime/references)
-                          std::condition_variable &is_empty);           // NOLINT(runtime/references)
+  explicit ServerReceiver(uint8_t client_id,
+                          ServerProtocol &protocol,            // NOLINT(runtime/references)
+                          bool &keep_playing,                  // NOLINT(runtime/references)
+                          bool &in_game, std::mutex &m,        // NOLINT(runtime/references)
+                          std::condition_variable &is_empty);  // NOLINT(runtime/references)
 
   // Ejecuta el loop del Receiver esperando comandos de lobby y posteriormente de juego.
   void run() override;

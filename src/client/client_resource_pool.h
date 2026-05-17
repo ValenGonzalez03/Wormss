@@ -21,15 +21,16 @@ class ResourcePool {
   Mix_Music *gMusic = NULL;
   unsigned int music_volume = 20;
 
-  void add_texture(const std::string &texture_name, const std::string &image_path, int width, int height,
-                   int amount_frames, BACKGROUND_COLOR back_color, int offset_x = 0, int offset_y = 0,
-                   int offset_width = 0, int offset_height = 0, bool textures_not_centered = false);
+  void add_texture(const std::string &texture_name, const std::string &image_path, int width,
+                   int height, int amount_frames, BACKGROUND_COLOR back_color, int offset_x = 0,
+                   int offset_y = 0, int offset_width = 0, int offset_height = 0,
+                   bool textures_not_centered = false);
 
-  void add_texture_walking(const std::string &texture_name, const std::string &image_path, int width, int height,
-                           int amount_frames);
+  void add_texture_walking(const std::string &texture_name, const std::string &image_path,
+                           int width, int height, int amount_frames);
 
-  void add_texture_aiming(const std::string &texture_name, const std::string &image_path, int width, int height,
-                          int amount_frames);
+  void add_texture_aiming(const std::string &texture_name, const std::string &image_path, int width,
+                          int height, int amount_frames);
 
   // Devuelve la textura guardada en el map de texturas
   // relacionada con el texture_name

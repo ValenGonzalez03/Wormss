@@ -85,8 +85,8 @@ Socket::Socket(const char *hostname, const char *servname) {
   if (skt != -1)
     ::close(skt);
 
-  throw LibError(saved_errno, "socket construction failed (connect to %s:%s)", (hostname ? hostname : ""),
-                 (servname ? servname : ""));
+  throw LibError(saved_errno, "socket construction failed (connect to %s:%s)",
+                 (hostname ? hostname : ""), (servname ? servname : ""));
 }
 
 Socket::Socket(const char *servname) {
@@ -182,7 +182,8 @@ Socket::Socket(const char *servname) {
   if (skt != -1)
     ::close(skt);
 
-  throw LibError(saved_errno, "socket construction failed (listen on %s)", (servname ? servname : ""));
+  throw LibError(saved_errno, "socket construction failed (listen on %s)",
+                 (servname ? servname : ""));
 }
 
 Socket::Socket(Socket &&other) {
@@ -312,7 +313,8 @@ int Socket::recvall(void *data, unsigned int sz, bool *was_closed) {
   *was_closed = false;
 
   while (received < sz) {
-    int s = recvsome((char *)data + received, sz - received, was_closed);  // NOLINT(readability/casting)
+    int s = recvsome((char *)data + received, sz - received,  // NOLINT(readability/casting)
+                     was_closed);
 
     if (s <= 0) {
       /*

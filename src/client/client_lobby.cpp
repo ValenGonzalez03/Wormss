@@ -82,7 +82,8 @@ void Lobby::send_start_game(int game_id) {
 
 void Lobby::wait_start_game(char option_selected) {
   if (prot.recv_game_started()) {
-    std::cout << "Cliente de id " << static_cast<int>(player_id) << " espero para comenzar." << std::endl;
+    std::cout << "Cliente de id " << static_cast<int>(player_id) << " espero para comenzar."
+              << std::endl;
     if (option_selected == 'j') {
       // Envio el comando para desbloquear al Receiver del Server
       GameStarted game_started(-1);

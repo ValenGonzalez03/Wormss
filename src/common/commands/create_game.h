@@ -14,12 +14,12 @@ class CreateGame : public Command {
   CreateGame() : Command(CODE_PLAYER_COMM::CREATE_GAME, 0) {}
 
   // Constructor from server side
-  explicit CreateGame(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
-      Command(CODE_PLAYER_COMM::CREATE_GAME, clt_id) {
+  explicit CreateGame(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
+                      bool *was_closed) : Command(CODE_PLAYER_COMM::CREATE_GAME, clt_id) {
     // receive(skt, was_closed);
   }
 
-  void send(Socket &skt, bool *was_closed) const override {
+  void send(Socket &skt, bool *was_closed) const override {  // NOLINT(runtime/references)
     skt.sendall(&code, sizeof(code), was_closed);
   }  // NOLINT(runtime/references)
 

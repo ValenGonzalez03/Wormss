@@ -5,23 +5,26 @@
 #define QUEUE_MAX_SIZE 20
 
 PlayerSender::PlayerSender(ServerProtocol &protocol, bool &keep_playing, uint8_t player_id) :
-    protocol(protocol), sender_queue(QUEUE_MAX_SIZE), keep_playing(keep_playing), player_id(player_id) {}
+    protocol(protocol), sender_queue(QUEUE_MAX_SIZE), keep_playing(keep_playing),
+    player_id(player_id) {}
 
 void PlayerSender::run() {
   bool was_closed = false;
   try {
-    while (keep_playing) {
+    while (!was_closed) {
       GameState game_state;
-      if (sender_queue.try_pop(game_state)) {
+      if (sender_queue.try_pop(game_state))
         game_state.serialize(protocol, &was_closed);
-        // protocol.send_game_state(game_state);
-      }
     }
-    GameState game_state;
-    while (sender_queue.try_pop(game_state)) {
-      game_state.serialize(protocol, &was_closed);
-      // protocol.send_game_state(game_state);
-    }
+    // GameState game_state;
+    // while (sender_queue.try_pop(game_state)) {
+    //   game_state.serialize(protocol, &was_closed);
+    //   // protocol.send_game_state(game_state);
+    // }
+  } catch (const LibError &liberr) {
+    closed = true;
+    auto str = "Conexión con cliente finalizada en cliente: " + std::to_string(player_id) + '\n';
+    std::cout << str;
   } catch (const std::exception &err) {
     std::cerr << "Error en el sender: " << err.what() << "\n";
   }
@@ -29,7 +32,8 @@ void PlayerSender::run() {
   std::cout << str;
 }
 
-uint8_t PlayerSender::send_create_info(const uint8_t &player_id, const std::map<uint8_t, std::string> &worlds_map) {
+uint8_t PlayerSender::send_create_info(const uint8_t &player_id,
+                                       const std::map<uint8_t, std::string> &worlds_map) {
   send_id(player_id);
   send_worlds_map(worlds_map);
 
@@ -68,6 +72,8 @@ void PlayerSender::send_world(const World *world) {
 }
 
 bool PlayerSender::has_started() { return is_alive(); }
+
+bool PlayerSender::is_closed() { return closed; }
 
 Queue<GameState> &PlayerSender::get_queue() { return sender_queue; }
 

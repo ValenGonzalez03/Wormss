@@ -36,7 +36,8 @@ class WorldView {
 
  public:
   // Crea una WorldView con una referencia a una resource pool y a un renderer
-  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend, Camera &camera,  // NOLINT(runtime/references)
+  WorldView(ResourcePool &res_pool, SDL2pp::Renderer &rend,  // NOLINT(runtime/references)
+            Camera &camera,                                  // NOLINT(runtime/references)
             const uint8_t &player_id);
   // void add_worms(std::vector<std::vector<float>> spawn_points);
 

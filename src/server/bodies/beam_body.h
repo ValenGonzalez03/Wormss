@@ -26,7 +26,8 @@ class BeamBody : public StaticBody {
 
   float explosion_intersect_value(float fraction) override;
 
-  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) override;
+  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal,
+                                    float fraction) override;
 
   BodyExplosionInfo get_explosion_info() override;
 

@@ -9,8 +9,10 @@
 void ContactListener::BeginContact(b2Contact* contact) {
   auto fixt_A = contact->GetFixtureA();
   auto fixt_B = contact->GetFixtureB();
-  auto* data_A = reinterpret_cast<UserData*>(contact->GetFixtureA()->GetBody()->GetUserData().pointer);
-  auto* data_B = reinterpret_cast<UserData*>(contact->GetFixtureB()->GetBody()->GetUserData().pointer);
+  auto* data_A =
+      reinterpret_cast<UserData*>(contact->GetFixtureA()->GetBody()->GetUserData().pointer);
+  auto* data_B =
+      reinterpret_cast<UserData*>(contact->GetFixtureB()->GetBody()->GetUserData().pointer);
 
   if (data_A && data_B) {
     if ((!(fixt_A->IsSensor()) && data_A->type == WORM)) {
@@ -31,8 +33,10 @@ void ContactListener::BeginContact(b2Contact* contact) {
 void ContactListener::EndContact(b2Contact* contact) {
   auto fixt_A = contact->GetFixtureA();
   auto fixt_B = contact->GetFixtureB();
-  auto* data_A = reinterpret_cast<UserData*>(contact->GetFixtureA()->GetBody()->GetUserData().pointer);
-  auto* data_B = reinterpret_cast<UserData*>(contact->GetFixtureB()->GetBody()->GetUserData().pointer);
+  auto* data_A =
+      reinterpret_cast<UserData*>(contact->GetFixtureA()->GetBody()->GetUserData().pointer);
+  auto* data_B =
+      reinterpret_cast<UserData*>(contact->GetFixtureB()->GetBody()->GetUserData().pointer);
 
   if (data_A && data_B) {
     if ((!fixt_A->IsSensor() && data_A->type == WORM)) {

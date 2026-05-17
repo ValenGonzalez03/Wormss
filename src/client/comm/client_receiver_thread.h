@@ -20,8 +20,9 @@ class ClientReceiverThread : public Thread {
   ClientReceiverThread &operator=(const ClientReceiverThread &) = delete;
 
  public:
-  explicit ClientReceiverThread(ClientProtocol &protocol, Queue<GameState> &recv_queue,  // NOLINT(runtime/references)
-                                bool &keep_playing);                                     // NOLINT(runtime/references)
+  explicit ClientReceiverThread(ClientProtocol &protocol,      // NOLINT(runtime/references)
+                                Queue<GameState> &recv_queue,  // NOLINT(runtime/references)
+                                bool &keep_playing);           // NOLINT(runtime/references)
 
   void run() override;
 };

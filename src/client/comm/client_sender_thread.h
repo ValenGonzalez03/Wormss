@@ -20,9 +20,10 @@ class ClientSenderThread : public Thread {
   ClientSenderThread &operator=(const ClientSenderThread &) = delete;
 
  public:
-  explicit ClientSenderThread(ClientProtocol &protocol,                     // NOLINT(runtime/references)
-                              Queue<std::shared_ptr<Command>> &send_queue,  // NOLINT(runtime/references)
-                              bool &keep_playing);                          // NOLINT(runtime/references)
+  explicit ClientSenderThread(
+      ClientProtocol &protocol,                     // NOLINT(runtime/references)
+      Queue<std::shared_ptr<Command>> &send_queue,  // NOLINT(runtime/references)
+      bool &keep_playing);                          // NOLINT(runtime/references)
 
   void run() override;
 };

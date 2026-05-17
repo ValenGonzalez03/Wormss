@@ -43,8 +43,8 @@ class WormBody : public DynamicBody {
  public:
   // explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
 
-  explicit WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, int health, float vel,
-                    b2World* world);
+  explicit WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, int health,
+                    float vel, b2World* world);
 
   void update();
 
@@ -81,8 +81,8 @@ class WormBody : public DynamicBody {
   ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
 
   // Calcula la posicion de lanzamiento de un proyectil en base a la del gusano, aplicando corrimientos opcionales
-  b2Vec2 calculate_projectile_launch_position(float proj_width, float proj_height, float offset_x = 0.0f,
-                                              float offset_y = 0.0f);
+  b2Vec2 calculate_projectile_launch_position(float proj_width, float proj_height,
+                                              float offset_x = 0.0f, float offset_y = 0.0f);
 
   // Devuelve los atributos del proyectil a lanzar
   ExplodableAttr attack_projectile(b2Vec2 proj_pos, uint8_t proj_id);
@@ -91,7 +91,8 @@ class WormBody : public DynamicBody {
 
   float explosion_intersect_value(float fraction) override;
 
-  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& center_expl, float fraction) override;
+  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& center_expl,
+                                    float fraction) override;
 
   BodyExplosionInfo get_explosion_info() override;
 

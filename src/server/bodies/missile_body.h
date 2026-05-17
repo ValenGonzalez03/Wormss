@@ -12,7 +12,8 @@ class MissileBody : public Explodable {
   bool m_contacting = false;
 
  public:
-  explicit MissileBody(const BodyBasicData& basic_data, uint8_t dir, const BodyAdvData& adv_data, b2World* world);
+  explicit MissileBody(const BodyBasicData& basic_data, uint8_t dir, const BodyAdvData& adv_data,
+                       b2World* world);
 
   void update() override;
 

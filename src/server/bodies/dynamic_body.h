@@ -7,7 +7,8 @@
 
 class DynamicBody : public Body {
  public:
-  DynamicBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TYPES type, b2World* world);
+  DynamicBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TYPES type,
+              b2World* world);
 
   void touch_worm(WormBody* worm) override = 0;
   void touch_beam(BeamBody* beam) override = 0;
@@ -21,7 +22,8 @@ class DynamicBody : public Body {
 
   float explosion_intersect_value(float fraction) override = 0;
 
-  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) override = 0;
+  void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal,
+                                    float fraction) override = 0;
 
   BodyExplosionInfo get_explosion_info() override = 0;
 

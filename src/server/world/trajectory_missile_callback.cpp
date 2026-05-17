@@ -2,7 +2,8 @@
 
 MissileCallback::MissileCallback() {}
 
-float MissileCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {
+float MissileCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal,
+                                     float fraction) {
   auto* data = reinterpret_cast<UserData*>(fixture->GetBody()->GetUserData().pointer);
   if (data) {
     auto* body = reinterpret_cast<Body*>(data->pointer);

@@ -1,6 +1,8 @@
 #include "client_bat.h"
 
-std::vector<SDL2pp::Texture *> Bat::get_aim_textures(const ResourcePool &pool) { return pool.get_worm_aiming(BAT); }
+std::vector<SDL2pp::Texture *> Bat::get_aim_textures(const ResourcePool &pool) {
+  return pool.get_worm_aiming(BAT);
+}
 
 std::vector<SDL2pp::Texture *> Bat::get_attack_textures(const ResourcePool &pool) {
   return pool.get_worm_attacking(BAT);

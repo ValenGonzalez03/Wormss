@@ -7,11 +7,13 @@
 
 class RunnableStartMoving : public RunnableCommandGame {
  public:
-  explicit RunnableStartMoving(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
+  explicit RunnableStartMoving(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
+                               bool *was_closed) :
       RunnableCommandGame(std::make_shared<StartMoving>(clt_id, skt, was_closed)) {}
 
   void run(GameManager &game_manager) override {
-    game_manager.move(command->get_client_id(), (reinterpret_cast<StartMoving *>(command.get()))->get_direction());
+    game_manager.move(command->get_client_id(),
+                      (reinterpret_cast<StartMoving *>(command.get()))->get_direction());
   }
 };
 

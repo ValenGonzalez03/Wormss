@@ -34,8 +34,8 @@ class Body {
   friend class World;
 
  public:
-  Body(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TYPES type, b2BodyType body_type,
-       b2World* world);
+  Body(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TYPES type,
+       b2BodyType body_type, b2World* world);
 
   void start_contact_with(Body* another_body);
   void touch(Body* other);
@@ -57,7 +57,8 @@ class Body {
 
   virtual float explosion_intersect_value(float fraction) = 0;
 
-  virtual void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal, float fraction) = 0;
+  virtual void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal,
+                                            float fraction) = 0;
 
   virtual BodyExplosionInfo get_explosion_info() = 0;
 

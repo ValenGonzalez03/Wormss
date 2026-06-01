@@ -14,7 +14,8 @@ class Weapon {
 
   virtual std::vector<SDL2pp::Texture *> get_aim_textures(const ResourcePool &pool) = 0;
 
-  virtual std::vector<SDL2pp::Texture *> get_attack_textures(const ResourcePool &pool) = 0;
+  virtual std::vector<SDL2pp::Texture *> get_attack_textures(
+      const ResourcePool &pool) = 0;
 
   virtual texture_vals get_fixed_vals_aim(uint8_t worm_dir, texture_vals vals) = 0;
 

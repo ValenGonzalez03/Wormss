@@ -18,7 +18,8 @@ class GameStarted : public Command {
 
   // Constructor from server side
   explicit GameStarted(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
-                       bool *was_closed) : Command(CODE_PLAYER_COMM::GAME_STARTED, clt_id) {
+                       bool *was_closed) :
+      Command(CODE_PLAYER_COMM::GAME_STARTED, clt_id) {
     skt.recvall(&game_id, sizeof(game_id), was_closed);
   }
 

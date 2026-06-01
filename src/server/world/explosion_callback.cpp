@@ -1,7 +1,8 @@
 #include "explosion_callback.h"
 #include <iostream>
 
-ExplosionCallback::ExplosionCallback(int num, Explosion& expl) : ray_number(num), explosion(expl) {}
+ExplosionCallback::ExplosionCallback(int num, Explosion& expl) :
+    ray_number(num), explosion(expl) {}
 
 float ExplosionCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point,
                                        const b2Vec2& normal, float fraction) {
@@ -25,7 +26,8 @@ void ExplosionCallback::evaluate_contact_for_bodies() {
     if (smallest_intersection >= body.fraction) {
       explosion.try_add_affected_body(body.body);
       b2Vec2 center_explosion = explosion.get_center();
-      body.body->update_explosion_ray_contact(body.point, center_explosion, body.fraction);
+      body.body->update_explosion_ray_contact(body.point, center_explosion,
+                                              body.fraction);
     }
   }
 }

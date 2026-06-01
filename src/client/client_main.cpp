@@ -34,7 +34,8 @@ int main(int argc, char *argv[]) {
       return 0;
     }
   } catch (const std::exception &err) {
-    std::cerr << "Something went wrong and an exception was caught: " << err.what() << "\n";
+    std::cerr << "Something went wrong and an exception was caught: " << err.what()
+              << "\n";
     return ERROR;
   } catch (...) {
     std::cerr << "Something went wrong and an unknown exception was caught.\n";

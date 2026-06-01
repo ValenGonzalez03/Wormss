@@ -19,8 +19,10 @@ void GameManager::initialize_game(const GameConfig &game_config) {
     if (i >= spawn_points.size()) {
       num_sp = spawn_points.size() - 1;
     }
-    world.create_worm(player_id, spawn_points[num_sp][0], spawn_points[num_sp][1], game_config);
-    auto string = "Worm of id: " + std::to_string(static_cast<int>(player_id)) + " created.\n";
+    world.create_worm(player_id, spawn_points[num_sp][0], spawn_points[num_sp][1],
+                      game_config);
+    auto string = "[CLIENT-MAN-THREAD]: Worm of id: " +
+                  std::to_string(static_cast<int>(player_id)) + " created.\n";
     std::cout << string;
     i++;
   }
@@ -139,8 +141,8 @@ void GameManager::attack(const uint8_t &player_id, float initial_force) {
 }
 
 void GameManager::use_bazooka(WormBody *worm, float initial_force) {
-  b2Vec2 missile_pos =
-      worm->calculate_projectile_launch_position(MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
+  b2Vec2 missile_pos = worm->calculate_projectile_launch_position(
+      MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
   b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
   MissileCallback callback;
   world.ray_cast(&callback, worm_pos, missile_pos);
@@ -149,7 +151,8 @@ void GameManager::use_bazooka(WormBody *worm, float initial_force) {
     b2Vec2 hit_point = callback.get_hit_point();
     world.create_explosion(hit_point.x, hit_point.y);
   } else {
-    ExplodableAttr proj_attr = worm->attack_projectile(missile_pos, projectiles_id_counter);
+    ExplodableAttr proj_attr =
+        worm->attack_projectile(missile_pos, projectiles_id_counter);
     projectiles_id_counter++;
     world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
                          proj_attr.direction, initial_force);
@@ -172,7 +175,8 @@ void GameManager::use_bat(WormBody *worm) {
 }
 
 void GameManager::use_grenade(WormBody *worm, float initial_force) {
-  b2Vec2 grenade_pos = worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT);
+  b2Vec2 grenade_pos =
+      worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT);
   ExplodableAttr proj_attr = worm->attack_projectile(grenade_pos, projectiles_id_counter);
   projectiles_id_counter++;
   world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
@@ -203,6 +207,8 @@ GameState GameManager::create_state() {
   return game_state;
 }
 
-void GameManager::set_game_finished(const bool is_finished) { game_finished = is_finished; }
+void GameManager::set_game_finished(const bool is_finished) {
+  game_finished = is_finished;
+}
 
 bool GameManager::is_game_finished() const { return game_finished; }

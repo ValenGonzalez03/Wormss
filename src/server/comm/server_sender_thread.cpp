@@ -1,14 +1,13 @@
-#include "player_sender_thread.h"
+#include "server_sender_thread.h"
 #include <arpa/inet.h>
 #include <list>
 
 #define QUEUE_MAX_SIZE 20
 
-PlayerSender::PlayerSender(ServerProtocol &protocol, bool &keep_playing, uint8_t player_id) :
-    protocol(protocol), sender_queue(QUEUE_MAX_SIZE), keep_playing(keep_playing),
-    player_id(player_id) {}
+ServerSender::ServerSender(ServerProtocol &protocol, uint8_t player_id) :
+    protocol(protocol), sender_queue(QUEUE_MAX_SIZE), player_id(player_id) {}
 
-void PlayerSender::run() {
+void ServerSender::run() {
   bool was_closed = false;
   try {
     while (!was_closed) {
@@ -23,16 +22,18 @@ void PlayerSender::run() {
     // }
   } catch (const LibError &liberr) {
     closed = true;
-    auto str = "Conexión con cliente finalizada en cliente: " + std::to_string(player_id) + '\n';
+    auto str = "[SENDER-THREAD]: Conexión con cliente finalizada en cliente: " +
+               std::to_string(player_id) + '\n';
     std::cout << str;
   } catch (const std::exception &err) {
-    std::cerr << "Error en el sender: " << err.what() << "\n";
+    std::cerr << "[SENDER-THREAD]: Error en el sender: " << err.what() << "\n";
   }
-  auto str = "Sender de cliente: " + std::to_string(player_id) + " termino.\n";
+  auto str =
+      "[SENDER-THREAD]: Sender de cliente: " + std::to_string(player_id) + " termino.\n";
   std::cout << str;
 }
 
-uint8_t PlayerSender::send_create_info(const uint8_t &player_id,
+uint8_t ServerSender::send_create_info(const uint8_t &player_id,
                                        const std::map<uint8_t, std::string> &worlds_map) {
   send_id(player_id);
   send_worlds_map(worlds_map);
@@ -41,22 +42,22 @@ uint8_t PlayerSender::send_create_info(const uint8_t &player_id,
   return protocol.recv_world_id(&was_closed);
 }
 
-void PlayerSender::send_game_started() {
+void ServerSender::send_game_started() {
   bool was_closed = false;
   protocol.send_game_started(&was_closed);
 }
 
-void PlayerSender::send_id(const uint8_t id) {
+void ServerSender::send_id(const uint8_t id) {
   bool was_closed = false;
   protocol.send_byte(id, &was_closed);
 }
 
-void PlayerSender::send_worlds_map(const std::map<uint8_t, std::string> &worlds_map) {
+void ServerSender::send_worlds_map(const std::map<uint8_t, std::string> &worlds_map) {
   bool was_closed = false;
   protocol.send_worlds_map(worlds_map, &was_closed);
 }
 
-void PlayerSender::send_world(const World *world) {
+void ServerSender::send_world(const World *world) {
   bool was_closed = false;
   protocol.send_string(world->get_name(), &was_closed);
   protocol.send_string(world->get_background(), &was_closed);
@@ -71,10 +72,10 @@ void PlayerSender::send_world(const World *world) {
   }
 }
 
-bool PlayerSender::has_started() { return is_alive(); }
+bool ServerSender::has_started() { return is_alive(); }
 
-bool PlayerSender::is_closed() { return closed; }
+bool ServerSender::is_closed() { return closed; }
 
-Queue<GameState> &PlayerSender::get_queue() { return sender_queue; }
+Queue<GameState> &ServerSender::get_queue() { return sender_queue; }
 
-PlayerSender::~PlayerSender() { keep_playing = false; }
+ServerSender::~ServerSender() {}

@@ -2,7 +2,8 @@
 
 ClientReceiverThread::ClientReceiverThread(
     ClientProtocol &protocol, Queue<GameState> &recv_queue,  // NOLINT(runtime/references)
-    bool &keep_playing) : prot(protocol), receiver_queue(recv_queue), keep_playing(keep_playing) {}
+    bool &keep_playing) :
+    prot(protocol), receiver_queue(recv_queue), keep_playing(keep_playing) {}
 
 void ClientReceiverThread::run() {
   // Blocking push

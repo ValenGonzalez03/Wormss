@@ -4,9 +4,10 @@
 #define QUEUE_MAX_SIZE 20
 
 Game::Game(const uint8_t &game_id, const World &world, const GameConfig &game_config) :
-    game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config), game_manager(world) {}
+    game_id(game_id), commands(QUEUE_MAX_SIZE), config(game_config), game_manager(world) {
+}
 
-void Game::add_player(PlayerSender &sender, const uint8_t &player_id) {
+void Game::add_player(ServerSender &sender, const uint8_t &player_id) {
   // player_id = players_counter;
   // players_counter++;
   broadcaster.add_queue(&sender.get_queue(), player_id);
@@ -26,7 +27,9 @@ void Game::charge_world() {
 
 void Game::run() {
   try {
-    std::string str = "Game of id: " + std::to_string(static_cast<int>(game_id)) + " started.\n";
+    std::string str =
+        "[GAME-THREAD]: Game of id: " + std::to_string(static_cast<int>(game_id)) +
+        " started.\n";
     std::cout << str;
 
     // bool was_closed = false;
@@ -80,7 +83,8 @@ void Game::run() {
       t1 += rate_ms;
       it += 1;
     }
-    std::cout << "Game of id: " << static_cast<int>(game_id) << " ended." << std::endl;
+    std::cout << "[GAME-THREAD]: Game of id: " << static_cast<int>(game_id) << " ended."
+              << std::endl;
   } catch (const std::exception &err) {
   }
 }
@@ -102,7 +106,9 @@ void Game::send_info_to_start_to_players() {
 
 void Game::stop_playing() { keep_playing = false; }
 
-bool Game::compare_id(const uint8_t &another_game_id) { return (game_id == another_game_id); }
+bool Game::compare_id(const uint8_t &another_game_id) {
+  return (game_id == another_game_id);
+}
 
 // void Game::set_world(World& world) {
 //   game_manager.set_world(world);

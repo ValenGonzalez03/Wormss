@@ -46,10 +46,11 @@ void ResourcePool::initialize() {
   // add_font("Vera12", "/Vera.ttf", 12);
 }
 
-void ResourcePool::add_texture(const std::string &texture_name, const std::string &image_path,
-                               int width, int height, int amount_frames,
-                               BACKGROUND_COLOR back_color, int offset_x, int offset_y,
-                               int offset_width, int offset_height, bool textures_not_centered) {
+void ResourcePool::add_texture(const std::string &texture_name,
+                               const std::string &image_path, int width, int height,
+                               int amount_frames, BACKGROUND_COLOR back_color,
+                               int offset_x, int offset_y, int offset_width,
+                               int offset_height, bool textures_not_centered) {
   SDL2pp::Surface src_surface = SDL2pp::Surface(RESOURCES_PATH + image_path);
   std::vector<SDL2pp::Texture *> textures(amount_frames);
 
@@ -81,7 +82,8 @@ void ResourcePool::add_texture(const std::string &texture_name, const std::strin
   texture_arrays[texture_name] = textures;
 }
 
-std::vector<SDL2pp::Texture *> ResourcePool::get_texture(const std::string &texture_name) const {
+std::vector<SDL2pp::Texture *> ResourcePool::get_texture(
+    const std::string &texture_name) const {
   try {
     return texture_arrays.at(texture_name);
   } catch (const std::out_of_range &e) {
@@ -97,7 +99,8 @@ void ResourcePool::add_background(const std::string &image_path) {
       SDL2pp::Surface(std::string(RESOURCES_PATH) + "/Images/Backgrounds/" + image_path);
   Uint32 color_key = SDL_MapRGB(surface.Get()->format, 128, 128, 192);
 
-  background = std::make_shared<SDL2pp::Texture>(renderer, surface.SetColorKey(true, color_key));
+  background =
+      std::make_shared<SDL2pp::Texture>(renderer, surface.SetColorKey(true, color_key));
 }
 
 void ResourcePool::add_short_beam() {
@@ -109,7 +112,8 @@ void ResourcePool::add_long_beam() {
 }
 
 void ResourcePool::add_worm_walking() {
-  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, LIGHT_BLUE, 19, 13, -38, -30, true);
+  add_texture(WORM_WALKING, WORM_WALKING_PATH, 60, 60, 15, LIGHT_BLUE, 19, 13, -38, -30,
+              true);
 }
 
 void ResourcePool::add_worm_jumping() {
@@ -117,20 +121,23 @@ void ResourcePool::add_worm_jumping() {
 }
 
 void ResourcePool::add_worm_aiming() {
-  add_texture(WORM_AIMING_BAZ, WORM_AIMING_BAZ_PATH, 60, 60, 32, LIGHT_BLUE, 16, 14, -29, -31,
+  add_texture(WORM_AIMING_BAZ, WORM_AIMING_BAZ_PATH, 60, 60, 32, LIGHT_BLUE, 16, 14, -29,
+              -31, false);
+  add_texture(WORM_AIMING_BAT, WORM_AIMING_BAT_PATH, 60, 60, 32, YELLOW, 15, 0, -15, 0,
               false);
-  add_texture(WORM_AIMING_BAT, WORM_AIMING_BAT_PATH, 60, 60, 32, YELLOW, 15, 0, -15, 0, false);
-  add_texture(WORM_AIMING_GRN, WORM_AIMING_GRN_PATH, 60, 60, 32, LIGHT_BLUE, 16, 12, -29, -28,
-              false);
+  add_texture(WORM_AIMING_GRN, WORM_AIMING_GRN_PATH, 60, 60, 32, LIGHT_BLUE, 16, 12, -29,
+              -28, false);
 }
 
 void ResourcePool::add_worm_attacking() {
-  add_texture(WORM_ATTACKING_BAT, WORM_ATTACKING_BAT_PATH, 60, 60, 32, YELLOW, 0, 0, -16, 0, false);
+  add_texture(WORM_ATTACKING_BAT, WORM_ATTACKING_BAT_PATH, 60, 60, 32, YELLOW, 0, 0, -16,
+              0, false);
 }
 
 void ResourcePool::add_explodables_textures() {
   add_texture(MISSILE, MISSILE_PATH, 60, 60, 32, LIGHT_BLUE, 17, 23, -35, -46, false);
-  add_texture(GRENADE_TX, GRENADE_TX_PATH, 60, 60, 32, LIGHT_BLUE, 24, 16, -48, -38, false);
+  add_texture(GRENADE_TX, GRENADE_TX_PATH, 60, 60, 32, LIGHT_BLUE, 24, 16, -48, -38,
+              false);
 }
 
 // ============================================================================================== //

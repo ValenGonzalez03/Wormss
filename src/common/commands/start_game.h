@@ -13,11 +13,12 @@ class StartGame : public Command {
 
  public:
   // Constructor from client side
-  explicit StartGame(int game_id) : game_id(game_id), Command(CODE_PLAYER_COMM::START_GAME, 0) {}
+  explicit StartGame(int game_id) :
+      game_id(game_id), Command(CODE_PLAYER_COMM::START_GAME, 0) {}
 
   // Constructor from server side
-  explicit StartGame(uint8_t clt_id, Socket &skt, bool *was_closed) :
-      Command(CODE_PLAYER_COMM::START_GAME, clt_id) {
+  explicit StartGame(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
+                     bool *was_closed) : Command(CODE_PLAYER_COMM::START_GAME, clt_id) {
     skt.recvall(&game_id, sizeof(game_id), was_closed);
   }
 

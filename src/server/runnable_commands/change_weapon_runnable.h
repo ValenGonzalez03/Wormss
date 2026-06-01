@@ -7,7 +7,8 @@
 
 class RunnableChangeWeapon : public RunnableCommandGame {
  public:
-  explicit RunnableChangeWeapon(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
+  explicit RunnableChangeWeapon(uint8_t clt_id,
+                                Socket &skt,  // NOLINT(runtime/references)
                                 bool *was_closed) :
       RunnableCommandGame(std::make_shared<ChangeWeapon>(clt_id, skt, was_closed)) {}
 

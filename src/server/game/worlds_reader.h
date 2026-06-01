@@ -59,7 +59,8 @@ class WorldsReader {
 
   std::vector<std::string> get_world_names();
 
-  std::vector<std::shared_ptr<World>> read_yaml_files(const std::filesystem::path& directory) {
+  std::vector<std::shared_ptr<World>> read_yaml_files(
+      const std::filesystem::path& directory) {
     std::vector<std::shared_ptr<World>> worlds;
     for (const auto& entry : std::filesystem::directory_iterator(directory)) {
       try {

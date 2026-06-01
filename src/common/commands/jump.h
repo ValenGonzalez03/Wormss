@@ -19,8 +19,8 @@ class Jump : public Command {
       Command(CODE_PLAYER_COMM::JUMP, client_id), direction(dir), jump_type(jump_type) {}
 
   // Constructor from server side with direction received by socket
-  explicit Jump(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
-      Command(CODE_PLAYER_COMM::JUMP, clt_id) {
+  explicit Jump(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
+                bool *was_closed) : Command(CODE_PLAYER_COMM::JUMP, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
     skt.recvall(&jump_type, sizeof(jump_type), was_closed);
   }

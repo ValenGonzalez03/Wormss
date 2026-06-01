@@ -11,19 +11,19 @@ Accept::Accept(Socket &skt) : skt(std::move(skt)) {}
 void Accept::run() {
   try {
     while (is_alive) {
-      std::shared_ptr<ClientManager> client =
-          std::make_shared<ClientManager>(std::move(skt.accept()), games_handler, id_counter);
+      std::shared_ptr<ClientManager> client = std::make_shared<ClientManager>(
+          std::move(skt.accept()), games_handler, id_counter);
       client->start();
       id_counter++;
 
       reap_dead();
       games_handler.reap_dead();
-      std::cout << "Pasa por el reap_dead" << std::endl;
       clients.push_back(client);
     }
   } catch (const std::exception &err) {
     if (is_alive) {
-      std::cerr << "Something went wrong and an exception was caught: " << err.what() << "\n";
+      std::cerr << "Something went wrong and an exception was caught: " << err.what()
+                << "\n";
     }
     is_alive = false;
     kill_all();

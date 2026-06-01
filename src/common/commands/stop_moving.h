@@ -11,12 +11,13 @@ extern uint8_t STOP_MOVING;
 class StopMoving : public Command {
  public:
   // Constructor from client side
-  explicit StopMoving(uint8_t client_id) : Command(CODE_PLAYER_COMM::STOP_MOVING, client_id) {}
+  explicit StopMoving(uint8_t client_id) :
+      Command(CODE_PLAYER_COMM::STOP_MOVING, client_id) {}
 
   // Constructor from server side for code consistency but doesn't do anything
   // different from the other
-  explicit StopMoving(uint8_t clt_id, Socket &skt, bool *was_closed) :
-      Command(CODE_PLAYER_COMM::STOP_MOVING, clt_id) {
+  explicit StopMoving(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
+                      bool *was_closed) : Command(CODE_PLAYER_COMM::STOP_MOVING, clt_id) {
     // receive(skt, was_closed);
   }
 

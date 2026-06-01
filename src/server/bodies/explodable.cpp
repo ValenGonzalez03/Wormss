@@ -5,8 +5,8 @@
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
-Explodable::Explodable(const BodyBasicData& basic_data, uint8_t dir, const BodyAdvData& adv_data,
-                       BODY_TYPES type, b2World* world) :
+Explodable::Explodable(const BodyBasicData& basic_data, uint8_t dir,
+                       const BodyAdvData& adv_data, BODY_TYPES type, b2World* world) :
     DynamicBody(basic_data, adv_data, type, world), direction(dir) {}
 
 void Explodable::apply_initial_impulse(float initial_force, float aim_angle) {
@@ -33,4 +33,6 @@ void Explodable::explode() { exploded = true; }
 
 bool Explodable::has_exploded() { return exploded; }
 
-Explodable::~Explodable() { free(reinterpret_cast<UserData*>(body->GetUserData().pointer)); }
+Explodable::~Explodable() {
+  free(reinterpret_cast<UserData*>(body->GetUserData().pointer));
+}

@@ -7,8 +7,8 @@
 
 class DynamicBody : public Body {
  public:
-  DynamicBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TYPES type,
-              b2World* world);
+  DynamicBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
+              BODY_TYPES type, b2World* world);
 
   void touch_worm(WormBody* worm) override = 0;
   void touch_beam(BeamBody* beam) override = 0;

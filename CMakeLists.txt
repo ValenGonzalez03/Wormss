@@ -44,9 +44,8 @@ add_executable(server
 					  ./src/server/server_server.cpp 
 					  ./src/server/comm/server_accept_thread.cpp
 					  ./src/server/comm/client_manager_thread.cpp
-					  ./src/server/comm/server_player.cpp
-					  ./src/server/comm/player_sender_thread.cpp
-					  ./src/server/comm/server_receiver_thread.cpp
+					  ./src/server/comm/server_sender_thread.cpp
+					  ./src/server/comm/server_receiver.cpp
 					  ./src/server/comm/broadcaster.cpp
 					  ./src/server/comm/server_protocol.cpp
 					  ./src/server/game/server_games_handler.cpp

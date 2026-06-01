@@ -10,7 +10,8 @@ class ClientManager;
 
 class RunnableCommandLobby : public RunnableCommand {
  public:
-  explicit RunnableCommandLobby(std::shared_ptr<Command> command) : RunnableCommand(command) {}
+  explicit RunnableCommandLobby(std::shared_ptr<Command> command) :
+      RunnableCommand(command) {}
 
   virtual void run(ClientManager& client_manager) = 0;  // NOLINT(runtime/references)
 };

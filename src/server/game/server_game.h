@@ -19,7 +19,7 @@
 #include "../../common/lib/queue.h"
 #include "../../common/lib/thread.h"
 #include "../comm/broadcaster.h"
-#include "../comm/player_sender_thread.h"
+#include "../comm/server_sender_thread.h"
 #include "game_manager.h"
 #include "../runnable_commands/command_runnable_game.h"
 
@@ -38,7 +38,7 @@ class Game : public Thread {
   const GameConfig &config;
   Queue<game_command_ptr> commands;
   Broadcaster broadcaster;
-  std::list<PlayerSender *> player_senders;
+  std::list<ServerSender *> player_senders;
 
   uint8_t players_counter = 0;
   uint8_t current_turn_id = 0;
@@ -50,9 +50,11 @@ class Game : public Thread {
       std::chrono::duration<float>((float)RATE);  // NOLINT(readability/casting)
 
  public:
-  explicit Game(const uint8_t &game_id, const World &world, const GameConfig &game_config);
+  explicit Game(const uint8_t &game_id, const World &world,
+                const GameConfig &game_config);
 
-  void add_player(PlayerSender &sender, const uint8_t &player_id);  // NOLINT(runtime/references)
+  void add_player(ServerSender &sender,  // NOLINT(runtime/references)
+                  const uint8_t &player_id);
 
   void delete_player(const uint8_t &player_id);
 

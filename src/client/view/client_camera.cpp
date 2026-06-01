@@ -17,7 +17,8 @@ void Camera::update(int worm_x, int worm_y, int worm_width, int worm_height) {
         camera_box.y -= SCROLL_SPEED;
     }
     if (moving_down) {
-      if (camera_box.GetY() < convert_meters_to_pixels_x(WORLD_HEIGHT) - camera_box.GetH())
+      if (camera_box.GetY() <
+          convert_meters_to_pixels_x(WORLD_HEIGHT) - camera_box.GetH())
         camera_box.y += SCROLL_SPEED;
     }
     if (moving_left) {

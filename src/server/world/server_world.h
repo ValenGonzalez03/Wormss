@@ -45,11 +45,11 @@ class World {
 
   BeamBody* create_beam(float pos_x, float pos_y, float angle, float length);
 
-  MissileBody* create_missile(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction,
-                              float initial_force);
+  MissileBody* create_missile(uint8_t id, float pos_x, float pos_y, float angle,
+                              uint8_t direction, float initial_force);
 
-  GrenadeBody* create_grenade(uint8_t id, float pos_x, float pos_y, float angle, uint8_t direction,
-                              float initial_force);
+  GrenadeBody* create_grenade(uint8_t id, float pos_x, float pos_y, float angle,
+                              uint8_t direction, float initial_force);
 
   void create_explosion(float center_x, float center_y);
 
@@ -85,7 +85,9 @@ class World {
 
   void set_name(const std::string& new_name) { this->name = new_name; }
 
-  void set_background(const std::string& new_background) { this->background = new_background; }
+  void set_background(const std::string& new_background) {
+    this->background = new_background;
+  }
 
   std::vector<std::vector<float>> get_spawn_points() { return spawn_points; }
 
@@ -97,11 +99,13 @@ class World {
   }
 
   World(const World& other) :
-      world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f))), worms(other.worms), name(other.name),
-      background(other.background), contact_listener(other.contact_listener) {
+      world(std::make_shared<b2World>(b2Vec2(0.0f, -10.0f))), worms(other.worms),
+      name(other.name), background(other.background),
+      contact_listener(other.contact_listener) {
     world->SetContactListener(&contact_listener);
     for (const auto& beam : other.beams) {
-      create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
+      create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(),
+                  beam->get_width());
     }
     for (const auto& spawn_point : other.spawn_points) {
       add_spawn_point(spawn_point[0], spawn_point[1]);
@@ -120,7 +124,8 @@ class World {
     this->world = std::make_shared<b2World>(b2Vec2(0.0f, -10.0f));
 
     for (const auto& beam : other.beams) {
-      this->create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(), beam->get_width());
+      this->create_beam(beam->get_pos_x(), beam->get_pos_y(), beam->get_angle(),
+                        beam->get_width());
     }
     for (const auto& spawn_point : other.spawn_points) {
       this->add_spawn_point(spawn_point[0], spawn_point[1]);

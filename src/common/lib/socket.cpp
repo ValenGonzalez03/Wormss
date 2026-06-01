@@ -313,8 +313,9 @@ int Socket::recvall(void *data, unsigned int sz, bool *was_closed) {
   *was_closed = false;
 
   while (received < sz) {
-    int s = recvsome((char *)data + received, sz - received,  // NOLINT(readability/casting)
-                     was_closed);
+    int s =
+        recvsome((char *)data + received, sz - received,  // NOLINT(readability/casting)
+                 was_closed);
 
     if (s <= 0) {
       /*
@@ -350,7 +351,8 @@ int Socket::sendall(const void *data, unsigned int sz, bool *was_closed) {
   *was_closed = false;
 
   while (sent < sz) {
-    int s = sendsome((char *)data + sent, sz - sent, was_closed);  // NOLINT(readability/casting)
+    int s = sendsome((char *)data + sent, sz - sent,  // NOLINT(readability/casting)
+                     was_closed);
 
     /* Véase los comentarios de `Socket::recvall` */
     if (s <= 0) {

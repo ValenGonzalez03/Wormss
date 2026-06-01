@@ -5,8 +5,8 @@
 #include "../../common/game_constants.h"
 #include "box2d/box2d.h"
 
-GrenadeBody::GrenadeBody(const BodyBasicData& basic_data, uint8_t dir, const BodyAdvData& adv_data,
-                         b2World* world) :
+GrenadeBody::GrenadeBody(const BodyBasicData& basic_data, uint8_t dir,
+                         const BodyAdvData& adv_data, b2World* world) :
     Explodable(basic_data, dir, adv_data, GRENADE_BODY, world) {}
 
 void GrenadeBody::update() {
@@ -46,4 +46,6 @@ void GrenadeBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
 
 BODY_TYPES GrenadeBody::get_type() { return GRENADE_BODY; }
 
-GrenadeBody::~GrenadeBody() { free(reinterpret_cast<UserData*>(body->GetUserData().pointer)); }
+GrenadeBody::~GrenadeBody() {
+  free(reinterpret_cast<UserData*>(body->GetUserData().pointer));
+}

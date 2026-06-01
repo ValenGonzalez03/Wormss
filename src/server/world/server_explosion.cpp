@@ -36,7 +36,8 @@ void Explosion::apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_
   float impulse_mag = blast_power * explotion_intensity;
   std::cout << "fraction: " << explosion_info.fraction_force << std::endl;
   std::cout << "explotion_intensity: " << explotion_intensity << std::endl;
-  body->apply_impulse(impulse_mag * explosion_info.impulse_dir, explosion_info.apply_point);
+  body->apply_impulse(impulse_mag * explosion_info.impulse_dir,
+                      explosion_info.apply_point);
 }
 
 b2Vec2 Explosion::get_center() { return b2Vec2(pos_x, pos_y); }

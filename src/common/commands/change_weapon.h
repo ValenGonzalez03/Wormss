@@ -19,7 +19,8 @@ class ChangeWeapon : public Command {
 
   // Constructor from server side with direction received by socket
   explicit ChangeWeapon(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
-                        bool *was_closed) : Command(CODE_PLAYER_COMM::CHANGE_WEAPON, clt_id) {
+                        bool *was_closed) :
+      Command(CODE_PLAYER_COMM::CHANGE_WEAPON, clt_id) {
     skt.recvall(&weapon_type, sizeof(weapon_type), was_closed);
   }
 

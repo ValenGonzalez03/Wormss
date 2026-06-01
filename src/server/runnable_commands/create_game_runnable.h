@@ -9,10 +9,13 @@
 
 class RunnableCreateGame : public RunnableCommandLobby {
  public:
-  RunnableCreateGame(int clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
+  RunnableCreateGame(int clt_id, Socket &skt,  // NOLINT(runtime/references)
+                     bool *was_closed) :
       RunnableCommandLobby(std::make_shared<CreateGame>(clt_id, skt, was_closed)) {}
 
-  void run(ClientManager &client_manager) override { client_manager.manage_create_game(); }
+  void run(ClientManager &client_manager) override {
+    client_manager.manage_create_game();
+  }
 };
 
 #endif

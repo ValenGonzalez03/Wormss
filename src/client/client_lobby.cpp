@@ -4,7 +4,8 @@
 Lobby::Lobby(ClientProtocol& prot) : prot(prot), player_id(-1) {}
 
 void Lobby::print_menu() {
-  std::cout << "Ingrese 'c' si quiere crear una partida o 'j' si quiere unirse a una:" << std::endl;
+  std::cout << "Ingrese 'c' si quiere crear una partida o 'j' si quiere unirse a una:"
+            << std::endl;
 }
 
 char Lobby::get_option() {
@@ -66,14 +67,16 @@ bool Lobby::join_game(bool* was_closed) {
 void Lobby::show_worlds(const std::map<uint8_t, std::string>& worlds_map) {
   std::cout << "Elige un numero de escenario:" << std::endl;
   for (const auto& world_pair : worlds_map) {
-    std::cout << static_cast<int>(world_pair.first) << ": " << world_pair.second << std::endl;
+    std::cout << static_cast<int>(world_pair.first) << ": " << world_pair.second
+              << std::endl;
   }
 }
 
 void Lobby::send_start_game(int game_id) {
   char command_lobby = '\0';
   while (command_lobby != 's') {
-    std::cout << "El creador de la partida cuando quiere empezarla debe ingresar 's'" << std::endl;
+    std::cout << "El creador de la partida cuando quiere empezarla debe ingresar 's'"
+              << std::endl;
     std::cin >> command_lobby;
   }
   StartGame start(game_id);
@@ -82,8 +85,8 @@ void Lobby::send_start_game(int game_id) {
 
 void Lobby::wait_start_game(char option_selected) {
   if (prot.recv_game_started()) {
-    std::cout << "Cliente de id " << static_cast<int>(player_id) << " espero para comenzar."
-              << std::endl;
+    std::cout << "Cliente de id " << static_cast<int>(player_id)
+              << " espero para comenzar." << std::endl;
     if (option_selected == 'j') {
       // Envio el comando para desbloquear al Receiver del Server
       GameStarted game_started(-1);

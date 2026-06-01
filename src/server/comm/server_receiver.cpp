@@ -1,13 +1,12 @@
-#include "server_receiver_thread.h"
+#include "server_receiver.h"
 #include <string>
 
 #define QUEUE_MAX_SIZE 20
 
-ServerReceiver::ServerReceiver(uint8_t client_id, ServerProtocol &protocol, bool &keep_playing,
-                               bool &in_game, std::mutex &m, std::condition_variable &is_empty) :
+ServerReceiver::ServerReceiver(uint8_t client_id, ServerProtocol &protocol,
+                               bool &in_game) :
     client_id(client_id), protocol(protocol), lobby_commands(QUEUE_MAX_SIZE),
-    game_commands(nullptr), is_empty(is_empty), keep_playing(keep_playing), in_game(in_game), m(m) {
-}
+    game_commands(nullptr), in_game(in_game) {}
 
 void ServerReceiver::run() {
   bool was_closed = false;
@@ -19,15 +18,17 @@ void ServerReceiver::run() {
         game_commands->try_push(runnable_command);
     }
   } catch (const LibError &libError) {  // Si se cierra el skt
-    keep_playing = false;
+    // keep_playing = false;
     std::string str("Se Cerro el Socket: ");
     str.append(libError.what() + '\n');
     std::cout << str;
   } catch (const std::runtime_error &runtimeError) {  // Si se procesa mal un cmd
-    keep_playing = false;
-    std::cerr << "Error en el Receiver: " << runtimeError.what() << std::endl;
+    // keep_playing = false;
+    std::cerr << "[CLIENT-MAN-THREAD]: Error en el Receiver: " << runtimeError.what()
+              << std::endl;
   }
-  auto str = "Receiver de cliente: " + std::to_string(client_id) + " termino.\n";
+  auto str = "[CLIENT-MAN-THREAD]: Receiver de cliente: " + std::to_string(client_id) +
+             " termino.\n";
   std::cout << str;
 }
 
@@ -38,10 +39,12 @@ void ServerReceiver::wait_for_client_ready() {
   }
 }
 
-Queue<lobby_command_ptr> &ServerReceiver::get_lobby_commands_queue() { return lobby_commands; }
+Queue<lobby_command_ptr> &ServerReceiver::get_lobby_commands_queue() {
+  return lobby_commands;
+}
 
 void ServerReceiver::set_game_commands_queue(Queue<game_command_ptr> *queue) {
   game_commands = queue;
 }
 
-ServerReceiver::~ServerReceiver() { keep_playing = false; }
+ServerReceiver::~ServerReceiver() {}

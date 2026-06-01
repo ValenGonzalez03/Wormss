@@ -3,7 +3,8 @@
 
 Body::Body(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TYPES type,
            b2BodyType body_type, b2World* world) :
-    width(basic_data.width), height(basic_data.height), angle(basic_data.angle), id(basic_data.id) {
+    width(basic_data.width), height(basic_data.height), angle(basic_data.angle),
+    id(basic_data.id) {
   b2BodyDef bodyDef;
   bodyDef.type = body_type;
   bodyDef.position.Set(basic_data.pos_x, basic_data.pos_y);
@@ -86,8 +87,9 @@ void Body::stop_touching(Body* other) {
 
 void Body::check_boundaries() {
   if ((get_pos_x() < 0) || (get_pos_x() > 25)) {  // Excedio limite horizontal
-    body->SetTransform(b2Vec2(5, 25),
-                       0);  // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
+    body->SetTransform(
+        b2Vec2(5, 25),
+        0);  // Por ahora solo fuerzo a que reaparezca mas arriba y a la derecha
   }
   if ((get_pos_y() < 0) || (get_pos_y() > WORLD_HEIGHT)) {  // Excedio limite vertical
     body->SetTransform(b2Vec2(get_pos_x(), 30),
@@ -113,4 +115,6 @@ float Body::get_height() { return height; }
 
 float Body::get_angle() { return body->GetAngle(); }
 
-UserData* Body::get_user_data() { return reinterpret_cast<UserData*>(body->GetUserData().pointer); }
+UserData* Body::get_user_data() {
+  return reinterpret_cast<UserData*>(body->GetUserData().pointer);
+}

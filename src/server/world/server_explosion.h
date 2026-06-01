@@ -23,7 +23,8 @@ class Explosion {
   std::vector<float> fraction_rays = std::vector<float>(NUM_RAYS, 1);
   std::map<Body*, BodyExplosionInfo> affected_bodies;
 
-  void apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_info, float blast_power);
+  void apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_info,
+                               float blast_power);
 
  public:
   Explosion(float pos_x, float pos_y, float radius);

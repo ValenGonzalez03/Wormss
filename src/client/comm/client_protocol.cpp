@@ -87,7 +87,8 @@ std::map<uint8_t, std::string> ClientProtocol::recv_worlds_map(bool *was_closed)
   return worlds_map;
 }
 
-void ClientProtocol::send_world_name_selected(const std::string &world_name, bool *was_closed) {
+void ClientProtocol::send_world_name_selected(const std::string &world_name,
+                                              bool *was_closed) {
   send_string(world_name, was_closed);
 }
 

@@ -12,7 +12,7 @@
 #include "../runnable_commands/command_runnable_game.h"
 #include "server_game.h"
 #include "game_manager.h"
-#include "../comm/server_player.h"
+#include "../comm/server_receiver.h"
 
 class Command;
 
@@ -30,15 +30,18 @@ class GamesHandler {
  public:
   GamesHandler();
 
-  Game *create_game(Player &player, const uint8_t &world_id,  // NOLINT(runtime/references)
-                    PlayerSender &sender,                     // NOLINT(runtime/references)
-                    ServerReceiver &receiver);                // NOLINT(runtime/references)
+  Game *create_game(const uint8_t &player_id,
+                    const uint8_t &world_id,    // NOLINT(runtime/references)
+                    ServerSender &sender,       // NOLINT(runtime/references)
+                    ServerReceiver &receiver);  // NOLINT(runtime/references)
 
-  Game *join_game(Player &player, const uint8_t &game_id,  // NOLINT(runtime/references)
-                  PlayerSender &sender,                    // NOLINT(runtime/references)
-                  ServerReceiver &receiver);               // NOLINT(runtime/references)
+  Game *join_game(const uint8_t &player_id,
+                  const uint8_t &game_id,     // NOLINT(runtime/references)
+                  ServerSender &sender,       // NOLINT(runtime/references)
+                  ServerReceiver &receiver);  // NOLINT(runtime/references)
 
-  Game *start_game(Player &player, const uint8_t &game_id);  // NOLINT(runtime/references)
+  Game *start_game(const uint8_t &player_id,
+                   const uint8_t &game_id);  // NOLINT(runtime/references)
 
   void delete_game(const uint8_t &game_id);
 

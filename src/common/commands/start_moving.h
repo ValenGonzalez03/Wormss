@@ -19,7 +19,8 @@ class StartMoving : public Command {
 
   // Constructor from server side with direction received by socket
   explicit StartMoving(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
-                       bool *was_closed) : Command(CODE_PLAYER_COMM::START_MOVING, clt_id) {
+                       bool *was_closed) :
+      Command(CODE_PLAYER_COMM::START_MOVING, clt_id) {
     skt.recvall(&direction, sizeof(direction), was_closed);
   }
 

@@ -7,7 +7,8 @@
 
 class RunnableStopMoving : public RunnableCommandGame {
  public:
-  RunnableStopMoving(uint8_t clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
+  RunnableStopMoving(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
+                     bool *was_closed) :
       RunnableCommandGame(std::make_shared<StopMoving>(clt_id, skt, was_closed)) {}
 
   void run(GameManager &game_manager) override {

@@ -27,8 +27,8 @@ const float RATE = static_cast<float>(1.0 / 60.0);
 Client::Client(ClientProtocol &&prot, uint8_t player_id) :
     prot(std::move(prot)), receiver_queue(), sender_queue(),
     receiver(this->prot, receiver_queue, keep_playing),
-    sender(this->prot, sender_queue, keep_playing), player_id(player_id), view(this->player_id),
-    last_game_state() {}
+    sender(this->prot, sender_queue, keep_playing), player_id(player_id),
+    view(this->player_id), last_game_state() {}
 
 void Client::start_threads() {
   sender.start();
@@ -67,8 +67,8 @@ int Client::run() {
 
     // Esto claramente es una mala solucion pero por ahora sirve
     last_game_state = receiver_queue.pop();
-    std::cout << "Cantidad worms: " << static_cast<int>(last_game_state.get_worms().size())
-              << std::endl;
+    std::cout << "Cantidad worms: "
+              << static_cast<int>(last_game_state.get_worms().size()) << std::endl;
     for (auto worm_data : last_game_state.get_worms()) {
       view.world_view.add_worm(worm_data.second);
     }
@@ -107,8 +107,8 @@ void Client::recv_world() {
     BeamAttr beam_attr = prot.recv_beam(&was_closed);
 
     if (beam_attr.width == 6.0f || beam_attr.width == 3.0f) {
-      view.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width, BEAM_HEIGHT,
-                               beam_attr.angle);
+      view.world_view.add_beam(beam_attr.pos_x, beam_attr.pos_y, beam_attr.width,
+                               BEAM_HEIGHT, beam_attr.angle);
     } else {
       std::cout << "Error tamanio viga" << std::endl;
     }
@@ -301,7 +301,8 @@ void Client::handle_jump_forward(uint8_t worm_dir, uint8_t jump_type) {
 
 void Client::handle_jump_backward(uint8_t worm_dir, uint8_t jump_type) {
   int jump_direction = (worm_dir == LEFT ? RIGHT : LEFT);  // Calculo la direccion opuesta
-  std::shared_ptr<Jump> cmd = std::make_shared<Jump>(player_id, jump_direction, jump_type);
+  std::shared_ptr<Jump> cmd =
+      std::make_shared<Jump>(player_id, jump_direction, jump_type);
   sender_queue.try_push(cmd);
 }
 
@@ -321,7 +322,8 @@ void Client::handle_start_shooting() {
 }
 
 void Client::handle_change_weapon(uint8_t weapon_type) {
-  std::shared_ptr<ChangeWeapon> cmd = std::make_shared<ChangeWeapon>(player_id, weapon_type);
+  std::shared_ptr<ChangeWeapon> cmd =
+      std::make_shared<ChangeWeapon>(player_id, weapon_type);
   sender_queue.try_push(cmd);
 }
 

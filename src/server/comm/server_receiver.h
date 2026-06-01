@@ -1,5 +1,5 @@
-#ifndef SERVER_RECEIVER_THREAD_H
-#define SERVER_RECEIVER_THREAD_H
+#ifndef SERVER_RECEIVER_H
+#define SERVER_RECEIVER_H
 
 #include "../../common/lib/socket.h"
 #include "../../common/lib/thread.h"
@@ -9,27 +9,25 @@
 #include <condition_variable>
 #include <memory>
 
-class ServerReceiver : public Thread {
+class ServerReceiver {
  private:
   uint8_t client_id;
   ServerProtocol &protocol;
   Queue<lobby_command_ptr> lobby_commands;
   Queue<game_command_ptr> *game_commands;
 
-  std::condition_variable &is_empty;
-  bool &keep_playing;
+  // std::condition_variable &is_empty;
+  // bool &keep_playing;
   bool &in_game;
-  std::mutex &m;
+  // std::mutex &m;
 
  public:
   explicit ServerReceiver(uint8_t client_id,
-                          ServerProtocol &protocol,            // NOLINT(runtime/references)
-                          bool &keep_playing,                  // NOLINT(runtime/references)
-                          bool &in_game, std::mutex &m,        // NOLINT(runtime/references)
-                          std::condition_variable &is_empty);  // NOLINT(runtime/references)
+                          ServerProtocol &protocol,  // NOLINT(runtime/references)
+                          bool &in_game);            // NOLINT(runtime/references));
 
   // Ejecuta el loop del Receiver esperando comandos de lobby y posteriormente de juego.
-  void run() override;
+  void run();
 
   // Espera hasta recibir el comando de cliente listo para comenzar el juego.
   void wait_for_client_ready();

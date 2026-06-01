@@ -5,8 +5,9 @@
 Worm::Worm(uint8_t id, int pos_x, int pos_y, int width, int height, float aim_angle,
            uint8_t direction, WormState worm_state, SDL2pp::Renderer &rend,
            ResourcePool &res_pool) :
-    id(id), pos_x(pos_x), pos_y(pos_y), width(width), height(height), aim_angle(aim_angle),
-    direction(direction), worm_state(worm_state), resource_pool(res_pool), renderer(rend) {
+    id(id), pos_x(pos_x), pos_y(pos_y), width(width), height(height),
+    aim_angle(aim_angle), direction(direction), worm_state(worm_state),
+    resource_pool(res_pool), renderer(rend) {
   weapon = new Bazooka(BAZOOKA);
 }
 
@@ -81,9 +82,10 @@ void Worm::render_worm_idle(int frame, int camera_x, int camera_y) {
   walk_texture.front()->SetAlphaMod(255);
   walk_texture.front()->SetBlendMode(SDL_BLENDMODE_BLEND);
 
-  renderer.Copy(*walk_texture.front(), SDL2pp::NullOpt,
-                SDL2pp::Rect(pos_x - camera_x, pos_y - 3 - camera_y, width + 2, height + 4), 0.0,
-                SDL2pp::NullOpt, flip);
+  renderer.Copy(
+      *walk_texture.front(), SDL2pp::NullOpt,
+      SDL2pp::Rect(pos_x - camera_x, pos_y - 3 - camera_y, width + 2, height + 4), 0.0,
+      SDL2pp::NullOpt, flip);
 }
 
 void Worm::render_worm_running(int frame, int camera_x, int camera_y) {
@@ -95,9 +97,10 @@ void Worm::render_worm_running(int frame, int camera_x, int camera_y) {
   walk_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
   walk_texture[frame_position]->SetAlphaMod(255);  // sprite is fully opaque
 
-  renderer.Copy(*walk_texture[frame_position], SDL2pp::NullOpt,
-                SDL2pp::Rect(pos_x - camera_x, pos_y - 3 - camera_y, width + 2, height + 4), 0.0,
-                SDL2pp::NullOpt, flip);
+  renderer.Copy(
+      *walk_texture[frame_position], SDL2pp::NullOpt,
+      SDL2pp::Rect(pos_x - camera_x, pos_y - 3 - camera_y, width + 2, height + 4), 0.0,
+      SDL2pp::NullOpt, flip);
 }
 
 void Worm::render_worm_jumping(int frame, int camera_x, int camera_y) {}
@@ -108,15 +111,18 @@ void Worm::render_worm_aiming(int frame, int camera_x, int camera_y) {
   auto aim_texture = weapon->get_aim_textures(resource_pool);
 
   auto normalized_angle = (aim_angle / M_PI_2);
-  auto frame_position = 16 + static_cast<int>(normalized_angle * ((aim_texture.size() / 2)));
+  auto frame_position =
+      16 + static_cast<int>(normalized_angle * ((aim_texture.size() / 2)));
   aim_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
   aim_texture[frame_position]->SetAlphaMod(255);
 
 
-  auto vals = weapon->get_fixed_vals_aim(direction, texture_vals{pos_x, pos_y, width, height});
-  renderer.Copy(*aim_texture[frame_position], SDL2pp::NullOpt,
-                SDL2pp::Rect(vals.x - camera_x, vals.y - camera_y, vals.width, vals.height), 0.0,
-                SDL2pp::NullOpt, flip);
+  auto vals =
+      weapon->get_fixed_vals_aim(direction, texture_vals{pos_x, pos_y, width, height});
+  renderer.Copy(
+      *aim_texture[frame_position], SDL2pp::NullOpt,
+      SDL2pp::Rect(vals.x - camera_x, vals.y - camera_y, vals.width, vals.height), 0.0,
+      SDL2pp::NullOpt, flip);
 }
 
 void Worm::render_worm_attacking(int frame, int camera_x, int camera_y) {
@@ -125,14 +131,17 @@ void Worm::render_worm_attacking(int frame, int camera_x, int camera_y) {
   auto attack_texture = weapon->get_attack_textures(resource_pool);
 
   auto normalized_angle = (aim_angle / M_PI_2);
-  auto frame_position = 16 + static_cast<int>(normalized_angle * ((attack_texture.size() / 2)));
+  auto frame_position =
+      16 + static_cast<int>(normalized_angle * ((attack_texture.size() / 2)));
   attack_texture[frame_position]->SetBlendMode(SDL_BLENDMODE_BLEND);
   attack_texture[frame_position]->SetAlphaMod(255);
 
-  auto vals = weapon->get_fixed_vals_attack(direction, texture_vals{pos_x, pos_y, width, height});
-  renderer.Copy(*attack_texture[frame_position], SDL2pp::NullOpt,
-                SDL2pp::Rect(vals.x - camera_x, vals.y - camera_y, vals.width, vals.height), 0.0,
-                SDL2pp::NullOpt, flip);
+  auto vals =
+      weapon->get_fixed_vals_attack(direction, texture_vals{pos_x, pos_y, width, height});
+  renderer.Copy(
+      *attack_texture[frame_position], SDL2pp::NullOpt,
+      SDL2pp::Rect(vals.x - camera_x, vals.y - camera_y, vals.width, vals.height), 0.0,
+      SDL2pp::NullOpt, flip);
 }
 
 SDL_RendererFlip Worm::choose_flip_direction() {

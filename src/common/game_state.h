@@ -27,13 +27,13 @@ struct WormData {
  public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   WormData() :
-      player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE), current_weapon(BAZOOKA),
-      aim_angle(0) {}
+      player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE),
+      current_weapon(BAZOOKA), aim_angle(0) {}
 
-  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st, WeaponType wp,
-                    float angle) :
-      player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st), current_weapon(wp),
-      aim_angle(angle) {}
+  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st,
+                    WeaponType wp, float angle) :
+      player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st),
+      current_weapon(wp), aim_angle(angle) {}
 
   explicit WormData(ClientProtocol &prot) : pos_x(0), pos_y(0) {
     bool was_closed = false;
@@ -41,7 +41,8 @@ struct WormData {
   }
 
   // Recibe la pos, la direccion, el state, etc del gusano (Lado cliente)
-  void deserialize(ClientProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
+  void deserialize(ClientProtocol &prot,  // NOLINT(runtime/references)
+                   bool *was_closed) {
     // Recibo el player_id
     this->player_id = prot.recv_byte(was_closed);
 
@@ -114,8 +115,8 @@ struct ExplodableData {
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   ExplodableData() : pos_x(0), pos_y(0), angle(0), type(WATER), direction(0), id(0) {}
 
-  explicit ExplodableData(float pos_x, float pos_y, float angle, BODY_TYPES type, uint8_t dir,
-                          uint8_t id) :
+  explicit ExplodableData(float pos_x, float pos_y, float angle, BODY_TYPES type,
+                          uint8_t dir, uint8_t id) :
       pos_x(pos_x), pos_y(pos_y), angle(angle), type(type), direction(dir), id(id) {}
 
   explicit ExplodableData(ClientProtocol &prot) :  // NOLINT(runtime/references)
@@ -124,7 +125,8 @@ struct ExplodableData {
     deserialize(prot, &was_closed);
   }
 
-  void deserialize(ClientProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
+  void deserialize(ClientProtocol &prot,  // NOLINT(runtime/references)
+                   bool *was_closed) {
     // Recibo el id del proyectil
     this->id = prot.recv_byte(was_closed);
 
@@ -184,7 +186,8 @@ struct ExplosionData {
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   ExplosionData() : pos_x(0), pos_y(0), radius(0) {}
 
-  explicit ExplosionData(float pos_x, float pos_y, float radius, const std::vector<float> &rays) :
+  explicit ExplosionData(float pos_x, float pos_y, float radius,
+                         const std::vector<float> &rays) :
       pos_x(pos_x), pos_y(pos_y), radius(radius), rays_fraction(rays) {}
 
   explicit ExplosionData(ClientProtocol &prot) : pos_x(0), pos_y(0), radius(0) {
@@ -192,7 +195,8 @@ struct ExplosionData {
     deserialize(prot, &was_closed);
   }
 
-  void deserialize(ClientProtocol &prot, bool *was_closed) {  // NOLINT(runtime/references)
+  void deserialize(ClientProtocol &prot,  // NOLINT(runtime/references)
+                   bool *was_closed) {
     // Recibo la position
     this->pos_x = prot.recv_float(was_closed);
     this->pos_y = prot.recv_float(was_closed);
@@ -254,7 +258,8 @@ struct GameState {
     }
     for (int i = 0; i < explodables_amount; i++) {
       ExplodableData explodable(prot);
-      explodables_list.insert(std::pair<uint8_t, ExplodableData>(explodable.get_id(), explodable));
+      explodables_list.insert(
+          std::pair<uint8_t, ExplodableData>(explodable.get_id(), explodable));
     }
     for (int i = 0; i < explosions_amount; i++) {
       ExplosionData explosion(prot);
@@ -294,9 +299,10 @@ struct GameState {
   std::map<uint8_t, ExplodableData> get_explodables() const { return explodables_list; }
 
   void add_explodable(const ExplodableAttr &attr) {
-    ExplodableData explodable(attr.pos_x, attr.pos_y, attr.angle, attr.type, attr.direction,
-                              attr.id);
-    explodables_list.insert(std::pair<uint8_t, ExplodableData>(explodable.get_id(), explodable));
+    ExplodableData explodable(attr.pos_x, attr.pos_y, attr.angle, attr.type,
+                              attr.direction, attr.id);
+    explodables_list.insert(
+        std::pair<uint8_t, ExplodableData>(explodable.get_id(), explodable));
   }
 
   std::list<ExplosionData> get_explosions() const { return explosions_list; }

@@ -7,7 +7,8 @@
 
 class RunnableJump : public RunnableCommandGame {
  public:
-  explicit RunnableJump(int clt_id, Socket &skt, bool *was_closed) :  // NOLINT(runtime/references)
+  explicit RunnableJump(int clt_id, Socket &skt,  // NOLINT(runtime/references)
+                        bool *was_closed) :
       RunnableCommandGame(std::make_shared<Jump>(clt_id, skt, was_closed)) {}
 
   void run(GameManager &game_manager) override {

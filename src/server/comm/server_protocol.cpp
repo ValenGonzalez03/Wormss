@@ -123,7 +123,9 @@ void ServerProtocol::send_float(float n, bool *was_closed) {
   skt.sendall(&number_be, sizeof(number_be), was_closed);
 }
 
-void ServerProtocol::send_bool(bool b, bool *was_closed) { skt.sendall(&b, sizeof(b), was_closed); }
+void ServerProtocol::send_bool(bool b, bool *was_closed) {
+  skt.sendall(&b, sizeof(b), was_closed);
+}
 
 
 //////////////////////////////////////////////////////////////////////
@@ -136,7 +138,8 @@ void ServerProtocol::send_beam(BeamAttr beam_attr, bool *was_closed) {
   send_float(beam_attr.width, was_closed);
 }
 
-void ServerProtocol::send_spawn_points(const std::vector<float> &spawn_point, bool *was_closed) {
+void ServerProtocol::send_spawn_points(const std::vector<float> &spawn_point,
+                                       bool *was_closed) {
   send_float(spawn_point[0], was_closed);
   send_float(spawn_point[1], was_closed);
 }

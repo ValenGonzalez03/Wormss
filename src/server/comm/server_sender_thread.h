@@ -1,5 +1,5 @@
-#ifndef PLAYER_SENDER_THREAD_H
-#define PLAYER_SENDER_THREAD_H
+#ifndef SERVER_SENDER_THREAD_H
+#define SERVER_SENDER_THREAD_H
 
 #include "../../common/game_state.h"
 #include "../../common/lib/queue.h"
@@ -11,16 +11,16 @@
 #include <memory>
 #include <string>
 
-class PlayerSender : public Thread {
+class ServerSender : public Thread {
  private:
   ServerProtocol &protocol;
   Queue<GameState> sender_queue;
-  bool &keep_playing;
+  // bool &keep_playing;
   bool closed = false;
   uint8_t player_id;
 
  public:
-  explicit PlayerSender(ServerProtocol &protocol, bool &keep_playing,  // NOLINT(runtime/references)
+  explicit ServerSender(ServerProtocol &protocol,  // NOLINT(runtime/references)
                         uint8_t player_id);
 
   // Envia al cliente su id y la lista de mundos disponibles para elegir. Devuelve el id del mundo elegido.
@@ -46,10 +46,10 @@ class PlayerSender : public Thread {
   // Ejecuta el loop del hilo Sender.
   void run() override;
 
-  ~PlayerSender();
+  ~ServerSender();
 
-  PlayerSender(const PlayerSender &) = delete;
-  PlayerSender &operator=(const PlayerSender &) = delete;
+  ServerSender(const ServerSender &) = delete;
+  ServerSender &operator=(const ServerSender &) = delete;
 };
 
 #endif

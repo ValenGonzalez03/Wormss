@@ -4,6 +4,7 @@
 #include <chrono>  // NOLINT(build/c++11)
 #include <cmath>
 #include <thread>  // NOLINT(build/c++11)
+#include <functional>
 
 using std::chrono::duration;
 using std::chrono::duration_cast;
@@ -17,13 +18,20 @@ typedef time_point<steady_clock, milliseconds> time_p_ms;
 typedef duration<float> dur_f;
 
 class ConstantRateLoop {
+ private:
+  dur_f rate;
+  std::function<bool()> func;
+
  public:
-  void loop(dur_f rate) {
+  ConstantRateLoop(dur_f rate, std::function<bool()> func_to_execute) :
+      rate(rate), func(func_to_execute) {}
+
+  void loop() {
     auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     int it_frames = 0;
     bool was_closed = false;
     while (!was_closed) {
-      was_closed = func_to_execute();
+      was_closed = func();
 
       auto t2 = time_point_cast<milliseconds>(steady_clock::now());
 
@@ -54,8 +62,6 @@ class ConstantRateLoop {
     *t1 += rate_ms;
     *it += 1;
   }
-
-  virtual bool func_to_execute() = 0;
 };
 
 #endif

@@ -22,7 +22,7 @@ using SDL2pp::SDLMixer;
 using SDL2pp::SDLTTF;
 using SDL2pp::Texture;
 
-const float RATE = static_cast<float>(1.0 / 60.0);
+#define FPS 60.0
 
 Client::Client(ClientProtocol &&prot, uint8_t player_id) :
     prot(std::move(prot)), receiver_queue(), sender_queue(),
@@ -78,11 +78,9 @@ int Client::run() {
     // ---------------------------------------------------------------------------
     // INICIALIZACION DEL MUNDO
 
-    // Loop del ConstantRateLoop, recibe como parametro el rate, que determina
-    // cuantos frames se renderizan en un segundo
-
-    // Ejecuta func_to_execute en cada iteracion
-    loop(std::chrono::duration<float>(static_cast<float>(RATE)));
+    ConstantRateLoop rate_loop(std::chrono::duration<float>(static_cast<float>(1 / FPS)),
+                               [this] { return execute_frame(); });
+    rate_loop.loop();  // Ejecuta execute_frame en cada iteracion
   } catch (const std::exception &e) {
     std::cerr << "Ha ocurrido un error: " << e.what() << '\n';
   }
@@ -115,7 +113,7 @@ void Client::recv_world() {
   }
 }
 
-bool Client::func_to_execute() {
+bool Client::execute_frame() {
   // Timing: calculate difference between this and previous frame
   // in milliseconds
   unsigned int frame_ticks = SDL_GetTicks();

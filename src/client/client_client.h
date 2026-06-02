@@ -18,7 +18,7 @@
 #include "comm/client_receiver_thread.h"
 #include "comm/client_sender_thread.h"
 
-class Client : public ConstantRateLoop {
+class Client {
  private:
   ClientProtocol prot;
 
@@ -88,7 +88,7 @@ class Client : public ConstantRateLoop {
   int run();
 
   // Devuelve false si el cliente no cerro el programa, devuelve true en caso contrario.
-  bool func_to_execute() override;
+  bool execute_frame();
 };
 
 #endif

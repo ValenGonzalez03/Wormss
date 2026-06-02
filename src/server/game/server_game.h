@@ -25,7 +25,7 @@
 
 #define MAX_PLAYERS 2
 #define MS_PER_UPDATE 10
-#define RATE 0.01
+// #define RATE 0.01
 
 typedef duration<float, duration<float>> dur_ms;
 typedef time_point<steady_clock, milliseconds> time_p_ms;
@@ -46,8 +46,7 @@ class Game : public Thread {
   bool started = false;
 
   std::mutex m;
-  std::chrono::duration<float> rate =
-      std::chrono::duration<float>((float)RATE);  // NOLINT(readability/casting)
+  // std::chrono::duration<float> rate =std::chrono::duration<float>((float)RATE);  // NOLINT(readability/casting)
 
  public:
   explicit Game(const uint8_t &game_id, const World &world,
@@ -58,9 +57,9 @@ class Game : public Thread {
 
   void delete_player(const uint8_t &player_id);
 
-  void handle_command();
-
   void charge_world();
+
+  bool execute_frame();
 
   void run() override;
 

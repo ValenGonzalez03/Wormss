@@ -11,9 +11,9 @@ class RunnableStartMoving : public RunnableCommandGame {
                                bool *was_closed) :
       RunnableCommandGame(std::make_shared<StartMoving>(clt_id, skt, was_closed)) {}
 
-  void run(GameManager &game_manager) override {
-    game_manager.move(command->get_client_id(),
-                      (reinterpret_cast<StartMoving *>(command.get()))->get_direction());
+  void run(Game &game) override {
+    game.move(command->get_client_id(),
+              (reinterpret_cast<StartMoving *>(command.get()))->get_direction());
   }
 };
 

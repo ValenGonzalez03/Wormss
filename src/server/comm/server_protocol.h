@@ -68,8 +68,8 @@ class ServerProtocol {
   void send_spawn_points(const std::vector<float> &spawn_point, bool *was_closed);
 
   // Recibe una lista de punteros a mundos y envía la cantidad de mundos y sus nombres por socket
-  void send_worlds_map(const std::map<uint8_t, std::string> &worlds_map,
-                       bool *was_closed);
+  void send_worlds_list(const std::map<uint8_t, std::string> &worlds_list,
+                        bool *was_closed);
 
   /////////// FUNCIONES DE ENVÍO DE MUNDO POR SOCKET /////////////////////
   //////////////////////////////////////////////////////////////////////

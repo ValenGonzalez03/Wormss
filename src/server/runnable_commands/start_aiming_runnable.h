@@ -11,9 +11,9 @@ class RunnableStartAiming : public RunnableCommandGame {
                                bool *was_closed) :
       RunnableCommandGame(std::make_shared<StartAiming>(clt_id, skt, was_closed)) {}
 
-  void run(GameManager &game_manager) override {
-    game_manager.aim(command->get_client_id(),
-                     (reinterpret_cast<StartAiming *>(command.get()))->get_direction());
+  void run(Game &game) override {
+    game.aim(command->get_client_id(),
+             (reinterpret_cast<StartAiming *>(command.get()))->get_direction());
   }
 };
 

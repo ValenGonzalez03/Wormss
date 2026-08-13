@@ -33,10 +33,10 @@ void ServerSender::run() {
   std::cout << str;
 }
 
-uint8_t ServerSender::send_create_info(const uint8_t &player_id,
-                                       const std::map<uint8_t, std::string> &worlds_map) {
+uint8_t ServerSender::send_create_info(
+    const uint8_t &player_id, const std::map<uint8_t, std::string> &worlds_list) {
   send_id(player_id);
-  send_worlds_map(worlds_map);
+  send_worlds_list(worlds_list);
 
   bool was_closed = false;
   return protocol.recv_world_id(&was_closed);
@@ -52,9 +52,9 @@ void ServerSender::send_id(const uint8_t id) {
   protocol.send_byte(id, &was_closed);
 }
 
-void ServerSender::send_worlds_map(const std::map<uint8_t, std::string> &worlds_map) {
+void ServerSender::send_worlds_list(const std::map<uint8_t, std::string> &worlds_list) {
   bool was_closed = false;
-  protocol.send_worlds_map(worlds_map, &was_closed);
+  protocol.send_worlds_list(worlds_list, &was_closed);
 }
 
 void ServerSender::send_world(const World *world) {

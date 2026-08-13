@@ -11,9 +11,7 @@ class RunnableStopMoving : public RunnableCommandGame {
                      bool *was_closed) :
       RunnableCommandGame(std::make_shared<StopMoving>(clt_id, skt, was_closed)) {}
 
-  void run(GameManager &game_manager) override {
-    game_manager.stop_moving(command->get_client_id());
-  }
+  void run(Game &game) override { game.stop_moving(command->get_client_id()); }
 };
 
 #endif

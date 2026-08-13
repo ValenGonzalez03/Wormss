@@ -144,12 +144,12 @@ void ServerProtocol::send_spawn_points(const std::vector<float> &spawn_point,
   send_float(spawn_point[1], was_closed);
 }
 
-void ServerProtocol::send_worlds_map(const std::map<uint8_t, std::string> &worlds_map,
-                                     bool *was_closed) {
-  uint16_t worlds_number = worlds_map.size();
+void ServerProtocol::send_worlds_list(const std::map<uint8_t, std::string> &worlds_list,
+                                      bool *was_closed) {
+  uint16_t worlds_number = worlds_list.size();
   uint16_t worlds_number_be = htons(worlds_number);
   skt.sendall(&worlds_number_be, sizeof(worlds_number_be), was_closed);
-  for (const auto &pair : worlds_map) {
+  for (const auto &pair : worlds_list) {
     send_byte(pair.first, was_closed);     // Envio id del mundo
     send_string(pair.second, was_closed);  // Envio nombre del mundo
   }

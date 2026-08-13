@@ -12,8 +12,8 @@ class RunnableChangeWeapon : public RunnableCommandGame {
                                 bool *was_closed) :
       RunnableCommandGame(std::make_shared<ChangeWeapon>(clt_id, skt, was_closed)) {}
 
-  void run(GameManager &game_manager) override {
-    game_manager.change_weapon(
+  void run(Game &game) override {
+    game.change_weapon(
         command->get_client_id(),
         (reinterpret_cast<ChangeWeapon *>(command.get()))->get_weapon_type());
   }

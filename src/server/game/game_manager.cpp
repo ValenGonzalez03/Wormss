@@ -1,214 +1,94 @@
 #include "game_manager.h"
-#include "../world/trajectory_missile_callback.h"
-#include "../world/baseball_bat_callback.h"
-#include "box2d/box2d.h"
-#include <algorithm>
-#include <stdio.h>
+#include "../../common/constant_rate_loop.h"
 #include <string>
-#include <vector>
 
-#define BAT_LENGTH 3
+#define QUEUE_MAX_SIZE 20
 
-GameManager::GameManager(const World &world) : world(world) {}
+GameManager::GameManager(const uint8_t &id, const World &world,
+                         const GameConfig &game_config) :
+    id(id), commands(QUEUE_MAX_SIZE), config(game_config), game(world) {}
 
-void GameManager::initialize_game(const GameConfig &game_config) {
-  int i = 0;
-  std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
-  for (uint8_t player_id : players) {
-    int num_sp = i;
-    if (i >= spawn_points.size()) {
-      num_sp = spawn_points.size() - 1;
-    }
-    world.create_worm(player_id, spawn_points[num_sp][0], spawn_points[num_sp][1],
-                      game_config);
-    auto string = "[CLIENT-MAN-THREAD]: Worm of id: " +
-                  std::to_string(static_cast<int>(player_id)) + " created.\n";
-    std::cout << string;
-    i++;
-  }
-}
-
-void GameManager::add_player(const uint8_t &player_id) {
-  current_players++;
-  players.push_back(player_id);
+void GameManager::add_player(ServerSender &sender, const uint8_t &player_id) {
+  broadcaster.add_queue(&sender.get_queue(), player_id);
+  player_senders.emplace_back(&sender);
+  game.add_player(player_id);
 }
 
 void GameManager::delete_player(const uint8_t &player_id) {
-  current_players--;
-  players.remove(player_id);
+  broadcaster.delete_queue(player_id);
+  game.delete_player(player_id);
 }
 
-// void GameManager::set_current_turn_id(const uint8_t &id) {
-//   current_turn_id = id;
-// }
+void GameManager::initialize_game() {
+  game.charge_world(config);
+  push_game_state();
+}
 
-// void GameManager::set_world(World& selected_world) {
-//   world = selected_world;
-// }
+void GameManager::run() {
+  try {
+    std::string str =
+        "[GAME-THREAD]: Game of id: " + std::to_string(static_cast<int>(id)) +
+        " started.\n";
+    std::cout << str;
 
-World *GameManager::get_world() { return &world; }
+    started = true;
 
-void GameManager::step() { world.step(timeStep, velocityIterations, positionIterations); }
+    // bool was_closed = false;
+    // int it = 0;
+    // auto t1 = time_point_cast<milliseconds>(steady_clock::now());
+    auto start_turn_time = std::chrono::steady_clock::now();
+
+    ConstantRateLoop rate_loop(std::chrono::duration<float>(static_cast<float>(1 / FPS)),
+                               [this] { return execute_frame(); });
+    rate_loop.loop();
+
+    keep_playing = false;
+
+    std::cout << "[GAME-THREAD]: Game of id: " << static_cast<int>(id) << " ended."
+              << std::endl;
+  } catch (const std::exception &err) {
+  }
+}
+
+bool GameManager::execute_frame() {
+  update();
+  game.update();
+  push_game_state();
+
+  return has_game_finished();
+}
 
 void GameManager::update() {
-  world.update_worms();
-
-  world.update_explodables();
-
-  world.update_explosions();
-}
-
-void GameManager::move(const uint8_t &player_id, const uint8_t &direction) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
-
-  WormBody *worm = world.get_worm(player_id);
-  worm->start_moving(direction);
-}
-
-void GameManager::stop_moving(const uint8_t &player_id) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
-
-  WormBody *worm = world.get_worm(player_id);
-  worm->stop_moving();
-}
-
-void GameManager::jump(const uint8_t &player_id, const uint8_t &direction,
-                       const uint8_t &jump_type) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
-
-  WormBody *worm = world.get_worm(player_id);
-  worm->jump(direction, jump_type);
-}
-
-void GameManager::aim(const uint8_t &player_id, const uint8_t &direction) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
-
-  WormBody *worm = world.get_worm(player_id);
-  worm->start_aiming(direction);
-}
-
-void GameManager::stop_aiming(const uint8_t &player_id) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
-
-  WormBody *worm = world.get_worm(player_id);
-  worm->stop_aiming();
-}
-
-void GameManager::change_weapon(const uint8_t &player_id, const uint8_t &weapon_type) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
-  WormBody *worm = world.get_worm(player_id);
-
-  worm->change_weapon(static_cast<WeaponType>(weapon_type));
-}
-
-void GameManager::attack(const uint8_t &player_id, float initial_force) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
-  WormBody *worm = world.get_worm(player_id);
-
-  if (worm->get_state() == ATTACKING)
-    return;
-
-  WeaponType weapon = worm->get_weapon_selected();
-  switch (weapon) {
-    case BAZOOKA:
-      use_bazooka(worm, initial_force);
-      break;
-    case BAT:
-      use_bat(worm);
-      break;
-    case GRENADE:
-      use_grenade(worm, initial_force);
-      break;
-    default:
-      /* Ningun arma (?) */
-      break;
-  }
-  worm->set_worm_to_attack();
-}
-
-void GameManager::use_bazooka(WormBody *worm, float initial_force) {
-  b2Vec2 missile_pos = worm->calculate_projectile_launch_position(
-      MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
-  b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
-  MissileCallback callback;
-  world.ray_cast(&callback, worm_pos, missile_pos);
-
-  if (callback.did_hit_wall()) {
-    b2Vec2 hit_point = callback.get_hit_point();
-    world.create_explosion(hit_point.x, hit_point.y);
-  } else {
-    ExplodableAttr proj_attr =
-        worm->attack_projectile(missile_pos, projectiles_id_counter);
-    projectiles_id_counter++;
-    world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
-                         proj_attr.direction, initial_force);
+  std::shared_ptr<RunnableCommandGame> runnable_command;
+  while (commands.try_pop(runnable_command)) {
+    runnable_command->run(game);
   }
 }
 
-void GameManager::use_bat(WormBody *worm) {
-  b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
-  UserData *data = worm->get_user_data();
-  BaseballBatCallback bat_callback(worm_pos, data);
-
-  float aim_angle = worm->get_aiming_angle();
-  uint8_t worm_dir = worm->get_direction();
-  float bat_end_x = (worm_dir == RIGHT ? 1 : -1) * cosf(aim_angle);
-  b2Vec2 bat_end_pos = worm_pos + (BAT_LENGTH * b2Vec2(bat_end_x, sinf(aim_angle)));
-  b2Vec2 dir = bat_end_pos - worm_pos;
-  dir.Normalize();
-  std::cout << "Bat direction: (" << dir.x << ", " << dir.y << ")" << std::endl;
-  world.ray_cast(&bat_callback, worm_pos, bat_end_pos);
+void GameManager::push_game_state() {
+  GameState game_state = game.create_state();
+  broadcaster.broadcast(game_state);
 }
 
-void GameManager::use_grenade(WormBody *worm, float initial_force) {
-  b2Vec2 grenade_pos =
-      worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT);
-  ExplodableAttr proj_attr = worm->attack_projectile(grenade_pos, projectiles_id_counter);
-  projectiles_id_counter++;
-  world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
-                       proj_attr.direction, initial_force);
+bool GameManager::has_game_finished() { return game.is_game_finished(); }
+
+void GameManager::send_info_to_start_to_players() {
+  for (auto &sender : player_senders) {
+    sender->send_game_started();
+    sender->send_world(game.get_world());
+  }
 }
 
-GameState GameManager::create_state() {
-  GameState game_state;
-  if (game_finished) {
-    game_state.set_game_finished();
-  }
-
-  auto worms_attr = world.get_worms_attr();
-  for (const auto &attr : worms_attr) {
-    game_state.add_worm(attr);
-  }
-
-  auto explodables_attr = world.get_explodables_attr();
-  for (const auto &attr : explodables_attr) {
-    game_state.add_explodable(attr);
-  }
-
-  auto explosions_attr = world.get_explosions_attr();
-  for (const auto &attr : explosions_attr) {
-    game_state.add_explosion(attr);
-  }
-
-  return game_state;
+bool GameManager::compare_id(const uint8_t &another_game_id) {
+  return (id == another_game_id);
 }
 
-void GameManager::set_game_finished(const bool is_finished) {
-  game_finished = is_finished;
-}
+bool GameManager::has_started() { return started; }
 
-bool GameManager::is_game_finished() const { return game_finished; }
+bool GameManager::is_dead() { return !keep_playing; }
+
+uint8_t GameManager::get_game_id() { return id; }
+
+Queue<game_command_ptr> *GameManager::get_commands_queue() { return &commands; }
+
+// GameManager &GameManager::get_game_manager() { return game_manager; }

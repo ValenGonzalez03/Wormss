@@ -1,72 +1,101 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
-#include "../../common/game_state.h"
-#include "box2d/box2d.h"
-#include "../world/server_world.h"
-#include "worlds_reader.h"
-#include "game_config.h"
-#include <stdio.h>
+#include <algorithm>
 #include <list>
-#include <utility>
+#include <map>
+#include <mutex>
 
-class GameManager {
+#include "math.h"
+#include <chrono>
+#include <cmath>
+#include <iostream>
+#include <unistd.h>
+#include <memory>
+
+#include "../../common/commands/command.h"
+#include "../../common/constant_rate_loop.h"
+#include "../../common/game_state.h"
+#include "../../common/lib/queue.h"
+#include "../../common/lib/thread.h"
+#include "../comm/broadcaster.h"
+#include "../comm/server_sender_thread.h"
+#include "../runnable_commands/command_runnable_game.h"
+#include "server_game.h"
+
+#define MAX_PLAYERS 2
+#define MS_PER_UPDATE 10
+// #define RATE 0.01
+
+typedef duration<float, duration<float>> dur_ms;
+typedef time_point<steady_clock, milliseconds> time_p_ms;
+typedef duration<float> dur_f;
+
+class GameManager : public Thread {
  private:
-  World world;
-  bool game_finished = false;
-  int current_players = 0;
-  // int current_player_id;
-  // int current_worm_id;
-  // uint8_t current_turn_id = 0;
-  int projectiles_id_counter = 0;
-  std::list<uint8_t> players;
+  uint8_t id;
+  Game game;
+  const GameConfig &config;
+  Queue<game_command_ptr> commands;
+  Broadcaster broadcaster;
+  std::list<ServerSender *> player_senders;
 
-  float timeStep = 1.0f / 60.0f;
-  int32 velocityIterations = 6;
-  int32 positionIterations = 2;
+  uint8_t players_counter = 0;
+  uint8_t current_turn_id = 0;
+  bool keep_playing = true;
+  bool started = false;
 
-  void use_bazooka(WormBody *worm, float initial_force);
-
-  void use_bat(WormBody *worm);
-
-  void use_grenade(WormBody *worm, float initial_force);
+  std::mutex m;
+  // std::chrono::duration<float> rate =std::chrono::duration<float>((float)RATE);  // NOLINT(readability/casting)
 
  public:
-  explicit GameManager(const World &world);
+  explicit GameManager(const uint8_t &game_id, const World &world,
+                       const GameConfig &game_config);
 
-  void initialize_game(const GameConfig &game_config);
+  // Agrega el sender del jugador al broadcaster y agrega al jugador a la lista del mundo.
+  void add_player(ServerSender &sender,  // NOLINT(runtime/references)
+                  const uint8_t &player_id);
 
-  void add_player(const uint8_t &player_id);
-
+  // Elimina el sender del jugador del broadcaster y elimina al jugador de la lista del mundo.
   void delete_player(const uint8_t &player_id);
 
-  // void set_current_turn_id(const uint8_t &id);
+  // Inicializa los gusanos en el mundo y empuja el primer GameState.
+  void initialize_game();
 
-  World *get_world();
+  void run() override;
 
-  void step();
+  // Ejecuta un frame del juego. Actualiza el estado del mundo y las acciones de los
+  // clientes, luego carga un GameState.
+  // Devuelve true si el juego terminó, false en caso contrario.
+  bool execute_frame();
 
+  // Ejecuta todos los comandos de los clientes que se encontraban encolados.
   void update();
 
-  void move(const uint8_t &player_id, const uint8_t &direction);
+  // Crea y empuja un GameState a las Queues de los jugadores.
+  void push_game_state();
 
-  void stop_moving(const uint8_t &player_id);
+  // Devuelve true si el juego terminó, false en caso contrario.
+  bool has_game_finished();
 
-  void jump(const uint8_t &player_id, const uint8_t &direction, const uint8_t &jump_type);
+  // Devuelve true si el juego fue iniciado, false en caso contrario.
+  bool has_started();
 
-  void aim(const uint8_t &player_id, const uint8_t &direction);
+  // Envia al cliente un aviso de que el juego empezó, y envía la información del mundo.
+  void send_info_to_start_to_players();
 
-  void stop_aiming(const uint8_t &player_id);
+  // Devuelve true si el id del juego coincide con el id recibido por parámetro,
+  // false en caso contrario.
+  bool compare_id(const uint8_t &another_game_id);
 
-  void change_weapon(const uint8_t &player_id, const uint8_t &weapon_type);
+  // Devuelve true si el Thread terminó, false en caso contrario.
+  bool is_dead();
 
-  void attack(const uint8_t &player_id, float initial_force);
+  uint8_t get_game_id();
 
-  GameState create_state();
+  Queue<game_command_ptr> *get_commands_queue();
 
-  void set_game_finished(const bool is_finished);
-
-  bool is_game_finished() const;
+  // GameManager &get_game_manager();
 
   GameManager(const GameManager &) = delete;
   GameManager &operator=(const GameManager &) = delete;

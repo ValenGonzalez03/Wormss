@@ -20,7 +20,7 @@ class ClientManager : public Thread {
  private:
   uint8_t client_id;
   GamesHandler &games_handler;
-  Game *game = nullptr;
+  GameManager *game = nullptr;
   // Player player;
 
   ServerProtocol protocol;

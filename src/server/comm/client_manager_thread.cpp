@@ -50,8 +50,8 @@ void ClientManager::run() {
 }
 
 void ClientManager::manage_create_game() {
-  auto worlds_map = games_handler.get_worlds_map();
-  uint8_t world_id = sender.send_create_info(client_id, worlds_map);
+  auto worlds_list = games_handler.get_worlds_list();
+  uint8_t world_id = sender.send_create_info(client_id, worlds_list);
 
   // set_to_host();
   this->game = games_handler.create_game(client_id, world_id, sender, receiver);

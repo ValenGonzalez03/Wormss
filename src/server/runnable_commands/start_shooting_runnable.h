@@ -12,10 +12,9 @@ class RunnableStartShooting : public RunnableCommandGame {
                                  bool *was_closed) :
       RunnableCommandGame(std::make_shared<StartShooting>(clt_id, skt, was_closed)) {}
 
-  void run(GameManager &game_manager) override {
-    game_manager.attack(
-        command->get_client_id(),
-        (reinterpret_cast<StartShooting *>(command.get()))->get_initial_force());
+  void run(Game &game) override {
+    game.attack(command->get_client_id(),
+                (reinterpret_cast<StartShooting *>(command.get()))->get_initial_force());
   }
 };
 

@@ -1,93 +1,68 @@
 #ifndef SERVER_GAME_H
 #define SERVER_GAME_H
 
-#include <algorithm>
-#include <list>
-#include <map>
-#include <mutex>
-
-#include "math.h"
-#include <chrono>
-#include <cmath>
-#include <iostream>
-#include <unistd.h>
-#include <memory>
-
-#include "../../common/commands/command.h"
-#include "../../common/constant_rate_loop.h"
 #include "../../common/game_state.h"
-#include "../../common/lib/queue.h"
-#include "../../common/lib/thread.h"
-#include "../comm/broadcaster.h"
-#include "../comm/server_sender_thread.h"
-#include "game_manager.h"
-#include "../runnable_commands/command_runnable_game.h"
+#include "box2d/box2d.h"
+#include "../world/server_world.h"
+#include "worlds_reader.h"
+#include "game_config.h"
+#include <stdio.h>
+#include <list>
+#include <utility>
 
-#define MAX_PLAYERS 2
-#define MS_PER_UPDATE 10
-// #define RATE 0.01
+#define FPS 60.0
 
-typedef duration<float, duration<float>> dur_ms;
-typedef time_point<steady_clock, milliseconds> time_p_ms;
-typedef duration<float> dur_f;
-
-class Game : public Thread {
+class Game {
  private:
-  uint8_t game_id;
-  GameManager game_manager;
-  const GameConfig &config;
-  Queue<game_command_ptr> commands;
-  Broadcaster broadcaster;
-  std::list<ServerSender *> player_senders;
+  World world;
+  bool game_finished = false;
+  int current_players = 0;
+  // int current_player_id;
+  // int current_worm_id;
+  // uint8_t current_turn_id = 0;
+  int projectiles_id_counter = 0;
+  std::list<uint8_t> players;
 
-  uint8_t players_counter = 0;
-  uint8_t current_turn_id = 0;
-  bool keep_playing = true;
-  bool started = false;
+  void use_bazooka(WormBody *worm, float initial_force);
 
-  std::mutex m;
-  // std::chrono::duration<float> rate =std::chrono::duration<float>((float)RATE);  // NOLINT(readability/casting)
+  void use_bat(WormBody *worm);
+
+  void use_grenade(WormBody *worm, float initial_force);
 
  public:
-  explicit Game(const uint8_t &game_id, const World &world,
-                const GameConfig &game_config);
+  explicit Game(const World &world);
 
-  void add_player(ServerSender &sender,  // NOLINT(runtime/references)
-                  const uint8_t &player_id);
+  void charge_world(const GameConfig &game_config);
+
+  void add_player(const uint8_t &player_id);
 
   void delete_player(const uint8_t &player_id);
 
-  void charge_world();
-
-  bool execute_frame();
-
-  void run() override;
-
-  void update();
-
-  void send_info_to_start_to_players();
-
-  void stop_playing();
-
-  bool compare_id(const uint8_t &another_game_id);
+  // void set_current_turn_id(const uint8_t &id);
 
   World *get_world();
 
-  void push_game_state();
+  void update();
 
-  void check_game_finished();
+  void move(const uint8_t &player_id, const uint8_t &direction);
 
-  void turn_to_started();
+  void stop_moving(const uint8_t &player_id);
 
-  bool is_started();
+  void jump(const uint8_t &player_id, const uint8_t &direction, const uint8_t &jump_type);
 
-  bool is_dead();
+  void aim(const uint8_t &player_id, const uint8_t &direction);
 
-  uint8_t get_game_id();
+  void stop_aiming(const uint8_t &player_id);
 
-  Queue<game_command_ptr> *get_commands_queue();
+  void change_weapon(const uint8_t &player_id, const uint8_t &weapon_type);
 
-  GameManager &get_game_manager();
+  void attack(const uint8_t &player_id, float initial_force);
+
+  GameState create_state();
+
+  void set_game_finished(const bool is_finished);
+
+  bool is_game_finished() const;
 
   Game(const Game &) = delete;
   Game &operator=(const Game &) = delete;

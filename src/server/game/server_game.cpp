@@ -110,6 +110,15 @@ void Game::change_weapon(const uint8_t &player_id, const uint8_t &weapon_type) {
   worm->change_weapon(static_cast<WeaponType>(weapon_type));
 }
 
+void Game::set_worm_to_charge(const uint8_t &player_id) {
+  // if (player_id != current_turn_id) {
+  //   return;
+  // }
+  WormBody *worm = world.get_worm(player_id);
+
+  worm->set_to_charge();
+}
+
 void Game::attack(const uint8_t &player_id, float initial_force) {
   // if (player_id != current_turn_id) {
   //   return;
@@ -135,7 +144,7 @@ void Game::attack(const uint8_t &player_id, float initial_force) {
   //     /* Ningun arma (?) */
   //     break;
   // }
-  worm->set_worm_to_attack();
+  worm->set_to_attack();
 }
 
 void Game::use_bazooka(WormBody *worm, float initial_force) {

@@ -56,6 +56,8 @@ class Game {
 
   void change_weapon(const uint8_t &player_id, const uint8_t &weapon_type);
 
+  void set_worm_to_charge(const uint8_t &player_id);
+
   void attack(const uint8_t &player_id, float initial_force);
 
   GameState create_state();

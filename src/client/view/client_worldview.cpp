@@ -234,6 +234,39 @@ void WorldView::render_text(const WormData &worm_data) {
                              text_sprite_2.GetHeight()));
 }
 
+void WorldView::render_charge_bar(uint8_t player_id, float charge, float max_charge) {
+  auto it = worms.find(player_id);
+  if (it == worms.end())
+    return;
+
+  Worm &worm = it->second;
+
+  const int BAR_WIDTH = 40;
+  const int BAR_HEIGHT = 6;
+  int bar_x =
+      worm.get_pos_x() - camera.get_x() + (worm.get_width() / 2) - (BAR_WIDTH / 2);
+  int bar_y = worm.get_pos_y() - camera.get_y() - 14;
+
+  float ratio = charge / max_charge;
+
+  // Fondo gris
+  renderer.SetDrawColor(SDL2pp::Color(60, 60, 60, 200));
+  renderer.FillRect(SDL2pp::Rect(bar_x, bar_y, BAR_WIDTH, BAR_HEIGHT));
+
+  // Relleno: verde -> amarillo -> rojo según carga
+  int fill_width = static_cast<int>(BAR_WIDTH * ratio);
+  if (fill_width > 0) {
+    Uint8 r = static_cast<Uint8>(255 * ratio);
+    Uint8 g = static_cast<Uint8>(255 * (1.0f - ratio));
+    renderer.SetDrawColor(SDL2pp::Color(r, g, 0, 255));
+    renderer.FillRect(SDL2pp::Rect(bar_x, bar_y, fill_width, BAR_HEIGHT));
+  }
+
+  // Borde blanco
+  renderer.SetDrawColor(SDL2pp::Color(255, 255, 255, 255));
+  renderer.DrawRect(SDL2pp::Rect(bar_x, bar_y, BAR_WIDTH, BAR_HEIGHT));
+}
+
 std::string WorldView::print_state(WormState state) {
   switch (state) {
     case IDLE:
@@ -244,6 +277,8 @@ std::string WorldView::print_state(WormState state) {
       return "jumping";
     case AIMING:
       return "aiming";
+    case CHARGING_ATTACK:
+      return "charging";
     case ATTACKING:
       return "attacking";
     default:

@@ -18,6 +18,14 @@
 #include "comm/client_receiver_thread.h"
 #include "comm/client_sender_thread.h"
 
+// #define MAX_CHARGE 15.0f
+// #define CHARGE_RATE 0.15f
+#define BAT_CHARGE 8.0f
+
+static constexpr float MAX_CHARGE = 20.0f;
+static constexpr float CHARGE_RATE = 0.15f;
+
+
 class Client {
  private:
   ClientProtocol prot;
@@ -36,6 +44,9 @@ class Client {
 
   std::set<int> mov_keys_pressed;
   std::set<int> aim_keys_pressed;
+
+  bool is_charging_attack = false;
+  float charge_power = 0.0f;
 
   void recv_world();
 
@@ -66,11 +77,11 @@ class Client {
   // Maneja el evento de finalización de apuntado
   void handle_stop_aiming();
 
-  // Maneja el evento de comienzo de disparo
-  void handle_start_shooting();
+  // Maneja el evento de carga de ataque (Para armas que requieran carga)
+  void handle_charging_attack();
 
-  // Maneja el evento de finalización de disparo
-  void handle_stop_shooting();
+  // Maneja el evento de ataque con la potencia correspondiente
+  void handle_attacking(float charge_power);
 
   // Maneja el evento de cambio de arma
   void handle_change_weapon(uint8_t weapon_type);

@@ -11,7 +11,8 @@
 #include "../runnable_commands/start_moving_runnable.h"
 #include "../runnable_commands/stop_aiming_runnable.h"
 #include "../runnable_commands/stop_moving_runnable.h"
-#include "../runnable_commands/start_shooting_runnable.h"
+#include "../runnable_commands/charging_attack_runnable.h"
+#include "../runnable_commands/attacking_runnable.h"
 #include "../runnable_commands/stop_game_runnable.h"
 #include "../runnable_commands/change_weapon_runnable.h"
 
@@ -37,8 +38,10 @@ game_command_ptr ServerProtocol::process_command(bool *was_closed) {
     return std::make_shared<RunnableStopAiming>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::CHANGE_WEAPON) {
     return std::make_shared<RunnableChangeWeapon>(client_id, skt, was_closed);
-  } else if (code == CODE_PLAYER_COMM::START_SHOOTING) {
-    return std::make_shared<RunnableStartShooting>(client_id, skt, was_closed);
+  } else if (code == CODE_PLAYER_COMM::CHARGING_ATTACK) {
+    return std::make_shared<RunnableChargingAttack>(client_id, skt, was_closed);
+  } else if (code == CODE_PLAYER_COMM::ATTACKING) {
+    return std::make_shared<RunnableAttacking>(client_id, skt, was_closed);
   } else if (code == CODE_PLAYER_COMM::STOP_GAME) {
     return std::make_shared<RunnableStopGame>(client_id, skt, was_closed);
   } else {

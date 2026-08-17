@@ -91,7 +91,9 @@ class WormBody : public DynamicBody {
   // Devuelve los atributos del proyectil a lanzar
   ExplodableAttr attack_projectile(b2Vec2 proj_pos, uint8_t proj_id);
 
-  void set_worm_to_attack();
+  void set_to_charge();
+
+  void set_to_attack();
 
   float explosion_intersect_value(float fraction) override;
 

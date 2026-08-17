@@ -1,6 +1,7 @@
 #include "client_client.h"
 
 #include <list>
+#include <algorithm>
 
 #include "../common/commands/create_game.h"
 #include "../common/commands/join_game.h"
@@ -10,7 +11,8 @@
 #include "../common/commands/start_moving.h"
 #include "../common/commands/stop_aiming.h"
 #include "../common/commands/stop_moving.h"
-#include "../common/commands/start_shooting.h"
+#include "../common/commands/charging_attack.h"
+#include "../common/commands/attacking.h"
 #include "../common/commands/stop_game.h"
 #include "../common/commands/change_weapon.h"
 #include "../common/game_constants.h"
@@ -167,6 +169,9 @@ bool Client::execute_frame() {
   // UPDATE ESTADO DEL JUEGO
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
+  if (is_charging_attack) {
+    charge_power = std::min(charge_power + CHARGE_RATE, MAX_CHARGE);
+  }
   view.world_view.update(game_state, frame_ticks);
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
@@ -179,6 +184,10 @@ bool Client::execute_frame() {
   view.renderer.Clear();
   view.world_view.render(frame_ticks);
   view.world_view.render_text(game_state.get_worms()[player_id]);
+  if (is_charging_attack) {
+    view.world_view.render_charge_bar(player_id, charge_power, MAX_CHARGE);
+  }
+  // std::cout << charge_power  << " y " << is_charging_attack << std::endl;
 
   // Show rendered frame
   view.renderer.Present();
@@ -193,6 +202,7 @@ bool Client::execute_frame() {
 bool Client::execute_event(SDL_Event &event) {
   auto worm_client = last_game_state.get_worms()[player_id];
   while (SDL_PollEvent(&event)) {
+    WeaponType w_type;
     if (event.type == SDL_QUIT) {  // Cierra el juego
       handle_quit_game();
       return true;
@@ -235,7 +245,16 @@ bool Client::execute_event(SDL_Event &event) {
           handle_start_aiming(key_aim_dir);
           break;
         case SDLK_SPACE:
-          handle_start_shooting();
+          if (event.key.repeat)
+            break;
+          w_type = worm_client.get_weapon_selected();
+          if (w_type == BAZOOKA || w_type == GRENADE) {
+            is_charging_attack = true;
+            charge_power = 0.0f;
+            handle_charging_attack();
+          } else {
+            handle_attacking(BAT_CHARGE);
+          }
           break;
         case SDLK_1:
           handle_change_weapon(BAZOOKA);
@@ -276,6 +295,13 @@ bool Client::execute_event(SDL_Event &event) {
             handle_stop_aiming();
           }
           break;
+        case SDLK_SPACE:
+          if (is_charging_attack) {
+            handle_attacking(charge_power);
+            is_charging_attack = false;
+            charge_power = 0.0f;
+          }
+          break;
       }
     }
   }
@@ -314,8 +340,13 @@ void Client::handle_stop_aiming() {
   sender_queue.try_push(cmd);
 }
 
-void Client::handle_start_shooting() {
-  std::shared_ptr<StartShooting> cmd = std::make_shared<StartShooting>(player_id, 8);
+void Client::handle_charging_attack() {
+  std::shared_ptr<ChargingAttack> cmd = std::make_shared<ChargingAttack>(player_id);
+  sender_queue.try_push(cmd);
+}
+
+void Client::handle_attacking(float charge_power) {
+  std::shared_ptr<Attacking> cmd = std::make_shared<Attacking>(player_id, charge_power);
   sender_queue.try_push(cmd);
 }
 

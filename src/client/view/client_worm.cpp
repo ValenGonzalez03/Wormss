@@ -59,6 +59,8 @@ void Worm::render(int frame, int camera_x, int camera_y) {
     render_worm_running(frame, camera_x, camera_y);
   } else if (this->worm_state == AIMING) {
     render_worm_aiming(frame, camera_x, camera_y);
+  } else if (this->worm_state == CHARGING_ATTACK) {
+    render_worm_attacking(frame, camera_x, camera_y);
   } else if (this->worm_state == ATTACKING) {
     render_worm_attacking(frame, camera_x, camera_y);
   } else {

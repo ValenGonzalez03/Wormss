@@ -58,6 +58,8 @@ class WorldView {
 
   void render_text(const WormData &worm_data);
 
+  void render_charge_bar(uint8_t player_id, float charge, float max_charge);
+
   // Setea un background al mundo
   void set_background(const std::string &path);
 };

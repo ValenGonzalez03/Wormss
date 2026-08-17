@@ -74,7 +74,7 @@ void WormBody::apply_vertical_impulse(float jump_speed) {
 ///////////////////////////////// METODOS DE CONTROL DEL GUSANO /////////////////////////////////
 
 void WormBody::start_moving(const uint8_t& dir) {
-  if (state == IDLE || JUMPING) {
+  if (state == IDLE || state == AIMING || state == MOVING) {
     state = MOVING;
     direction = dir;
   }
@@ -84,7 +84,11 @@ void WormBody::move_left() { apply_horizontal_impulse(-vel); }
 
 void WormBody::move_right() { apply_horizontal_impulse(vel); }
 
-void WormBody::stop_moving() { state = IDLE; }
+void WormBody::stop_moving() {
+  if (state == MOVING) {
+    state = IDLE;
+  }
+}
 
 
 void WormBody::jump(const uint8_t& dir, const uint8_t& jump_type) {
@@ -119,7 +123,7 @@ void WormBody::jump_backward() {
 
 
 void WormBody::start_aiming(const uint8_t& dir) {
-  if (state == IDLE) {
+  if (state == IDLE || state == MOVING || state == AIMING) {
     state = AIMING;
     aim_direction = dir;
   }
@@ -141,7 +145,11 @@ void WormBody::aim_down() {
   }
 }
 
-void WormBody::stop_aiming() { state = IDLE; }
+void WormBody::stop_aiming() {
+  if (state == AIMING) {
+    state = IDLE;
+  }
+}
 
 void WormBody::change_weapon(WeaponType weapon) {
   switch (weapon) {
@@ -188,7 +196,9 @@ ExplodableAttr WormBody::attack_projectile(b2Vec2 proj_pos, uint8_t proj_id) {
   return ExplodableAttr{proj_id, WORM, pos_x, pos_y, final_angle, worm_dir};
 }
 
-void WormBody::set_worm_to_attack() { state = ATTACKING; }
+void WormBody::set_to_charge() { state = CHARGING_ATTACK; }
+
+void WormBody::set_to_attack() { state = ATTACKING; }
 
 float WormBody::explosion_intersect_value(float fraction) { return 1; }
 

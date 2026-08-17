@@ -144,8 +144,8 @@ std::list<WormAttr> World::get_worms_attr() {
   std::list<WormAttr> worms_attr;
   for (auto worm : worms) {
     WormAttr attr({worm->get_id(), worm->get_pos_x(), worm->get_pos_y(),
-                   worm->get_direction(), worm->get_state(), worm->get_weapon_selected(),
-                   worm->get_aiming_angle()});
+                   worm->get_direction(), worm->get_state(),
+                   worm->get_weapon_selected()->get_type(), worm->get_aiming_angle()});
     worms_attr.emplace_back(attr);
   }
   return worms_attr;

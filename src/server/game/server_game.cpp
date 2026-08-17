@@ -119,21 +119,22 @@ void Game::attack(const uint8_t &player_id, float initial_force) {
   if (worm->get_state() == ATTACKING)
     return;
 
-  WeaponType weapon = worm->get_weapon_selected();
-  switch (weapon) {
-    case BAZOOKA:
-      use_bazooka(worm, initial_force);
-      break;
-    case BAT:
-      use_bat(worm);
-      break;
-    case GRENADE:
-      use_grenade(worm, initial_force);
-      break;
-    default:
-      /* Ningun arma (?) */
-      break;
-  }
+  ServerWeapon *weapon = worm->get_weapon_selected();
+  weapon->attack(world, initial_force, projectiles_id_counter);
+  // switch (weapon) {
+  //   case BAZOOKA:
+  //     use_bazooka(worm, initial_force);
+  //     break;
+  //   case BAT:
+  //     use_bat(worm);
+  //     break;
+  //   case GRENADE:
+  //     use_grenade(worm, initial_force);
+  //     break;
+  //   default:
+  //     /* Ningun arma (?) */
+  //     break;
+  // }
   worm->set_worm_to_attack();
 }
 

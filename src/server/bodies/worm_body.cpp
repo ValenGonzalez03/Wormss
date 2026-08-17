@@ -3,6 +3,9 @@
 #include "missile_body.h"
 #include "box2d/box2d.h"
 #include "../../common/game_constants.h"
+#include "../game/weapons/server_bazooka.h"
+#include "../game/weapons/server_bat.h"
+#include "../game/weapons/server_grenade.h"
 #include <stdio.h>
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
@@ -11,6 +14,7 @@ WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
                    int health, float vel, b2World* world) :
     DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
   body->SetFixedRotation(true);
+  current_weapon = std::make_unique<ServerBazooka>(this);
 
   // // Sensor para detectar si el gusano esta tocando el suelo
   b2PolygonShape polygonShape;
@@ -139,9 +143,21 @@ void WormBody::aim_down() {
 
 void WormBody::stop_aiming() { state = IDLE; }
 
-
-void WormBody::change_weapon(WeaponType weapon) { current_weapon = weapon; }
-
+void WormBody::change_weapon(WeaponType weapon) {
+  switch (weapon) {
+    case BAZOOKA:
+      current_weapon = std::make_unique<ServerBazooka>(this);
+      break;
+    case BAT:
+      current_weapon = std::make_unique<ServerBat>(this);
+      break;
+    case GRENADE:
+      current_weapon = std::make_unique<ServerGrenade>(this);
+      break;
+    default:
+      break;
+  }
+}
 ///////////////////////////////// METODOS DE CONTROL DEL GUSANO /////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -234,7 +250,7 @@ BODY_TYPES WormBody::get_type() { return WORM; }
 
 WormState WormBody::get_state() { return state; }
 
-WeaponType WormBody::get_weapon_selected() { return current_weapon; }
+ServerWeapon* WormBody::get_weapon_selected() { return current_weapon.get(); }
 
 uint8_t WormBody::get_direction() { return direction; }
 

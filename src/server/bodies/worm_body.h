@@ -4,6 +4,8 @@
 #include "../../common/game_constants.h"
 #include "dynamic_body.h"
 #include "box2d/box2d.h"
+#include "../game/weapons/server_weapon.h"
+#include <memory>
 #include <iostream>
 #include <stdio.h>
 
@@ -15,9 +17,10 @@ class WormBody : public DynamicBody {
   float jump_vel_forward = 5;
   float jump_vel_backward = 5;
 
+  // WeaponType current_weapon = BAZOOKA;
+  std::unique_ptr<ServerWeapon> current_weapon;
   // Atributos de estado del gusano
   WormState state = IDLE;
-  WeaponType current_weapon = BAZOOKA;
   uint8_t direction = RIGHT;
 
   uint8_t aim_direction = UP;
@@ -111,7 +114,7 @@ class WormBody : public DynamicBody {
 
   WormState get_state();
 
-  WeaponType get_weapon_selected();
+  ServerWeapon* get_weapon_selected();
 
   uint8_t get_direction();
 

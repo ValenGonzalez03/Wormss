@@ -51,6 +51,8 @@ class Body {
   virtual void stop_touching_missile(MissileBody* missile) = 0;
   virtual void stop_touching_grenade(GrenadeBody* grenade) = 0;
 
+  virtual void take_damage(int amount);
+
   void check_boundaries();
 
   void apply_impulse(const b2Vec2& impulse, const b2Vec2& point);

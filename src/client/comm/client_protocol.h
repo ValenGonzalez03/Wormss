@@ -45,6 +45,8 @@ class ClientProtocol {
   // Envía el tamaño de una cadena y luego la cadena
   void send_string(const std::string &str, bool *was_closed);
 
+  int32_t recv_int32(bool *was_closed);
+
   // Recibe un 'float' por socket, lo transforma y
   // lo devuelve
   float recv_float(bool *was_closed);

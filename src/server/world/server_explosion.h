@@ -7,6 +7,8 @@
 #include <map>
 #include <vector>
 
+#define EXPLOSION_DAMAGE_MULTIPLIER 3
+
 struct BodyRayInfo {
   Body* body;
   b2Vec2 point;
@@ -25,7 +27,9 @@ class Explosion {
   std::map<Body*, BodyExplosionInfo> affected_bodies;
 
   void apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_info,
-                               float blast_power);
+                               float charge_intensity);
+
+  void apply_explosion_damage(Body* body, float charge_intensity);
 
  public:
   Explosion(float pos_x, float pos_y, float radius, float charge_intensity);
@@ -45,10 +49,6 @@ class Explosion {
   float get_radius();
 
   std::vector<float> get_fraction_rays();
-
-  // void simulate_explosion(b2Vec2 center, float blastRadius, float blastPower);
-
-  // void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 };
 
 #endif

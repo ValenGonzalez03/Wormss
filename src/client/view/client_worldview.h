@@ -41,7 +41,7 @@ class WorldView {
             const uint8_t &player_id);
   // void add_worms(std::vector<std::vector<float>> spawn_points);
 
-  void add_worm(WormData data);
+  void add_worm(const WormData &data);
 
   // Convierte la posicion pasada por parámetro de m a px, crea la long_beam y la agrega al WorldView
   void add_beam(float pos_x, float pos_y, float width, float height, float angle);

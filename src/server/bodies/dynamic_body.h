@@ -20,6 +20,8 @@ class DynamicBody : public Body {
   void stop_touching_missile(MissileBody* missile) override = 0;
   void stop_touching_grenade(GrenadeBody* grenade) override = 0;
 
+  void take_damage(int amount) override;
+
   float explosion_intersect_value(float fraction) override = 0;
 
   void update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& normal,

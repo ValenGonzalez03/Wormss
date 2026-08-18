@@ -248,6 +248,15 @@ void WormBody::teleport(float pos_x, float pos_y) {
   body->SetAwake(true);
 }
 
+void WormBody::take_damage(int amount) {
+  health -= amount;
+  if (health <= 0) {
+    health = 0;
+  }
+}
+
+bool WormBody::is_dead() const { return health <= 0; }
+
 ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -255,6 +264,8 @@ void WormBody::teleport(float pos_x, float pos_y) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// GETTERS ///////////////////////////////////////////
+
+int32_t WormBody::get_health() const { return health; }
 
 BODY_TYPES WormBody::get_type() { return WORM; }
 

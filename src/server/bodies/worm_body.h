@@ -12,7 +12,7 @@
 class WormBody : public DynamicBody {
  private:
   // Atributos fijos del gusano
-  int health;
+  int32_t health;
   float vel;
   float jump_vel_forward = 5;
   float jump_vel_backward = 5;
@@ -104,6 +104,10 @@ class WormBody : public DynamicBody {
 
   void teleport(float pos_x, float pos_y);
 
+  void take_damage(int amount) override;
+
+  bool is_dead() const;
+
   ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,6 +115,8 @@ class WormBody : public DynamicBody {
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// GETTERS ///////////////////////////////////////////
+
+  int32_t get_health() const;
 
   BODY_TYPES get_type() override;
 

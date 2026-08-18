@@ -25,6 +25,7 @@ void Explosion::apply_explosion_to_bodies() {
   for (auto& [body_ptr, info] : affected_bodies) {
     BodyExplosionInfo expl_info = body_ptr->get_explosion_info();
     apply_explosion_impulse(body_ptr, expl_info, charge_intensity);
+    apply_explosion_damage(body_ptr, 1 - expl_info.fraction_force);
   }
 }
 
@@ -36,6 +37,12 @@ void Explosion::apply_explosion_impulse(Body* body, BodyExplosionInfo explosion_
   std::cout << "explotion_intensity: " << explotion_intensity << std::endl;
   body->apply_impulse(impulse_mag * explosion_info.impulse_dir,
                       explosion_info.apply_point);
+}
+
+void Explosion::apply_explosion_damage(Body* body, float explotion_intensity) {
+  int damage =
+      static_cast<int>(BLAST_POWER * explotion_intensity * EXPLOSION_DAMAGE_MULTIPLIER);
+  body->take_damage(damage);
 }
 
 b2Vec2 Explosion::get_center() { return b2Vec2(pos_x, pos_y); }

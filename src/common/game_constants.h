@@ -70,6 +70,7 @@ struct BodyAdvData {
 
 struct WormAttr {
   uint8_t player_id;
+  int32_t health;
   float pos_x;  // En metros
   float pos_y;  // En metros
   uint8_t direction;

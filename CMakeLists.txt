@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(Worms LANGUAGES CXX)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(box2d REQUIRED)
 find_package(SDL2pp REQUIRED)
 find_package(yaml-cpp REQUIRED)
@@ -91,7 +92,6 @@ add_executable(editor ./level_editor/main.cpp
 target_link_libraries(editor PUBLIC yaml-cpp)
 target_link_libraries(editor PUBLIC SDL2pp::SDL2pp)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 target_compile_definitions(client PUBLIC RESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")
 target_compile_definitions(server PUBLIC RESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")
 target_compile_definitions(editor PUBLIC RESOURCES_PATH="${PROJECT_SOURCE_DIR}/resources")

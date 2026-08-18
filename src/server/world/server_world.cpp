@@ -27,7 +27,7 @@ WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn
   BodyBasicData basic_data{player_id, spawn_x, spawn_y, 0.0f, WORM_WIDTH, WORM_HEIGHT};
   BodyAdvData adv_data{1.0f, 0.2f, WORM_CATEGORY,
                        BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY};
-  WormBody* worm = new WormBody(basic_data, adv_data, config.get_worm_life(),
+  WormBody* worm = new WormBody(basic_data, adv_data, config.get_worm_health(),
                                 config.get_worm_speed(), world.get());
 
   worms.push_back(worm);
@@ -144,8 +144,8 @@ void World::ray_cast(b2RayCastCallback* callback, const b2Vec2& point1,
 std::list<WormAttr> World::get_worms_attr() {
   std::list<WormAttr> worms_attr;
   for (auto worm : worms) {
-    WormAttr attr({worm->get_id(), worm->get_pos_x(), worm->get_pos_y(),
-                   worm->get_direction(), worm->get_state(),
+    WormAttr attr({worm->get_id(), worm->get_health(), worm->get_pos_x(),
+                   worm->get_pos_y(), worm->get_direction(), worm->get_state(),
                    worm->get_weapon_selected()->get_type(), worm->get_aiming_angle()});
     worms_attr.emplace_back(attr);
   }

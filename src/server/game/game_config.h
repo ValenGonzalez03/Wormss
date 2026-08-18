@@ -9,11 +9,11 @@
 class GameConfig {
  private:
   float worm_speed;
-  int worm_life;
+  uint32_t worm_health;
 
   void load_info(const YAML::Node file) {
     worm_speed = file["worm_speed"].as<float>();
-    worm_life = file["worm_life"].as<int>();
+    worm_health = file["worm_health"].as<uint32_t>();
   }
 
  public:
@@ -28,7 +28,7 @@ class GameConfig {
 
   float get_worm_speed() const { return worm_speed; }
 
-  int get_worm_life() const { return worm_life; }
+  uint32_t get_worm_health() const { return worm_health; }
 };
 
 #endif

@@ -52,6 +52,8 @@ class ServerProtocol {
   // Envía el tamaño de una cadena y luego la cadena
   void send_string(const std::string &str, bool *was_closed);
 
+  void send_int32(const int32_t n, bool *was_closed);
+
   // Multiplica un número flotante por 100 para mandarlo como uint por el socket, al recibirlo hay que
   // dividirlo por 100 para obtener otra vez el num original
   void send_float(float n, bool *was_closed);

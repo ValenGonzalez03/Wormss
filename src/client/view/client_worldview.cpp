@@ -33,7 +33,7 @@ void WorldView::add_beam(float pos_x, float pos_y, float width, float height,
 //   }
 // }
 
-void WorldView::add_worm(WormData data) {
+void WorldView::add_worm(const WormData &data) {
   float width = WORM_WIDTH;
   float heigth = WORM_HEIGHT;
 
@@ -42,9 +42,9 @@ void WorldView::add_worm(WormData data) {
   int width_px = convert_meters_to_pixels_x(width);
   int heigth_px = convert_meters_to_pixels_x(heigth);
 
-  Worm worm(data.get_player_id(), pos_x_px, pos_y_px, width_px, heigth_px,
-            data.get_aim_angle(), data.get_direction(), data.get_state(), renderer,
-            resource_pool);
+  Worm worm(data.get_player_id(), data.get_health(), pos_x_px, pos_y_px, width_px,
+            heigth_px, data.get_aim_angle(), data.get_direction(), data.get_state(),
+            renderer, resource_pool);
   worms.insert({worm.get_id(), worm});
 }
 

@@ -6,3 +6,5 @@ DynamicBody::DynamicBody(const BodyBasicData &basic_data, const BodyAdvData &adv
     Body(basic_data, adv_data, type, b2_dynamicBody, world) {
   affected_by_explosions = true;
 }
+
+void DynamicBody::take_damage(int amount) {}

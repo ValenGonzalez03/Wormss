@@ -17,6 +17,7 @@
 struct WormData {
  private:
   uint8_t player_id;
+  int32_t health;
   float pos_x;  // En metros
   float pos_y;  // En metros
   uint8_t direction;
@@ -27,13 +28,13 @@ struct WormData {
  public:
   // Default constructor (PARA QUE COMPILE, REVISAR!!!!)
   WormData() :
-      player_id(-1), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE),
+      player_id(-1), health(100), pos_x(0), pos_y(0), direction(RIGHT), state(IDLE),
       current_weapon(BAZOOKA), aim_angle(0) {}
 
-  explicit WormData(uint8_t id, float pos_x, float pos_y, u_int8_t dir, WormState st,
-                    WeaponType wp, float angle) :
-      player_id(id), pos_x(pos_x), pos_y(pos_y), direction(dir), state(st),
-      current_weapon(wp), aim_angle(angle) {}
+  explicit WormData(uint8_t id, uint32_t health, float pos_x, float pos_y, uint8_t dir,
+                    WormState st, WeaponType wp, float angle) :
+      player_id(id), health(health), pos_x(pos_x), pos_y(pos_y), direction(dir),
+      state(st), current_weapon(wp), aim_angle(angle) {}
 
   explicit WormData(ClientProtocol &prot) : pos_x(0), pos_y(0) {
     bool was_closed = false;
@@ -45,6 +46,9 @@ struct WormData {
                    bool *was_closed) {
     // Recibo el player_id
     this->player_id = prot.recv_byte(was_closed);
+
+    // Recibo la vida del gusano
+    this->health = prot.recv_int32(was_closed);
 
     // Recibo la position
     this->pos_x = prot.recv_float(was_closed);
@@ -68,6 +72,9 @@ struct WormData {
     // Envio el player_id
     prot.send_byte(this->player_id, was_closed);
 
+    // Envio la vida del gusano
+    prot.send_int32(this->health, was_closed);
+
     // Envio la posicion
     prot.send_float(pos_x, was_closed);
     prot.send_float(pos_y, was_closed);
@@ -88,6 +95,8 @@ struct WormData {
   }
 
   uint8_t get_player_id() const { return player_id; }
+
+  int32_t get_health() const { return health; }
 
   float get_pos_x() const { return pos_x; }
 
@@ -291,8 +300,8 @@ struct GameState {
   std::map<uint8_t, WormData> get_worms() const { return worms_list; }
 
   void add_worm(const WormAttr &attr) {
-    WormData worm(attr.player_id, attr.pos_x, attr.pos_y, attr.direction, attr.state,
-                  attr.current_weapon, attr.aim_angle);
+    WormData worm(attr.player_id, attr.health, attr.pos_x, attr.pos_y, attr.direction,
+                  attr.state, attr.current_weapon, attr.aim_angle);
     worms_list.insert(std::pair<uint8_t, WormData>(worm.get_player_id(), worm));
   }
 

@@ -1,11 +1,12 @@
 #include "client_worm.h"
 
 #include <cmath>
+#include <string>
 
-Worm::Worm(uint8_t id, int pos_x, int pos_y, int width, int height, float aim_angle,
-           uint8_t direction, WormState worm_state, SDL2pp::Renderer &rend,
-           ResourcePool &res_pool) :
-    id(id), pos_x(pos_x), pos_y(pos_y), width(width), height(height),
+Worm::Worm(uint8_t id, uint32_t health, int pos_x, int pos_y, int width, int height,
+           float aim_angle, uint8_t direction, WormState worm_state,
+           SDL2pp::Renderer &rend, ResourcePool &res_pool) :
+    id(id), health(health), pos_x(pos_x), pos_y(pos_y), width(width), height(height),
     aim_angle(aim_angle), direction(direction), worm_state(worm_state),
     resource_pool(res_pool), renderer(rend) {
   weapon = new Bazooka(BAZOOKA);
@@ -13,8 +14,9 @@ Worm::Worm(uint8_t id, int pos_x, int pos_y, int width, int height, float aim_an
 
 int Worm::get_id() { return id; }
 
-void Worm::update(WormData data) {
+void Worm::update(const WormData &data) {
   id = data.get_player_id();
+  health = data.get_health();
 
   pos_x = convert_meters_to_pixels_x(data.get_pos_x()) - width / 2;
   pos_y = convert_meters_to_pixels_y(data.get_pos_y()) - height / 2;
@@ -66,6 +68,8 @@ void Worm::render(int frame, int camera_x, int camera_y) {
   } else {
     render_worm_idle(frame, camera_x, camera_y);
   }
+
+  render_health_indicator(camera_x, camera_y);
 
   if (std::getenv("DEBUG") != NULL) {
     SDL2pp::Rect box(pos_x - camera_x, pos_y - camera_y, width, height);
@@ -144,6 +148,32 @@ void Worm::render_worm_attacking(int frame, int camera_x, int camera_y) {
       *attack_texture[frame_position], SDL2pp::NullOpt,
       SDL2pp::Rect(vals.x - camera_x, vals.y - camera_y, vals.width, vals.height), 0.0,
       SDL2pp::NullOpt, flip);
+}
+
+void Worm::render_health_indicator(int camera_x, int camera_y) {
+  SDL2pp::Font font(RESOURCES_PATH "/Vera.ttf", 12);
+
+  std::string health_text = std::to_string(health);
+
+  SDL2pp::Texture text_texture(
+      renderer, font.RenderText_Blended(health_text, SDL_Color{80, 220, 80, 255}));
+
+  int text_w = text_texture.GetWidth();
+  int text_h = text_texture.GetHeight();
+
+  // Centrado encima de la cabeza
+  int center_x = pos_x - camera_x + width / 2;
+  int text_x = center_x - text_w / 2;
+  int text_y = pos_y - camera_y - text_h - 16;
+
+  // Fondo gris oscuro
+  const int pad = 3;
+  renderer.SetDrawColor(SDL2pp::Color(40, 40, 40, 210));
+  renderer.FillRect(
+      SDL2pp::Rect(text_x - pad, text_y - pad, text_w + 2 * pad, text_h + 2 * pad));
+
+  renderer.Copy(text_texture, SDL2pp::NullOpt,
+                SDL2pp::Rect(text_x, text_y, text_w, text_h));
 }
 
 SDL_RendererFlip Worm::choose_flip_direction() {

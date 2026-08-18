@@ -54,6 +54,13 @@ void ClientProtocol::send_string(const std::string &str, bool *was_closed) {
   skt.sendall(str.c_str(), str.size(), was_closed);
 }
 
+int32_t ClientProtocol::recv_int32(bool *was_closed) {
+  int32_t number;
+  skt.recvall(&number, sizeof(number), was_closed);
+  int32_t number_be = ntohl(number);
+  return number_be;
+}
+
 float ClientProtocol::recv_float(bool *was_closed) {
   int16_t number;
   skt.recvall(&number, sizeof(number), was_closed);

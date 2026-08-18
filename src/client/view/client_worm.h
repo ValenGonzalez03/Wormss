@@ -11,6 +11,7 @@
 class Worm {
  private:
   uint8_t id;
+  uint32_t health;
   int pos_x;   // En pixeles
   int pos_y;   // En pixeles
   int width;   // En pixeles
@@ -44,19 +45,21 @@ class Worm {
   // Renderiza el worm cuando se encuentra en estado "attacking" en funcion del arma seleccionada
   void render_worm_attacking(int frame, int camera_x, int camera_y);
 
+  void render_health_indicator(int camera_x, int camera_y);
+
  public:
   Worm();
 
   // Crea un Worm con un renderer y las texturas correspondientes
-  explicit Worm(uint8_t id, int pos_x, int pos_y, int width, int heigth, float aim_angle,
-                uint8_t direction, WormState worm_state,
+  explicit Worm(uint8_t id, uint32_t health, int pos_x, int pos_y, int width, int heigth,
+                float aim_angle, uint8_t direction, WormState worm_state,
                 SDL2pp::Renderer &rend,   // NOLINT(runtime/references)
                 ResourcePool &res_pool);  // NOLINT(runtime/references)
 
   int get_id();
 
   // Actualiza el estado del Worm con la informacion del server
-  void update(WormData data);
+  void update(const WormData &data);
 
   // Renderiza el worm en función de su estado actual
   void render(int frame, int camera_x, int camera_y);
@@ -65,14 +68,15 @@ class Worm {
   int get_pos_y();
   int get_width();
   int get_height();
+  uint32_t get_health();
 
   ~Worm();
 
   Worm(const Worm &other) :
-      id(other.id), pos_x(other.pos_x), pos_y(other.pos_y), width(other.width),
-      height(other.height), aim_angle(other.aim_angle), direction(other.direction),
-      worm_state(other.worm_state), weapon(nullptr), resource_pool(other.resource_pool),
-      renderer(other.renderer) {
+      id(other.id), health(other.health), pos_x(other.pos_x), pos_y(other.pos_y),
+      width(other.width), height(other.height), aim_angle(other.aim_angle),
+      direction(other.direction), worm_state(other.worm_state), weapon(nullptr),
+      resource_pool(other.resource_pool), renderer(other.renderer) {
     assign_new_weapon(other.weapon->get_type());
   }
 

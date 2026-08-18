@@ -116,6 +116,11 @@ std::string ServerProtocol::recv_string(bool *was_closed) {
   return std::string(buffer);
 }
 
+void ServerProtocol::send_int32(const int32_t n, bool *was_closed) {
+  int32_t number_be = htonl(n);
+  skt.sendall(&number_be, sizeof(number_be), was_closed);
+}
+
 void ServerProtocol::send_byte(const uint8_t n, bool *was_closed) {
   skt.sendall(&n, sizeof(n), was_closed);
 }

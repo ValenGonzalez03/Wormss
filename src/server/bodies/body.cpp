@@ -85,6 +85,10 @@ void Body::stop_touching(Body* other) {
   }
 }
 
+void Body::take_damage(int amount) {
+  // Por defecto no hace nada. Las subclases pueden sobreescribir este método
+}
+
 void Body::check_boundaries() {
   if ((get_pos_x() < 0) || (get_pos_x() > 25)) {  // Excedio limite horizontal
     body->SetTransform(

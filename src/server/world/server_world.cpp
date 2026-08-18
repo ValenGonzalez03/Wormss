@@ -35,32 +35,32 @@ WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn
 }
 
 MissileBody* World::create_missile(uint8_t id, float pos_x, float pos_y, float angle,
-                                   uint8_t direction, float initial_force) {
+                                   uint8_t direction, float charge_intensity) {
   BodyBasicData basic_data{id, pos_x, pos_y, angle, MISSILE_WIDTH, MISSILE_HEIGHT};
   BodyAdvData adv_data{
       1.0f, 0.3f, MISSILE_CATEGORY,
       BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
   MissileBody* missile = new MissileBody(basic_data, direction, adv_data, world.get());
 
-  missile->apply_initial_impulse(initial_force, angle);
+  missile->apply_initial_impulse(charge_intensity, angle);
   explodables.push_back(missile);
   // std::cout << "Angle: " << angle << "  Direction: " << (int)direction << "  Initial force: " << initial_force << std::endl;
   return missile;
 }
 
 GrenadeBody* World::create_grenade(uint8_t id, float pos_x, float pos_y, float angle,
-                                   uint8_t direction, float initial_force) {
+                                   uint8_t direction, float charge_intensity) {
   BodyBasicData basic_data{id, pos_x, pos_y, angle, GRENADE_WIDTH, GRENADE_HEIGHT};
   BodyAdvData adv_data{1.0f, 0.3f, GRENADE_CATEGORY,
                        BEAM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
   GrenadeBody* grenade = new GrenadeBody(basic_data, direction, adv_data, world.get());
-  grenade->apply_initial_impulse(initial_force, angle);
+  grenade->apply_initial_impulse(charge_intensity, angle);
   explodables.push_back(grenade);
   return grenade;
 }
 
-void World::create_explosion(float pos_x, float pos_y) {
-  Explosion explosion(pos_x, pos_y, EXPLOSION_RADIUS);
+void World::create_explosion(float pos_x, float pos_y, float charge_intensity) {
+  Explosion explosion(pos_x, pos_y, EXPLOSION_RADIUS, charge_intensity);
   for (int i = 0; i < NUM_RAYS; i++) {
     float angle_rad = (i / static_cast<float>(NUM_RAYS)) * 2.0f * b2_pi;
     b2Vec2 center(pos_x, pos_y);
@@ -109,7 +109,8 @@ void World::update_explodables() {
   for (std::list<Explodable*>::iterator it = explodables.begin();
        it != explodables.end();) {
     if ((*it)->has_exploded()) {
-      create_explosion((*it)->get_pos_x(), (*it)->get_pos_y());
+      create_explosion((*it)->get_pos_x(), (*it)->get_pos_y(),
+                       (*it)->get_charge_intensity());
       destroy_body(*it);
       it = explodables.erase(it);
       std::cout << "KABOOM" << std::endl;

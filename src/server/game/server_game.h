@@ -23,12 +23,6 @@ class Game {
   int projectiles_id_counter = 0;
   std::list<uint8_t> players;
 
-  void use_bazooka(WormBody *worm, float initial_force);
-
-  void use_bat(WormBody *worm);
-
-  void use_grenade(WormBody *worm, float initial_force);
-
  public:
   explicit Game(const World &world);
 
@@ -58,7 +52,7 @@ class Game {
 
   void set_worm_to_charge(const uint8_t &player_id);
 
-  void attack(const uint8_t &player_id, float initial_force);
+  void attack(const uint8_t &player_id, float charge_intensity);
 
   GameState create_state();
 

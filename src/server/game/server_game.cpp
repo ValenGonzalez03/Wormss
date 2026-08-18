@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 
-#define BAT_LENGTH 3
 const float TIME_STEP = (1.0f / FPS);
 const int32 VEL_ITERATIONS = 6;
 const int32 POS_ITERATIONS = 2;
@@ -119,7 +118,7 @@ void Game::set_worm_to_charge(const uint8_t &player_id) {
   worm->set_to_charge();
 }
 
-void Game::attack(const uint8_t &player_id, float initial_force) {
+void Game::attack(const uint8_t &player_id, float charge_intensity) {
   // if (player_id != current_turn_id) {
   //   return;
   // }
@@ -129,65 +128,9 @@ void Game::attack(const uint8_t &player_id, float initial_force) {
     return;
 
   ServerWeapon *weapon = worm->get_weapon_selected();
-  weapon->attack(world, initial_force, projectiles_id_counter);
-  // switch (weapon) {
-  //   case BAZOOKA:
-  //     use_bazooka(worm, initial_force);
-  //     break;
-  //   case BAT:
-  //     use_bat(worm);
-  //     break;
-  //   case GRENADE:
-  //     use_grenade(worm, initial_force);
-  //     break;
-  //   default:
-  //     /* Ningun arma (?) */
-  //     break;
-  // }
+  weapon->attack(world, charge_intensity, projectiles_id_counter);
+
   worm->set_to_attack();
-}
-
-void Game::use_bazooka(WormBody *worm, float initial_force) {
-  b2Vec2 missile_pos = worm->calculate_projectile_launch_position(
-      MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
-  b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
-  MissileCallback callback;
-  world.ray_cast(&callback, worm_pos, missile_pos);
-
-  if (callback.did_hit_wall()) {
-    b2Vec2 hit_point = callback.get_hit_point();
-    world.create_explosion(hit_point.x, hit_point.y);
-  } else {
-    ExplodableAttr proj_attr =
-        worm->attack_projectile(missile_pos, projectiles_id_counter);
-    projectiles_id_counter++;
-    world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
-                         proj_attr.direction, initial_force);
-  }
-}
-
-void Game::use_bat(WormBody *worm) {
-  b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
-  UserData *data = worm->get_user_data();
-  BaseballBatCallback bat_callback(worm_pos, data);
-
-  float aim_angle = worm->get_aiming_angle();
-  uint8_t worm_dir = worm->get_direction();
-  float bat_end_x = (worm_dir == RIGHT ? 1 : -1) * cosf(aim_angle);
-  b2Vec2 bat_end_pos = worm_pos + (BAT_LENGTH * b2Vec2(bat_end_x, sinf(aim_angle)));
-  b2Vec2 dir = bat_end_pos - worm_pos;
-  dir.Normalize();
-  std::cout << "Bat direction: (" << dir.x << ", " << dir.y << ")" << std::endl;
-  world.ray_cast(&bat_callback, worm_pos, bat_end_pos);
-}
-
-void Game::use_grenade(WormBody *worm, float initial_force) {
-  b2Vec2 grenade_pos =
-      worm->calculate_projectile_launch_position(GRENADE_WIDTH, GRENADE_HEIGHT);
-  ExplodableAttr proj_attr = worm->attack_projectile(grenade_pos, projectiles_id_counter);
-  projectiles_id_counter++;
-  world.create_grenade(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
-                       proj_attr.direction, initial_force);
 }
 
 GameState Game::create_state() {

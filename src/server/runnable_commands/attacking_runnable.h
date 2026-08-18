@@ -7,14 +7,13 @@
 
 class RunnableAttacking : public RunnableCommandGame {
  public:
-  explicit RunnableAttacking(uint8_t clt_id,
-                             Socket &skt,  // NOLINT(runtime/references)
+  explicit RunnableAttacking(uint8_t clt_id, Socket &skt,  // NOLINT(runtime/references)
                              bool *was_closed) :
       RunnableCommandGame(std::make_shared<Attacking>(clt_id, skt, was_closed)) {}
 
   void run(Game &game) override {
     game.attack(command->get_client_id(),
-                (reinterpret_cast<Attacking *>(command.get()))->get_charge_power());
+                (reinterpret_cast<Attacking *>(command.get()))->get_charge_intensity());
   }
 };
 

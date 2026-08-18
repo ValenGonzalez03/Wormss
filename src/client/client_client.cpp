@@ -253,7 +253,7 @@ bool Client::execute_event(SDL_Event &event) {
             charge_power = 0.0f;
             handle_charging_attack();
           } else {
-            handle_attacking(BAT_CHARGE);
+            handle_attacking(0.0f);
           }
           break;
         case SDLK_1:
@@ -297,7 +297,7 @@ bool Client::execute_event(SDL_Event &event) {
           break;
         case SDLK_SPACE:
           if (is_charging_attack) {
-            handle_attacking(charge_power);
+            handle_attacking(charge_power / MAX_CHARGE);
             is_charging_attack = false;
             charge_power = 0.0f;
           }
@@ -345,8 +345,9 @@ void Client::handle_charging_attack() {
   sender_queue.try_push(cmd);
 }
 
-void Client::handle_attacking(float charge_power) {
-  std::shared_ptr<Attacking> cmd = std::make_shared<Attacking>(player_id, charge_power);
+void Client::handle_attacking(float charge_intensity) {
+  std::shared_ptr<Attacking> cmd =
+      std::make_shared<Attacking>(player_id, charge_intensity);
   sender_queue.try_push(cmd);
 }
 

@@ -14,7 +14,7 @@ class ServerWeapon {
  public:
   explicit ServerWeapon(WormBody* worm, WeaponType type) : worm(worm), type(type) {}
 
-  virtual void attack(World& world, float initial_force,
+  virtual void attack(World& world, float charge_intensity,
                       int& proj_id_counter) = 0;  // NOLINT(runtime/references)
 
   WeaponType get_type() { return type; }

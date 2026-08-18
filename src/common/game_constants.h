@@ -5,7 +5,7 @@
 #include <vector>
 #include "box2d/box2d.h"
 
-#define PIXEL_PER_METER 25.0f  // 23,3 periodico (1 metro equivale a 25 pixeles)
+#define PIXEL_PER_METER 25.0f  // 1 metro equivale a 25 pixeles
 #define WORLD_WIDTH 50.0f      // En metros (Equivale a 1250 pixeles)
 #define WORLD_HEIGHT 30.0f     // En metros (Equivale a 750 pixeles)
 
@@ -95,6 +95,7 @@ struct ExplodableAttr {
 };
 
 #define NUM_RAYS 16
+#define BLAST_POWER 20.0f
 
 struct ExplosionAttr {
   float pos_x;

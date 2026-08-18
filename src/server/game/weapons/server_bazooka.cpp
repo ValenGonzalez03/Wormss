@@ -4,7 +4,7 @@
 #include "../../world/trajectory_missile_callback.h"
 #include "../../../common/game_constants.h"
 
-void ServerBazooka::attack(World& world, float initial_force, int& proj_id_counter) {
+void ServerBazooka::attack(World& world, float charge_intensity, int& proj_id_counter) {
   b2Vec2 missile_pos = worm->calculate_projectile_launch_position(
       MISSILE_WIDTH, MISSILE_HEIGHT, 0.27f, 0.27f);
   b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
@@ -14,11 +14,11 @@ void ServerBazooka::attack(World& world, float initial_force, int& proj_id_count
 
   if (callback.did_hit_wall()) {
     b2Vec2 hit_point = callback.get_hit_point();
-    world.create_explosion(hit_point.x, hit_point.y);
+    world.create_explosion(hit_point.x, hit_point.y, charge_intensity);
   } else {
     ExplodableAttr proj_attr = worm->attack_projectile(missile_pos, proj_id_counter);
     proj_id_counter++;
     world.create_missile(proj_attr.id, proj_attr.pos_x, proj_attr.pos_y, proj_attr.angle,
-                         proj_attr.direction, initial_force);
+                         proj_attr.direction, charge_intensity);
   }
 }

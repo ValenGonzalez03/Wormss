@@ -9,9 +9,10 @@ Explodable::Explodable(const BodyBasicData& basic_data, uint8_t dir,
                        const BodyAdvData& adv_data, BODY_TYPES type, b2World* world) :
     DynamicBody(basic_data, adv_data, type, world), direction(dir) {}
 
-void Explodable::apply_initial_impulse(float initial_force, float aim_angle) {
-  float vel_x = cos(aim_angle) * initial_force;
-  float vel_y = sin(aim_angle) * initial_force;
+void Explodable::apply_initial_impulse(float charge_intensity, float aim_angle) {
+  this->charge_intensity = charge_intensity;
+  float vel_x = cos(aim_angle) * charge_intensity * BLAST_POWER;
+  float vel_y = sin(aim_angle) * charge_intensity * BLAST_POWER;
   b2Vec2 dir_vec = (direction == RIGHT ? b2Vec2(vel_x, vel_y) : b2Vec2(-vel_x, -vel_y));
   std::cout << "angle: " << aim_angle;
   std::cout << "  Dir: (" << dir_vec.x << ", " << dir_vec.y << ")" << std::endl;
@@ -28,6 +29,8 @@ BodyExplosionInfo Explodable::get_explosion_info() {
 }
 
 uint8_t Explodable::get_direction() { return direction; }
+
+float Explodable::get_charge_intensity() const { return charge_intensity; }
 
 void Explodable::explode() { exploded = true; }
 

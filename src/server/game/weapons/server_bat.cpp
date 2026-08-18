@@ -6,7 +6,7 @@
 
 #define BAT_LENGTH 3
 
-void ServerBat::attack(World& world, float initial_force, int& proj_id_counter) {
+void ServerBat::attack(World& world, float charge_intensity, int& proj_id_counter) {
   b2Vec2 worm_pos = b2Vec2(worm->get_pos_x(), worm->get_pos_y());
   UserData* data = worm->get_user_data();
   BaseballBatCallback bat_callback(worm_pos, data);

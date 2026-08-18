@@ -18,12 +18,12 @@
 #include "comm/client_receiver_thread.h"
 #include "comm/client_sender_thread.h"
 
-// #define MAX_CHARGE 15.0f
-// #define CHARGE_RATE 0.15f
-#define BAT_CHARGE 8.0f
+#define MAX_CHARGE 20.0f
+#define CHARGE_RATE 0.15f
+// #define BAT_CHARGE 8.0f
 
-static constexpr float MAX_CHARGE = 20.0f;
-static constexpr float CHARGE_RATE = 0.15f;
+// static constexpr float MAX_CHARGE = 20.0f;
+// static constexpr float CHARGE_RATE = 0.15f;
 
 
 class Client {

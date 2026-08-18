@@ -19,6 +19,7 @@ class Explosion {
   float pos_x;
   float pos_y;
   float radius;
+  float charge_intensity;
   float time_since_explosion_started = 0;
   std::vector<float> fraction_rays = std::vector<float>(NUM_RAYS, 1);
   std::map<Body*, BodyExplosionInfo> affected_bodies;
@@ -27,7 +28,7 @@ class Explosion {
                                float blast_power);
 
  public:
-  Explosion(float pos_x, float pos_y, float radius);
+  Explosion(float pos_x, float pos_y, float radius, float charge_intensity);
 
   void update();
 

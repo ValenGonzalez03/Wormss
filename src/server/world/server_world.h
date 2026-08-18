@@ -46,12 +46,12 @@ class World {
   BeamBody* create_beam(float pos_x, float pos_y, float angle, float length);
 
   MissileBody* create_missile(uint8_t id, float pos_x, float pos_y, float angle,
-                              uint8_t direction, float initial_force);
+                              uint8_t direction, float charge_intensity);
 
   GrenadeBody* create_grenade(uint8_t id, float pos_x, float pos_y, float angle,
-                              uint8_t direction, float initial_force);
+                              uint8_t direction, float charge_intensity);
 
-  void create_explosion(float center_x, float center_y);
+  void create_explosion(float center_x, float center_y, float charge_intensity);
 
   void step(float timeStep, int32 velocityIterations, int32 positionIterations);
 

@@ -10,6 +10,7 @@
 class Explodable : public DynamicBody {
  private:
   uint8_t direction;
+  float charge_intensity = 0.0f;
   bool m_contacting = false;
   bool exploded = false;
 
@@ -27,6 +28,8 @@ class Explodable : public DynamicBody {
   BodyExplosionInfo get_explosion_info() override;
 
   uint8_t get_direction();
+
+  float get_charge_intensity() const;
 
   virtual void update() = 0;
 

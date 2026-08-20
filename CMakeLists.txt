@@ -57,8 +57,6 @@ add_executable(server
 					  ./src/server/game/weapons/server_bat.cpp
 					  ./src/server/game/weapons/server_grenade.cpp
 					  ./src/server/bodies/body.cpp
-					  ./src/server/bodies/dynamic_body.cpp
-					  ./src/server/bodies/static_body.cpp
 					  ./src/server/bodies/worm_body.cpp
 					  ./src/server/bodies/explodable.cpp
 					  ./src/server/bodies/missile_body.cpp

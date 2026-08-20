@@ -34,16 +34,6 @@ bool GrenadeBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool GrenadeBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-void GrenadeBody::touch_beam(BeamBody* beam) { /* NADA */ }
-void GrenadeBody::touch_worm(WormBody* worm) { /* NADA */ }
-void GrenadeBody::touch_missile(MissileBody* missile) { /* NADA */ }
-void GrenadeBody::touch_grenade(GrenadeBody* grenade) { /* NADA */ }
-
-void GrenadeBody::stop_touching_worm(WormBody* worm) { /* NADA */ }
-void GrenadeBody::stop_touching_beam(BeamBody* beam) { /* NADA */ }
-void GrenadeBody::stop_touching_missile(MissileBody* missile) { /* NADA */ }
-void GrenadeBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
-
 BODY_TYPES GrenadeBody::get_type() { return GRENADE_BODY; }
 
 GrenadeBody::~GrenadeBody() {

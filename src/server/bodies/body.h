@@ -39,17 +39,17 @@ class Body {
 
   void start_contact_with(Body* another_body);
   void touch(Body* other);
-  virtual void touch_worm(WormBody* worm) = 0;
-  virtual void touch_beam(BeamBody* beam) = 0;
-  virtual void touch_missile(MissileBody* missile) = 0;
-  virtual void touch_grenade(GrenadeBody* grenade) = 0;
+  virtual void touch_worm() {}
+  virtual void touch_beam() {}
+  virtual void touch_missile() {}
+  virtual void touch_grenade() {}
 
   void end_contact_with(Body* another_body);
   void stop_touching(Body* other);
-  virtual void stop_touching_worm(WormBody* worm) = 0;
-  virtual void stop_touching_beam(BeamBody* beam) = 0;
-  virtual void stop_touching_missile(MissileBody* missile) = 0;
-  virtual void stop_touching_grenade(GrenadeBody* grenade) = 0;
+  virtual void stop_touching_worm() {}
+  virtual void stop_touching_beam() {}
+  virtual void stop_touching_missile() {}
+  virtual void stop_touching_grenade() {}
 
   virtual void take_damage(int amount);
 

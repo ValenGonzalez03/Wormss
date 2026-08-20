@@ -2,12 +2,12 @@
 #define BEAM_BODY_H
 
 #include "box2d/box2d.h"
-#include "static_body.h"
+#include "body.h"
 #include "../../common/game_constants.h"
 #include <stdio.h>
 #include <iostream>
 
-class BeamBody : public StaticBody {
+class BeamBody : public Body {
  public:
   // explicit BeamBody(b2World* world, float pos_x, float pos_y);
   // explicit BeamBody(b2World* world, float pos_x, float pos_y, int angle, float length);
@@ -15,15 +15,6 @@ class BeamBody : public StaticBody {
   explicit BeamBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
                     b2World* world);
 
-  void touch_worm(WormBody* worm) override;
-  void touch_beam(BeamBody* beam) override;
-  void touch_missile(MissileBody* missile) override;
-  void touch_grenade(GrenadeBody* grenade) override;
-
-  void stop_touching_worm(WormBody* worm) override;
-  void stop_touching_beam(BeamBody* beam) override;
-  void stop_touching_missile(MissileBody* missile) override;
-  void stop_touching_grenade(GrenadeBody* grenade) override;
 
   float explosion_intersect_value(float fraction) override;
 

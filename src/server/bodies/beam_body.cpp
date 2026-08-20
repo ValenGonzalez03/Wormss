@@ -5,17 +5,10 @@
 #include <stdio.h>
 
 BeamBody::BeamBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
-                   b2World* world) : StaticBody(basic_data, adv_data, BEAM, world) {
-  /*polygonShape.SetAsBox(width, width, b2Vec2(0, 0), angleInRadians);
-    fixtureDef.isSensor = true;
-    b2Fixture* footSensorFixture = body->CreateFixture(&fixtureDef);
-    b2FixtureUserData data = footSensorFixture->GetUserData();
-    data.pointer = (uintptr_t)3;*/
+                   b2World* world) :
+    Body(basic_data, adv_data, BEAM, b2_staticBody, world) {
+  affected_by_explosions = false;
 }
-
-// void BeamBody::start_contact_with(Body* another_body) {
-//  if (another_body->get_type() == WORM) {}
-// }
 
 float BeamBody::explosion_intersect_value(float fraction) { return fraction; }
 
@@ -25,16 +18,6 @@ void BeamBody::update_explosion_ray_contact(const b2Vec2& point, const b2Vec2& n
 BodyExplosionInfo BeamBody::get_explosion_info() {
   return BodyExplosionInfo{b2Vec2(0, 0), b2Vec2(0, 0), 0};
 }
-
-void BeamBody::touch_beam(BeamBody* beam) { /* NADA */ }
-void BeamBody::touch_worm(WormBody* worm) { /* NADA */ }
-void BeamBody::touch_missile(MissileBody* missile) { /* NADA */ }
-void BeamBody::touch_grenade(GrenadeBody* grenade) { /* NADA */ }
-
-void BeamBody::stop_touching_worm(WormBody* worm) { /* NADA */ }
-void BeamBody::stop_touching_beam(BeamBody* beam) { /* NADA */ }
-void BeamBody::stop_touching_missile(MissileBody* missile) { /* NADA */ }
-void BeamBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
 
 void BeamBody::print_beam() {
   std::cout << "BEAM =>  ";

@@ -2,12 +2,12 @@
 #define EXPLODABLE_H
 
 #include "../../common/game_constants.h"
-#include "dynamic_body.h"
+#include "body.h"
 #include "box2d/box2d.h"
 #include <iostream>
 #include <stdio.h>
 
-class Explodable : public DynamicBody {
+class Explodable : public Body {
  private:
   uint8_t direction;
   float charge_intensity = 0.0f;
@@ -32,16 +32,6 @@ class Explodable : public DynamicBody {
   float get_charge_intensity() const;
 
   virtual void update() = 0;
-
-  void touch_worm(WormBody* worm) override = 0;
-  void touch_beam(BeamBody* beam) override = 0;
-  void touch_missile(MissileBody* missile) override = 0;
-  void touch_grenade(GrenadeBody* grenade) override = 0;
-
-  void stop_touching_worm(WormBody* worm) override = 0;
-  void stop_touching_beam(BeamBody* beam) override = 0;
-  void stop_touching_missile(MissileBody* missile) override = 0;
-  void stop_touching_grenade(GrenadeBody* grenade) override = 0;
 
   void explode();
 

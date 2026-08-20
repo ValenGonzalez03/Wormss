@@ -35,23 +35,19 @@ void Body::touch(Body* other) {
   auto type = other->get_type();
   switch (type) {
     case WORM: {
-      WormBody* worm = reinterpret_cast<WormBody*>(other);
-      touch_worm(worm);
+      touch_worm();
       break;
     }
     case BEAM: {
-      BeamBody* beam = reinterpret_cast<BeamBody*>(other);
-      touch_beam(beam);
+      touch_beam();
       break;
     }
     case MISSILE: {
-      MissileBody* missile = reinterpret_cast<MissileBody*>(other);
-      touch_missile(missile);
+      touch_missile();
       break;
     }
     case GRENADE_BODY: {
-      GrenadeBody* grenade = reinterpret_cast<GrenadeBody*>(other);
-      touch_grenade(grenade);
+      touch_grenade();
       break;
     }
 
@@ -65,18 +61,15 @@ void Body::end_contact_with(Body* another_body) { stop_touching(another_body); }
 void Body::stop_touching(Body* other) {
   switch (other->get_type()) {
     case WORM: {
-      WormBody* worm = reinterpret_cast<WormBody*>(other);
-      stop_touching_worm(worm);
+      stop_touching_worm();
       break;
     }
     case BEAM: {
-      BeamBody* beam = reinterpret_cast<BeamBody*>(other);
-      stop_touching_beam(beam);
+      stop_touching_beam();
       break;
     }
     case GRENADE_BODY: {
-      GrenadeBody* grenade = reinterpret_cast<GrenadeBody*>(other);
-      stop_touching_grenade(grenade);
+      stop_touching_grenade();
       break;
     }
 

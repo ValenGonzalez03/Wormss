@@ -2,14 +2,14 @@
 #define WORM_BODY_H
 
 #include "../../common/game_constants.h"
-#include "dynamic_body.h"
+#include "body.h"
 #include "box2d/box2d.h"
 #include "../game/weapons/server_weapon.h"
 #include <memory>
 #include <iostream>
 #include <stdio.h>
 
-class WormBody : public DynamicBody {
+class WormBody : public Body {
  private:
   // Atributos fijos del gusano
   int32_t health;
@@ -136,15 +136,9 @@ class WormBody : public DynamicBody {
   /////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// COLISIONES ///////////////////////////////////////////
 
-  void touch_worm(WormBody* worm) override;
-  void touch_beam(BeamBody* beam) override;
-  void touch_missile(MissileBody* missile) override;
-  void touch_grenade(GrenadeBody* grenade) override;
+  void touch_beam() override;
 
-  void stop_touching_worm(WormBody* worm) override;
-  void stop_touching_beam(BeamBody* beam) override;
-  void stop_touching_missile(MissileBody* missile) override;
-  void stop_touching_grenade(GrenadeBody* grenade) override;
+  void stop_touching_beam() override;
 
   void hit_a_surface();
 

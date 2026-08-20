@@ -7,7 +7,9 @@ const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
 Explodable::Explodable(const BodyBasicData& basic_data, uint8_t dir,
                        const BodyAdvData& adv_data, BODY_TYPES type, b2World* world) :
-    DynamicBody(basic_data, adv_data, type, world), direction(dir) {}
+    Body(basic_data, adv_data, type, b2_dynamicBody, world), direction(dir) {
+  affected_by_explosions = true;
+}
 
 void Explodable::apply_initial_impulse(float charge_intensity, float aim_angle) {
   this->charge_intensity = charge_intensity;

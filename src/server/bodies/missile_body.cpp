@@ -13,15 +13,10 @@ bool MissileBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool MissileBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-void MissileBody::touch_beam(BeamBody* beam) { explode(); }
-void MissileBody::touch_worm(WormBody* worm) { explode(); }
-void MissileBody::touch_missile(MissileBody* missile) { explode(); }
-void MissileBody::touch_grenade(GrenadeBody* grenade) { /* NADA */ }
-
-void MissileBody::stop_touching_worm(WormBody* worm) { /* NADA */ }
-void MissileBody::stop_touching_beam(BeamBody* beam) { /* NADA */ }
-void MissileBody::stop_touching_missile(MissileBody* missile) { /* NADA */ }
-void MissileBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
+void MissileBody::touch_beam() { explode(); }
+void MissileBody::touch_worm() { explode(); }
+void MissileBody::touch_missile() { explode(); }
+void MissileBody::touch_grenade() { explode(); }
 
 BODY_TYPES MissileBody::get_type() { return MISSILE; }
 

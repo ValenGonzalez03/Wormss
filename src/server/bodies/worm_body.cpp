@@ -12,7 +12,8 @@ const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
 WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
                    int health, float vel, b2World* world) :
-    DynamicBody(basic_data, adv_data, WORM, world), health(health), vel(vel) {
+    Body(basic_data, adv_data, WORM, b2_dynamicBody, world), health(health), vel(vel) {
+  affected_by_explosions = true;
   body->SetFixedRotation(true);
   current_weapon = std::make_unique<ServerBazooka>(this);
 
@@ -285,15 +286,9 @@ float WormBody::get_aiming_angle() { return aiming_angle; }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// COLISIONES ///////////////////////////////////////////
 
-void WormBody::touch_worm(WormBody* worm) { /* NADA */ }
-void WormBody::touch_beam(BeamBody* beam) { hit_a_surface(); }
-void WormBody::touch_missile(MissileBody* missile) { /* NADA */ }
-void WormBody::touch_grenade(GrenadeBody* grenade) { /* NADA */ }
+void WormBody::touch_beam() { hit_a_surface(); }
 
-void WormBody::stop_touching_worm(WormBody* worm) { /* NADA */ }
-void WormBody::stop_touching_beam(BeamBody* beam) { move_away_from_surface(); }
-void WormBody::stop_touching_missile(MissileBody* missile) { /* NADA */ }
-void WormBody::stop_touching_grenade(GrenadeBody* grenade) { /* NADA */ }
+void WormBody::stop_touching_beam() { move_away_from_surface(); }
 
 void WormBody::hit_a_surface() {
   num_foot_contacts++;

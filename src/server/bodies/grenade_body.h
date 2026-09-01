@@ -27,6 +27,8 @@ class GrenadeBody : public Explodable {
 
   bool has_exceeded_height_limit();
 
+  void touch_water() override;
+
   BODY_TYPES get_type() override;
 
   ~GrenadeBody();

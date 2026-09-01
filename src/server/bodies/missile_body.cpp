@@ -17,6 +17,7 @@ void MissileBody::touch_beam() { explode(); }
 void MissileBody::touch_worm() { explode(); }
 void MissileBody::touch_missile() { explode(); }
 void MissileBody::touch_grenade() { explode(); }
+void MissileBody::touch_water() { explode(); }
 
 BODY_TYPES MissileBody::get_type() { return MISSILE; }
 

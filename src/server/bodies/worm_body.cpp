@@ -288,6 +288,8 @@ float WormBody::get_aiming_angle() { return aiming_angle; }
 
 void WormBody::touch_beam() { hit_a_surface(); }
 
+void WormBody::touch_water() { take_damage(10000); }
+
 void WormBody::stop_touching_beam() { move_away_from_surface(); }
 
 void WormBody::hit_a_surface() {

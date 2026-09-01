@@ -43,6 +43,7 @@ class Body {
   virtual void touch_beam() {}
   virtual void touch_missile() {}
   virtual void touch_grenade() {}
+  virtual void touch_water() {}
 
   void end_contact_with(Body* another_body);
   void stop_touching(Body* other);
@@ -50,6 +51,7 @@ class Body {
   virtual void stop_touching_beam() {}
   virtual void stop_touching_missile() {}
   virtual void stop_touching_grenade() {}
+  virtual void stop_touching_water() {}
 
   virtual void take_damage(int amount);
 

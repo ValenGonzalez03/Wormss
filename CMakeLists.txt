@@ -62,6 +62,7 @@ add_executable(server
 					  ./src/server/bodies/missile_body.cpp
 					  ./src/server/bodies/grenade_body.cpp
 					  ./src/server/bodies/beam_body.cpp
+					  ./src/server/bodies/water_body.cpp
 					  ./src/server/world/explosion_callback.cpp
 					  ./src/server/world/server_explosion.cpp
 					  ./src/server/world/server_world.cpp

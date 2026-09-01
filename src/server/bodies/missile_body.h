@@ -25,6 +25,7 @@ class MissileBody : public Explodable {
   void touch_beam() override;
   void touch_missile() override;
   void touch_grenade() override;
+  void touch_water() override;
 
   BODY_TYPES get_type() override;
 

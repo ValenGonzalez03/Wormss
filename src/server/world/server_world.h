@@ -8,6 +8,7 @@
 #include "../bodies/beam_body.h"
 #include "../bodies/missile_body.h"
 #include "../bodies/grenade_body.h"
+#include "../bodies/water_body.h"
 #include "server_explosion.h"
 #include <list>
 #include <vector>
@@ -24,6 +25,7 @@ class World {
   std::list<Explodable*> explodables;
   std::list<Explosion> explosions;
   std::list<Body*> bodies;
+  WaterBody* water = nullptr;
   std::string name = "";
   std::string background = "";
   std::vector<std::vector<float>> spawn_points;
@@ -50,6 +52,8 @@ class World {
 
   GrenadeBody* create_grenade(uint8_t id, float pos_x, float pos_y, float angle,
                               uint8_t direction, float charge_intensity);
+
+  void create_water();
 
   void create_explosion(float center_x, float center_y, float charge_intensity);
 
@@ -120,6 +124,7 @@ class World {
     this->name = other.name;
     this->background = other.background;
     this->contact_listener = other.contact_listener;
+    this->water = nullptr;
     world->SetContactListener(&contact_listener);
     this->world = std::make_shared<b2World>(b2Vec2(0.0f, -10.0f));
 

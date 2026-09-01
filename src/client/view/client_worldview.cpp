@@ -134,6 +134,8 @@ void WorldView::render(int frame) {
     explosion.render(frame, camera.get_x(), camera.get_y());
   }
 
+  render_water();
+
   // render_text("Position: " + std::to_string((int)state.position)
   //       + ", running: " + (state.is_running ? "true" : "false")
   //       + ", direction: " + std::to_string(int(state.direction)), "Vera", 0,
@@ -205,6 +207,23 @@ void WorldView::render_background() {
   } else {
     throw std::runtime_error("No existe el background");
   }
+}
+
+void WorldView::render_water() {
+  int water_w = convert_meters_to_pixels_x(WATER_WIDTH);
+  int water_h = convert_meters_to_pixels_x(WATER_HEIGHT);
+  int water_x = 0 - camera.get_x();
+  int water_y = convert_meters_to_pixels_y(WATER_HEIGHT) - camera.get_y();
+
+  renderer.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
+  renderer.SetDrawColor(SDL2pp::Color(30, 100, 250, 160));
+  renderer.FillRect(SDL2pp::Rect(water_x, water_y, water_w, water_h));
+
+  // Línea de superficie más clara
+  renderer.SetDrawColor(SDL2pp::Color(80, 160, 255, 200));
+  renderer.DrawLine(water_x, water_y, water_x + water_w, water_y);
+
+  renderer.SetDrawBlendMode(SDL_BLENDMODE_NONE);
 }
 
 void WorldView::render_text(const WormData &worm_data) {

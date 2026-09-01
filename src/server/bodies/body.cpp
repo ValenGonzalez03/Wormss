@@ -50,6 +50,10 @@ void Body::touch(Body* other) {
       touch_grenade();
       break;
     }
+    case WATER: {
+      touch_water();
+      break;
+    }
 
     default:
       break;

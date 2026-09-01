@@ -28,6 +28,7 @@ void Game::charge_world(const GameConfig &game_config) {
     std::cout << string;
     i++;
   }
+  world.create_water();
 }
 
 void Game::add_player(const uint8_t &player_id) {

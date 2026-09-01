@@ -26,6 +26,8 @@ class WorldView {
 
   void render_background();
 
+  void render_water();
+
   std::pair<float, float> get_explodable_size(BODY_TYPES type);
 
   // Muestra el estado del gusano

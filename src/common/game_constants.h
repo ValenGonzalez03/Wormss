@@ -20,6 +20,9 @@
 #define GRENADE_WIDTH 0.6f   // En metros (Equivale a 15 pixeles)
 #define GRENADE_HEIGHT 0.8f  // En metros (Equivale a 20 pixeles)
 
+#define WATER_WIDTH (WORLD_WIDTH + 5)
+#define WATER_HEIGHT ((WORLD_HEIGHT * 0.1) + 1)
+
 #define LEFT 0
 #define RIGHT 1
 #define UP 2
@@ -49,7 +52,8 @@ enum BODY_CATEGORIES {
   WORM_CATEGORY = 0x0001,
   BEAM_CATEGORY = 0x0002,
   MISSILE_CATEGORY = 0x0003,
-  GRENADE_CATEGORY = 0x0004
+  GRENADE_CATEGORY = 0x0004,
+  WATER_CATEGORY = 0x0005
 };
 
 struct BodyBasicData {

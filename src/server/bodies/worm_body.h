@@ -138,6 +138,8 @@ class WormBody : public Body {
 
   void touch_beam() override;
 
+  void touch_water() override;
+
   void stop_touching_beam() override;
 
   void hit_a_surface();

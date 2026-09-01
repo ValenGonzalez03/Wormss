@@ -59,6 +59,14 @@ GrenadeBody* World::create_grenade(uint8_t id, float pos_x, float pos_y, float a
   return grenade;
 }
 
+void World::create_water() {
+  BodyBasicData basic_data{0,    WATER_WIDTH / 2, WATER_HEIGHT / 2,
+                           0.0f, WATER_WIDTH,     WATER_HEIGHT};
+  BodyAdvData adv_data{1.0f, 0.0f, WATER_CATEGORY,
+                       WORM_CATEGORY | MISSILE_CATEGORY | GRENADE_CATEGORY};
+  water = new WaterBody(basic_data, adv_data, world.get());
+}
+
 void World::create_explosion(float pos_x, float pos_y, float charge_intensity) {
   Explosion explosion(pos_x, pos_y, EXPLOSION_RADIUS, charge_intensity);
   for (int i = 0; i < NUM_RAYS; i++) {
@@ -201,4 +209,8 @@ World::~World() {
   delete_beams();
 
   delete_explodables();
+
+  if (water) {
+    destroy_body(water);
+  }
 }

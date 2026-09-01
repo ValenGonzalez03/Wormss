@@ -21,11 +21,11 @@ class MissileBody : public Explodable {
 
   bool has_exceeded_height_limit();
 
-  void touch_worm() override;
-  void touch_beam() override;
-  void touch_missile() override;
-  void touch_grenade() override;
-  void touch_water() override;
+  void start_contact_with_worm(b2Fixture self_fixture) override;
+  void start_contact_with_beam(b2Fixture self_fixture) override;
+  void start_contact_with_missile(b2Fixture self_fixture) override;
+  void start_contact_with_grenade(b2Fixture self_fixture) override;
+  void start_contact_with_water(b2Fixture self_fixture) override;
 
   BODY_TYPES get_type() override;
 

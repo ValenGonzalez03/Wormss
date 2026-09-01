@@ -34,7 +34,7 @@ bool GrenadeBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool GrenadeBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-void GrenadeBody::touch_water() { explode(); }
+void GrenadeBody::start_contact_with_water(b2Fixture self_fixt) { explode(); }
 
 BODY_TYPES GrenadeBody::get_type() { return GRENADE_BODY; }
 

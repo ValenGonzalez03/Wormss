@@ -286,11 +286,20 @@ float WormBody::get_aiming_angle() { return aiming_angle; }
 /////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////// COLISIONES ///////////////////////////////////////////
 
-void WormBody::touch_beam() { hit_a_surface(); }
+void WormBody::start_contact_with_beam(b2Fixture self_fixt) {
+  if (self_fixt.IsSensor()) {
+    hit_a_surface();
+  }
+}
 
-void WormBody::touch_water() { take_damage(10000); }
+void WormBody::start_contact_with_water(b2Fixture self_fixt) { take_damage(10000); }
 
-void WormBody::stop_touching_beam() { move_away_from_surface(); }
+void WormBody::end_contact_with_beam(b2Fixture self_fixt) {
+  if (self_fixt.IsSensor()) {
+    move_away_from_surface();
+  }
+}
+
 
 void WormBody::hit_a_surface() {
   num_foot_contacts++;

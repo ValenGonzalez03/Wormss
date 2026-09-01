@@ -27,7 +27,7 @@ class GrenadeBody : public Explodable {
 
   bool has_exceeded_height_limit();
 
-  void touch_water() override;
+  void start_contact_with_water(b2Fixture self_fixt) override;
 
   BODY_TYPES get_type() override;
 

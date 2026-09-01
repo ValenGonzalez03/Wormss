@@ -13,11 +13,11 @@ bool MissileBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 
 bool MissileBody::has_exceeded_height_limit() { return get_pos_y() < 0; }
 
-void MissileBody::touch_beam() { explode(); }
-void MissileBody::touch_worm() { explode(); }
-void MissileBody::touch_missile() { explode(); }
-void MissileBody::touch_grenade() { explode(); }
-void MissileBody::touch_water() { explode(); }
+void MissileBody::start_contact_with_beam(b2Fixture self_fixt) { explode(); }
+void MissileBody::start_contact_with_worm(b2Fixture self_fixt) { explode(); }
+void MissileBody::start_contact_with_missile(b2Fixture self_fixt) { explode(); }
+void MissileBody::start_contact_with_grenade(b2Fixture self_fixt) { explode(); }
+void MissileBody::start_contact_with_water(b2Fixture self_fixt) { explode(); }
 
 BODY_TYPES MissileBody::get_type() { return MISSILE; }
 

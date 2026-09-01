@@ -37,21 +37,45 @@ class Body {
   Body(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TYPES type,
        b2BodyType body_type, b2World* world);
 
-  void start_contact_with(Body* another_body);
-  void touch(Body* other);
-  virtual void touch_worm() {}
-  virtual void touch_beam() {}
-  virtual void touch_missile() {}
-  virtual void touch_grenade() {}
-  virtual void touch_water() {}
+  // Dado el tipo de another_body define el comportamiento del cuerpo al empezar un
+  // contacto con el otro cuerpo
+  void start_contact_with(Body* another_body, b2Fixture self_fixt);
 
-  void end_contact_with(Body* another_body);
-  void stop_touching(Body* other);
-  virtual void stop_touching_worm() {}
-  virtual void stop_touching_beam() {}
-  virtual void stop_touching_missile() {}
-  virtual void stop_touching_grenade() {}
-  virtual void stop_touching_water() {}
+  // Recibe el fixture que entró en contacto con el gusano y determina el comportamiento al
+  // colisionar con el mismo
+  virtual void start_contact_with_worm(b2Fixture self_fixt) {}
+  // Recibe el fixture que entró en contacto con la viga y determina el comportamiento al
+  // colisionar con el mismo
+  virtual void start_contact_with_beam(b2Fixture self_fixt) {}
+  // Recibe el fixture que entró en contacto con el misil y determina el comportamiento al
+  // colisionar con el mismo
+  virtual void start_contact_with_missile(b2Fixture self_fixt) {}
+  // Recibe el fixture que entró en contacto con la granada y determina el comportamiento al
+  // colisionar con el mismo
+  virtual void start_contact_with_grenade(b2Fixture self_fixt) {}
+  // Recibe el fixture que entró en contacto con el agua y determina el comportamiento al
+  // colisionar con el mismo
+  virtual void start_contact_with_water(b2Fixture self_fixt) {}
+
+  // Dado el tipo de another_body define el comportamiento del cuerpo al terminar un
+  // contacto con el otro cuerpo
+  void end_contact_with(Body* another_body, b2Fixture self_fixt);
+
+  // Recibe el fixture que dejo de entrar en contacto con el gusano y determina el
+  // comportamiento al dejar de colisionar con el mismo
+  virtual void end_contact_with_worm(b2Fixture self_fixt) {}
+  // Recibe el fixture que dejo de entrar en contacto con la viga y determina el
+  // comportamiento al dejar de colisionar con el mismo
+  virtual void end_contact_with_beam(b2Fixture self_fixt) {}
+  // Recibe el fixture que dejo de entrar en contacto con el misil y determina el
+  // comportamiento al dejar de colisionar con el mismo
+  virtual void end_contact_with_missile(b2Fixture self_fixt) {}
+  // Recibe el fixture que dejo de entrar en contacto con la granada y determina el
+  // comportamiento al dejar de colisionar con el mismo
+  virtual void end_contact_with_grenade(b2Fixture self_fixt) {}
+  // Recibe el fixture que dejo de entrar en contacto con el agua y determina el
+  // comportamiento al dejar de colisionar con el mismo
+  virtual void end_contact_with_water(b2Fixture self_fixt) {}
 
   virtual void take_damage(int amount);
 

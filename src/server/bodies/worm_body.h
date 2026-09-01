@@ -136,11 +136,11 @@ class WormBody : public Body {
   /////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// COLISIONES ///////////////////////////////////////////
 
-  void touch_beam() override;
+  void start_contact_with_beam(b2Fixture self_fixt) override;
 
-  void touch_water() override;
+  void start_contact_with_water(b2Fixture self_fixt) override;
 
-  void stop_touching_beam() override;
+  void end_contact_with_beam(b2Fixture self_fixt) override;
 
   void hit_a_surface();
 

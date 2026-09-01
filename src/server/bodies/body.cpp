@@ -29,29 +29,27 @@ Body::Body(const BodyBasicData& basic_data, const BodyAdvData& adv_data, BODY_TY
   body->GetUserData().pointer = reinterpret_cast<uintptr_t>(data);
 }
 
-void Body::start_contact_with(Body* another_body) { touch(another_body); }
-
-void Body::touch(Body* other) {
+void Body::start_contact_with(Body* other, b2Fixture self_fixt) {
   auto type = other->get_type();
   switch (type) {
     case WORM: {
-      touch_worm();
+      start_contact_with_worm(self_fixt);
       break;
     }
     case BEAM: {
-      touch_beam();
+      start_contact_with_beam(self_fixt);
       break;
     }
     case MISSILE: {
-      touch_missile();
+      start_contact_with_missile(self_fixt);
       break;
     }
     case GRENADE_BODY: {
-      touch_grenade();
+      start_contact_with_grenade(self_fixt);
       break;
     }
     case WATER: {
-      touch_water();
+      start_contact_with_water(self_fixt);
       break;
     }
 
@@ -60,20 +58,18 @@ void Body::touch(Body* other) {
   }
 }
 
-void Body::end_contact_with(Body* another_body) { stop_touching(another_body); }
-
-void Body::stop_touching(Body* other) {
+void Body::end_contact_with(Body* other, b2Fixture self_fixt) {
   switch (other->get_type()) {
     case WORM: {
-      stop_touching_worm();
+      end_contact_with_worm(self_fixt);
       break;
     }
     case BEAM: {
-      stop_touching_beam();
+      end_contact_with_beam(self_fixt);
       break;
     }
     case GRENADE_BODY: {
-      stop_touching_grenade();
+      end_contact_with_grenade(self_fixt);
       break;
     }
 

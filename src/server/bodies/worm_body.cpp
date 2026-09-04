@@ -20,16 +20,21 @@ WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
   // // Sensor para detectar si el gusano esta tocando el suelo
   b2PolygonShape polygonShape;
   b2FixtureDef fixtureDef;
-  polygonShape.SetAsBox((WORM_WIDTH / 1.2) / 2, 0.2 / 2, b2Vec2(0, -WORM_HEIGHT / 2), 0);
+  polygonShape.SetAsBox((WORM_WIDTH * 1.1) / 2, 0.2 / 2, b2Vec2(0, -WORM_HEIGHT / 2), 0);
   fixtureDef.shape = &polygonShape;
   fixtureDef.isSensor = true;
   body->CreateFixture(&fixtureDef);
 }
 
 void WormBody::update() {
-  check_boundaries();
+  if (check_boundaries()) {
+    take_damage(100000);
+  }
 
   // std::cout << "jump_timeout: " << jump_timeout << std::endl;
+  if (health <= 0) {
+    dead = true;
+  }
   if (jump_timeout > 0) {
     jump_timeout--;
   }
@@ -256,8 +261,6 @@ void WormBody::take_damage(int amount) {
   }
 }
 
-bool WormBody::is_dead() const { return health <= 0; }
-
 ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -277,6 +280,8 @@ ServerWeapon* WormBody::get_weapon_selected() { return current_weapon.get(); }
 uint8_t WormBody::get_direction() { return direction; }
 
 float WormBody::get_aiming_angle() { return aiming_angle; }
+
+bool WormBody::is_dead() const { return dead; }
 
 ////////////////////////////////////////// GETTERS ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////

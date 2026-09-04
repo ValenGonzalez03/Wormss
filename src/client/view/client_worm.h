@@ -20,6 +20,7 @@ class Worm {
   uint8_t direction;
   WormState worm_state;
   Weapon *weapon;
+  bool dead = false;
   ResourcePool &resource_pool;
   SDL2pp::Renderer &renderer;
   // SDL2pp::Texture &shooting_texture;
@@ -69,6 +70,8 @@ class Worm {
   int get_width();
   int get_height();
   uint32_t get_health();
+  bool is_dead();
+  void set_dead();
 
   ~Worm();
 

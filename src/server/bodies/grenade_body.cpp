@@ -10,7 +10,9 @@ GrenadeBody::GrenadeBody(const BodyBasicData& basic_data, uint8_t dir,
     Explodable(basic_data, dir, adv_data, GRENADE_BODY, world) {}
 
 void GrenadeBody::update() {
-  check_boundaries();
+  if (check_boundaries()) {
+    explode();
+  }
 
   if (started_countdown) {
     if (frames_counted >= TIME_DETONATION) {

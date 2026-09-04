@@ -31,6 +31,7 @@ class WormBody : public Body {
 
   int frames_attacking = 0;
 
+  bool dead = false;
 
   // Atributos para manejar la explosion sobre un gusano
   bool hit_by_explosion = false;
@@ -106,8 +107,6 @@ class WormBody : public Body {
 
   void take_damage(int amount) override;
 
-  bool is_dead() const;
-
   ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -127,6 +126,8 @@ class WormBody : public Body {
   uint8_t get_direction();
 
   float get_aiming_angle();
+
+  bool is_dead() const;
 
   ///////////////////////////////////////// GETTERS ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////

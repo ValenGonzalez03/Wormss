@@ -7,7 +7,11 @@ MissileBody::MissileBody(const BodyBasicData& basic_data, uint8_t dir,
                          const BodyAdvData& adv_data, b2World* world) :
     Explodable(basic_data, dir, adv_data, MISSILE, world) {}
 
-void MissileBody::update() { check_boundaries(); }
+void MissileBody::update() {
+  if (check_boundaries()) {
+    explode();
+  }
+}
 
 bool MissileBody::has_exceeded_width_limit() { return get_pos_x() < 0; }
 

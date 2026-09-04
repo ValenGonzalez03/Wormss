@@ -79,7 +79,7 @@ class Body {
 
   virtual void take_damage(int amount);
 
-  void check_boundaries();
+  bool check_boundaries();
 
   void apply_impulse(const b2Vec2& impulse, const b2Vec2& point);
 

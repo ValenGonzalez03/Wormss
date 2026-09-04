@@ -104,12 +104,15 @@ WormBody* World::get_worm(const uint8_t& player_id) {
   if (it != worms.end()) {
     return *it;
   }
-  return nullptr;
+  throw std::runtime_error("Worm with player_id " + std::to_string(player_id) +
+                           " not found in the world.");
 }
 
 void World::update_worms() {
   for (WormBody* worm : worms) {
-    worm->update();
+    if (!worm->is_dead()) {
+      worm->update();
+    }
   }
 }
 
@@ -152,6 +155,9 @@ void World::ray_cast(b2RayCastCallback* callback, const b2Vec2& point1,
 std::list<WormAttr> World::get_worms_attr() {
   std::list<WormAttr> worms_attr;
   for (auto worm : worms) {
+    if (worm->is_dead()) {
+      continue;
+    }
     WormAttr attr({worm->get_id(), worm->get_health(), worm->get_pos_x(),
                    worm->get_pos_y(), worm->get_direction(), worm->get_state(),
                    worm->get_weapon_selected()->get_type(), worm->get_aiming_angle()});

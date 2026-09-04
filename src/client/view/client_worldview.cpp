@@ -121,6 +121,9 @@ void WorldView::render(int frame) {
 
   // Renderizar gusanos
   for (auto &worm : worms) {
+    if (worm.second.is_dead()) {
+      continue;
+    }
     worm.second.render(frame, camera.get_x(), camera.get_y());
   }
 
@@ -145,8 +148,15 @@ void WorldView::render(int frame) {
 void WorldView::update(const GameState &game_state, int frame) {
   // Actualizo el estado de los gusanos
   auto worms_data = game_state.get_worms();
-  for (auto &worm : worms) {
-    worm.second.update(worms_data[worm.second.get_id()]);
+  for (auto &pair_worm : worms) {
+    if (!pair_worm.second.is_dead()) {
+      auto it_worm_data = worms_data.find(pair_worm.second.get_id());
+      if (it_worm_data == worms_data.end()) {
+        pair_worm.second.set_dead();
+      } else {
+        pair_worm.second.update(it_worm_data->second);
+      }
+    }
   }
 
   // Actualizo el estado de la camara

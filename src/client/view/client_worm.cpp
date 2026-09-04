@@ -185,6 +185,8 @@ int Worm::get_pos_x() { return pos_x; }
 int Worm::get_pos_y() { return pos_y; }
 int Worm::get_width() { return width; }
 int Worm::get_height() { return height; }
+bool Worm::is_dead() { return dead; }
+void Worm::set_dead() { dead = true; }
 
 Worm::~Worm() {
   // delete weapon;

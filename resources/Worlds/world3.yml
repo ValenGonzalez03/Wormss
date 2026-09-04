@@ -17,14 +17,26 @@ beams:
     position_y: 5.0
     angle: 0.0
     length: 6.0
-  - position_x: 15.0
+  - position_x: 13.0
     position_y: 5.0
     angle: 0.0
     length: 3.0
-  - position_x: 15.0
-    position_y: 9.0
+  - position_x: 13.0
+    position_y: 10.0
     angle: 90.0
     length: 6.0
+  - position_x: 18.5
+    position_y: 5.0
+    angle: 0.0
+    length: 6.0
+  - position_x: 25.5
+    position_y: 5.0
+    angle: 0.0
+    length: 6.0
+  - position_x: 31.5
+    position_y: 6.0
+    angle: 15.0
+    length: 6.0      
 spawn_points:
   - position_x: 6.0
     position_y: 15.0

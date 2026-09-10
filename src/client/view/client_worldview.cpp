@@ -236,7 +236,7 @@ void WorldView::render_water() {
   renderer.SetDrawBlendMode(SDL_BLENDMODE_NONE);
 }
 
-void WorldView::render_text(const WormData &worm_data) {
+void WorldView::render_text(const WormData &worm_data, const GameState &game_state) {
   SDL2pp::Font font(RESOURCES_PATH "/Vera.ttf", 12);
 
   std::string text = "Pos x: " + std::to_string(worm_data.get_pos_x()) +
@@ -261,6 +261,17 @@ void WorldView::render_text(const WormData &worm_data) {
   renderer.Copy(text_sprite_2, SDL2pp::NullOpt,
                 SDL2pp::Rect(0, text_sprite.GetHeight(), text_sprite_2.GetWidth(),
                              text_sprite_2.GetHeight()));
+
+  std::string turn_text =
+      "Turn: Player " + std::to_string(game_state.get_current_turn_id()) +
+      " | Time: " + std::to_string(game_state.get_turn_time_remaining()) + "s";
+
+  SDL2pp::Texture turn_text_sprite(
+      renderer, (font).RenderText_Blended(turn_text, SDL_Color{255, 255, 255, 255}));
+
+  renderer.Copy(turn_text_sprite, SDL2pp::NullOpt,
+                SDL2pp::Rect(text_sprite_2.GetWidth() + 2, turn_text_sprite.GetHeight(),
+                             turn_text_sprite.GetWidth(), turn_text_sprite.GetHeight()));
 }
 
 void WorldView::render_charge_bar(uint8_t player_id, float charge, float max_charge) {

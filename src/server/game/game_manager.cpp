@@ -33,9 +33,6 @@ void GameManager::run() {
 
     started = true;
 
-    // bool was_closed = false;
-    // int it = 0;
-    // auto t1 = time_point_cast<milliseconds>(steady_clock::now());
     auto start_turn_time = std::chrono::steady_clock::now();
 
     ConstantRateLoop rate_loop(std::chrono::duration<float>(static_cast<float>(1 / FPS)),

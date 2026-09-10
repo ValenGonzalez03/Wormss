@@ -183,7 +183,7 @@ bool Client::execute_frame() {
   // ---------------------------------------------------------------------------
   view.renderer.Clear();
   view.world_view.render(frame_ticks);
-  view.world_view.render_text(game_state.get_worms()[player_id]);
+  view.world_view.render_text(game_state.get_worms()[player_id], game_state);
   if (is_charging_attack) {
     view.world_view.render_charge_bar(player_id, charge_power, MAX_CHARGE);
   }

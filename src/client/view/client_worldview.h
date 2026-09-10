@@ -58,7 +58,7 @@ class WorldView {
   // Renderiza la world_view
   void render(int frame);
 
-  void render_text(const WormData &worm_data);
+  void render_text(const WormData &worm_data, const GameState &game_state);
 
   void render_charge_bar(uint8_t player_id, float charge, float max_charge);
 

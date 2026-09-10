@@ -6,13 +6,17 @@
 #include "../world/server_world.h"
 #include "worlds_reader.h"
 #include "game_config.h"
+#include "turn_manager.h"
 #include <stdio.h>
-#include <list>
+#include <vector>
 #include <utility>
 
 #define FPS 60.0
 
+
 class Game {
+  friend class GameState;
+
  private:
   World world;
   bool game_finished = false;
@@ -21,7 +25,11 @@ class Game {
   // int current_worm_id;
   // uint8_t current_turn_id = 0;
   int projectiles_id_counter = 0;
-  std::list<uint8_t> players;
+  std::vector<uint8_t> players;
+  TurnManager turn_manager;
+  std::chrono::steady_clock::time_point last_tick = std::chrono::steady_clock::now();
+
+  void update_turn();
 
  public:
   explicit Game(const World &world);

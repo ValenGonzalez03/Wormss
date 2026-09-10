@@ -249,6 +249,8 @@ struct GameState {
   std::map<uint8_t, WormData> worms_list;
   std::map<uint8_t, ExplodableData> explodables_list;
   std::list<ExplosionData> explosions_list;
+  uint8_t current_turn_id = -1;
+  float turn_time_remaining = -1;
 
  public:
   GameState() : worms_list(std::map<uint8_t, WormData>()) {}
@@ -275,6 +277,9 @@ struct GameState {
       explosions_list.push_back(explosion);
     }
 
+    this->current_turn_id = prot.recv_byte(was_closed);
+    this->turn_time_remaining = prot.recv_float(was_closed);
+
     this->game_finished = static_cast<bool>(prot.recv_byte(was_closed));
   }
 
@@ -292,6 +297,9 @@ struct GameState {
     for (auto &explosion : explosions_list) {
       explosion.serialize(prot, was_closed);
     }
+
+    prot.send_byte(current_turn_id, was_closed);
+    prot.send_float(turn_time_remaining, was_closed);
 
     uint8_t finished = static_cast<uint8_t>(this->game_finished);
     prot.send_byte(finished, was_closed);
@@ -324,6 +332,14 @@ struct GameState {
   bool is_game_finished() const { return game_finished; }
 
   void set_game_finished() { game_finished = true; }
+
+  uint8_t get_current_turn_id() const { return current_turn_id; }
+
+  void set_current_turn_id(uint8_t id) { current_turn_id = id; }
+
+  float get_turn_time_remaining() const { return turn_time_remaining; }
+
+  void set_turn_time_remaining(float time) { turn_time_remaining = time; }
 };
 
 #endif

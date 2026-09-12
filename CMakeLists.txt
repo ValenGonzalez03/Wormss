@@ -54,6 +54,7 @@ add_executable(server
 					  ./src/server/game/game_manager.cpp
 					  ./src/server/game/server_game.cpp
 					  ./src/server/game/turn_manager.cpp
+					  ./src/server/game/server_player.cpp
 					  ./src/server/game/weapons/server_bazooka.cpp
 					  ./src/server/game/weapons/server_bat.cpp
 					  ./src/server/game/weapons/server_grenade.cpp

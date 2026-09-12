@@ -12,6 +12,7 @@
 class WormBody : public Body {
  private:
   // Atributos fijos del gusano
+  uint8_t player_id;
   int32_t health;
   float vel;
   float jump_vel_forward = 5;
@@ -48,7 +49,7 @@ class WormBody : public Body {
   // explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
 
   explicit WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
-                    int health, float vel, b2World* world);
+                    uint8_t player_id, int32_t health, float vel, b2World* world);
 
   void update();
 
@@ -114,6 +115,8 @@ class WormBody : public Body {
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////// GETTERS ///////////////////////////////////////////
+
+  uint8_t get_player_id() const;
 
   int32_t get_health() const;
 

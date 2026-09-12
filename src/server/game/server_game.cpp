@@ -11,42 +11,40 @@ const float TIME_STEP = (1.0f / FPS);
 const int32 VEL_ITERATIONS = 6;
 const int32 POS_ITERATIONS = 2;
 
-Game::Game(const World &world) : world(world), turn_manager(&players) {}
+Game::Game(const World& world) : world(world), turn_manager(&players) {}
 
-void Game::charge_world(const GameConfig &game_config) {
+void Game::charge_world(const GameConfig& game_config) {
   int i = 0;
+  int worm_id_counter = 0;
   std::vector<std::vector<float>> spawn_points = world.get_spawn_points();
-  for (uint8_t player_id : players) {
+  for (auto& [_, player] : players) {
     int num_sp = i;
     if (i >= spawn_points.size()) {
       num_sp = spawn_points.size() - 1;
     }
-    world.create_worm(player_id, spawn_points[num_sp][0], spawn_points[num_sp][1],
-                      game_config);
+    auto worm =
+        world.create_worm(worm_id_counter++, player.get_player_id(),
+                          spawn_points[num_sp][0], spawn_points[num_sp][1], game_config);
+    player.add_worm(worm);
     auto string = "[CLIENT-MAN-THREAD]: Worm of id: " +
-                  std::to_string(static_cast<int>(player_id)) + " created.\n";
+                  std::to_string(static_cast<int>(worm_id_counter - 1)) + " created.\n";
     std::cout << string;
     i++;
   }
   world.create_water();
+
+  turn_manager.assign_first_player();
 }
 
-void Game::add_player(const uint8_t &player_id) {
-  current_players++;
-  players.push_back(player_id);
+void Game::add_player(const uint8_t& player_id) {
+  Player player(player_id);
+  players.emplace(player_id, player);
+  // players[player_id] = player;
 }
 
-void Game::delete_player(const uint8_t &player_id) {
-  current_players--;
-  auto player_id_it = std::find(players.begin(), players.end(), player_id);
-  players.erase(player_id_it);
-}
+void Game::delete_player(const uint8_t& player_id) { players.erase(player_id); }
 
-// void Game::set_current_turn_id(const uint8_t &id) {
-//   current_turn_id = id;
-// }
-
-World *Game::get_world() { return &world; }
+World* Game::get_world() { return &world; }
 
 void Game::update() {
   world.update_worms();
@@ -66,105 +64,88 @@ void Game::update_turn() {
   turn_manager.update(dt);
 }
 
-void Game::move(const uint8_t &player_id, const uint8_t &direction) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
+void Game::move(const uint8_t& player_id, const uint8_t& direction) {
   if (!turn_manager.is_turn_of(player_id)) {
     return;
   }
+  auto player = turn_manager.get_current_player();
+  WormBody* worm = player.get_current_worm();
 
-  WormBody *worm = world.get_worm(player_id);
   worm->start_moving(direction);
 }
 
-void Game::stop_moving(const uint8_t &player_id) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
+void Game::stop_moving(const uint8_t& player_id) {
   if (!turn_manager.is_turn_of(player_id)) {
     return;
   }
+  auto player = turn_manager.get_current_player();
+  WormBody* worm = player.get_current_worm();
 
-  WormBody *worm = world.get_worm(player_id);
   worm->stop_moving();
 }
 
-void Game::jump(const uint8_t &player_id, const uint8_t &direction,
-                const uint8_t &jump_type) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
+void Game::jump(const uint8_t& player_id, const uint8_t& direction,
+                const uint8_t& jump_type) {
   if (!turn_manager.is_turn_of(player_id)) {
     return;
   }
+  auto player = turn_manager.get_current_player();
+  WormBody* worm = player.get_current_worm();
 
-  WormBody *worm = world.get_worm(player_id);
   worm->jump(direction, jump_type);
 }
 
-void Game::aim(const uint8_t &player_id, const uint8_t &direction) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
+void Game::aim(const uint8_t& player_id, const uint8_t& direction) {
   if (!turn_manager.is_turn_of(player_id)) {
     return;
   }
+  auto player = turn_manager.get_current_player();
+  WormBody* worm = player.get_current_worm();
 
-  WormBody *worm = world.get_worm(player_id);
   worm->start_aiming(direction);
 }
 
-void Game::stop_aiming(const uint8_t &player_id) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
+void Game::stop_aiming(const uint8_t& player_id) {
   if (!turn_manager.is_turn_of(player_id)) {
     return;
   }
+  auto player = turn_manager.get_current_player();
+  WormBody* worm = player.get_current_worm();
 
-  WormBody *worm = world.get_worm(player_id);
   worm->stop_aiming();
 }
 
-void Game::change_weapon(const uint8_t &player_id, const uint8_t &weapon_type) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
+void Game::change_weapon(const uint8_t& player_id, const uint8_t& weapon_type) {
   if (!turn_manager.is_turn_of(player_id)) {
     return;
   }
-  WormBody *worm = world.get_worm(player_id);
+  auto player = turn_manager.get_current_player();
+  WormBody* worm = player.get_current_worm();
 
   worm->change_weapon(static_cast<WeaponType>(weapon_type));
 }
 
-void Game::set_worm_to_charge(const uint8_t &player_id) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
+void Game::set_worm_to_charge(const uint8_t& player_id) {
   if (!turn_manager.is_turn_of(player_id)) {
     return;
   }
-  WormBody *worm = world.get_worm(player_id);
+  auto player = turn_manager.get_current_player();
+  WormBody* worm = player.get_current_worm();
 
   worm->set_to_charge();
 }
 
-void Game::attack(const uint8_t &player_id, float charge_intensity) {
-  // if (player_id != current_turn_id) {
-  //   return;
-  // }
+void Game::attack(const uint8_t& player_id, float charge_intensity) {
   if (!turn_manager.is_turn_of(player_id)) {
     return;
   }
-
-  WormBody *worm = world.get_worm(player_id);
+  auto player = turn_manager.get_current_player();
+  WormBody* worm = player.get_current_worm();
 
   if (worm->get_state() == ATTACKING)
     return;
 
-  ServerWeapon *weapon = worm->get_weapon_selected();
+  ServerWeapon* weapon = worm->get_weapon_selected();
   weapon->attack(world, charge_intensity, projectiles_id_counter);
 
   worm->set_to_attack();
@@ -173,24 +154,29 @@ void Game::attack(const uint8_t &player_id, float charge_intensity) {
 GameState Game::create_state() {
   GameState game_state;
   if (game_finished) {
-    game_state.set_game_finished();
+    game_state.game_finished = true;
+    // game_state.set_game_finished();
   }
 
-  game_state.set_current_turn_id(turn_manager.get_current_turn_id());
-  game_state.set_turn_time_remaining(turn_manager.get_time_remaining());
+  Player current_player = turn_manager.get_current_player();
+  game_state.current_turn_player_id = current_player.get_player_id();
+  game_state.current_turn_worm_id = current_player.get_current_worm()->get_id();
+  game_state.turn_time_remaining = turn_manager.get_time_remaining();
+  // game_state.set_current_turn_id(turn_manager.get_current_player().get_player_id());
+  // game_state.set_turn_time_remaining(turn_manager.get_time_remaining());
 
   auto worms_attr = world.get_worms_attr();
-  for (const auto &attr : worms_attr) {
+  for (const auto& attr : worms_attr) {
     game_state.add_worm(attr);
   }
 
   auto explodables_attr = world.get_explodables_attr();
-  for (const auto &attr : explodables_attr) {
+  for (const auto& attr : explodables_attr) {
     game_state.add_explodable(attr);
   }
 
   auto explosions_attr = world.get_explosions_attr();
-  for (const auto &attr : explosions_attr) {
+  for (const auto& attr : explosions_attr) {
     game_state.add_explosion(attr);
   }
 

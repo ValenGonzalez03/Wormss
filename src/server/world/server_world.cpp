@@ -22,12 +22,12 @@ BeamBody* World::create_beam(float pos_x, float pos_y, float angle, float length
   return beam;
 }
 
-WormBody* World::create_worm(const uint8_t player_id, float spawn_x, float spawn_y,
-                             const GameConfig& config) {
-  BodyBasicData basic_data{player_id, spawn_x, spawn_y, 0.0f, WORM_WIDTH, WORM_HEIGHT};
+WormBody* World::create_worm(const uint8_t worm_id, const uint8_t player_id,
+                             float spawn_x, float spawn_y, const GameConfig& config) {
+  BodyBasicData basic_data{worm_id, spawn_x, spawn_y, 0.0f, WORM_WIDTH, WORM_HEIGHT};
   BodyAdvData adv_data{1.0f, 0.2f, WORM_CATEGORY,
                        BEAM_CATEGORY | WORM_CATEGORY | MISSILE_CATEGORY};
-  WormBody* worm = new WormBody(basic_data, adv_data, config.get_worm_health(),
+  WormBody* worm = new WormBody(basic_data, adv_data, player_id, config.get_worm_health(),
                                 config.get_worm_speed(), world.get());
 
   worms.push_back(worm);
@@ -158,9 +158,10 @@ std::list<WormAttr> World::get_worms_attr() {
     if (worm->is_dead()) {
       continue;
     }
-    WormAttr attr({worm->get_id(), worm->get_health(), worm->get_pos_x(),
-                   worm->get_pos_y(), worm->get_direction(), worm->get_state(),
-                   worm->get_weapon_selected()->get_type(), worm->get_aiming_angle()});
+    WormAttr attr({worm->get_id(), worm->get_player_id(), worm->get_health(),
+                   worm->get_pos_x(), worm->get_pos_y(), worm->get_direction(),
+                   worm->get_state(), worm->get_weapon_selected()->get_type(),
+                   worm->get_aiming_angle()});
     worms_attr.emplace_back(attr);
   }
   return worms_attr;

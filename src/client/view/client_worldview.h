@@ -50,7 +50,7 @@ class WorldView {
 
   Explodable add_explodable(ExplodableData data);
 
-  void add_explosion(ExplosionData data, int frame);
+  void add_explosion(const ExplosionData &data, int frame);
 
   // Recibe el estado de juego y actualiza la world_view con los nuevos datos
   void update(const GameState &game_state, int frame);
@@ -60,7 +60,7 @@ class WorldView {
 
   void render_text(const WormData &worm_data, const GameState &game_state);
 
-  void render_charge_bar(uint8_t player_id, float charge, float max_charge);
+  void render_charge_bar(uint8_t worm_id, float charge, float max_charge);
 
   // Setea un background al mundo
   void set_background(const std::string &path);

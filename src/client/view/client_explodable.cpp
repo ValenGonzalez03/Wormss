@@ -10,9 +10,9 @@ Explodable::Explodable(int pos_x, int pos_y, int width, int heigth, float angle,
     direction(dir), id(id), texture(texture), renderer(rend) {}
 
 void Explodable::update(ExplodableData data) {
-  pos_x = convert_meters_to_pixels_x(data.get_pos_x()) - width / 2;
-  pos_y = convert_meters_to_pixels_y(data.get_pos_y()) - height / 2;
-  angle = data.get_angle();
+  pos_x = convert_meters_to_pixels_x(data.pos_x) - width / 2;
+  pos_y = convert_meters_to_pixels_y(data.pos_y) - height / 2;
+  angle = data.angle;
 }
 
 void Explodable::render(int frame, int camera_x, int camera_y) {

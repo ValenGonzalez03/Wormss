@@ -42,7 +42,8 @@ class World {
  public:
   World();
 
-  WormBody* create_worm(const uint8_t player_id, const float spawn_x, const float spawn_y,
+  WormBody* create_worm(const uint8_t worm_id, const uint8_t player_id,
+                        const float spawn_x, const float spawn_y,
                         const GameConfig& config);
 
   BeamBody* create_beam(float pos_x, float pos_y, float angle, float length);

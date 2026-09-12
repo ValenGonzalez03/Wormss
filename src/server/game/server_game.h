@@ -4,28 +4,23 @@
 #include "../../common/game_state.h"
 #include "box2d/box2d.h"
 #include "../world/server_world.h"
+#include "server_player.h"
 #include "worlds_reader.h"
 #include "game_config.h"
 #include "turn_manager.h"
 #include <stdio.h>
-#include <vector>
+#include <map>
 #include <utility>
 
 #define FPS 60.0
 
 
 class Game {
-  friend class GameState;
-
  private:
   World world;
   bool game_finished = false;
-  int current_players = 0;
-  // int current_player_id;
-  // int current_worm_id;
-  // uint8_t current_turn_id = 0;
   int projectiles_id_counter = 0;
-  std::vector<uint8_t> players;
+  std::map<uint8_t, Player> players = {};
   TurnManager turn_manager;
   std::chrono::steady_clock::time_point last_tick = std::chrono::steady_clock::now();
 

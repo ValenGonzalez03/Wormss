@@ -11,6 +11,7 @@
 class Worm {
  private:
   uint8_t id;
+  uint8_t player_id;
   uint32_t health;
   int pos_x;   // En pixeles
   int pos_y;   // En pixeles
@@ -52,8 +53,9 @@ class Worm {
   Worm();
 
   // Crea un Worm con un renderer y las texturas correspondientes
-  explicit Worm(uint8_t id, uint32_t health, int pos_x, int pos_y, int width, int heigth,
-                float aim_angle, uint8_t direction, WormState worm_state,
+  explicit Worm(uint8_t id, uint8_t player_id, uint32_t health, int pos_x, int pos_y,
+                int width, int heigth, float aim_angle, uint8_t direction,
+                WormState worm_state,
                 SDL2pp::Renderer &rend,   // NOLINT(runtime/references)
                 ResourcePool &res_pool);  // NOLINT(runtime/references)
 
@@ -76,10 +78,11 @@ class Worm {
   ~Worm();
 
   Worm(const Worm &other) :
-      id(other.id), health(other.health), pos_x(other.pos_x), pos_y(other.pos_y),
-      width(other.width), height(other.height), aim_angle(other.aim_angle),
-      direction(other.direction), worm_state(other.worm_state), weapon(nullptr),
-      resource_pool(other.resource_pool), renderer(other.renderer) {
+      id(other.id), player_id(other.player_id), health(other.health), pos_x(other.pos_x),
+      pos_y(other.pos_y), width(other.width), height(other.height),
+      aim_angle(other.aim_angle), direction(other.direction),
+      worm_state(other.worm_state), weapon(nullptr), resource_pool(other.resource_pool),
+      renderer(other.renderer) {
     assign_new_weapon(other.weapon->get_type());
   }
 

@@ -154,7 +154,7 @@ bool Client::execute_frame() {
     std::cerr << e.what();
   }
 
-  if (game_state.is_game_finished()) {
+  if (game_state.game_finished) {
     std::cout << "El juego ha terminado" << std::endl;
     handle_quit_game();
     // prot.close_socket();
@@ -183,9 +183,11 @@ bool Client::execute_frame() {
   // ---------------------------------------------------------------------------
   view.renderer.Clear();
   view.world_view.render(frame_ticks);
-  view.world_view.render_text(game_state.get_worms()[player_id], game_state);
-  if (is_charging_attack) {
-    view.world_view.render_charge_bar(player_id, charge_power, MAX_CHARGE);
+  view.world_view.render_text(game_state.get_worms()[game_state.current_turn_worm_id],
+                              game_state);
+  if (is_charging_attack && game_state.current_turn_player_id == player_id) {
+    view.world_view.render_charge_bar(game_state.current_turn_worm_id, charge_power,
+                                      MAX_CHARGE);
   }
   // std::cout << charge_power  << " y " << is_charging_attack << std::endl;
 
@@ -230,12 +232,12 @@ bool Client::execute_event(SDL_Event &event) {
           handle_start_moving(key_mov_dir);
           break;
         case SDLK_RETURN:
-          if (worm_client.get_state() != JUMPING)
-            handle_jump_forward(worm_client.get_direction(), JUMP_FORWARD);
+          if (worm_client.state != JUMPING)
+            handle_jump_forward(worm_client.direction, JUMP_FORWARD);
           break;
         case SDLK_BACKSPACE:
-          if (worm_client.get_state() != JUMPING)
-            handle_jump_backward(worm_client.get_direction(), JUMP_BACKWARD);
+          if (worm_client.state != JUMPING)
+            handle_jump_backward(worm_client.direction, JUMP_BACKWARD);
           break;
         case SDLK_UP:
         case SDLK_DOWN:
@@ -247,7 +249,7 @@ bool Client::execute_event(SDL_Event &event) {
         case SDLK_SPACE:
           if (event.key.repeat)
             break;
-          w_type = worm_client.get_weapon_selected();
+          w_type = worm_client.current_weapon;
           if (w_type == BAZOOKA || w_type == GRENADE) {
             is_charging_attack = true;
             charge_power = 0.0f;

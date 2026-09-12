@@ -37,20 +37,19 @@ void WorldView::add_worm(const WormData &data) {
   float width = WORM_WIDTH;
   float heigth = WORM_HEIGHT;
 
-  int pos_x_px = convert_meters_to_pixels_x(data.get_pos_x() - width / 2);
-  int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y() + heigth / 2);
+  int pos_x_px = convert_meters_to_pixels_x(data.pos_x - width / 2);
+  int pos_y_px = convert_meters_to_pixels_y(data.pos_y + heigth / 2);
   int width_px = convert_meters_to_pixels_x(width);
   int heigth_px = convert_meters_to_pixels_x(heigth);
 
-  Worm worm(data.get_player_id(), data.get_health(), pos_x_px, pos_y_px, width_px,
-            heigth_px, data.get_aim_angle(), data.get_direction(), data.get_state(),
-            renderer, resource_pool);
+  Worm worm(data.id, data.player_id, data.health, pos_x_px, pos_y_px, width_px, heigth_px,
+            data.aim_angle, data.direction, data.state, renderer, resource_pool);
   worms.insert({worm.get_id(), worm});
 }
 
 Explodable WorldView::add_explodable(ExplodableData data) {
   SDL2pp::Texture *explodable_texture;
-  switch (data.get_type()) {
+  switch (data.type) {
     case MISSILE:
       explodable_texture = resource_pool.get_missile_texture()[8];
       break;
@@ -61,19 +60,18 @@ Explodable WorldView::add_explodable(ExplodableData data) {
       break;
   }
 
-  auto size = get_explodable_size(data.get_type());
+  auto size = get_explodable_size(data.type);
   float width = size.first;
   float heigth = size.second;
 
-  int pos_x_px = convert_meters_to_pixels_x(data.get_pos_x() - width / 2);
-  int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y() + heigth / 2);
+  int pos_x_px = convert_meters_to_pixels_x(data.pos_x - width / 2);
+  int pos_y_px = convert_meters_to_pixels_y(data.pos_y + heigth / 2);
   int width_px = convert_meters_to_pixels_x(width);
   int heigth_px = convert_meters_to_pixels_x(heigth);
 
 
-  Explodable explodable(pos_x_px, pos_y_px, width_px, heigth_px, data.get_angle(),
-                        data.get_direction(), data.get_id(),
-                        std::move(explodable_texture), renderer);
+  Explodable explodable(pos_x_px, pos_y_px, width_px, heigth_px, data.angle,
+                        data.direction, data.id, std::move(explodable_texture), renderer);
   return explodable;
 }
 
@@ -100,13 +98,12 @@ std::pair<float, float> WorldView::get_explodable_size(BODY_TYPES type) {
   return {width, height};
 }
 
-void WorldView::add_explosion(ExplosionData data, int frame) {
-  int pos_x_px = convert_meters_to_pixels_x(data.get_pos_x());
-  int pos_y_px = convert_meters_to_pixels_y(data.get_pos_y());
-  int radius_px = convert_meters_to_pixels_x(data.get_radius());
+void WorldView::add_explosion(const ExplosionData &data, int frame) {
+  int pos_x_px = convert_meters_to_pixels_x(data.pos_x);
+  int pos_y_px = convert_meters_to_pixels_y(data.pos_y);
+  int radius_px = convert_meters_to_pixels_x(data.radius);
 
-  Explosion explosion(pos_x_px, pos_y_px, radius_px, data.get_rays_fraction(), frame,
-                      renderer);
+  Explosion explosion(pos_x_px, pos_y_px, radius_px, data.rays_fraction, frame, renderer);
   explosions.emplace_back(explosion);
 }
 
@@ -160,13 +157,14 @@ void WorldView::update(const GameState &game_state, int frame) {
   }
 
   // Actualizo el estado de la camara
-  auto worm_result = worms.find(player_id);
-  if (worm_result == worms.end()) {
-    throw std::runtime_error("Id del jugador no encontrado en los gusanos");
+  auto current_worm_result = worms.find(game_state.current_turn_worm_id);
+  if (current_worm_result == worms.end()) {
+    throw std::runtime_error(
+        "Id del actual gusano no encontrado para actualizar la camara");
   }
-  auto player_worm = (worms.find(player_id))->second;
-  camera.update(player_worm.get_pos_x(), player_worm.get_pos_y(), player_worm.get_width(),
-                player_worm.get_height());
+  auto current_worm = current_worm_result->second;
+  camera.update(current_worm.get_pos_x(), current_worm.get_pos_y(),
+                current_worm.get_width(), current_worm.get_height());
 
   // Actualizo el estado de los explotables
   auto explodables_data = game_state.get_explodables();
@@ -239,10 +237,10 @@ void WorldView::render_water() {
 void WorldView::render_text(const WormData &worm_data, const GameState &game_state) {
   SDL2pp::Font font(RESOURCES_PATH "/Vera.ttf", 12);
 
-  std::string text = "Pos x: " + std::to_string(worm_data.get_pos_x()) +
-                     ", Pos y: " + std::to_string(worm_data.get_pos_y() - WORM_HEIGHT) +
-                     ", state: " + (print_state(worm_data.get_state())) + ", weapon: " +
-                     (print_weapon_selected(worm_data.get_weapon_selected()));
+  std::string text = "Pos x: " + std::to_string(worm_data.pos_x) +
+                     ", Pos y: " + std::to_string(worm_data.pos_y - WORM_HEIGHT) +
+                     ", state: " + (print_state(worm_data.state)) +
+                     ", weapon: " + (print_weapon_selected(worm_data.current_weapon));
 
   SDL2pp::Texture text_sprite(
       renderer, (font).RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
@@ -251,9 +249,8 @@ void WorldView::render_text(const WormData &worm_data, const GameState &game_sta
                 SDL2pp::Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
 
 
-  std::string dir = (worm_data.get_direction() == LEFT ? "left" : "right");
-  std::string text_2 =
-      "direction: " + dir + ", player_id: " + std::to_string(worm_data.get_player_id());
+  std::string dir = (worm_data.direction == LEFT ? "left" : "right");
+  std::string text_2 = "direction: " + dir + ", worm_id: " + std::to_string(worm_data.id);
 
   SDL2pp::Texture text_sprite_2(
       renderer, (font).RenderText_Blended(text_2, SDL_Color{255, 255, 255, 255}));
@@ -263,8 +260,8 @@ void WorldView::render_text(const WormData &worm_data, const GameState &game_sta
                              text_sprite_2.GetHeight()));
 
   std::string turn_text =
-      "Turn: Player " + std::to_string(game_state.get_current_turn_id()) +
-      " | Time: " + std::to_string(game_state.get_turn_time_remaining()) + "s";
+      ", player_id " + std::to_string(game_state.current_turn_player_id) +
+      ", time: " + std::to_string(game_state.turn_time_remaining) + "s";
 
   SDL2pp::Texture turn_text_sprite(
       renderer, (font).RenderText_Blended(turn_text, SDL_Color{255, 255, 255, 255}));
@@ -274,8 +271,8 @@ void WorldView::render_text(const WormData &worm_data, const GameState &game_sta
                              turn_text_sprite.GetWidth(), turn_text_sprite.GetHeight()));
 }
 
-void WorldView::render_charge_bar(uint8_t player_id, float charge, float max_charge) {
-  auto it = worms.find(player_id);
+void WorldView::render_charge_bar(uint8_t worm_id, float charge, float max_charge) {
+  auto it = worms.find(worm_id);
   if (it == worms.end())
     return;
 

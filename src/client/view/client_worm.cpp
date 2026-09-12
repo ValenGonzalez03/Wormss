@@ -3,29 +3,30 @@
 #include <cmath>
 #include <string>
 
-Worm::Worm(uint8_t id, uint32_t health, int pos_x, int pos_y, int width, int height,
-           float aim_angle, uint8_t direction, WormState worm_state,
-           SDL2pp::Renderer &rend, ResourcePool &res_pool) :
-    id(id), health(health), pos_x(pos_x), pos_y(pos_y), width(width), height(height),
-    aim_angle(aim_angle), direction(direction), worm_state(worm_state),
-    resource_pool(res_pool), renderer(rend) {
+Worm::Worm(uint8_t id, uint8_t player_id, uint32_t health, int pos_x, int pos_y,
+           int width, int height, float aim_angle, uint8_t direction,
+           WormState worm_state, SDL2pp::Renderer &rend, ResourcePool &res_pool) :
+    id(id), player_id(player_id), health(health), pos_x(pos_x), pos_y(pos_y),
+    width(width), height(height), aim_angle(aim_angle), direction(direction),
+    worm_state(worm_state), resource_pool(res_pool), renderer(rend) {
   weapon = new Bazooka(BAZOOKA);
 }
 
 int Worm::get_id() { return id; }
 
 void Worm::update(const WormData &data) {
-  id = data.get_player_id();
-  health = data.get_health();
+  id = data.id;
+  player_id = data.player_id;
+  health = data.health;
 
-  pos_x = convert_meters_to_pixels_x(data.get_pos_x()) - width / 2;
-  pos_y = convert_meters_to_pixels_y(data.get_pos_y()) - height / 2;
+  pos_x = convert_meters_to_pixels_x(data.pos_x) - width / 2;
+  pos_y = convert_meters_to_pixels_y(data.pos_y) - height / 2;
 
-  worm_state = data.get_state();
-  direction = data.get_direction();
-  aim_angle = data.get_aim_angle();
+  worm_state = data.state;
+  direction = data.direction;
+  aim_angle = data.aim_angle;
 
-  WeaponType w_type = data.get_weapon_selected();
+  WeaponType w_type = data.current_weapon;
   update_weapon_selected(w_type);
 }
 

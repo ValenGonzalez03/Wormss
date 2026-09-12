@@ -11,8 +11,9 @@
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
 WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
-                   int health, float vel, b2World* world) :
-    Body(basic_data, adv_data, WORM, b2_dynamicBody, world), health(health), vel(vel) {
+                   uint8_t player_id, int32_t health, float vel, b2World* world) :
+    Body(basic_data, adv_data, WORM, b2_dynamicBody, world), player_id(player_id),
+    health(health), vel(vel) {
   affected_by_explosions = true;
   body->SetFixedRotation(true);
   current_weapon = std::make_unique<ServerBazooka>(this);
@@ -268,6 +269,8 @@ void WormBody::take_damage(int amount) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////// GETTERS ///////////////////////////////////////////
+
+uint8_t WormBody::get_player_id() const { return player_id; }
 
 int32_t WormBody::get_health() const { return health; }
 

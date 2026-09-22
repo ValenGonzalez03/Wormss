@@ -159,12 +159,14 @@ void WorldView::update(const GameState &game_state, int frame) {
   // Actualizo el estado de la camara
   auto current_worm_result = worms.find(game_state.current_turn_worm_id);
   if (current_worm_result == worms.end()) {
-    throw std::runtime_error(
-        "Id del actual gusano no encontrado para actualizar la camara");
+    camera.update(0, 0, 0, 0);
+    // throw std::runtime_error(
+    //     "Id del actual gusano no encontrado para actualizar la camara");
+  } else {
+    auto current_worm = current_worm_result->second;
+    camera.update(current_worm.get_pos_x(), current_worm.get_pos_y(),
+                  current_worm.get_width(), current_worm.get_height());
   }
-  auto current_worm = current_worm_result->second;
-  camera.update(current_worm.get_pos_x(), current_worm.get_pos_y(),
-                current_worm.get_width(), current_worm.get_height());
 
   // Actualizo el estado de los explotables
   auto explodables_data = game_state.get_explodables();

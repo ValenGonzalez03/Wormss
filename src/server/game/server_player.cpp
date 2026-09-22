@@ -9,10 +9,11 @@ void Player::add_worm(WormBody *worm) {
     current_worm_it = worms.begin();
 }
 
-void Player::remove_worm(WormBody *worm) {
-  worms.erase(worm->get_id());
-  if (!worms.empty())
-    current_worm_it = worms.begin();
+void Player::remove_worm(uint8_t worm_id) {
+  auto it = worms.find(worm_id);
+  if (it != worms.end()) {
+    current_worm_it = worms.erase(it);
+  }
 }
 
 void Player::advance_worm() {

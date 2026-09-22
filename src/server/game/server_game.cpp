@@ -158,12 +158,12 @@ GameState Game::create_state() {
     // game_state.set_game_finished();
   }
 
-  Player current_player = turn_manager.get_current_player();
-  game_state.current_turn_player_id = current_player.get_player_id();
-  game_state.current_turn_worm_id = current_player.get_current_worm()->get_id();
-  game_state.turn_time_remaining = turn_manager.get_time_remaining();
-  // game_state.set_current_turn_id(turn_manager.get_current_player().get_player_id());
-  // game_state.set_turn_time_remaining(turn_manager.get_time_remaining());
+  if (turn_manager.are_players_remaining()) {
+    Player current_player = turn_manager.get_current_player();
+    game_state.current_turn_player_id = current_player.get_player_id();
+    game_state.current_turn_worm_id = current_player.get_current_worm()->get_id();
+    game_state.turn_time_remaining = turn_manager.get_time_remaining();
+  }
 
   auto worms_attr = world.get_worms_attr();
   for (const auto& attr : worms_attr) {

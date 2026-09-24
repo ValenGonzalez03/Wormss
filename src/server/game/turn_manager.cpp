@@ -13,10 +13,7 @@ void TurnManager::update(const float dt) {
   Player& current_player = current_player_it->second;
   WormBody* current_worm = current_player.get_current_worm();
   time_remaining -= dt;
-  if (time_remaining <= 0.0f) {  // Termino el tiempo del turno
-    current_player_it->second.advance_worm();
-    next_turn();
-  } else if (current_worm->is_dead()) {  // Un gusano ha muerto durante el turno
+  if (current_worm->is_dead()) {  // Un gusano ha muerto durante el turno
     current_player.remove_worm(current_worm->get_id());
     std::cout << "[GAME-THREAD]: Gusano " << static_cast<int>(current_worm->get_id())
               << " del jugador " << static_cast<int>(current_player.get_player_id())
@@ -27,6 +24,9 @@ void TurnManager::update(const float dt) {
       std::cout << "[GAME-THREAD]: Jugador " << static_cast<int>(current_player_it->first)
                 << " eliminado del juego." << std::endl;
     }
+    next_turn();
+  } else if (time_remaining <= 0.0f) {  // Termino el tiempo del turno
+    current_player_it->second.advance_worm();
     next_turn();
   }
 }
@@ -57,6 +57,16 @@ void TurnManager::assign_first_player() {
     return;
   }
   current_player_it = players->begin();
+}
+
+void TurnManager::notify_attack_this_turn() { attacked_this_turn = true; }
+
+bool TurnManager::has_attacked_this_turn() const { return attacked_this_turn; }
+
+void TurnManager::advance_turn_after_attack() {
+  attacked_this_turn = false;
+  current_player_it->second.advance_worm();
+  next_turn();
 }
 
 Player& TurnManager::get_current_player() const { return current_player_it->second; }

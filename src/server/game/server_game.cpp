@@ -61,6 +61,13 @@ void Game::update_turn() {
   float dt = std::chrono::duration<float>(now - last_tick).count();
   last_tick = now;
 
+  if (turn_manager.has_attacked_this_turn()) {
+    if (world.are_all_bodies_at_rest()) {
+      turn_manager.advance_turn_after_attack();
+    }
+    return;
+  }
+
   turn_manager.update(dt);
 }
 
@@ -149,6 +156,8 @@ void Game::attack(const uint8_t& player_id, float charge_intensity) {
   weapon->attack(world, charge_intensity, projectiles_id_counter);
 
   worm->set_to_attack();
+
+  turn_manager.notify_attack_this_turn();
 }
 
 GameState Game::create_state() {

@@ -143,6 +143,21 @@ void World::update_explosions() {
   }
 }
 
+bool World::are_all_bodies_at_rest() const {
+  if (!explodables.empty())
+    return false;
+  if (!explosions.empty())
+    return false;
+
+  bool any_awake = std::any_of(worms.begin(), worms.end(), [](const WormBody* worm) {
+    return (!worm->is_dead() && worm->is_awake());
+  });
+  if (any_awake)
+    return false;
+
+  return true;
+}
+
 int World::get_worms_number() { return worms.size(); }
 
 int World::get_explodables_number() { return explodables.size(); }

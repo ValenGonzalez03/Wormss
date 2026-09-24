@@ -68,6 +68,8 @@ class World {
 
   void update_explosions();
 
+  bool are_all_bodies_at_rest() const;
+
   int get_worms_number();
 
   int get_explodables_number();

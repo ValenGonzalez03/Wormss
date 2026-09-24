@@ -10,6 +10,7 @@ class TurnManager {
   std::map<uint8_t, Player> *players;
   std::map<uint8_t, Player>::iterator current_player_it;
   float time_remaining;
+  bool attacked_this_turn = false;
 
   // Avanza al siguiente jugador en la rotación de turnos y reinicia el tiempo del turno.
   void next_turn();
@@ -26,6 +27,17 @@ class TurnManager {
 
   // Asigna el primer jugador de la lista como el jugador actual en caso de que exista.
   void assign_first_player();
+
+  // Determina que jugador ha atacado durante el turno actual.
+  void notify_attack_this_turn();
+
+  // Devuelve true si el jugador ha atacado durante el turno actual, false en caso
+  // contrario.
+  bool has_attacked_this_turn() const;
+
+  // Avanza al siguiente jugador en la rotación de turnos después de que el jugador
+  // actual haya atacado, reiniciando el tiempo del turno.
+  void advance_turn_after_attack();
 
   // Recibe un player_id y devuelve true si es el turno de ese jugador,
   // false en caso contrario.

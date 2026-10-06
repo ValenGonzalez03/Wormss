@@ -7,6 +7,7 @@
 #include "../game/weapons/server_bat.h"
 #include "../game/weapons/server_grenade.h"
 #include <stdio.h>
+#include <algorithm>
 
 const float delta_angle = static_cast<float>(1) * b2_pi / 180.0f;
 
@@ -22,6 +23,8 @@ WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
   b2PolygonShape polygonShape;
   b2FixtureDef fixtureDef;
   polygonShape.SetAsBox((WORM_WIDTH * 1.1) / 2, 0.2 / 2, b2Vec2(0, -WORM_HEIGHT / 2), 0);
+  fixtureDef.filter.categoryBits = adv_data.category_bits;
+  fixtureDef.filter.maskBits = adv_data.mask_bits;
   fixtureDef.shape = &polygonShape;
   fixtureDef.isSensor = true;
   body->CreateFixture(&fixtureDef);
@@ -32,7 +35,9 @@ void WormBody::update() {
     take_damage(100000);
   }
 
-  // std::cout << "jump_timeout: " << jump_timeout << std::endl;
+  if (num_foot_contacts == 0) {
+    track_max_height();
+  }
   if (health <= 0) {
     dead = true;
   }
@@ -73,6 +78,16 @@ void WormBody::apply_horizontal_impulse(float desired_vel) {
 void WormBody::apply_vertical_impulse(float jump_speed) {
   float impulse = body->GetMass() * jump_speed;
   body->ApplyLinearImpulse(b2Vec2(0, impulse), body->GetWorldCenter(), true);
+}
+
+void WormBody::track_max_height() {
+  float current_y = body->GetPosition().y;
+  if (!tracking_fall) {
+    tracking_fall = true;
+    max_y_while_in_air = current_y;
+  } else {
+    max_y_while_in_air = std::max(max_y_while_in_air, current_y);
+  }
 }
 
 
@@ -262,6 +277,19 @@ void WormBody::take_damage(int amount) {
   }
 }
 
+void WormBody::check_for_fall_damage() {
+  if (tracking_fall) {
+    float fall_distance = max_y_while_in_air - body->GetPosition().y;
+    if (fall_distance > FALL_DAMAGE_THRESHOLD) {
+      int damage = static_cast<int>((fall_distance - FALL_DAMAGE_THRESHOLD) *
+                                    FALL_DAMAGE_MULTIPLIER);
+      take_damage(damage);
+    }
+    tracking_fall = false;
+    max_y_while_in_air = 0.0f;
+  }
+}
+
 ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -315,6 +343,8 @@ void WormBody::hit_a_surface() {
   num_foot_contacts++;
   if (num_foot_contacts == 1) {
     state = IDLE;
+
+    check_for_fall_damage();
   }
   jump_timeout = 30;
 }

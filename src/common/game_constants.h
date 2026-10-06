@@ -51,9 +51,9 @@ enum BODY_TYPES { WORM = 0, WATER = 1, BEAM = 2, MISSILE = 3, GRENADE_BODY = 4 }
 enum BODY_CATEGORIES {
   WORM_CATEGORY = 0x0001,
   BEAM_CATEGORY = 0x0002,
-  MISSILE_CATEGORY = 0x0003,
-  GRENADE_CATEGORY = 0x0004,
-  WATER_CATEGORY = 0x0005
+  MISSILE_CATEGORY = 0x0004,
+  GRENADE_CATEGORY = 0x0008,
+  WATER_CATEGORY = 0x0010
 };
 
 struct BodyBasicData {
@@ -71,6 +71,9 @@ struct BodyAdvData {
   uint16 category_bits;
   uint16 mask_bits;
 };
+
+#define FALL_DAMAGE_THRESHOLD 3.0f    // Metros mínimos de caída para recibir daño
+#define FALL_DAMAGE_MULTIPLIER 10.0f  // Daño por cada metro adicional al threshold
 
 struct WormAttr {
   uint8_t id;

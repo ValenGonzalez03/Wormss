@@ -29,6 +29,8 @@ class WormBody : public Body {
 
   int num_foot_contacts = 0;
   int jump_timeout = 0;
+  bool tracking_fall = false;
+  float max_y_while_in_air = 0.0f;
 
   int frames_attacking = 0;
 
@@ -44,6 +46,8 @@ class WormBody : public Body {
   void apply_horizontal_impulse(float desired_vel);
 
   void apply_vertical_impulse(float jump_speed);
+
+  void track_max_height();
 
  public:
   // explicit WormBody(b2World* world, float pos_x, float pos_y, uint8_t id);
@@ -107,6 +111,8 @@ class WormBody : public Body {
   void teleport(float pos_x, float pos_y);
 
   void take_damage(int amount) override;
+
+  void check_for_fall_damage();
 
   ///////////////////////////////// METODOS DE ARMAS Y EXPLOSIONES /////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -31,13 +31,14 @@ class TurnManager {
   // Determina que jugador ha atacado durante el turno actual.
   void notify_attack_this_turn();
 
-  // Devuelve true si el jugador ha atacado durante el turno actual, false en caso
-  // contrario.
-  bool has_attacked_this_turn() const;
+  // Devuelve true si el jugador ha terminado su turno debido a un evento que lo produzca
+  // Como atacar o recibir daño. Devuelve false en caso contrario.
+  bool ended_his_turn() const;
 
-  // Avanza al siguiente jugador en la rotación de turnos después de que el jugador
-  // actual haya atacado, reiniciando el tiempo del turno.
-  void advance_turn_after_attack();
+  // Avanza al siguiente jugador en la rotación de turnos después de que haya ocurrido
+  // un evento que produzca el fin del turno en el jugador actual, reiniciando el tiempo
+  // del turno.
+  void advance_turn_after_finish_event();
 
   // Recibe un player_id y devuelve true si es el turno de ese jugador,
   // false en caso contrario.

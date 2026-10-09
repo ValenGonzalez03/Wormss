@@ -34,6 +34,8 @@ class WormBody : public Body {
 
   int frames_attacking = 0;
 
+  bool took_damage_this_frame = false;
+
   bool dead = false;
 
   // Atributos para manejar la explosion sobre un gusano
@@ -139,6 +141,10 @@ class WormBody : public Body {
   bool is_dead() const;
 
   bool is_awake() const;
+
+  bool has_taken_damage() const;
+
+  void reset_damage_flag();
 
   ///////////////////////////////////////// GETTERS ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////

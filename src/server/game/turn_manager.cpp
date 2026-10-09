@@ -61,10 +61,14 @@ void TurnManager::assign_first_player() {
 
 void TurnManager::notify_attack_this_turn() { attacked_this_turn = true; }
 
-bool TurnManager::has_attacked_this_turn() const { return attacked_this_turn; }
+bool TurnManager::ended_his_turn() const {
+  auto current_worm = current_player_it->second.get_current_worm();
+  return attacked_this_turn || current_worm->has_taken_damage();
+}
 
-void TurnManager::advance_turn_after_attack() {
+void TurnManager::advance_turn_after_finish_event() {
   attacked_this_turn = false;
+  current_player_it->second.get_current_worm()->reset_damage_flag();
   current_player_it->second.advance_worm();
   next_turn();
 }

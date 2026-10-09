@@ -61,9 +61,9 @@ void Game::update_turn() {
   float dt = std::chrono::duration<float>(now - last_tick).count();
   last_tick = now;
 
-  if (turn_manager.has_attacked_this_turn()) {
+  if (turn_manager.ended_his_turn()) {
     if (world.are_all_bodies_at_rest()) {
-      turn_manager.advance_turn_after_attack();
+      turn_manager.advance_turn_after_finish_event();
     }
     return;
   }

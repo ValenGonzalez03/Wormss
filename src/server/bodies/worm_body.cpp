@@ -275,6 +275,7 @@ void WormBody::take_damage(int amount) {
   if (health <= 0) {
     health = 0;
   }
+  took_damage_this_frame = true;
 }
 
 void WormBody::check_for_fall_damage() {
@@ -315,6 +316,10 @@ float WormBody::get_aiming_angle() { return aiming_angle; }
 bool WormBody::is_dead() const { return dead; }
 
 bool WormBody::is_awake() const { return body->IsAwake(); }
+
+bool WormBody::has_taken_damage() const { return took_damage_this_frame; }
+
+void WormBody::reset_damage_flag() { took_damage_this_frame = false; }
 
 ////////////////////////////////////////// GETTERS ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////

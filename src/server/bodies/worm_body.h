@@ -9,6 +9,8 @@
 #include <iostream>
 #include <stdio.h>
 
+#define TIME_ATTACKING 0.5
+
 class WormBody : public Body {
  private:
   // Atributos fijos del gusano
@@ -32,7 +34,7 @@ class WormBody : public Body {
   bool tracking_fall = false;
   float max_y_while_in_air = 0.0f;
 
-  int frames_attacking = 0;
+  float attacking_remaining = 0;
 
   bool took_damage_this_frame = false;
 
@@ -57,7 +59,7 @@ class WormBody : public Body {
   explicit WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
                     uint8_t player_id, int32_t health, float vel, b2World* world);
 
-  void update();
+  void update(float dt);
 
 
 
@@ -69,19 +71,19 @@ class WormBody : public Body {
   void move_right();
   void stop_moving();
 
-
   void jump(const uint8_t& dir, const uint8_t& jump_type);
   void jump_forward();
   void jump_backward();
-
 
   void start_aiming(const uint8_t& dir);
   void aim_up();
   void aim_down();
   void stop_aiming();
 
-
   void change_weapon(WeaponType weapon);
+
+  void set_to_charge();
+  void set_to_attack();
 
   ///////////////////////////////// METODOS DE CONTROL DE GUSANO /////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,10 +100,6 @@ class WormBody : public Body {
 
   // Devuelve los atributos del proyectil a lanzar
   ExplodableAttr attack_projectile(b2Vec2 proj_pos, uint8_t proj_id);
-
-  void set_to_charge();
-
-  void set_to_attack();
 
   float explosion_intersect_value(float fraction) override;
 
@@ -145,6 +143,8 @@ class WormBody : public Body {
   bool has_taken_damage() const;
 
   void reset_damage_flag();
+
+  void reset_state();
 
   ///////////////////////////////////////// GETTERS ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////

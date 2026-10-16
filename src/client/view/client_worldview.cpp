@@ -261,9 +261,12 @@ void WorldView::render_text(const WormData &worm_data, const GameState &game_sta
                 SDL2pp::Rect(0, text_sprite.GetHeight(), text_sprite_2.GetWidth(),
                              text_sprite_2.GetHeight()));
 
-  std::string turn_text =
-      ", player_id " + std::to_string(game_state.current_turn_player_id) +
-      ", time: " + std::to_string(game_state.turn_time_remaining) + "s";
+  std::string turn_text = ", player_id " +
+                          std::to_string(game_state.current_turn_player_id) +
+                          ", time: " + std::to_string(game_state.turn_time_remaining) +
+                          "s"
+                          ", attk_grace: " +
+                          std::to_string(game_state.post_attack_grace_remaining) + "s";
 
   SDL2pp::Texture turn_text_sprite(
       renderer, (font).RenderText_Blended(turn_text, SDL_Color{255, 255, 255, 255}));

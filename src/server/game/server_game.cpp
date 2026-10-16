@@ -47,32 +47,29 @@ void Game::delete_player(const uint8_t& player_id) { players.erase(player_id); }
 World* Game::get_world() { return &world; }
 
 void Game::update() {
-  world.update_worms();
-  world.update_explodables();
-  world.update_explosions();
-
-  update_turn();
-
-  world.step(TIME_STEP, VEL_ITERATIONS, POS_ITERATIONS);
-}
-
-void Game::update_turn() {
   auto now = std::chrono::steady_clock::now();
   float dt = std::chrono::duration<float>(now - last_tick).count();
   last_tick = now;
 
-  if (turn_manager.ended_his_turn()) {
-    if (world.are_all_bodies_at_rest()) {
-      turn_manager.advance_turn_after_finish_event();
-    }
-    return;
-  }
+  world.update_worms(dt);
+  world.update_explodables();
+  world.update_explosions();
 
+  update_turn(dt);
+
+  world.step(TIME_STEP, VEL_ITERATIONS, POS_ITERATIONS);
+}
+
+void Game::update_turn(float dt) {
   turn_manager.update(dt);
+
+  if (turn_manager.ended_his_turn() && world.are_all_bodies_at_rest()) {
+    turn_manager.advance_full_turn();
+  }
 }
 
 void Game::move(const uint8_t& player_id, const uint8_t& direction) {
-  if (!turn_manager.is_turn_of(player_id)) {
+  if (!turn_manager.can_play_in_turn(player_id)) {
     return;
   }
   auto player = turn_manager.get_current_player();
@@ -82,7 +79,7 @@ void Game::move(const uint8_t& player_id, const uint8_t& direction) {
 }
 
 void Game::stop_moving(const uint8_t& player_id) {
-  if (!turn_manager.is_turn_of(player_id)) {
+  if (!turn_manager.can_play_in_turn(player_id)) {
     return;
   }
   auto player = turn_manager.get_current_player();
@@ -93,7 +90,7 @@ void Game::stop_moving(const uint8_t& player_id) {
 
 void Game::jump(const uint8_t& player_id, const uint8_t& direction,
                 const uint8_t& jump_type) {
-  if (!turn_manager.is_turn_of(player_id)) {
+  if (!turn_manager.can_play_in_turn(player_id)) {
     return;
   }
   auto player = turn_manager.get_current_player();
@@ -103,7 +100,7 @@ void Game::jump(const uint8_t& player_id, const uint8_t& direction,
 }
 
 void Game::aim(const uint8_t& player_id, const uint8_t& direction) {
-  if (!turn_manager.is_turn_of(player_id)) {
+  if (!turn_manager.can_play_in_turn(player_id)) {
     return;
   }
   auto player = turn_manager.get_current_player();
@@ -113,7 +110,7 @@ void Game::aim(const uint8_t& player_id, const uint8_t& direction) {
 }
 
 void Game::stop_aiming(const uint8_t& player_id) {
-  if (!turn_manager.is_turn_of(player_id)) {
+  if (!turn_manager.can_play_in_turn(player_id)) {
     return;
   }
   auto player = turn_manager.get_current_player();
@@ -123,7 +120,7 @@ void Game::stop_aiming(const uint8_t& player_id) {
 }
 
 void Game::change_weapon(const uint8_t& player_id, const uint8_t& weapon_type) {
-  if (!turn_manager.is_turn_of(player_id)) {
+  if (!turn_manager.can_play_in_turn(player_id)) {
     return;
   }
   auto player = turn_manager.get_current_player();
@@ -133,7 +130,7 @@ void Game::change_weapon(const uint8_t& player_id, const uint8_t& weapon_type) {
 }
 
 void Game::set_worm_to_charge(const uint8_t& player_id) {
-  if (!turn_manager.is_turn_of(player_id)) {
+  if (!turn_manager.can_play_in_turn(player_id)) {
     return;
   }
   auto player = turn_manager.get_current_player();
@@ -143,7 +140,7 @@ void Game::set_worm_to_charge(const uint8_t& player_id) {
 }
 
 void Game::attack(const uint8_t& player_id, float charge_intensity) {
-  if (!turn_manager.is_turn_of(player_id)) {
+  if (!turn_manager.can_play_in_turn(player_id)) {
     return;
   }
   auto player = turn_manager.get_current_player();
@@ -157,7 +154,7 @@ void Game::attack(const uint8_t& player_id, float charge_intensity) {
 
   worm->set_to_attack();
 
-  turn_manager.notify_attack_this_turn();
+  turn_manager.on_attack();
 }
 
 GameState Game::create_state() {
@@ -172,6 +169,8 @@ GameState Game::create_state() {
     game_state.current_turn_player_id = current_player.get_player_id();
     game_state.current_turn_worm_id = current_player.get_current_worm()->get_id();
     game_state.turn_time_remaining = turn_manager.get_time_remaining();
+    game_state.post_attack_grace_remaining =
+        turn_manager.get_post_attack_grace_remaining();
   }
 
   auto worms_attr = world.get_worms_attr();

@@ -216,6 +216,7 @@ struct GameState {
   uint8_t current_turn_player_id = -1;
   uint8_t current_turn_worm_id = -1;
   float turn_time_remaining = -1;
+  float post_attack_grace_remaining = -1;
 
   GameState() : worms_list(std::map<uint8_t, WormData>()) {}
 
@@ -244,6 +245,7 @@ struct GameState {
     this->current_turn_player_id = prot.recv_byte(was_closed);
     this->current_turn_worm_id = prot.recv_byte(was_closed);
     this->turn_time_remaining = prot.recv_float(was_closed);
+    this->post_attack_grace_remaining = prot.recv_float(was_closed);
 
     this->game_finished = static_cast<bool>(prot.recv_byte(was_closed));
   }
@@ -266,6 +268,7 @@ struct GameState {
     prot.send_byte(current_turn_player_id, was_closed);
     prot.send_byte(current_turn_worm_id, was_closed);
     prot.send_float(turn_time_remaining, was_closed);
+    prot.send_float(post_attack_grace_remaining, was_closed);
 
     uint8_t finished = static_cast<uint8_t>(this->game_finished);
     prot.send_byte(finished, was_closed);

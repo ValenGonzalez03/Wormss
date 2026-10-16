@@ -62,7 +62,7 @@ class World {
 
   WormBody* get_worm(const uint8_t& player_id);
 
-  void update_worms();
+  void update_worms(float dt);
 
   void update_explodables();
 

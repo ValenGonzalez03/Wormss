@@ -30,7 +30,7 @@ WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
   body->CreateFixture(&fixtureDef);
 }
 
-void WormBody::update() {
+void WormBody::update(float dt) {
   if (check_boundaries()) {
     take_damage(100000);
   }
@@ -58,9 +58,8 @@ void WormBody::update() {
       aim_down();
     }
   } else if (state == ATTACKING) {
-    frames_attacking++;
-    if (frames_attacking >= 60) {
-      frames_attacking = 0;
+    attacking_remaining -= dt;
+    if (attacking_remaining <= 0) {
       state = IDLE;
     }
   }
@@ -220,7 +219,10 @@ ExplodableAttr WormBody::attack_projectile(b2Vec2 proj_pos, uint8_t proj_id) {
 
 void WormBody::set_to_charge() { state = CHARGING_ATTACK; }
 
-void WormBody::set_to_attack() { state = ATTACKING; }
+void WormBody::set_to_attack() {
+  state = ATTACKING;
+  attacking_remaining = TIME_ATTACKING;
+}
 
 float WormBody::explosion_intersect_value(float fraction) { return 1; }
 
@@ -320,6 +322,8 @@ bool WormBody::is_awake() const { return body->IsAwake(); }
 bool WormBody::has_taken_damage() const { return took_damage_this_frame; }
 
 void WormBody::reset_damage_flag() { took_damage_this_frame = false; }
+
+void WormBody::reset_state() { state = IDLE; }
 
 ////////////////////////////////////////// GETTERS ///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////

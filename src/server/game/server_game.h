@@ -25,7 +25,7 @@ class Game {
   std::chrono::steady_clock::time_point last_tick = std::chrono::steady_clock::now();
 
   // Actualiza el tiempo restante del turno y gestiona el cambio de turno si es necesario.
-  void update_turn();
+  void update_turn(float dt);
 
  public:
   explicit Game(const World &world);

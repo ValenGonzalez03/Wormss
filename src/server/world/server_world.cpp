@@ -107,10 +107,10 @@ WormBody* World::get_worm(const uint8_t& player_id) {
                            " not found in the world.");
 }
 
-void World::update_worms() {
+void World::update_worms(float dt) {
   for (WormBody* worm : worms) {
     if (!worm->is_dead()) {
-      worm->update();
+      worm->update(dt);
     }
   }
 }

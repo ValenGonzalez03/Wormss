@@ -21,12 +21,14 @@ class Game {
   bool game_finished = false;
   int projectiles_id_counter = 0;
   std::map<uint8_t, Player> players = {};
+  Player *winner = nullptr;
   TurnManager turn_manager;
   std::chrono::steady_clock::time_point last_tick = std::chrono::steady_clock::now();
 
   // Actualiza el tiempo restante del turno y gestiona el cambio de turno si es necesario.
   void update_turn(float dt);
 
+  // Verifica si queda solo un jugador en el juego y, si es así, marca el juego como terminado.
   void check_game_finished();
 
  public:
@@ -79,6 +81,8 @@ class Game {
 
   // Carga toda la informacion requerida por el cliente en un GameState y lo devuelve.
   GameState create_state();
+
+  Player *get_winner();
 
   void set_game_finished(const bool is_finished);
 

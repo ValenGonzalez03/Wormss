@@ -50,6 +50,8 @@ class Client {
 
   void recv_world();
 
+  void recv_end_of_game_msg();
+
   // Ejecuta un evento y devuelve true si se quiere cerrar el juego o false en caso contrario
   bool execute_event(SDL_Event &event);  // NOLINT(runtime/references)
 

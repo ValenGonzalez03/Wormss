@@ -58,6 +58,8 @@ void Game::update() {
   update_turn(dt);
 
   world.step(TIME_STEP, VEL_ITERATIONS, POS_ITERATIONS);
+
+  check_game_finished();
 }
 
 void Game::update_turn(float dt) {
@@ -66,6 +68,13 @@ void Game::update_turn(float dt) {
   if (turn_manager.ended_his_turn() && world.are_all_bodies_at_rest()) {
     world.apply_pending_damage_to_worms();
     turn_manager.advance_full_turn();
+  }
+}
+
+void Game::check_game_finished() {
+  if (players.size() == 1) {
+    game_finished = true;
+    winner = &(players.begin()->second);
   }
 }
 
@@ -195,3 +204,5 @@ GameState Game::create_state() {
 void Game::set_game_finished(const bool is_finished) { game_finished = is_finished; }
 
 bool Game::is_game_finished() const { return game_finished; }
+
+Player* Game::get_winner() { return winner; }

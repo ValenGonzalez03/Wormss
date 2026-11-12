@@ -72,10 +72,17 @@ void ServerSender::send_world(const World *world) {
   }
 }
 
+void ServerSender::send_player_final_status(uint8_t final_status) {
+  bool was_closed = false;
+  protocol.send_byte(final_status, &was_closed);
+}
+
 bool ServerSender::has_started() { return is_alive(); }
 
 bool ServerSender::is_closed() { return closed; }
 
 Queue<GameState> &ServerSender::get_queue() { return sender_queue; }
+
+uint8_t ServerSender::get_player_id() const { return player_id; }
 
 ServerSender::~ServerSender() {}

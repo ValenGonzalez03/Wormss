@@ -276,6 +276,28 @@ void WorldView::render_text(const WormData &worm_data, const GameState &game_sta
                              turn_text_sprite.GetWidth(), turn_text_sprite.GetHeight()));
 }
 
+void WorldView::render_final_text(PlayerFinalStatus status) {
+  SDL2pp::Font font(RESOURCES_PATH "/Vera.ttf", 24);
+
+  std::string text;
+  if (status == PlayerFinalStatus::WINNER) {
+    text = "YOU WIN!";
+  } else if (status == PlayerFinalStatus::LOSER) {
+    text = "YOU LOSE!";
+  } else if (status == PlayerFinalStatus::EARLY_EXIT) {
+    text = "YOU LEFT THE GAME EARLY!";
+  }
+
+  SDL2pp::Texture text_sprite(
+      renderer, (font).RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+
+  int x = (renderer.GetOutputWidth() - text_sprite.GetWidth()) / 2;
+  int y = (renderer.GetOutputHeight() - text_sprite.GetHeight()) / 2;
+
+  renderer.Copy(text_sprite, SDL2pp::NullOpt,
+                SDL2pp::Rect(x, y, text_sprite.GetWidth(), text_sprite.GetHeight()));
+}
+
 void WorldView::render_charge_bar(uint8_t worm_id, float charge, float max_charge) {
   auto it = worms.find(worm_id);
   if (it == worms.end())

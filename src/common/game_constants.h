@@ -31,6 +31,8 @@
 #define JUMP_FORWARD 0
 #define JUMP_BACKWARD 1
 
+enum PlayerFinalStatus : uint8_t { WINNER = 0, LOSER = 1, EARLY_EXIT = 2 };
+
 enum WormState { IDLE, MOVING, JUMPING, AIMING, CHARGING_ATTACK, ATTACKING };
 
 enum WeaponType { NONE, BAZOOKA, BAT, GRENADE };

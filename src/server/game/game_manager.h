@@ -81,6 +81,8 @@ class GameManager : public Thread {
   // Devuelve true si el juego fue iniciado, false en caso contrario.
   bool has_started();
 
+  void manage_end_game();
+
   // Envia al cliente un aviso de que el juego empezó, y envía la información del mundo.
   void send_info_to_start_to_players();
 

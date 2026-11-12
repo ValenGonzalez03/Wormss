@@ -1,6 +1,7 @@
 #include "game_manager.h"
 #include "../../common/constant_rate_loop.h"
 #include <string>
+#include <thread>
 
 #define QUEUE_MAX_SIZE 20
 
@@ -41,6 +42,8 @@ void GameManager::run() {
 
     keep_playing = false;
 
+    manage_end_game();
+
     std::cout << "[GAME-THREAD]: Game of id: " << static_cast<int>(id) << " ended."
               << std::endl;
   } catch (const std::exception &err) {
@@ -68,6 +71,26 @@ void GameManager::push_game_state() {
 }
 
 bool GameManager::has_game_finished() { return game.is_game_finished(); }
+
+void GameManager::manage_end_game() {
+  sleep(2);  // Para que los clientes terminen de recibir el ultimo game_state
+
+  const Player *winner = game.get_winner();
+  int8_t winner_id = -1;
+  if (winner) {
+    winner_id = winner->get_player_id();
+  }
+
+  for (auto &player_sender : player_senders) {
+    if (player_sender->get_player_id() == winner_id) {
+      player_sender->send_player_final_status(PlayerFinalStatus::WINNER);
+    } else if (winner) {
+      player_sender->send_player_final_status(PlayerFinalStatus::LOSER);
+    } else {
+      player_sender->send_player_final_status(PlayerFinalStatus::EARLY_EXIT);
+    }
+  }
+}
 
 void GameManager::send_info_to_start_to_players() {
   for (auto &sender : player_senders) {

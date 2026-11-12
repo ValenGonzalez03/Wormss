@@ -60,6 +60,8 @@ class WorldView {
 
   void render_text(const WormData &worm_data, const GameState &game_state);
 
+  void render_final_text(PlayerFinalStatus status);
+
   void render_charge_bar(uint8_t worm_id, float charge, float max_charge);
 
   // Setea un background al mundo

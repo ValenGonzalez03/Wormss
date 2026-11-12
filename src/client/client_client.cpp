@@ -115,6 +115,20 @@ void Client::recv_world() {
   }
 }
 
+void Client::recv_end_of_game_msg() {
+  GameState game_state = GameState();
+  receiver_queue.pop_last_one(
+      game_state);  // Para vaciar la queue y que no quede un game_state mas
+
+  bool was_closed = false;
+  auto finish_byte = prot.recv_byte(&was_closed);
+
+  PlayerFinalStatus status = static_cast<PlayerFinalStatus>(finish_byte);
+  view.world_view.render_final_text(status);
+  view.renderer.Present();
+  SDL_Delay(5000);  // Muestra el mensaje final por 5 segundos
+}
+
 bool Client::execute_frame() {
   // Timing: calculate difference between this and previous frame
   // in milliseconds
@@ -156,6 +170,9 @@ bool Client::execute_frame() {
 
   if (game_state.game_finished) {
     std::cout << "El juego ha terminado" << std::endl;
+
+    recv_end_of_game_msg();
+
     handle_quit_game();
     // prot.close_socket();
     // sender_queue.close();

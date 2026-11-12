@@ -37,11 +37,15 @@ class ServerSender : public Thread {
 
   void send_world(const World *world);
 
+  void send_player_final_status(uint8_t final_status);
+
   bool has_started();
 
   bool is_closed();
 
   Queue<GameState> &get_queue();
+
+  uint8_t get_player_id() const;
 
   // Ejecuta el loop del hilo Sender.
   void run() override;

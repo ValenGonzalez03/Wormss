@@ -64,6 +64,7 @@ void Game::update_turn(float dt) {
   turn_manager.update(dt);
 
   if (turn_manager.ended_his_turn() && world.are_all_bodies_at_rest()) {
+    world.apply_pending_damage_to_worms();
     turn_manager.advance_full_turn();
   }
 }

@@ -75,6 +75,9 @@ struct BodyAdvData {
 #define FALL_DAMAGE_THRESHOLD 3.0f    // Metros mínimos de caída para recibir daño
 #define FALL_DAMAGE_MULTIPLIER 10.0f  // Daño por cada metro adicional al threshold
 
+// Tiempo en segundos entre la resolución de daño de cada gusano al final del turno
+#define DAMAGE_RESOLUTION_INTERVAL 0.5f
+
 struct WormAttr {
   uint8_t id;
   uint8_t player_id;

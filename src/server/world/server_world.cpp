@@ -148,8 +148,9 @@ bool World::are_all_bodies_at_rest() const {
   if (!explosions.empty())
     return false;
 
+  // Los gusanos sumergidos o muertos se ignoran: ya no interactúan con la física activa.
   bool any_awake = std::any_of(worms.begin(), worms.end(), [](const WormBody* worm) {
-    return (!worm->is_dead() && worm->is_awake());
+    return (!worm->is_dead() && !worm->is_submerged() && worm->is_awake());
   });
   if (any_awake)
     return false;
@@ -169,7 +170,8 @@ void World::ray_cast(b2RayCastCallback* callback, const b2Vec2& point1,
 std::list<WormAttr> World::get_worms_attr() {
   std::list<WormAttr> worms_attr;
   for (auto worm : worms) {
-    if (worm->is_dead()) {
+    // Los gusanos muertos o sumergidos (agua/fuera de mapa) no se envían al cliente.
+    if (worm->is_dead() || worm->is_submerged()) {
       continue;
     }
     WormAttr attr({worm->get_id(), worm->get_player_id(), worm->get_health(),
@@ -202,6 +204,25 @@ std::list<ExplosionAttr> World::get_explosions_attr() {
   }
   return explosions_attr;
 }
+
+void World::apply_pending_damage_to_worms() {
+  // Devuelve los IDs de los gusanos con daño acumulado. El orden refleja
+  // el orden interno de la lista de gusanos del mundo (orden de creación).
+  for (auto worm : worms) {
+    if (worm->has_pending_damage()) {
+      worm->apply_pending_damage();
+    }
+  }
+}
+
+// void World::apply_pending_damage_to(uint8_t worm_id) {
+//   for (auto worm : worms) {
+//     if (worm->get_id() == worm_id) {
+//       worm->apply_pending_damage();
+//       return;
+//     }
+//   }
+// }
 
 void World::delete_worms() {
   for (auto& worm : worms) {

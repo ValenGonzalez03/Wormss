@@ -27,6 +27,8 @@ class Game {
   // Actualiza el tiempo restante del turno y gestiona el cambio de turno si es necesario.
   void update_turn(float dt);
 
+  void check_game_finished();
+
  public:
   explicit Game(const World &world);
 

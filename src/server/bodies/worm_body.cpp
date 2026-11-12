@@ -31,16 +31,17 @@ WormBody::WormBody(const BodyBasicData& basic_data, const BodyAdvData& adv_data,
 }
 
 void WormBody::update(float dt) {
-  if (check_boundaries()) {
+  // Si el gusano sale del mapa, se lo trata igual que el agua: daño letal diferido.
+  // La guardia evita acumular el daño en cada frame.
+  if (!submerged && check_boundaries()) {
+    submerged = true;
     take_damage(100000);
   }
 
   if (num_foot_contacts == 0) {
     track_max_height();
   }
-  if (health <= 0) {
-    dead = true;
-  }
+  // La muerte ya NO se marca aquí: ocurre al final del turno en apply_pending_damage().
   if (jump_timeout > 0) {
     jump_timeout--;
   }
@@ -273,10 +274,8 @@ void WormBody::teleport(float pos_x, float pos_y) {
 }
 
 void WormBody::take_damage(int amount) {
-  health -= amount;
-  if (health <= 0) {
-    health = 0;
-  }
+  // Acumula el daño para aplicarlo al final del turno en la fase de resolución.
+  pending_damage += amount;
   took_damage_this_frame = true;
 }
 
@@ -339,14 +338,19 @@ void WormBody::start_contact_with_beam(b2Fixture self_fixt) {
   }
 }
 
-void WormBody::start_contact_with_water(b2Fixture self_fixt) { take_damage(10000); }
+void WormBody::start_contact_with_water(b2Fixture self_fixt) {
+  // La guardia evita que el daño se acumule en cada frame de contacto con el agua.
+  if (!submerged) {
+    submerged = true;
+    take_damage(10000);
+  }
+}
 
 void WormBody::end_contact_with_beam(b2Fixture self_fixt) {
   if (self_fixt.IsSensor()) {
     move_away_from_surface();
   }
 }
-
 
 void WormBody::hit_a_surface() {
   num_foot_contacts++;
@@ -369,5 +373,20 @@ void WormBody::move_away_from_surface() {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+bool WormBody::has_pending_damage() const { return pending_damage > 0; }
+
+void WormBody::apply_pending_damage() {
+  if (pending_damage <= 0)
+    return;
+  health -= pending_damage;
+  if (health <= 0) {
+    health = 0;
+    dead = true;
+  }
+  pending_damage = 0;
+}
+
+bool WormBody::is_submerged() const { return submerged; }
 
 WormBody::~WormBody() { free(reinterpret_cast<UserData*>(body->GetUserData().pointer)); }

@@ -40,6 +40,13 @@ class WormBody : public Body {
 
   bool dead = false;
 
+  // --- Daño diferido ---
+  // Daño acumulado durante el turno, se aplica al final en la fase de resolución.
+  int pending_damage = 0;
+  // Indica que el gusano cayó al agua o fuera del mapa y debe ser tratado como
+  // fuera de juego, aunque su muerte aún no fue oficializada.
+  bool submerged = false;
+
   // Atributos para manejar la explosion sobre un gusano
   bool hit_by_explosion = false;
   b2Vec2 impulse_dir = b2Vec2(0, 0);
@@ -143,6 +150,17 @@ class WormBody : public Body {
   bool has_taken_damage() const;
 
   void reset_damage_flag();
+
+  // --- Daño diferido ---
+  // Devuelve true si el gusano tiene daño pendiente de aplicar.
+  bool has_pending_damage() const;
+
+  // Aplica el daño acumulado en pending_damage: reduce la vida y, si llega a 0,
+  // marca al gusano como muerto. Resetea pending_damage.
+  void apply_pending_damage();
+
+  // Devuelve true si el gusano está sumergido (agua/fuera de mapa).
+  bool is_submerged() const;
 
   void reset_state();
 

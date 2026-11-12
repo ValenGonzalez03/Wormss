@@ -88,6 +88,14 @@ class World {
 
   std::list<ExplosionAttr> get_explosions_attr();
 
+  // Devuelve los IDs de los gusanos que tienen daño acumulado pendiente,
+  // en el orden en que fueron afectados por primera vez.
+  // std::list<uint8_t> get_worms_with_pending_damage() const;
+
+  // Aplica el daño acumulado (pending_damage) al gusano indicado por worm_id.
+  // Si la salud llega a 0, el gusano es marcado como muerto.
+  void apply_pending_damage_to_worms();
+
   std::list<BeamBody*> get_beams() const { return this->beams; }
 
   void set_name(const std::string& new_name) { this->name = new_name; }

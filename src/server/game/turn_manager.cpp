@@ -1,7 +1,7 @@
 #include "turn_manager.h"
 #include <iostream>
 
-#define TURN_DURATION 10.0f
+#define TURN_DURATION 30.0f
 #define POST_ATTACK_GRACE_DURATION 3.0f
 
 TurnManager::TurnManager(std::map<uint8_t, Player>* players) :

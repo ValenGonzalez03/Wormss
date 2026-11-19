@@ -39,8 +39,6 @@ void Accept::reap_dead() {
     return false;
   };
 
-  // std::cout << "Paso por aca" << std::endl;
-
   clients.erase(std::remove_if(clients.begin(), clients.end(), dead), clients.end());
 }
 

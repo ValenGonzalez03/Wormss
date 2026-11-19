@@ -11,6 +11,9 @@ void ClientReceiverThread::run() {
     try {
       bool was_closed = false;
       GameState game_state(prot, &was_closed);
+      if (game_state.game_finished) {
+        _keep_running = false;
+      }
       // GameState game_state = prot.process_game_state();
       receiver_queue.push(game_state);
     } catch (const std::exception &e) {

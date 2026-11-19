@@ -15,7 +15,7 @@ void ServerReceiver::run() {
     while (!was_closed) {
       game_command_ptr runnable_command = protocol.process_command(&was_closed);
       if (runnable_command)
-        game_commands->try_push(runnable_command);
+        game_commands->push(runnable_command);
     }
   } catch (const LibError &libError) {  // Si se cierra el skt
     // keep_playing = false;

@@ -38,7 +38,7 @@ beams:
     angle: 15.0
     length: 6.0      
 spawn_points:
-  - position_x: 6.0
-    position_y: 15.0
   - position_x: 10.0
-    position_y: 15.0
+    position_y: 8.0
+  - position_x: 20.0
+    position_y: 8.0

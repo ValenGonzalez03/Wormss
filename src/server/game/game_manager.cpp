@@ -47,6 +47,9 @@ void GameManager::run() {
     std::cout << "[GAME-THREAD]: Game of id: " << static_cast<int>(id) << " ended."
               << std::endl;
   } catch (const std::exception &err) {
+    std::string str = "[GAME-THREAD]: Error en Game de id: " + std::to_string(id) + ":" +
+                      '\n' + std::string(err.what()) + '\n';
+    std::cerr << str;
   }
 }
 
@@ -73,8 +76,6 @@ void GameManager::push_game_state() {
 bool GameManager::has_game_finished() { return game.is_game_finished(); }
 
 void GameManager::manage_end_game() {
-  sleep(2);  // Para que los clientes terminen de recibir el ultimo game_state
-
   const Player *winner = game.get_winner();
   int8_t winner_id = -1;
   if (winner) {
@@ -82,11 +83,18 @@ void GameManager::manage_end_game() {
   }
 
   for (auto &player_sender : player_senders) {
-    if (player_sender->get_player_id() == winner_id) {
+    player_sender->close_queue();
+    while (!player_sender->has_ended()) {
+      sleep(0.01);
+    }
+    if (player_sender->get_player_id() ==
+        winner_id) {  // Si el ganador existe y el jugador actual es el ganador
       player_sender->send_player_final_status(PlayerFinalStatus::WINNER);
-    } else if (winner) {
+    } else if (winner) {  // Si el ganador existe y el jugador actual NO es el ganador
       player_sender->send_player_final_status(PlayerFinalStatus::LOSER);
-    } else {
+    } else {  // Si se cerro el juego (stop_game) antes de que termine, y no hay ganador
+      std::cout << "Id: " << static_cast<int>(player_sender->get_player_id())
+                << " PASA POR ACA" << std::endl;
       player_sender->send_player_final_status(PlayerFinalStatus::EARLY_EXIT);
     }
   }
@@ -110,5 +118,3 @@ bool GameManager::is_dead() { return !keep_playing; }
 uint8_t GameManager::get_game_id() { return id; }
 
 Queue<game_command_ptr> *GameManager::get_commands_queue() { return &commands; }
-
-// GameManager &GameManager::get_game_manager() { return game_manager; }

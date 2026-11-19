@@ -89,7 +89,7 @@ void ClientManager::manage_game_started() {
 void ClientManager::finish(bool was_closed) {
   keep_playing = false;
   // protocol.close_socket(sender.is_closed());
-  game->push_game_state();
+  // game->push_game_state();
   // player.push_last_game_state();
   sender.join();
   // receiver.join();

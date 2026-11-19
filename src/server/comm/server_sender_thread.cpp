@@ -11,23 +11,18 @@ void ServerSender::run() {
   bool was_closed = false;
   try {
     while (!was_closed) {
-      GameState game_state;
-      if (sender_queue.try_pop(game_state))
-        game_state.serialize(protocol, &was_closed);
+      GameState game_state = sender_queue.pop();
+      game_state.serialize(protocol, &was_closed);
     }
-    // GameState game_state;
-    // while (sender_queue.try_pop(game_state)) {
-    //   game_state.serialize(protocol, &was_closed);
-    //   // protocol.send_game_state(game_state);
-    // }
   } catch (const LibError &liberr) {
-    closed = true;
+    skt_closed = true;
     auto str = "[SENDER-THREAD]: Conexión con cliente finalizada en cliente: " +
                std::to_string(player_id) + '\n';
     std::cout << str;
   } catch (const std::exception &err) {
     std::cerr << "[SENDER-THREAD]: Error en el sender: " << err.what() << "\n";
   }
+  ended = true;
   auto str =
       "[SENDER-THREAD]: Sender de cliente: " + std::to_string(player_id) + " termino.\n";
   std::cout << str;
@@ -79,7 +74,11 @@ void ServerSender::send_player_final_status(uint8_t final_status) {
 
 bool ServerSender::has_started() { return is_alive(); }
 
-bool ServerSender::is_closed() { return closed; }
+bool ServerSender::has_ended() { return ended; }
+
+void ServerSender::close_queue() { sender_queue.close(); }
+
+bool ServerSender::is_closed() { return skt_closed; }
 
 Queue<GameState> &ServerSender::get_queue() { return sender_queue; }
 

@@ -115,7 +115,7 @@ void Client::recv_world() {
   }
 }
 
-void Client::recv_end_of_game_msg() {
+void Client::manage_end_of_game() {
   GameState game_state = GameState();
   receiver_queue.pop_last_one(
       game_state);  // Para vaciar la queue y que no quede un game_state mas
@@ -171,7 +171,7 @@ bool Client::execute_frame() {
   if (game_state.game_finished) {
     std::cout << "El juego ha terminado" << std::endl;
 
-    recv_end_of_game_msg();
+    manage_end_of_game();
 
     handle_quit_game();
     // prot.close_socket();

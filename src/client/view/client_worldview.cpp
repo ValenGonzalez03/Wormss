@@ -277,7 +277,7 @@ void WorldView::render_text(const WormData &worm_data, const GameState &game_sta
 }
 
 void WorldView::render_final_text(PlayerFinalStatus status) {
-  SDL2pp::Font font(RESOURCES_PATH "/Vera.ttf", 24);
+  SDL2pp::Font font(RESOURCES_PATH "/Vera.ttf", 32);
 
   std::string text;
   if (status == PlayerFinalStatus::WINNER) {
@@ -285,17 +285,38 @@ void WorldView::render_final_text(PlayerFinalStatus status) {
   } else if (status == PlayerFinalStatus::LOSER) {
     text = "YOU LOSE!";
   } else if (status == PlayerFinalStatus::EARLY_EXIT) {
-    text = "YOU LEFT THE GAME EARLY!";
+    text = "EARLY GAME DISCONNECT";
   }
 
-  SDL2pp::Texture text_sprite(
-      renderer, (font).RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+  const int OUTLINE = 1;
+  const int PAD = 16;
 
-  int x = (renderer.GetOutputWidth() - text_sprite.GetWidth()) / 2;
-  int y = (renderer.GetOutputHeight() - text_sprite.GetHeight()) / 2;
+  // Borde negro (la textura sale 2*OUTLINE más grande en cada dimensión)
+  font.SetOutline(OUTLINE);
+  SDL2pp::Texture outline_tex(renderer,
+                              font.RenderText_Blended(text, SDL_Color{0, 0, 0, 255}));
 
-  renderer.Copy(text_sprite, SDL2pp::NullOpt,
-                SDL2pp::Rect(x, y, text_sprite.GetWidth(), text_sprite.GetHeight()));
+  // Relleno blanco
+  font.SetOutline(0);
+  SDL2pp::Texture fill_tex(renderer,
+                           font.RenderText_Blended(text, SDL_Color{237, 215, 19, 255}));
+
+  int x = (renderer.GetOutputWidth() - outline_tex.GetWidth()) / 2;
+  int y = (renderer.GetOutputHeight() - outline_tex.GetHeight()) / 2;
+
+  // Panel oscuro semitransparente
+  renderer.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
+  renderer.SetDrawColor(SDL2pp::Color(0, 0, 0, 150));
+  renderer.FillRect(SDL2pp::Rect(x - PAD, y - PAD, outline_tex.GetWidth() + 2 * PAD,
+                                 outline_tex.GetHeight() + 2 * PAD));
+  renderer.SetDrawBlendMode(SDL_BLENDMODE_NONE);
+
+  // Primero el borde, después el relleno centrado encima
+  renderer.Copy(outline_tex, SDL2pp::NullOpt,
+                SDL2pp::Rect(x, y, outline_tex.GetWidth(), outline_tex.GetHeight()));
+  renderer.Copy(
+      fill_tex, SDL2pp::NullOpt,
+      SDL2pp::Rect(x + OUTLINE, y + OUTLINE, fill_tex.GetWidth(), fill_tex.GetHeight()));
 }
 
 void WorldView::render_charge_bar(uint8_t worm_id, float charge, float max_charge) {

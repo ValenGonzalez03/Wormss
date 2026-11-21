@@ -48,9 +48,11 @@ class Client {
   bool is_charging_attack = false;
   float charge_power = 0.0f;
 
+  // Recibe toda la información del mundo para renderizarla.
   void recv_world();
 
-  void recv_end_of_game_msg();
+  // Recibe el estado final del juego y lo renderiza en pantalla.
+  void manage_end_of_game();
 
   // Ejecuta un evento y devuelve true si se quiere cerrar el juego o false en caso contrario
   bool execute_event(SDL_Event &event);  // NOLINT(runtime/references)
@@ -94,13 +96,17 @@ class Client {
  public:
   explicit Client(ClientProtocol &&prot, uint8_t player_id);
 
+  // Inicia los threads Receiver y Sender.
   void start_threads();
 
+  // Joinea los threads Receiver y Sender.
   void join_threads();
 
+  // Inicializa la configuracion inicial del cliente y llama al loop principal del juego.
   int run();
 
-  // Devuelve false si el cliente no cerro el programa, devuelve true en caso contrario.
+  // Ejecuta el loop principal del cliente. Devuelve false si el cliente no cerro el programa,
+  // devuelve true en caso contrario.
   bool execute_frame();
 };
 

@@ -51,7 +51,8 @@ void Game::update() {
   float dt = std::chrono::duration<float>(now - last_tick).count();
   last_tick = now;
 
-  world.update_worms(dt);
+  update_players(dt);
+
   world.update_explodables();
   world.update_explosions();
 
@@ -60,6 +61,35 @@ void Game::update() {
   world.step(TIME_STEP, VEL_ITERATIONS, POS_ITERATIONS);
 
   check_game_finished();
+}
+
+void Game::update_players(float dt) {
+  for (auto it = players.begin(); it != players.end();) {
+    Player& player = it->second;
+    if (player.has_lost()) {
+      if (turn_manager.get_current_player().get_player_id() == player.get_player_id()) {
+        turn_manager.advance_full_turn();
+      }
+      std::cout << "[GAME-THREAD]: Jugador " << static_cast<int>(player.get_player_id())
+                << " eliminado del juego." << std::endl;
+      it = players.erase(it);
+    } else {
+      player.update_worms(dt);
+      ++it;
+    }
+  }
+  // for (auto& [_, player] : players) {
+  //   if (player.has_lost()) {
+  //     if (turn_manager.get_current_player().get_player_id() == player.get_player_id()) {
+  //       turn_manager.advance_full_turn();
+  //     }
+  //     delete_player(player.get_player_id());
+  //     std::cout << "[GAME-THREAD]: Jugador " << static_cast<int>(player.get_player_id())
+  //           << " eliminado del juego." << std::endl;
+  //   } else {
+  //     player.update_worms(dt);
+  //   }
+  // }
 }
 
 void Game::update_turn(float dt) {

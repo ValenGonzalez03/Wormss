@@ -18,9 +18,6 @@ class TurnManager {
   // Avanza al siguiente jugador en la rotación de turnos y reinicia el tiempo del turno.
   void next_turn();
 
-  // Elimina al jugador de la rotación de turnos sin avanzar al siguiente jugador.
-  void remove_player(const uint8_t player_id);
-
  public:
   explicit TurnManager(std::map<uint8_t, Player> *players);
 

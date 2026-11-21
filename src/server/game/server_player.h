@@ -20,8 +20,8 @@ class Player {
   // lo establece como el gusano actual.
   void add_worm(WormBody *worm);
 
-  // Elimina el gusano con el id especificado de la lista de gusanos del jugador.
-  void remove_worm(uint8_t worm_id);
+  // Actualiza todos los gusanos del jugador, si un gusano murio lo elimina de su lista.
+  void update_worms(float dt);
 
   // Avanza al siguiente gusano vivo en la rotación de gusanos.
   void advance_worm();

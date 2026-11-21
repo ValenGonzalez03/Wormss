@@ -9,10 +9,21 @@ void Player::add_worm(WormBody *worm) {
     current_worm_it = worms.begin();
 }
 
-void Player::remove_worm(uint8_t worm_id) {
-  auto it = worms.find(worm_id);
-  if (it != worms.end()) {
-    current_worm_it = worms.erase(it);
+void Player::update_worms(float dt) {
+  for (auto it = worms.begin(); it != worms.end();) {
+    WormBody *worm = it->second;
+    if (!worm->is_dead()) {
+      worm->update(dt);
+      ++it;
+    } else {
+      if (current_worm_it->first == worm->get_id()) {
+        advance_worm();
+      }
+      it = worms.erase(it);
+      std::cout << "[GAME-THREAD]: Gusano " << static_cast<int>(worm->get_id())
+                << " del jugador " << static_cast<int>(player_id)
+                << " eliminado del juego." << std::endl;
+    }
   }
 }
 

@@ -25,6 +25,8 @@ class Game {
   TurnManager turn_manager;
   std::chrono::steady_clock::time_point last_tick = std::chrono::steady_clock::now();
 
+  void update_players(float dt);
+
   // Actualiza el tiempo restante del turno y gestiona el cambio de turno si es necesario.
   void update_turn(float dt);
 

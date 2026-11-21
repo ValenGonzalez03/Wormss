@@ -12,22 +12,8 @@ void TurnManager::update(const float dt) {
     return;
   }
 
-  Player& current_player = current_player_it->second;
+  const Player& current_player = current_player_it->second;
   WormBody* current_worm = current_player.get_current_worm();
-
-  if (current_worm->is_dead()) {  // Un gusano ha muerto durante el turno
-    current_player.remove_worm(current_worm->get_id());
-    std::cout << "[GAME-THREAD]: Gusano " << static_cast<int>(current_worm->get_id())
-              << " del jugador " << static_cast<int>(current_player.get_player_id())
-              << " eliminado del juego." << std::endl;
-    if (current_player
-            .has_lost()) {  // Si ademas el gusano que murió era el ultimo del jugador, se elimina al jugador
-      remove_player(current_player_it->first);
-      std::cout << "[GAME-THREAD]: Jugador " << static_cast<int>(current_player_it->first)
-                << " eliminado del juego." << std::endl;
-    }
-    next_turn();
-  }
 
   switch (state) {
     case TurnState::ACTIVE:
@@ -90,13 +76,6 @@ void TurnManager::assign_first_player() {
     return;
   }
   current_player_it = players->begin();
-}
-
-void TurnManager::remove_player(const uint8_t player_id) {
-  auto it = players->find(player_id);
-  if (it != players->end()) {
-    current_player_it = players->erase(it);
-  }
 }
 
 bool TurnManager::are_players_remaining() const { return !(players->empty()); }

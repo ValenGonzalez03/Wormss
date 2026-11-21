@@ -93,8 +93,6 @@ void GameManager::manage_end_game() {
     } else if (winner) {  // Si el ganador existe y el jugador actual NO es el ganador
       player_sender->send_player_final_status(PlayerFinalStatus::LOSER);
     } else {  // Si se cerro el juego (stop_game) antes de que termine, y no hay ganador
-      std::cout << "Id: " << static_cast<int>(player_sender->get_player_id())
-                << " PASA POR ACA" << std::endl;
       player_sender->send_player_final_status(PlayerFinalStatus::EARLY_EXIT);
     }
   }
